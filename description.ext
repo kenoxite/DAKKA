@@ -1,0 +1,535 @@
+#include "control_defines.hpp"
+#include "dialogs\defines.hpp"
+#include "dialogs\dialog_default.hpp"
+#include "dialogs\dialog_loading.hpp"
+#include "dialogs\dialog_main.hpp"
+#include "dialogs\dialog_task2.hpp"
+
+class CfgSounds
+{
+    sounds[] = {};
+
+    // SPECTRUM DEVICE
+    class silent1
+    {
+        name = "silent 1";
+        // filename, volume, pitch, distance (optional)
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\empty01s.ogg", 1, 1 };
+        // subtitle delay in seconds, subtitle text
+        titles[] = { 0, "" };
+    };
+    class radioNoise1
+    {
+        name = "radio noise 1";
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise1.ogg", 1, 1 };
+        titles[] = { 0, "" };
+    };
+    class radioNoise2
+    {
+        name = "radio noise 2";
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise2.ogg", 1, 1 };
+        titles[] = { 0, "" };
+    };
+    class radioNoise3
+    {
+        name = "radio noise 3";
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise3.ogg", 1, 1 };
+        titles[] = { 0, "" };
+    };
+
+    // DUST STORM
+    class uragan_1
+    {
+        name = "uragan_1";
+        sound[] = {"\sound\uragan_1.ogg", db+5, 1};
+        titles[] = {1, ""};
+    };
+    class bcg_wind
+    {
+        name = "bcg_wind";
+        sound[] = {"\sound\bcg_wind.ogg", db+5, 1};
+        titles[] = {1, ""};
+    };  
+    class rafala_1
+    {
+        name = "rafala_1";
+        sound[] = {"\sound\rafala_1.ogg", db+10, 1};
+        titles[] = {1, ""};
+    };  
+    class rafala_4_dr
+    {
+        name = "rafala_4_dr";
+        sound[] = {"\sound\rafala_4_dr.ogg", db+1, 1};
+        titles[] = {1, ""};
+    };  
+    class rafala_5_st
+    {
+        name = "rafala_5_st";
+        sound[] = {"\sound\rafala_5_st.ogg", db+1, 1};
+        titles[] = {1, ""};
+    };
+    class sandstorm
+    {
+        name = "sandstorm";
+        sound[] = {"\sound\sandstorm.ogg", db+10, 1};
+        titles[] = {1, ""};
+    };
+
+    // MONSOON
+    class rafala_2
+    {
+        name = "rafala_2";
+        sound[] = {"\sound\rafala_2.ogg", db+5, 1};
+        titles[] = {1, ""};
+    };   
+    class rafala_6
+    {
+        name = "rafala_6";
+        sound[] = {"\sound\rafala_6.ogg", db+15, 1};
+        titles[] = {1, ""};
+    };  
+    class rafala_7
+    {
+        name = "rafala_7";
+        sound[] = {"\sound\rafala_7.ogg", db+10, 1};
+        titles[] = {1, ""};
+    };  
+    class rafala_8
+    {
+        name = "rafala_8";
+        sound[] = {"\sound\rafala_8.ogg", db+15, 1};
+        titles[] = {1, ""};
+    };  
+    class rafala_9
+    {
+        name = "rafala_9";
+        sound[] = {"\sound\rafala_9.ogg", db+10, 1};
+        titles[] = {1, ""};
+    };
+    class 01_far
+    {
+        name = "01_far"; // Name for mission editor
+        sound[] = {\Sound\01_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 02_far
+    {
+        name = "02_far"; // Name for mission editor
+        sound[] = {\Sound\02_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 03_far
+    {
+        name = "03_far"; // Name for mission editor
+        sound[] = {\Sound\03_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 04_far
+    {
+        name = "04_far"; // Name for mission editor
+        sound[] = {\Sound\04_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 05_far
+    {
+        name = "05_far"; // Name for mission editor
+        sound[] = {\Sound\05_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 06_far
+    {
+        name = "06_far"; // Name for mission editor
+        sound[] = {\Sound\06_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 07_far
+    {
+        name = "07_far"; // Name for mission editor
+        sound[] = {\Sound\07_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 08_far
+    {
+        name = "08_far"; // Name for mission editor
+        sound[] = {\Sound\08_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 09_far
+    {
+        name = "09_far"; // Name for mission editor
+        sound[] = {\Sound\09_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 10_far
+    {
+        name = "10_far"; // Name for mission editor
+        sound[] = {\Sound\10_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 11_far
+    {
+        name = "11_far"; // Name for mission editor
+        sound[] = {\Sound\11_far.ogg,1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 12_far
+    {
+        name = "12_far"; // Name for mission editor
+        sound[] = {\Sound\12_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 13_far
+    {
+        name = "13_far"; // Name for mission editor
+        sound[] = {\Sound\13_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 14_far
+    {
+        name = "14_far"; // Name for mission editor
+        sound[] = {\Sound\14_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 16_far
+    {
+        name = "16_far"; // Name for mission editor
+        sound[] = {\Sound\16_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 17_far
+    {
+        name = "17_far"; // Name for mission editor
+        sound[] = {\Sound\17_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 18_far
+    {
+        name = "18_far"; // Name for mission editor
+        sound[] = {\Sound\18_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 19_far
+    {
+        name = "19_far"; // Name for mission editor
+        sound[] = {\Sound\19_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 20_far
+    {
+        name = "20_far"; // Name for mission editor
+        sound[] = {\Sound\20_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 21_far
+    {
+        name = "21_far"; // Name for mission editor
+        sound[] = {\Sound\21_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 22_far
+    {
+        name = "22_far"; // Name for mission editor
+        sound[] = {\Sound\22_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 23_far
+    {
+        name = "23_far"; // Name for mission editor
+        sound[] = {\Sound\23_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 24_far
+    {
+        name = "24_far"; // Name for mission editor
+        sound[] = {\Sound\24_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 25_far
+    {
+        name = "25_far"; // Name for mission editor
+        sound[] = {\Sound\25_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 26_far
+    {
+        name = "26_far"; // Name for mission editor
+        sound[] = {\Sound\26_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+    class 27_far
+    {
+        name = "27_far"; // Name for mission editor
+        sound[] = {\Sound\27_far.ogg, 1, 1.0};
+        titles[] = {0, ""}; 
+    };  
+
+};
+
+
+class CfgFunctions
+{
+	class DMORBAT
+	{
+		tag = "DMORBAT";
+
+		class General
+		{
+			file = "functions\general";
+
+            // Data extraction
+            class extractFactionData {};
+            class extractGroupsData {};
+
+            // Data categorization
+            class categorizeGroups {};
+            class categorizeUnits {};
+            class createFactionGroups {};
+
+            // Units and groups
+            class spawnMan {};
+            class spawnVehicle {};
+            class deleteGroup {};
+            class deleteMan {};
+            class deleteVehicle {};
+            class cloneUnit {};
+            class spawnEnemy {};
+
+            // Type checks
+            class isMan {};
+            class isAir {};
+            class groupType {};
+            class classType {};
+            class groupRoles {};
+            class vehicleType {};
+            class isVehicleArmed {};
+
+            // Misc
+            class realUnitbyIndex {};
+			class findFirstNested {};
+			class middlePoint {};
+			class boundingBoxReal {};
+			class convertToSimpleObject {};
+			class useNVGflashlight {};
+
+            // 3rd party
+            class loadedFromSave { preInit = 1; };
+            class trueZoom {};
+            class occupyHouse {};
+            class spectate {};
+            class calcAzimuth {};
+            class getUnitPositionId {};
+
+            // Unused
+            class missingModsCheck {};
+		};
+
+        class Settings
+        {
+            file = "functions\settings";
+            
+            // Global Settings
+            class globalSettingsLoad {};
+            class globalSettingsSave {};
+
+            // Task Settings
+            class settingsDelete {};
+            class settingsLoad {};
+            class settingsSave {};
+            class settingsImport {};
+            class settingsExport {};
+
+            // Task settings menu
+            class settingsMenuNew {};
+            class settingsMenuNewSet {};
+            class settingsMenuRename {};
+            class settingsMenuRenameSet {};
+            class settingsMenuDelete {};
+        };
+
+		class TaskEdit
+		{
+			file = "functions\taskEdit";
+
+            // Start
+            class openMainDialog {};
+
+			// Control functions
+            class buttonChangePage {};
+			class displayMessage {};
+			class displayTaskInfo {};
+
+            // Update control contents
+            class updateFactionCombo {};
+            class updateGroupsTreeList {};
+            class updateUnitsTreeList {};
+            class updateCrewSlotsCombo {};
+            class updatePlayerGroupTreeList {};
+            class updateCustomGroupsTreeList {};
+            class updateLocationCatCombo {};
+            class updateLocationsCombo {};
+            class updateCompositionsTreeList {};
+            class updatePlacedCompositionsTreeList {};
+            class updatePresenceCombo {};
+            class updateSkillsCombo {};
+            class updateSupportTypesCombo {};
+            class updateSelectedSupportGroupsTreeList {};
+            class updateSavedDataCombo {};
+            class updateWeatherEffectsCombo {};
+
+			// Controls EH
+			class ComboFactions_selChanged {};
+            class TaskSelectionCombo_selChanged {};
+			class TreeFactionGroups_selChanged {};
+			class TreeFactionUnits_selChanged {};
+			class TreePlayerGroup_selChanged {};
+			class TreeCustomGroup_selChanged {};
+			class LocationCatCombo_selChanged {};
+			class LocationsCombo_selChanged {};
+			class TreeCompositions_selChanged {};
+			class TreePlacedCompositions_selChanged {};
+            class SupportTypesCombo_selChanged {};
+            class TreeSupportUnits_selChanged {};
+            class ComboSavedData_selChanged {};
+
+            // Groups
+            class addGroupToPlayerGroup {};
+            class addGroupToGroup {};
+            class addUnitToGroup {};
+            class removeFromPlayerGroup {};
+            class removeFromGroup {};
+            class moveUnitInGroup {};
+
+            // Units
+            class addUnitToPlayerGroup {};
+            class editUnitAttributes {};
+            class editUnitLoadout {};
+            class createUnitTooltip {};
+
+            // Player
+            class checkIfSelIsPlayer {};
+            class setPlayerUnit {};
+            class getCrewSlots {};
+            class setCrewSlot {};
+
+            // Support
+            class supportUnitAdd {};
+            class supportUnitRemove {};
+            class changeSupportLimit {};
+
+            // Misc
+            class playMusic {};
+            class modsCheck {};
+            class deleteTaskMarkers {};
+            class deleteCompositionMarkers {};
+
+            // End
+            class missionEditTerminate {};
+		};
+
+        class Environment
+        {
+            file = "functions\environment";
+
+            class randomTime {};
+            class setDate {};
+            class fillDate {};
+            class randomWeather {};
+            class setWeather {};
+            class setFog {};
+            class setOvercast {};
+            class startWeatherEffect {};
+            class resetWeatherEffects {};
+        };
+
+        class Cameras
+        {
+            file = "functions\cameras";
+            
+            class cameraIntro {};
+            class cameraIntroTerminate {};
+            class cameraPreviewStatic {};
+            class cameraPreviewCircle {};
+            class cameraPreviewTerminate {};
+            class cameraEdit {};
+            class cameraControls {};
+        };
+
+        class Preview
+        {
+            file = "functions\preview";
+
+            class previewGroupDelete {};
+            class previewPlayerGroup {};
+            class previewGroup {};
+            class previewGroupPosition {};
+            class previewUnit {};
+            class displayVehicleInfo {};
+            class prepareGroupPreview {};
+        };
+
+        class Map
+        {
+            file = "functions\map";
+            
+            class mapDisplayLocations {};
+            class mapDisplayCompositions {};
+            class moveToCtrlMapMarker {};
+            class switchMapMode {};
+            class mapMoving {};
+        };
+
+        class Locations
+        {
+            file = "functions\locations";
+            
+            class locationSet {};
+            class locationRotate {};
+            class locationRemove {};
+            class locationAdd {};
+            class locationPreview {};
+        };
+
+        class Compositions
+        {
+            file = "functions\compositions";
+
+            class compositionPlace {};
+            class compositionLoad {};
+            class compositionRemove {};
+            class compositionEdit {};
+            class compositionSpawn {};
+            class compositionEditControls {};
+        };
+
+		class Task
+		{
+			file = "functions\task";
+
+            // Start
+            class showInfoText {};
+            class setPlayerGroup {};
+            class spawnGroup {};
+            class prepareUnit {};
+
+			class GroupWp {};
+			class patrolArea {};
+			class targetVisible {};
+			class enemiesClose {};
+
+            // Misc
+            class stopAndHeal {};
+            class setUnitSkill {};
+            class unstickUnit {};
+
+            // End
+            class endMission {};
+		};
+
+		class Support
+		{
+			file = "functions\support";
+
+			class spawnSupport {};
+		};
+	};
+};

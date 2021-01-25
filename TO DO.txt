@@ -1,0 +1,38 @@
+TO DO LIST
+==========
+- FIX: Player sometimes doesn't get the identity of the playable unit
+- FIX: rhs vehicles start bouncing, after reloading, maybe it's the cause?
+- FIX: Importing data from another terrain will give wrong locations
+- FIX: Leader of player group doesn't move to first waypoint when player group is from an OPFOR faction (solution so far is to manually unstick him in-game)
+- FIX: Task 2: player group identifies friendly forces as enemies (only when leader isn't player?)
+
+- UNFINISHED: Styling and positioning of the camera controls
+- UNFINISHED: Remove or comment out diag_logs used for debugging
+- UNFINISHED: Delete commented out code no longer needed
+- UNFINISHED: Update descriptions for all the custom functions
+- UNFINISHED: Create briefing, description, mission debriefing and overall more ambient text
+
+- TWEAK: Task 1: make only nearby patrols to respond to contact call
+- TWEAK: Summary screen
+- TWEAK: Auto assign default groups and compositions when starting the mission without selecting any
+- TWEAK: Add mod dependency check to compositions
+- TWEAK: Air transport: warn if supplied transport has less seats than the size of player group
+- TWEAK: Main menu: revise positioning for all resolutions. Group task selection elements. Stylize
+- TWEAK: Text in mission info gets cut if location name is too long
+- TWEAK: Center popups
+- TWEAK: Revise cameras and camera controls
+- TWEAK: Refactor everything to apply more consistency and remove redundancies
+- TWEAK: Make sure vehicles spawn in really safe positions... (flying tanks can be seen at spawn, so it needs further tweaking... lol)
+
+- FEATURE: Locations: add option to select a single location or select a random location
+- FEATURE: Edit unit attributes: add checkboxes for healer, engineer, demo, etc
+- FEATURE: Profiles: "Save As" button
+- FEATURE: Option to add friendly group to High Command
+- FEATURE: Adding static weapons to compositions
+- FEATURE: Add custom group as faction group, always available regardless of settings saved
+- FEATURE: Force horizontal positioning on compositions (mainly for CUP buildings)
+- FEATURE: Place new unit at position of selected unit or last if group is selected
+- FEATURE: More tasks
+- FEATURE: Clone button that duplicates the selected group
+- FEATURE: Button to toggle display in AO preview markers showing range of player spawn, task areas, etc.
+- FEATURE: Button for custom groups to make a unit the leader (useful when building custom motor/mechanized groups and want to make the vehicle leader)

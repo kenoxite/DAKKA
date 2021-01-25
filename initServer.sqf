@@ -1,0 +1,2 @@
+[] execVM "start.sqf";
+

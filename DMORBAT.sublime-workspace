@@ -1,0 +1,1875 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"slee",
+				"select"
+			],
+			[
+				"_fact",
+				"_factionInfantry"
+			],
+			[
+				"_eleg",
+				"_eligiblePatrols"
+			],
+			[
+				"_eligi",
+				"_eligiblePatrolsAll"
+			],
+			[
+				"push",
+				"pushBack"
+			],
+			[
+				"_impor",
+				"_importedText"
+			],
+			[
+				"setPos",
+				"setPosASL"
+			],
+			[
+				"DMORBAT_fnc_camera",
+				"DMORBAT_fnc_cameraIntroTerminate"
+			],
+			[
+				"_supor",
+				"_supportLeader"
+			],
+			[
+				"DMORBAT_",
+				"DMORBAT_officer"
+			],
+			[
+				"_supp",
+				"_supportType"
+			],
+			[
+				"_sup",
+				"_supportTypes"
+			],
+			[
+				"_cate",
+				"_categoryLocations"
+			],
+			[
+				"_rese",
+				"_resetTimerPos"
+			],
+			[
+				"_wind",
+				"_windStr"
+			],
+			[
+				"setcurse",
+				"lbSetCurSel"
+			],
+			[
+				"pushba",
+				"pushBackUnique"
+			],
+			[
+				"_d",
+				"_dlcIndex"
+			],
+			[
+				"_unit",
+				"_unitPresence"
+			],
+			[
+				"_skil",
+				"_skillLevels"
+			],
+			[
+				"_facti",
+				"_factionGroups"
+			],
+			[
+				"_pla",
+				"_playableUnit"
+			],
+			[
+				"_index",
+				"_indexCat"
+			],
+			[
+				"pus",
+				"pushBack"
+			],
+			[
+				"pusbh",
+				"pushBackUnique"
+			],
+			[
+				"hide",
+				"hideObject"
+			],
+			[
+				"lbsetc",
+				"lbSetCurSel"
+			],
+			[
+				"_camerar",
+				"_cameraRelZ"
+			],
+			[
+				"_camer",
+				"_cameraDir"
+			],
+			[
+				"_came",
+				"_cameraPos"
+			],
+			[
+				"_amount",
+				"_amountVeh"
+			],
+			[
+				"ORBAT_",
+				"ORBAT_Task"
+			],
+			[
+				"_gr",
+				"_groupNumber"
+			],
+			[
+				"waitu",
+				"waitUntil"
+			],
+			[
+				"diag",
+				"diag_log"
+			],
+			[
+				"ORBAT_fnc_c",
+				"ORBAT_fnc_checkIfSelIsPlayer"
+			],
+			[
+				"ORBAT_prev",
+				"ORBAT_previewGroup"
+			],
+			[
+				"_crews",
+				"_crewSlotRoles"
+			],
+			[
+				"_amou",
+				"_amountVeh"
+			],
+			[
+				"_row",
+				"_rowMax"
+			],
+			[
+				"ORBAT_T",
+				"ORBAT_Task-1"
+			],
+			[
+				"_idc",
+				"_idcCombo"
+			],
+			[
+				"HIde",
+				"Hide_Rail"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "start.sqf",
+			"settings":
+			{
+				"buffer_size": 18000,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "description.ext",
+			"settings":
+			{
+				"buffer_size": 14102,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_createFactionGroups.sqf",
+			"settings":
+			{
+				"buffer_size": 10401,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_categorizeUnits.sqf",
+			"settings":
+			{
+				"buffer_size": 4402,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "scripts/playNow.sqf",
+			"settings":
+			{
+				"buffer_size": 31724,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tasks/taskStart.sqf",
+			"settings":
+			{
+				"buffer_size": 2805,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "menuPages/page5.sqf",
+			"settings":
+			{
+				"buffer_size": 23105,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/compositions/fn_compositionLoad.sqf",
+			"settings":
+			{
+				"buffer_size": 5227,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/taskEdit/fn_ComboFactions_selChanged.sqf",
+			"settings":
+			{
+				"buffer_size": 2050,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/taskEdit/fn_setPlayerUnit.sqf",
+			"settings":
+			{
+				"buffer_size": 1662,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tasks/Task 1/task1_init.sqf",
+			"settings":
+			{
+				"buffer_size": 13482,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tasks/Task 2/task2_init.sqf",
+			"settings":
+			{
+				"buffer_size": 23450,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Tanoa/settings_terrain.hpp",
+			"settings":
+			{
+				"buffer_size": 1997,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Tanoa/compositions_default.hpp",
+			"settings":
+			{
+				"buffer_size": 34240,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "control_defines.hpp",
+			"settings":
+			{
+				"buffer_size": 14853,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dialogs/dialog_main.hpp",
+			"settings":
+			{
+				"buffer_size": 144573,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_groupRoles.sqf",
+			"settings":
+			{
+				"buffer_size": 4120,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_categorizeGroups.sqf",
+			"settings":
+			{
+				"buffer_size": 3187,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_groupType.sqf",
+			"settings":
+			{
+				"buffer_size": 2199,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/task/fn_prepareUnit.sqf",
+			"settings":
+			{
+				"buffer_size": 4475,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tasks/Task 1/task1_flow.sqf",
+			"settings":
+			{
+				"buffer_size": 23284,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tasks/Task 2/task2_flow.sqf",
+			"settings":
+			{
+				"buffer_size": 18212,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_spawnMan.sqf",
+			"settings":
+			{
+				"buffer_size": 3115,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_spawnVehicle.sqf",
+			"settings":
+			{
+				"buffer_size": 2057,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/task/fn_spawnGroup.sqf",
+			"settings":
+			{
+				"buffer_size": 6467,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/task/fn_setPlayerGroup.sqf",
+			"settings":
+			{
+				"buffer_size": 8908,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/taskEdit/fn_TaskSelectionCombo_selChanged.sqf",
+			"settings":
+			{
+				"buffer_size": 1398,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_vehicleType.sqf",
+			"settings":
+			{
+				"buffer_size": 4591,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/general/fn_isVehicleArmed.sqf",
+			"settings":
+			{
+				"buffer_size": 3883,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions/support/fn_spawnSupport.sqf",
+			"settings":
+			{
+				"buffer_size": 11402,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/dialogs",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/compositions",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/environment",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/locations",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/map",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/preview",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/support",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/menuPages",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/Signal_jamming",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/Task 1",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/Task 2"
+	],
+	"file_history":
+	[
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2021-01-03_12-19-05.rpt",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2021-01-02_11-00-58.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/compositions/fn_compositionRemove.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2021-01-02_08-37-28.rpt",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2021-01-01_22-04-59.rpt",
+		"/D/Google Drive/Backups/Modding/Arma 3 Projects/2035 Central Africa/dev/mod.cpp",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2021-01-01_12-14-05.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_updateFactionCombo.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TaskSelectionCombo_selChanged.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/menuPages/page1.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_ComboFactions_selChanged.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-31_18-06-10.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_missionEditTerminate.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/Squad_feedback.Stratis/initPlayerLocal.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-30_20-32-03.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Tanoa/settings_terrain.hpp",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT_categorizeGroups.altis/init.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_loadedFromSave.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_setPlayerGroup.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-29_17-22-49.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/settings_terrain.hpp",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_prepareUnit.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_useNVGflashlight.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_isMan.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_isAir.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-29_10-41-15.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT_categorizeGroups.altis/description.ext",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Tanoa/description.ext",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_patrolArea.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/menuCheck.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/Task 1/task1_init.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/taskStart.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/compositions_default.hpp",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/menuPages/page7.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/playNow.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-29_07-33-20.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/environment/fn_randomTime.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_supportUnitAdd.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_addUnitToGroup.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_updateUnitsTreeList.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_categorizeGroup.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_updateGroupsTreeList.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsSave.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/compositions/fn_compositionLoad.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.old6.Altis/start.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.old7.Altis/start.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-28_21-51-27.rpt",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-28_20-13-28.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_extractGroupsData.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-28_19-15-42.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT_vehicleType.altis/description.ext",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/preview/fn_displayVehicleInfo.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_groupType.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-28_09-44-59.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/support/fn_spawnSupport.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT_vehicleType.altis/init.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_createUnitTooltip.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-27_08-18-56.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_addGroupToGroup.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_returnGroupType.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_returnClassType.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/Task 2/task2_flow.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/Task 2/task2_init.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/Task 1/task1_flow.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/tasks/playNow.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_spawnGroup.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_unstickUnit.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_cloneUnit.sqf",
+		"/C/Temp/PboM/133847819/rhs_weap_launchers.hpp",
+		"/C/Temp/PboM/1431615685/rhs_infantry_msv.hpp",
+		"/C/Temp/PboM/1431615685/cfgFunctions.hpp",
+		"/C/Temp/PboM/1431615685/scripts/rhs_nvgHandler.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_22-20-29.rpt",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_20-46-46.rpt",
+		"/C/Temp/PboM/1431615685/rhs_infantry_misc.hpp",
+		"/C/Temp/PboM/1431615685/script_config.hpp",
+		"/C/Temp/PboM/1431615685/script_macros.hpp",
+		"/C/Temp/PboM/1431615685/script_mod.hpp",
+		"/E/Steam/steamapps/common/Arma 3/!Workshop/@RHSAFRF/addons/config.cpp",
+		"/C/Temp/PboM/1466230036/cfgMagazines.h",
+		"/C/Temp/PboM/1466230036/scripts/rhs_disposable_load.sqf",
+		"/C/Temp/PboM/1466230036/scripts/rhs_disposable.sqf",
+		"/C/Temp/PboM/1466230036/cfgFunctions.hpp",
+		"/C/Temp/PboM/1466230036/rhsusf_weap_launchers.hpp",
+		"/C/Temp/PboM/1466230036/rhsusf_weap_AI.hpp",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/postapocalyptic.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/environment/fn_startWeatherEffect.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/snow.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/cameras/fn_cameraEdit.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/cameras/fn_cameraPreviewCircle.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/cameras/fn_cameraPreviewStatic.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/cameras/fn_cameraPreviewTerminate.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_20-01-00.rpt",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_15-39-17.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_spawnEnemy.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_targetVisible.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_spawnVehicle.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_spawnMan.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsExport.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsImport.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/general/fn_calcAzimuth.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_14-33-05.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/menuPages/page2.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsMenuRenameSet.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsMenuRename.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_updateSavedDataCombo.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsLoad.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/settings/fn_settingsMenuNewSet.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/compositions/fn_compositionEdit.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/preview/fn_previewGroup.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TreeSupportUnits_selChanged.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TreeCompositions_selChanged.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TreePlacedCompositions_selChanged.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TreePlayerGroup_selChanged.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TreeFactionGroups_selChanged.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/locations/fn_locationPreview.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/taskEdit/fn_TreeCustomGroup_selChanged.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_12-05-27.rpt",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-26_09-29-32.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/locations/fn_locationSet.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT_weatherEffects2.altis/mission.sqm",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT_weatherEffects.Altis/init.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/functions/task/fn_setUnitSkill.sqf",
+		"/C/Users/esopo/AppData/Local/Arma 3/Arma3_x64_2020-12-25_10-28-00.rpt",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/duststorm.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/monsoon.sqf",
+		"/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Altis/scripts/earthquake.sqf",
+		"/E/Steam/steamapps/common/Arma 3/userconfig/VCOM_AI/AISettingsV3.hpp"
+	],
+	"find":
+	{
+		"height": 40.0
+	},
+	"find_in_files":
+	{
+		"height": 102.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"_playerLoadout",
+			"DMORBAT_fnc_prepareUnit",
+			"compositionremove",
+			"_rshAIDisposableLauncherFix",
+			"DMORBAT_fnc_prepareUnit",
+			"compositionload",
+			"_detectedTime",
+			"magtype",
+			"setCaptive",
+			"PATH",
+			"setCaptive",
+			"p1",
+			"_supportLogicGroup",
+			"_magtype",
+			"DMORBAT_PlayerFaction",
+			"DMORBAT_Task1_detected",
+			"{\n",
+			"DMORBAT_PlayerNewGroup",
+			"for",
+			"LBSelChanged",
+			"ComboFactions_selChanged",
+			"_softAll",
+			"_factionUnarmed",
+			"_landGroupsUnarmed",
+			"_landGroups",
+			"_groupsAmount",
+			"_addGroupsToTaskData",
+			"_patrolCarInf",
+			"_ref",
+			"_patrolCarInf",
+			"_landGroupsUnarmed",
+			"_landGroups",
+			"for ",
+			"allowDamage",
+			"allowdama",
+			"_eligibleArmor",
+			"_airGroups",
+			"diag_log",
+			"artill",
+			"_factionAir",
+			"_factionArmor",
+			"_addGroupsToTaskData",
+			"artillery",
+			"DMORBAT_fnc_categorizeUnits",
+			"categorizeUnits",
+			"_enemyGroups",
+			"Assigning friendly groups",
+			"_thisInfAAGroupData",
+			"_selectedInfAAGroup",
+			"_eligibleFriendlyInfAAAll",
+			"_eligibleFriendlyInfAA",
+			"_thisInfATGroupData",
+			"_selectedInfATGroup",
+			"_eligibleFriendlyInfATAll",
+			"_eligibleFriendlyInfAT",
+			"_friendlyGroupsData",
+			"_friendlyGroupsDataIndex",
+			"_eligibleFriendlyInfAll",
+			"_eligibleFriendlyInf",
+			"_faction",
+			"_group pushBack \\[\\(selectRandom (.*)\\)\\]",
+			"_group pushBack \\[\\(selectRandom .*\\)\\]",
+			"_group pushBack \\[\\(selectrandom ([\\w\\]\\)\\\"0-9\\}\\'])\\)\\]",
+			"_group pushBack [(selectrandom ([\\w\\]\\)\\\"0-9\\}\\']))]",
+			"_group pushBack \\[\\(selectRandom w\\)\\]",
+			"_group pushBack \\[\\(selectRandom .*\\)\\]",
+			"_enemyFaction",
+			"_infGroups",
+			"_eligiblePatrols",
+			"_infGroups",
+			"DMORBAT_fnc_categorizeUnits",
+			"_selectedComposition",
+			"diag_log",
+			"cutText",
+			"intro",
+			"DMORBAT_editingTask",
+			"DMORBAT_mainDialogOpened",
+			"_selectedpatrol",
+			"playno",
+			"open",
+			"_categorizeGroups",
+			"slotindex",
+			"patrol",
+			"_groupTypesTxt",
+			"_task",
+			"_name",
+			"_category",
+			"UK3CB_ADA_O",
+			"UK3CB_ADP_O",
+			"rhsgref_faction_cdf_air_b",
+			"UK3CB_ADC_I",
+			"OPF_GEN_F",
+			"diag_log",
+			"_infCount",
+			"_unitClasses",
+			"_veh",
+			"\"%Car",
+			"})",
+			"({",
+			"_vehType = ",
+			"!_classFound && ",
+			"MRAP",
+			"_harmfulAmmo",
+			"_harmlessAmmo",
+			"DMORBAT_fnc_isArmed",
+			"_isArmed",
+			"_turretMags",
+			"_checked",
+			"{!_classFound}",
+			"returnClassType",
+			"returnGroupType",
+			"enableRadio",
+			"_isMan",
+			"secondary",
+			"eventhandler",
+			"p1",
+			"Single-shot",
+			"rhs_weap_M136_hp",
+			"Single-shot",
+			"m72a7",
+			"_load",
+			"DMORBAT_environment",
+			"_unitLoadout",
+			"_loadout",
+			"enableEnvironment",
+			"_playerLoadout",
+			"playmu",
+			"waituntil"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"_rhsAIDisposableLauncherFix",
+			"_timeOfDetection",
+			"_factionSoft",
+			"_softAll",
+			"_thisAAGroupData",
+			"_selectedAAGroup",
+			"_eligibleAAAll",
+			"_eligibleAA",
+			"_thisATGroupData",
+			"_selectedInfAT",
+			"_eligibleATAll",
+			"_eligibleAT",
+			"_groupsData",
+			"_groupsDataIndex",
+			"_eligibleInfAll",
+			"_eligibleInf",
+			"_group pushBack (selectRandom $1)",
+			"_group pushBack [(selectRandom $1)]",
+			"_faction",
+			"_customGroups",
+			"DMORBAT_fnc_categorizeGroups",
+			"_groupName",
+			"_groupsData",
+			"\"1%Car",
+			")",
+			"(",
+			"",
+			"_checkParent",
+			"_harmfulAmmo",
+			"DMORBAT_fnc_isVehicleArmed",
+			"DMORBAT_fnc_isArmed",
+			"_turretsWithMags",
+			"_noMags",
+			"!_classFound",
+			"classType",
+			"groupType",
+			"_exportedData",
+			"_simpleWreck",
+			"_wreckPosition",
+			"_wreckReference",
+			"_PPeffect_grain",
+			"_PPeffect_colorC",
+			"DMORBAT_snowIntensity",
+			"DMORBAT_TTL",
+			"DMORBAT_snowTTL",
+			"DMORBAT_snowMaxDistance",
+			"DMORBAT_snowFidelity",
+			"DMORBAT_snowVelocity",
+			"DMORBAT_snowTempIntensity",
+			"DMORBAT_snow",
+			"_supportType",
+			"DMORBAT_fnc_updateWeatherEffectsCombo",
+			"\\Ca\\Data\\Cl_fire",
+			"\"\"",
+			"\\Ca\\Data\\Cl_basic.p3d",
+			"[\"\\ca\\characters2\\OTHER\\FLY.p3d\",1,0,1,0]",
+			"_obj",
+			", objNull",
+			"",
+			"\\Ca\\Data\\Cl_fire",
+			"\\Ca\\Data\\ParticleEffects\\CloudletWater\\CloudletWater.p3d",
+			"\\Ca\\Data\\Cl_water",
+			"cl_water",
+			"_sa_local_jamm_givenUp",
+			"_reporter",
+			"\"menuPages\\page",
+			"\"menuPages\\",
+			"\"tasks\\",
+			"\"task\\",
+			"extractGroupsData",
+			"compositionSpawn",
+			"isAir",
+			"isMan",
+			"_passengerSeats",
+			"_isBomb",
+			"_supportLogicGroup",
+			"DMORBAT_SupportReq",
+			"_supportLeader",
+			"_supportProvider",
+			"_supportGroups",
+			"_supportLocation",
+			"_supportRadius",
+			"_supportData",
+			"_supportTypes",
+			"DMORBAT_SupportReq",
+			"_TransportProvider",
+			"_CASProvider",
+			"_ArtyProvider",
+			"_SupportReq",
+			"DMORBAT_supportLogicGroup",
+			"_groupsData",
+			"DMORBAT_fnc_updateSelectedSupportGroupsTreeList",
+			"_supportGroup",
+			"_catUnits",
+			"_catName",
+			"_catUnits",
+			"_catIndex",
+			"_catName",
+			"IDC_BT_PREVIEW",
+			"_faction",
+			"_subCatUnits",
+			"_supportTypeName",
+			"_thisSupportTypeData",
+			"_thisSupportTypeName",
+			"_supportTypesData",
+			"_locations",
+			"DMORBAT_TaskData_default",
+			"DMORBAT_TaskData",
+			"DMORBAT_TaskData_Groups_default",
+			"DMORBAT_TaskData_Groups",
+			"_slotData",
+			"_ranks",
+			"_unitClasses",
+			"_groupName",
+			"_groupTypeName",
+			"_groupData",
+			"_unitsData",
+			"_thisUnitData",
+			"_groupData",
+			"_groupIndex",
+			"_selectedGroupTypeData",
+			"_groupTypeData",
+			"_groupTypeIndex",
+			"IDC_TREE_FACTION_GROUPS",
+			"_selectedGroupType",
+			"IDC_TREE_FACTION_GROUPS",
+			"IDC_TREE_FACTION_UNITS",
+			"_groupTypeData"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"path": "D:\\Users\\esopo\\Documents\\Arma 3 - Other Profiles\\kenoxite\\missions\\DMORBAT.Altis"
+		}
+	],
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "start.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18000,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12147,
+								12167
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 5478.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "description.ext",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14102,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								665,
+								665
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 132.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "functions/general/fn_createFactionGroups.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10401,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9900,
+								9900
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 802.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "functions/general/fn_categorizeUnits.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4402,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								674,
+								677
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 198.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "scripts/playNow.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 31724,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								29584,
+								29584
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 10316.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "tasks/taskStart.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2805,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1827,
+								1136
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 294.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "menuPages/page5.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23105,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11407,
+								11407
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3869.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "functions/compositions/fn_compositionLoad.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5227,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1654,
+								1654
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 434.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "functions/taskEdit/fn_ComboFactions_selChanged.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2050,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1217,
+								1169
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 336.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "functions/taskEdit/fn_setPlayerUnit.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1662,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								927,
+								927
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 276.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "tasks/Task 1/task1_init.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9209,
+								9115
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2922.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "tasks/Task 2/task2_init.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23450,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4377,
+								4377
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1272.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Tanoa/settings_terrain.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1997,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1697,
+								1697
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/D/Users/esopo/Documents/Arma 3 - Other Profiles/kenoxite/missions/DMORBAT.Tanoa/compositions_default.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 34240,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10571,
+								7655
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 590.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 14,
+					"file": "control_defines.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14853,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								872,
+								897
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 213.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "dialogs/dialog_main.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2111,
+								2111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 981.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "functions/general/fn_groupRoles.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3546,
+								3546
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1233.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "functions/general/fn_categorizeGroups.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3187,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2710,
+								2714
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 798.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "functions/general/fn_groupType.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2199,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2148,
+								2151
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 958.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "functions/task/fn_prepareUnit.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4475,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2985,
+								2985
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 924.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "tasks/Task 1/task1_flow.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23284,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								21223,
+								21223
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 5979.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "tasks/Task 2/task2_flow.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18212,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17584,
+								17673
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4658.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "functions/general/fn_spawnMan.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3115,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								608,
+								608
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 266.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "functions/general/fn_spawnVehicle.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2057,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1974,
+								1974
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 672.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "functions/task/fn_spawnGroup.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6467,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6235,
+								6235
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2003.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "functions/task/fn_setPlayerGroup.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8908,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5061,
+								5008
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1804.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "functions/taskEdit/fn_TaskSelectionCombo_selChanged.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1398,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								617,
+								617
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 264.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "functions/general/fn_vehicleType.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4591,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2820,
+								2820
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 299.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "functions/general/fn_isVehicleArmed.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3883,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								203,
+								203
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 99.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "functions/support/fn_spawnSupport.sqf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11402,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6078,
+								6078
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQF Language/SQF.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1854.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 40.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				0,
+				1,
+				1,
+				2
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			0.5,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 103.0
+	},
+	"pinned_build_system": "",
+	"project": "",
+	"replace":
+	{
+		"height": 71.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 305.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
