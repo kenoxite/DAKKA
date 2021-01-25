@@ -1,3 +1,4 @@
-# DMORBAT.Altis
- 
-Dynamic and custom edit mission for Arma 3.
+# DMORBAT
+*Mission for Arma 3**
+
+Dynamic and custom edit mission.
