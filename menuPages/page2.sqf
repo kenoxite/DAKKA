@@ -136,7 +136,7 @@ _ctrl ctrlSetTooltip "Move Right";
 
 // TASK DESCRIPTION
 _ctrl = (_display displayCtrl IDC_TITLE_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText format ["%2\n%3%4", DMORBAT_Task,
+_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DMORBAT_Task,
 	toUpper (call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task]),
 	"→      ",
 	"CREATE PLAYER GROUP"
@@ -683,12 +683,29 @@ _ctrl ctrlCommit 0;
         _ctrl ctrlSetPosition [ _ctrlx, _ctrly, _ctrlWidth, _ctrlHeight];
         _ctrl ctrlCommit 0;
 
+
 // Camera controls
 _ctrl = (_display displayCtrl IDC_GRP_CAM_CONTROLS);
-_ctrlx = SafeZoneX + (SafeZoneW - (8 * pixelGridNoUIScale * pixelW));
-_ctrly = SafeZoneY + (SafeZoneH - (22 * pixelGridNoUIScale * pixelH));
+_ctrlx = SafeZoneX + (SafeZoneW - (5.8 * pixelGridNoUIScale * pixelW));
+_ctrly = SafeZoneY + (SafeZoneH - (20 * pixelGridNoUIScale * pixelH));
 _ctrlWidth = 8 * pixelGridNoUIScale * pixelW;
 _ctrlHeight = 5 * pixelGridNoUIScale * pixelH;
+_ctrl ctrlSetPosition [ _ctrlx, _ctrly, _ctrlWidth, _ctrlHeight];
+_ctrl ctrlCommit 0;
+
+_ctrl = (_display displayCtrl IDC_GRP_CAM_TYPE);
+_ctrlx = SafeZoneX + (SafeZoneW - (8.7 * pixelGridNoUIScale * pixelW));
+_ctrly = SafeZoneY + (SafeZoneH - (15 * pixelGridNoUIScale * pixelH));
+_ctrlWidth = 4 * pixelGridNoUIScale * pixelW;
+_ctrlHeight = 10 * pixelGridNoUIScale * pixelH;
+_ctrl ctrlSetPosition [ _ctrlx, _ctrly, _ctrlWidth, _ctrlHeight];
+_ctrl ctrlCommit 0;
+
+_ctrl = (_display displayCtrl IDC_GRP_EDIT_CONTROLS);
+_ctrlx = SafeZoneX + (SafeZoneW - (12 * pixelGridNoUIScale * pixelW));
+_ctrly = SafeZoneY + (SafeZoneH - (10 * pixelGridNoUIScale * pixelH));
+_ctrlWidth = 8 * pixelGridNoUIScale * pixelW;
+_ctrlHeight = 7 * pixelGridNoUIScale * pixelH;
 _ctrl ctrlSetPosition [ _ctrlx, _ctrly, _ctrlWidth, _ctrlHeight];
 _ctrl ctrlCommit 0;
 

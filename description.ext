@@ -439,6 +439,7 @@ class CfgFunctions
             class setOvercast {};
             class startWeatherEffect {};
             class resetWeatherEffects {};
+            class fullMoonDates {};
         };
 
         class Cameras

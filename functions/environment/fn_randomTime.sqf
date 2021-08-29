@@ -17,9 +17,9 @@
 
 */
 
-private ["_randomTime", "_sunriseSunsetTime", "_dawn", "_dusk", "_hour", "_minutes"];
+private ["_randomTime", "_sunriseSunsetTime", "_dawn", "_dusk", "_hour", "_minutes", "_newDate"];
 
-if (DMORBAT_noNight || DMORBAT_automated) then {
+if (DMORBAT_noNight) then {
     _sunriseSunsetTime = DMORBAT_customDate call BIS_fnc_sunriseSunsetTime;
     _dawn = ceil (_sunriseSunsetTime select 0);
     _dusk = floor (_sunriseSunsetTime select 1);
@@ -31,6 +31,11 @@ if (DMORBAT_noNight || DMORBAT_automated) then {
     _hour = floor (random 23);
     _minutes = floor (random 59);
 };
+
+_newDate = DMORBAT_customDate;
+_newDate set [3, _hour];
+_newDate set [4, _minutes];
+setDate _newDate;
 
 // skipTime _randomTime;
  ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_HOUR) lbSetCurSel (_hour);

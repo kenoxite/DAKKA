@@ -4,6 +4,117 @@
 0 fadeSound 0;
 cutText ["", "BLACK IN"];
 
+// RANDOM DATE, TIME & WEATHER
+call DMORBAT_fnc_resetWeatherEffects;
+_null = [] spawn {
+        if (DMORBAT_automated) then {
+            // Random date
+            _newDate = DMORBAT_customDate;
+            _newDate set [0, 2035];
+            _newDate set [1, [1, 12] call BIS_fnc_randomInt];
+            _newDate set [2, [1, 28] call BIS_fnc_randomInt];
+            setDate _newDate;
+            // Random date with full moon
+            // setDate selectRandom (2035 call DMORBAT_fnc_fullMoonDates);
+            DMORBAT_noNight = true;
+            [] spawn DMORBAT_fnc_randomTime;
+            // Brighter nights
+            // _null = [] spawn {
+            //     sleep 0.1;
+            //     _sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
+            //     if (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1)) then { setAperture 1 } else { setAperture 0 };
+            // };
+            [] spawn DMORBAT_fnc_randomWeather;
+        } else {
+            sleep 1;
+            // Weather effect
+            if (DMORBAT_weatherEffect != "None") then {
+                call compile format ["DMORBAT_%1 = true", DMORBAT_weatherEffect];
+                call DMORBAT_fnc_startWeatherEffect;
+            };
+            // Random time and weather
+            if (DMORBAT_randomTime) then {
+               [] spawn DMORBAT_fnc_randomTime;
+            };
+            if (DMORBAT_randomWeather && (DMORBAT_weatherEffect == "None" || DMORBAT_weatherEffect == "earthquake")) then {
+               [] spawn DMORBAT_fnc_randomWeather;
+            };
+        };
+};
+
+
+// LOCATIONS
+// Set random location if none was specified in a custom game
+if (!DMORBAT_automated) then {
+    // Retrieve data for this task
+    _task = DMORBAT_Task;
+    _taskData = DMORBAT_TaskData select (_task - 1);
+    _worldLocationsData = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
+    _locationsData = [_worldLocationsData, worldName] call BIS_fnc_getFromPairs;
+    _categoryData = _locationsData select 0;
+    _categoryLocations = _categoryData select 1;
+    if (count _categoryLocations == 0) then {
+        _locationsPredefined = call compile format ["DMORBAT_locations_Task%1", _task];
+        // Add locations data to tasks array
+        _locations = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
+        _thisWorldLocations = [_locations, worldName] call BIS_fnc_getFromPairs;
+        if (isNil "_thisWorldLocations") then {
+            // Add terrain data and include the predefined locations
+            _newArr = [worldName, _locationsPredefined];
+            [_taskData, "Locations", [_newArr]] call BIS_fnc_addToPairs;
+        } else {
+            // Add predefined locations to current terrain
+            [_locations, worldName, _locationsPredefined] call BIS_fnc_setToPairs
+        };
+
+        // COMPOSITIONS
+        // Delete existing ones first
+        // [true] call DMORBAT_fnc_compositionRemove;
+        // Load default compositions
+        #include "..\compositions_default.hpp";
+        _compositionsPredefined =+ DMORBAT_compositions_default;
+        if (_task == 1) then {
+            // Amount of compositions should match amount of predefined locations
+            _taskLocations = [_locationsPredefined, "Outposts"] call BIS_fnc_getFromPairs;
+            _selectedCompositions = [];
+            {
+                private _coords = _x select 0;
+                diag_log format ["_coords: %1", _coords];
+                private _dir = _x select 1;
+                private _comp =+ selectRandom _compositionsPredefined;
+                private _compName = _comp select 0;
+                private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
+                _comp set [0, _newName];
+                diag_log format ["_selectedComposition: %1", _compName];
+                private _compData = _comp select 1;
+                private _ref = _compData select 0;
+                _ref set [1, [_coords select 0, _coords select 1]];
+                _ref set [2, _dir];
+                _selectedCompositions pushBack _comp;
+            } forEach _taskLocations;
+
+            // Add compositions data to tasks array
+            _compositions = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+            _thisWorldCompositions = [_compositions, worldName] call BIS_fnc_getFromPairs;
+            if (isNil "_thisWorldCompositions") then {
+                // Add terrain data and include the predefined compositions
+                _newArr = [worldName, _selectedCompositions];
+                [_taskData, "Compositions", [_newArr]] call BIS_fnc_addToPairs;
+            } else {
+                // Add predefined compositions to current terrain
+                [_compositions, worldName, _selectedCompositions] call BIS_fnc_setToPairs
+            };
+
+            {
+                diag_log format ["%1: %2", _x select 0, _x select 1];
+            } forEach _selectedCompositions;
+
+            // Load compositions
+            call DMORBAT_fnc_compositionLoad;
+        };
+    };
+};
+
 // Start loading screen
 if (!DMORBAT_automated) then {
     _loadingScreen = createDialog "DMORBAT_Loading_Screen";
@@ -54,23 +165,6 @@ _nul = [] spawn {
 _supportLogicGroup = createGroup sideLogic;
 _marta = _supportLogicGroup createUnit ["MartaManager", _basepos, [], 50, "CAN_COLLIDE"];
 setGroupIconsVisible [false, false];
-
-call DMORBAT_fnc_resetWeatherEffects;
-_null = [] spawn {
-    sleep 1;
-    // Weather effect
-    if (DMORBAT_weatherEffect != "None") then {
-        call compile format ["DMORBAT_%1 = true", DMORBAT_weatherEffect];
-        call DMORBAT_fnc_startWeatherEffect;
-    };
-    // Random time and weather
-    if (DMORBAT_randomTime || DMORBAT_automated) then {
-       [] spawn DMORBAT_fnc_randomTime;
-    };
-    if ((DMORBAT_randomWeather || DMORBAT_automated) && (DMORBAT_weatherEffect == "None" || DMORBAT_weatherEffect == "earthquake")) then {
-       [] spawn DMORBAT_fnc_randomWeather;
-    };
-};
 
 // Things to do if using Play Now option
 if (DMORBAT_automated) then {

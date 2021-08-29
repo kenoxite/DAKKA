@@ -601,13 +601,8 @@ class DMORBAT_Menu_Mission_Edit
         class DMORBAT_Grp_CameraControls: DMORBAT_Controls_Group {
             idc = IDC_GRP_CAM_CONTROLS; 
 
-            // x = safezoneX + (25 * pixelGridNoUIScale * pixelW);
-            // y = safezoneY;
-            // w = safezoneW - (25 * pixelGridNoUIScale * pixelW);
-            // h = safezoneH;
-
-            x = safezoneW - (43 * pixelGridNoUIScale * pixelW);
-            y = safezoneH - (39 * pixelGridNoUIScale * pixelH);
+            x = SafeZoneX + (SafeZoneW - (5.8 * pixelGridNoUIScale * pixelW));
+            y = SafeZoneY + (SafeZoneH - (20 * pixelGridNoUIScale * pixelH));
             w = 8 * pixelGridNoUIScale * pixelW;
             h = 5 * pixelGridNoUIScale * pixelH;
         
@@ -620,7 +615,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 8 * pixelGridNoUIScale * pixelW;    
                     h = 5 * pixelGridNoUIScale * pixelH;
 
-                    text = "#(rgb,8,8,3)color(1,0,0,0.5)";
+                    text = "#(rgb,8,8,3)color(1,0,0,0)";
                 };
 
                 // BCKG
@@ -760,8 +755,8 @@ class DMORBAT_Menu_Mission_Edit
         class DMORBAT_Grp_CameraType: DMORBAT_Controls_Group {
             idc = IDC_GRP_CAM_TYPE; 
 
-            x = safezoneW - (38 * pixelGridNoUIScale * pixelW);
-            y = safezoneH - (50 * pixelGridNoUIScale * pixelH);
+            x = SafeZoneX + (SafeZoneW - (8.7 * pixelGridNoUIScale * pixelW));
+            y = SafeZoneY + (SafeZoneH - (15 * pixelGridNoUIScale * pixelH));
             w = 4 * pixelGridNoUIScale * pixelW;
             h = 10 * pixelGridNoUIScale * pixelH;
         
@@ -774,7 +769,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 3 * pixelGridNoUIScale * pixelW;    
                     h = 10 * pixelGridNoUIScale * pixelH;
 
-                    text = "#(rgb,8,8,3)color(1,0,0,0.5)";
+                    text = "#(rgb,8,8,3)color(1,0,0,0)";
                 };
 
                 // BCKG
@@ -783,8 +778,8 @@ class DMORBAT_Menu_Mission_Edit
                     idc = -1;
                     x = 0.95 * pixelGridNoUIScale * pixelW;
                     y = 0.9 * pixelGridNoUIScale * pixelH;
-                    w = 3 * pixelGridNoUIScale * pixelW;    
-                    h = 8 * pixelGridNoUIScale * pixelH;
+                    w = 1.8 * pixelGridNoUIScale * pixelW;    
+                    h = 4.8 * pixelGridNoUIScale * pixelH;
 
                     text = "#(rgb,8,8,3)color(1,0.5,0,1)";
                 };
@@ -806,7 +801,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\zoomout.paa";
+                    text = "images\dialogs\camtop.paa";
                 };
 
                 // HIGH
@@ -826,7 +821,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\up.paa";             
+                    text = "images\dialogs\camangle.paa";             
                 };
 
                 // CIRCLING
@@ -846,7 +841,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\zoomin.paa";
+                    text = "images\dialogs\camcircle.paa";
                 };
             };
         };
@@ -855,8 +850,8 @@ class DMORBAT_Menu_Mission_Edit
         class DMORBAT_Grp_CompEditControls: DMORBAT_Controls_Group {
             idc = IDC_GRP_EDIT_CONTROLS;    
 
-            x = safezoneX + (25 * pixelGridNoUIScale * pixelW);
-            y = safezoneH - (39 * pixelGridNoUIScale * pixelH);
+            x = SafeZoneX + (SafeZoneW - (12 * pixelGridNoUIScale * pixelW));
+            y = SafeZoneY + (SafeZoneH - (10 * pixelGridNoUIScale * pixelH));
             w = 8 * pixelGridNoUIScale * pixelW;
             h = 7 * pixelGridNoUIScale * pixelH;
         
@@ -869,7 +864,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 8 * pixelGridNoUIScale * pixelW;    
                     h = 7 * pixelGridNoUIScale * pixelH;
 
-                    text = "#(rgb,8,8,3)color(1,0,0,0.5)";
+                    text = "#(rgb,8,8,3)color(1,0,0,0)";
                 };
 
                 // BCKG
@@ -901,7 +896,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\zoomout.paa";
+                    text = "images\dialogs\rotateleft.paa";
                 };
 
                 // UP
@@ -921,7 +916,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\up.paa";             };
+                    text = "images\dialogs\moveup.paa";             };
 
                 // ROTATE RIGHT
                 class DMORBAT_BT_CompEditControls_RotateRight:DMORBAT_InvisibleButton
@@ -940,7 +935,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\zoomin.paa";
+                    text = "images\dialogs\rotateright.paa";
                 };
 
                 // LEFT
@@ -960,7 +955,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\left.paa";
+                    text = "images\dialogs\moveleft.paa";
                 };
 
                 // DOWN
@@ -980,7 +975,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\down.paa";
+                    text = "images\dialogs\movedown.paa";
                 };
 
                 // RIGHT
@@ -1000,7 +995,7 @@ class DMORBAT_Menu_Mission_Edit
                     w = 1.5 * pixelGridNoUIScale * pixelW;
                     h = 1.5 * pixelGridNoUIScale * pixelH;
 
-                    text = "images\dialogs\right.paa";
+                    text = "images\dialogs\moveright.paa";
                 };
 
                 class DMORBAT_BT_CompEditControls_Close:DMORBAT_Button

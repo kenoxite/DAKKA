@@ -31,7 +31,7 @@ if (_month <= _rainMonths_Beg || _month >= _rainMonths_End) then {
     // Rainy months
     _fogMin = 0;
     _forMed = DMORBAT_fogValue select 0;
-    _fogMax = (DMORBAT_fogValue select 1) min 1;
+    _fogMax = ((DMORBAT_fogValue select 1) / 2) min 1;
 } else {
     // Dry months
     _fogMin = 0;

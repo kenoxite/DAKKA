@@ -89,7 +89,7 @@ if (_playerIsInf) then {
     {
         private _veh = vehicle _x;
         if ([_veh] call DMORBAT_fnc_isAir) then {
-            private _pos = [[(DMORBAT_task2_locPos select 0) + (floor random 200), (DMORBAT_task2_locPos select 1), 2000], 5000, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+            private _pos = [[(DMORBAT_task2_locPos select 0) + (floor random 200), (DMORBAT_task2_locPos select 1), 2000], -5000, DMORBAT_task2_locDir] call BIS_fnc_relPos;
             if (_x == effectiveCommander _veh) then {
                 _veh setVehiclePosition [_pos, [], (sizeOf (typeOf _veh) + 100), "FLY"];
             };

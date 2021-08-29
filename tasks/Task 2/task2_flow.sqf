@@ -98,6 +98,34 @@ _task_2_checks = [] spawn {
             _color = ["Map", _owner] call BIS_fnc_displayColorGet;
             _ctrl ctrlSetText format ["#(rgb,8,8,3)color(%1,%2,%3,0.5)", _color select 0, _color select 1, _color select 2];
 
+            // Resume dynamic music
+            ["initialize",
+                [
+                    [ // stealth
+                        "LeadTrack06_F_EPC",
+                        "EventTrack03_F_EPB",
+                        "AmbientTrack04_F",
+                        "EventTrack03a_F_EPB"
+                    ],
+                    [ // combat
+                        "AmbientTrack01a_F_Tacops",
+                        "EventTrack01a_F_Tacops",
+                        "EventTrack01b_F_Tacops",
+                        "EventTrack02a_F_Tacops",
+                        "EventTrack02b_F_Tacops",
+                        "EventTrack03a_F_Tacops",
+                        "EventTrack03b_F_Tacops"
+                    ],
+                    [ // safe
+                    ],
+                    0.5, // volume
+                    5, // transition
+                    500, // radius
+                    5, // execution rate
+                    true // no repeat
+                ]
+            ] call BIS_fnc_jukebox;
+
             //
             DMORBAT_loadedSavegame = false;
         };

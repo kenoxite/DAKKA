@@ -43,7 +43,7 @@ if (DMORBAT_automated) then {
 
 // TASK DESCRIPTION
 _ctrl = (_display displayCtrl IDC_TITLE_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText format ["%2\n%3%4", DMORBAT_Task,
+_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DMORBAT_Task,
 	toUpper (call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task]),
 	"→      ",
 	"GLOBAL SETTINGS"
@@ -152,7 +152,7 @@ _ctrl ctrlSetEventHandler ["CheckedChanged", '
     ["No night"] call DMORBAT_fnc_globalSettingsSave;
     '];
 _ctrl cbSetChecked  DMORBAT_noNight;
-_ctrl ctrlSetTooltip "Enable if you only want to play during the day when using random time";
+_ctrl ctrlSetTooltip "Enable if you only want to play during the day.\n\nThis setting is recommended if the player group doesn't have night vision capabilities.";
 if (DMORBAT_randomTime) then {
     _ctrl ctrlShow true;
 } else {

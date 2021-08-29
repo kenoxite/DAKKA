@@ -87,7 +87,7 @@ _ctrl ctrlSetTooltip "Circling";
 
 // TASK DESCRIPTION
 _ctrl = (_display displayCtrl IDC_TITLE_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText format ["%2\n%3%4", DMORBAT_Task,
+_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DMORBAT_Task,
 	toUpper (call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task]),
 	"→      ",
 	"SET AO LOCATIONS"

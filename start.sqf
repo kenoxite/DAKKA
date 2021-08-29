@@ -410,7 +410,7 @@ removeHeadgear p1;
 removeGoggles p1; 
 
 // Spectate EH
-p1 addEventHandler ["killed", { [_this] spawn DMORBAT_fnc_spectate; } ];
+// p1 addEventHandler ["killed", { [_this] spawn DMORBAT_fnc_spectate; } ];
 
 DMORBAT_EH_OpenMenu = player addAction ["Open Menu", { call DMORBAT_fnc_openMainDialog;}];
 
