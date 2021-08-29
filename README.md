@@ -1,4 +1,4 @@
 # DMORBAT
 *Mission for Arma 3*
 
-Dynamic and custom edit mission.
+Simple and flexible dynamic mission framework with instant action capabilities.
