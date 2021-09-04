@@ -47,6 +47,11 @@ private _hasDiver = false;
 private _hasSniper = false;
 private _hasCrew = false;
 private _hasAssistant = false;
+private _hasRadio = false;
+private _hasDriver = false;
+private _hasPilot = false;
+private _hasJTAC = false;
+private _hasSpotter = false;
 
 private _SFvehicleClasses = [
         "MenRecon",
@@ -59,45 +64,53 @@ private _return = false;
 // Array of class names
 {
     if (_x isKindOf "Man") then {
+        private _className = toLowerANSI _x;
         private _config = configFile >> "CfgVehicles" >> _x;
         private _name = getText (_config >> "displayName");
         private _role = getText (_config >> "role");
         private _icon = getText (_config >> "icon");
         private _hacker = getNumber (_config >> "uavHacker") == 1;
         private _vehicleClass = getText (_config >> "vehicleClass");
-        if (_role == "MachineGunner" || "_ar" in _x || "autorifleman" in _x || "machinegunner" in _x) then { _hasMG = true };
-        if (_role == "Grenadier" || "grenadier" in _x || "_gl" in _x) then { _hasGrenadier = true };
-        if (_role == "Unarmed") then { _hasUnarmed = true };
+        private _threat = getArray (_config >> "threat");
+        if (_role == "MachineGunner" || "_ar" in _className || "autorifleman" in _className || "machinegunner" in _className || "_mg" in _className) then { _hasMG = true };
+        if (_role == "Grenadier" || "grenadier" in _className || "_gl" in _className) then { _hasGrenadier = true };
+        if (_role == "Unarmed" || "unarmed" in _className || "captive" in _className || "survivor" in _className) then { _hasUnarmed = true };
         // if (_role == "Sapper") then { _hasEngi = true };
         // if (_role == "SpecialOperative") then { _hasSF = true };
-        if (_role == "Assistant") then { _hasAssistant = true };
+        if (_role == "Assistant" || "_aaa" in _className || "_aat" in _className || "_amg" in _className || "_aar" in _className) then { _hasAssistant = true };
 
-        if (_icon == "iconManLeader" || "_sl" in _x || "_squadleader" in _x) then { _hasLeader = true };
-        if (_icon == "iconManOfficer" || "officer" in _x || "general" in _x) then { _hasOfficer = true };
-        if (_icon == "iconManExplosive") then { _hasDemo = true };
-        if (_icon == "iconManEngineer") then { _hasEngi = true };
-        if (_icon == "iconManMedic" || _role == "CombatLifeSaver" || "medic" in _x) then { _hasMedic = true };
-        if (_icon == "iconManAT" || _role == "MissileSpecialist" || "_at" in _x || "_aa" in _x || "_rpg" in _x) then {
-            private _threat = getArray (_config >> "threat");
-            if (count _threat > 0) then {
-                if ((_threat select 2) >= 0.9 || "_aa" in _x) then {
-                    _hasAA = true;
-                } else {
-                    _hasAT = true;
-                };
+        if (_icon == "iconManLeader" || "_sl" in _className || "_squadleader" in _className || "commander" in _className) then { _hasLeader = true };
+        if (_icon == "iconManOfficer" || "officer" in _className || "general" in _className) then { _hasOfficer = true };
+        if (_icon == "iconManExplosive" || "explosive" in _className || "sapper" in _className || "mine" in _className || "_exp" in _className) then { _hasDemo = true };
+        if (_icon == "iconManEngineer" || "engineer" in _className || "repair" in _className) then { _hasEngi = true };
+        if (_icon == "iconManMedic" || _role == "CombatLifeSaver" || "medic" in _className) then { _hasMedic = true };
+        // if (_icon == "iconManAT" || _role == "MissileSpecialist" || "_at" in _className || "_aa" in _className || "_rpg" in _className || "_lat" in _className || "_hat" in _className) then {
+        if ((_threat select 1) > 0.5 || (_threat select 2) > 0.5) then {
+            if ((_threat select 2) > 0.5) then {
+                _hasAA = true;
+            } else {
+                _hasAT = true;
             };
         };
         if (_hacker) then { _hasHacker = true };
-        if (_vehicleClass == "MenDiver" || "diver" in _x) then { _hasDiver = true };
-        if (_role == "Marksman" || "marksman" in _x) then {
-            if (_vehicleClass == "MenSniper") then {
+        if (_vehicleClass == "MenDiver" || "diver" in _className) then { _hasDiver = true };
+        if (_icon == "iconManSniper" || _role == "Marksman" || "marksman" in _className || "sniper" in _className || "spotter" in _className) then {
+            if (_vehicleClass == "MenSniper" || "sniper" in _className) then {
                 _hasSniper = true;
             } else {
-                _hasMarksman = true;
+                if ("spotter" in _className) then {
+                    _hasSpotter = true;
+                } else {
+                    _hasMarksman = true;
+                };
             };
         };
-        if (_vehicleClass in _SFvehicleClasses) then { _hasSF = true };
-        if (_role == "Crewman" || "crew" in _x) then { _hasCrew = true };
+        if (_vehicleClass in _SFvehicleClasses || "specop" in _className || "blackop" in _className || "spetsnaz" in _className || "ranger" in _className || "recon" in _className || "marsoc" in _className || "_sf" in _className || "saboteur" in _className || "_sas" in _className) then { _hasSF = true };
+        if (_role == "Crewman" || "crew" in _className) then { _hasCrew = true };
+        if ("radio" in _className) then { _hasRadio = true };
+        if ("driver" in _className) then { _hasDriver = true };
+        if ("pilot" in _className) then { _hasPilot = true };
+        if ("jtac" in _className) then { _hasJTAC = true };
 
         if (_roleCheck != "") then {
             if (call compile format ["%1"]) exitWith { _return = true };
@@ -108,5 +121,5 @@ private _return = false;
 if (_roleCheck != "") then {
     _return
 } else {
-    [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant]
+    [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter]
 }

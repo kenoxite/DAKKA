@@ -35,6 +35,77 @@ DMORBAT_task1_locPos = (_categoryLocations select _locationIndex) select 0;
 if (count DMORBAT_task1_locPos < 3) then { DMORBAT_task1_locPos pushBack 0 };
 diag_log format ["DMORBAT: Task 1 - Initializing Location %1", _locationIndex + 1];
 
+
+
+// COMPOSITIONS
+_txt = "Generating compositions...";
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Task 1 - %1", _txt];
+// Delete existing ones first
+[true] call DMORBAT_fnc_compositionRemove;
+// Load default compositions
+#include "..\..\compositions_default.hpp";
+_compositionsPredefined =+ DMORBAT_compositions_default;
+_locationsPredefined = DMORBAT_locations_Task1;
+// Amount of compositions should match amount of predefined locations
+_taskLocations = [_locationsPredefined, "Outposts"] call BIS_fnc_getFromPairs;
+_selectedCompositions = [];
+{
+    private _coords = _x select 0;
+    // diag_log format ["_coords: %1", _coords];
+    private _dir = _x select 1;
+    private _comp =+ selectRandom _compositionsPredefined;
+    private _compName = _comp select 0;
+    private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
+    _comp set [0, _newName];
+    // diag_log format ["_selectedComposition: %1", _compName];
+    private _compData = _comp select 1;
+    private _ref = _compData select 0;
+    _ref set [1, [_coords select 0, _coords select 1]];
+    _ref set [2, _dir];
+    _selectedCompositions pushBack _comp;
+} forEach _taskLocations;
+
+// Add compositions data to tasks array
+_compositions = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+_thisWorldCompositions = [_compositions, worldName] call BIS_fnc_getFromPairs;
+if (isNil "_thisWorldCompositions") then {
+    // Add terrain data and include the predefined compositions
+    _newArr = [worldName, _selectedCompositions];
+    [_taskData, "Compositions", [_newArr]] call BIS_fnc_addToPairs;
+} else {
+    // Add predefined compositions to current terrain
+    [_compositions, worldName, _selectedCompositions] call BIS_fnc_setToPairs
+};
+
+// {
+//     diag_log format ["%1: %2", _x select 0, _x select 1];
+// } forEach _selectedCompositions;
+
+// Load compositions
+[false, DMORBAT_task1_locPos] call DMORBAT_fnc_compositionLoad;
+
+// Enable simulation for all composition objects
+_nul = [] spawn {
+    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+    _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
+    if (!isNil "_compositionsData") then {
+        waitUntil { DMORBAT_compositionsLoaded == count _compositionsData };
+
+        {
+            _compObjects =+ _x select 1;
+            _compObjects deleteAt 0;
+            {
+                _obj = _x select 0;
+                _obj enableSimulation true;
+                // _obj setVelocity [0, 0, 0];
+                _obj allowDamage true;
+            } forEach _compObjects;
+        } forEach _compositionsData;
+    };
+};
+
 // CREATE MARKERS
 _ctrl ctrlSetText format ["Creating markers...", ""];
 // Marker: Suggested search area for the outpost

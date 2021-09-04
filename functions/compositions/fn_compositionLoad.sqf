@@ -17,9 +17,13 @@
 
 */
 
+params [["_all", true], ["_location", []], ["_distance", 100]];
+
 DMORBAT_compositionsLoaded = 0;
 
-_nul = [] spawn {
+_nul = _this spawn {
+    params [["_all", true], ["_location", []], ["_distance", 100]];
+    diag_log format ["DMORBAT: _all: %1, _location: %2, _distance: %3", _all, _location, _distance];
     private ["_taskData", "_worldCompositionsData", "_compositionsData", "_thisCompositionData", "_hiddenObjects", "_compObjects", "_compObjectsCopy", "_ref", "_obj", "_objClass", "_relPos", "_objDir", "_keepHorizontal", "_itemPos", "_finalDir", "_aligned", "_refPos", "_refDir", "_nearTerrObj", "_hideDist", "_return"];
 
     _return = true;
@@ -27,11 +31,33 @@ _nul = [] spawn {
     _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
     _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 
+    private _trimmedCompositionsData = [];
+    // Check for distance if not all compositions want to be spawned
+    if (!_all) then {
+        for [{private _i = 0}, {_i < count _compositionsData}, {_i = _i + 1}] do 
+        {
+            private _thisCompositionData = _compositionsData select _i;
+            private _compObjects = _thisCompositionData select 1;
+            private _refArr = _compObjects select 0;
+            private _refPos = _refArr select 1;
+            private _refDir = _refArr select 2;
+            private _ref = "Flag_BI_F" createVehicle _refPos;
+            _ref hideObject true;
+            if ((_ref distance2D _location) <= _distance) then {
+                _trimmedCompositionsData pushBack _thisCompositionData;
+            };
+        };
+    };
+    {
+        diag_log format ["DMORBAT: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1];
+    } forEach _trimmedCompositionsData;
+
+
     _aligned = true;
 
-    for [{private _i = 0}, {_i < count _compositionsData}, {_i = _i + 1}] do 
+    for [{private _i = 0}, {_i < count _trimmedCompositionsData}, {_i = _i + 1}] do 
     {
-    	_thisCompositionData = _compositionsData select _i;
+    	_thisCompositionData = _trimmedCompositionsData select _i;
     	// diag_log format ["DMORBAT: compositionLoad _thisCompositionData: %1", _thisCompositionData];
         diag_log format ["DMORBAT: compositionLoad - Loading composition: %1", _thisCompositionData select 0 ];
     	_compObjects = _thisCompositionData select 1;
@@ -118,7 +144,9 @@ _nul = [] spawn {
     };
 
     // Save task settings
-    call DMORBAT_fnc_settingsSave;
+    if (!DMORBAT_automated) then {
+        call DMORBAT_fnc_settingsSave;
+    };
 
     if (count _compositionsData == 0) then {
         _return = false;

@@ -23,6 +23,7 @@ if (_class == "") exitWith { diag_log format ["DMORBAT: vehicleType --- ERROR --
 // diag_log format ["DMORBAT: _class: %1 _checkWeapons: %2", _class, _checkWeapons];
 
 private _vehType = "";
+private _subCat = getText (configFile >> "CfgVehicles" >> _class >> "editorSubcategory");
 
 // Drones
 private _crew = getText (configFile >> "CfgVehicles" >> _class >> "crew");
@@ -31,7 +32,7 @@ private _txt = if (getText (configFile >> "CfgVehicles" >> _crew >> "simulation"
 private _parentClasses = [ configFile >> "CfgVehicles" >> _class, true ] call BIS_fnc_returnParents;
 // diag_log format ["DMORBAT: _class: %1 _parentClasses: %2", _class, _parentClasses];
 
-if (getText (configFile >> "CfgVehicles" >> _class >> "editorSubcategory") == "EdSubcat_Artillery") exitWith { format ["%1Artillery", _txt] };
+if (_subCat == "EdSubcat_Artillery") exitWith { format ["%1Artillery", _txt] };
 
 if ("StaticWeapon" in _parentClasses) exitWith {
     if (_checkWeapons) then {
@@ -41,44 +42,96 @@ if ("StaticWeapon" in _parentClasses) exitWith {
     }
 };
 
+private _isAA = if (_subCat == "EdSubcat_AAs") then { true } else { false };
+
 if ("LandVehicle" in _parentClasses) then {
 
     // Wheeled
     if ("Wheeled_APC_F" in _parentClasses) exitWith {
         if (_checkWeapons) then {
-            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { format ["%1Wheeled APC", _txt] } else { format ["%1Wheeled APC (unarmed)", _txt] }
+            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { 
+                if (_isAA) then {
+                    format ["%1Wheeled APC (AA)", _txt]
+                } else {
+                    format ["%1Wheeled APC", _txt]
+                }
+            } else { format ["%1Wheeled APC (unarmed)", _txt] }
         } else {
-            _vehType = format ["%1Wheeled APC", _txt]
+            if (_isAA) then {
+                _vehType = format ["%1Wheeled APC (AA)", _txt]
+            } else {
+                _vehType = format ["%1Wheeled APC", _txt]
+            }
         }
     };
     if ("Truck_F" in _parentClasses) exitWith {
         if (_checkWeapons) then {
-            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { format ["%1Truck", _txt] } else { format ["%1Truck (unarmed)", _txt] }
+            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then {
+                if (_isAA) then {
+                    format ["%1Truck (AA)", _txt]
+                } else {
+                    format ["%1Truck", _txt]
+                }
+            } else { format ["%1Truck (unarmed)", _txt] }
         } else {
-            _vehType = format ["%1Truck", _txt]
+            if (_isAA) then {
+                _vehType = format ["%1Truck (AA)", _txt]
+            } else {
+                _vehType = format ["%1Truck", _txt]
+            }
         }
     };
     if ("Car" in _parentClasses) exitWith {
         if (_checkWeapons) then {
-            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { format ["%1Car", _txt] } else { format ["%1Car (unarmed)", _txt] }
+            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then {
+                if (_isAA) then {
+                    format ["%1Car (AA)", _txt]
+                } else {
+                    format ["%1Car", _txt]
+                }
+            } else { format ["%1Car (unarmed)", _txt] }
         } else {
-            _vehType = format ["%1Car", _txt]
+            if (_isAA) then {
+                _vehType = format ["%1Car (AA)", _txt]
+            } else {
+                _vehType = format ["%1Car", _txt]
+            }
         }
     };
 
     // Tracked
-    if ("APC_Tracked_01_base_F" in _parentClasses) exitWith {
+    if ("APC_Tracked_01_base_F" in _parentClasses || "APC_Tracked_02_base_F" in _parentClasses || "CUP_M113_Base" in _parentClasses || "CUP_MTLB_Base" in _parentClasses || "CUP_AAV_Base" in _parentClasses || "CUP_M2Bradley_Base" in _parentClasses || "CUP_FV432_Bulldog_Base" in _parentClasses || "CUP_FV510_Base" in _parentClasses || "CUP_MCV80_Base" in _parentClasses) exitWith {
         if (_checkWeapons) then {
-            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { format ["%1Tracked APC", _txt] } else { format ["%1Tracked APC (unarmed)", _txt] }
+            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then {
+                if (_isAA) then {
+                    format ["%1Tracked APC (AA)", _txt]
+                } else {
+                    format ["%1Tracked APC", _txt]
+                }
+            } else { format ["%1Tracked APC (unarmed)", _txt] }
         } else {
-            _vehType = format ["%1Tracked APC", _txt]
+            if (_isAA) then {
+                _vehType = format ["%1Tracked APC (AA)", _txt]
+            } else {
+                _vehType = format ["%1Tracked APC", _txt]
+            }
         }
     };
     if ("Tank" in _parentClasses) exitWith {
         if (_checkWeapons) then {
-            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { format ["%1Tank", _txt] } else { format ["%1Tank (unarmed)", _txt] }
+            _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then {
+                if (_isAA) then {
+                    format ["%1Tank (AA)", _txt]
+                } else {
+                    format ["%1Tank", _txt]
+                }
+            } else { format ["%1Tank (unarmed)", _txt] }
         } else {
-            _vehType = format ["%1Tank", _txt]
+            if (_isAA) then {
+                _vehType = format ["%1Tank (AA)", _txt]
+            } else {
+                _vehType = format ["%1Tank", _txt]
+            }
         }
     };
 

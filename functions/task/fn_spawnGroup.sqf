@@ -89,8 +89,12 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                 _safeRadius = 20 + (sizeOf _unitClass);
                 _safeSpotFound = false;
                 _alowedDamage = isDamageAllowed _unit;
+                _unit enableSimulation false;
+                _unit setVelocity [0, 0, 0];
                 _unit allowDamage false;
                 {
+                    _x enableSimulation false;
+                    _x setVelocity [0, 0, 0];
                     _x allowDamage false;
                 } forEach (crew vehicle _unit);
                  for [{private _i = 0}, {_i < _tries && !_safeSpotFound}, {_i = _i + 1}] do 
@@ -116,8 +120,10 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                         };
                     };
                     _distMod = _distMod * (_i + 2);
+                    _unit enableSimulation true;
                     _unit allowDamage _alowedDamage;
                     {
+                        _x enableSimulation true;
                         _x allowDamage _alowedDamage;
                     } forEach (crew vehicle _unit);
                 };

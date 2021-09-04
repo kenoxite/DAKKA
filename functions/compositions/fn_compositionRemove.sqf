@@ -85,6 +85,8 @@ if (!_all) then {
 call DMORBAT_fnc_mapDisplayCompositions;
 
 // Save task settings
-call DMORBAT_fnc_settingsSave;
+if (!DMORBAT_automated) then {
+    call DMORBAT_fnc_settingsSave;
+};
 
 true

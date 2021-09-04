@@ -61,7 +61,7 @@ if (_specific) then {
                 };
             };
         } else {
-            _return = "Land";
+            _return = "Armor";
         };
     };
 };

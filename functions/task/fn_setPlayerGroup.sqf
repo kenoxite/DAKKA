@@ -132,6 +132,9 @@ _leader = leader _grp;
 _isLeader = _leader == _playableUnit;
 _isMan = [typeOf _veh] call DMORBAT_fnc_isMan; 
 
+// Unit Voice-overs mod: language that speaks the unit that is going to be replaced by the player
+_voice = _playableUnit getVariable "UVO_voice";
+
 // Apply identity, loadout and traits of the playable unit
 [_playableUnit, p1, true, true, true] call DMORBAT_fnc_cloneUnit;
 if (pitch p1 == 0) then {
@@ -269,5 +272,22 @@ _units = (units group p1);
     };
     if ((count _groupPassengers) == 0) exitWith { false };
 } forEach _groupVehicles;
+
+// UNIT VOICE-OVERS FIX
+_nul = [_voice] spawn {
+    private ["_voice"];
+    _voice = _this select 0;
+
+    // Reset
+    player setVariable ["UVO_voice",nil,true];
+    // player setVariable ["UVO_speaking",nil,true];
+    player setVariable ["UVO_suppressBuffer",nil,true];
+    player setVariable ["UVO_allowDeathShouts",false,true];
+
+    // Apply
+    player setVariable ["UVO_voice",_voice,true];
+    player setVariable ["UVO_suppressBuffer",0,true];
+    player setVariable ["UVO_allowDeathShouts",missionNamespace getVariable ["uvo_main_UVO" + _voice,true],true];
+};
 
 group p1 

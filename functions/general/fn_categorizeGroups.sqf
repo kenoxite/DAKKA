@@ -25,7 +25,7 @@ private _sniperGroups = [];
 private _motGroups = [];
 private _mechGroups = [];
 private _artilleryGroups = [];
-private _landGroups = [];
+private _armorGroups = [];
 private _airGroups = [];
 private _waterGroups = [];
 
@@ -53,7 +53,7 @@ private _waterGroups = [];
             {
                 _isInf = true;
                 private _groupRoles = [_classes] call DMORBAT_fnc_groupRoles;
-                // _groupRoles = [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper]
+                // _groupRoles = [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter]
                 // SF
                 if (_isInf && {_groupRoles select 13}) then {
                     _isInf = false;
@@ -84,9 +84,9 @@ private _waterGroups = [];
             {
                 _artilleryGroups pushBack [_classes];
             };
-            case "Land":
+            case "Armor":
             {
-                _landGroups pushBack [_classes];
+                _armorGroups pushBack [_classes];
             };
             case "Air":
             {
@@ -100,4 +100,4 @@ private _waterGroups = [];
     } forEach _groupsData;
 } forEach _factionGroups;
 
-[_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _landGroups, _airGroups, _waterGroups] 
+[_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups] 

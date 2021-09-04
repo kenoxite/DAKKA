@@ -28,14 +28,14 @@ diag_log format ["DMORBAT: Play Now - %1", _txt];
 _playerFaction = DMORBAT_PlayerFactions select (_task - 1);
 diag_log format ["DMORBAT: _playerFaction: %1", _playerFaction];
 _factionGroups = [_playerFaction] call DMORBAT_fnc_categorizeGroups;
-// _categorizeGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _landGroups, _airGroups, _waterGroups]
+// _categorizeGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups]
 _infGroups = _factionGroups select 0;
 _SFGroups = _factionGroups select 1;
 _sniperGroups = _factionGroups select 2;
 _motGroups = _factionGroups select 3;
 _mechGroups = _factionGroups select 4;
 _artilleryGroups = _factionGroups select 5;
-_landGroups = _factionGroups select 6;
+_armorGroups = _factionGroups select 6;
 _airGroups = _factionGroups select 7;
 _waterGroups = _factionGroups select 8;
 
@@ -44,10 +44,18 @@ _ctrl ctrlSetText _txt;
 diag_log format ["DMORBAT: Play Now - %1", _txt];
 
 // Form custom infantry groups if faction doesn't have any defined
-if (count _infGroups == 0) then {
-    diag_log format ["DMORBAT: No infantry groups found for player faction %1. Creating custom ones...", _playerFaction];
-    _infGroups = [_playerFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
-};
+// if (count _infGroups == 0) then {
+//     diag_log format ["DMORBAT: No infantry groups found for player faction %1. Creating custom ones...", _playerFaction];
+//     _infGroups = [_playerFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
+// };
+// Always create custom faction groups. Most mods either don't bother, know or want to create proper groups anyway so even if they have them they probably will be useless or lacking
+diag_log format ["DMORBAT: Creating custom groups for faction %1...", _playerFaction];
+_infGroupsCustom = [_playerFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
+// _infGroups append _infGroupsCustom;
+_infGroups =+ _infGroupsCustom;
+_SFGroupsCustom = [_playerFaction, "SF"] call DMORBAT_fnc_createFactionGroups;
+// _SFGroups append _SFGroupsCustom;
+_SFGroups =+ _SFGroupsCustom;
 
 // PLAYER GROUP
 _playerGroup = [];
@@ -108,7 +116,7 @@ _playerData = [_playableUnit, 0, []];
 [_taskData, "Player data", _playerData] call BIS_fnc_setToPairs;
 
 // FUNCTIONS
-_addGroupsToTaskData = {
+_fnc_addGroupsToTaskData = {
     params ["_dataType1", "_dataType2", "_groupsPool", ["_groupsAmount", 1], ["_unitsAmount", 0], ["_variablePresence", false], ["_presenceThreshold", 3], ["_skill", 0]];
     // diag_log format ["_dataType1: %1 _dataType2: %2 _groupsPool: %3", _dataType1, _dataType2, _groupsPool];
     private _task = DMORBAT_Task;
@@ -120,11 +128,7 @@ _addGroupsToTaskData = {
     private _presenceChance = 1;
     for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do 
     {
-        _selectedGroup = if (count _groupsPool > 1) then {
-                                _groupsPool select (floor (random ((count _groupsPool) - 1)));
-                        } else {
-                            (_groupsPool select 0);
-                        };
+        _selectedGroup = selectRandom _groupsPool;
         private _thisGroupData = [format ["%1 Group %2", _dataType2, _i + 1], [], []];
         {
             if (_unitsAmount > 0 && _forEachIndex == _unitsAmount) exitWith { true };
@@ -236,70 +240,70 @@ if (_task == 2) then {
     _eligibleInf = [];
     _eligibleInfAll = [];
     // Pick a group with 8 or more members
-    _eligibleInfAll = _infGroups select { (count (_x select 0)) >= 8 };
+    _eligibleInfAll =+ _infGroups select { (count (_x select 0)) >= 8 };
     if (count _eligibleInfAll > 0) then {
-        _eligibleInf = _eligibleInfAll;
+        _eligibleInf =+ _eligibleInfAll;
     } else {
-        _eligibleInf = _infGroups;
+        _eligibleInf =+ _infGroups;
     };
-    ["Friendly groups", "Infantry", _eligibleInf, 2] call _addGroupsToTaskData;
+    ["Friendly groups", "Infantry", _eligibleInf, 2] call _fnc_addGroupsToTaskData;
 
     // AT Teams
     _eligibleAT = [];
     _eligibleATAll = [];
     // Pick a group with 4 or less members and AT
-    _eligibleATAll = _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 0)};
+    _eligibleATAll =+ _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 0)};
     if (count _eligibleATAll > 0) then {
-        _eligibleAT = _eligibleATAll;
+        _eligibleAT =+ _eligibleATAll;
     } else {
         // Pick a group with 4 or less members
-        _eligibleATAll = _infGroups select { (count (_x select 0)) <= 4 };
+        _eligibleATAll =+ _infGroups select { (count (_x select 0)) <= 4 };
         if (count _eligibleATAll > 0) then {
-            _eligibleAT = _eligibleATAll;
+            _eligibleAT =+ _eligibleATAll;
         } else {
             // Otherwise pick one randomly
-            _eligibleAT = _infGroups;
+            _eligibleAT =+ _infGroups;
         };
     };
-    ["Friendly groups", "Infantry", _eligibleAT, 1, 0, true, 4] call _addGroupsToTaskData;
+    ["Friendly groups", "Infantry", _eligibleAT, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
 
     // AA Teams
     _eligibleAA = [];
     _eligibleAAAll = [];
     // Pick a group with 4 or less members and AA
-    _eligibleAAAll = _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 1)};
+    _eligibleAAAll =+ _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 1)};
     if (count _eligibleAAAll > 0) then {
-        _eligibleAA = _eligibleAAAll;
+        _eligibleAA =+ _eligibleAAAll;
     } else {
         // Pick a group with 4 or less members
-        _eligibleAAAll = _infGroups select { (count (_x select 0)) <= 4 };
+        _eligibleAAAll =+ _infGroups select { (count (_x select 0)) <= 4 };
         if (count _eligibleAAAll > 0) then {
-            _eligibleAA = _eligibleAAAll;
+            _eligibleAA =+ _eligibleAAAll;
         } else {
             // Otherwise pick one randomly
-            _eligibleAA = _infGroups;
+            _eligibleAA =+ _infGroups;
         };
     };
-    ["Friendly groups", "Infantry", _eligibleAA, 1, 0, true, 4] call _addGroupsToTaskData;
+    ["Friendly groups", "Infantry", _eligibleAA, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
 
     // LAND
     if (count _mechGroups == 0 && count _motGroups == 0) then {
         diag_log "DMORBAT: Play Now - No mechanized or motorized groups found. Creating custom ones...";
         // Check faction for suitable land units
         _factionLand = [_playerFaction, "Land"] call DMORBAT_fnc_categorizeUnits;
-        private _landGroupsVeh = [];
+        private _landGroups = [];
         {
             private _grps = _x select 1;
             {
-                _landGroupsVeh pushBack _x;
+                _landGroups pushBack _x;
             } forEach _grps;
         } forEach _factionLand;
 
         // Categorize each vehicle for all the land groups
-        if (count _landGroupsVeh > 0) then {
-            _factionMot = [];
-            _factionMech = [];
-            _factionArmor = [];
+        if (count _landGroups > 0) then {
+            private _factionMot = [];
+            private _factionMech = [];
+            private _factionArmor = [];
             {
                 private _unit = _x select 0;
                 private _type = [_unit, true] call DMORBAT_fnc_vehicleType;
@@ -316,11 +320,11 @@ if (_task == 2) then {
 
                 if (_type == "Tank") then { _factionArmor pushBack _unit };
                 if (_type == "Drone Tank") then { _factionArmor pushBack _unit };
-            } forEach _landGroupsVeh;
+            } forEach _landGroups;
 
             // Add to the vehicles pool
             {
-                for [{private _i = 0}, {_i < 2}, {_i = _i + 1}] do 
+                for [{private _i = 0}, {_i < 1}, {_i = _i + 1}] do 
                 {
                     _motGroups pushBack [[_x],[]];
                 };
@@ -332,11 +336,11 @@ if (_task == 2) then {
 
             {
                 private _grp = [];
-                for [{private _i = 0}, {_i < 2}, {_i = _i + 1}] do 
+                for [{private _i = 0}, {_i < 1}, {_i = _i + 1}] do 
                 {
                     _grp pushBack _x;
                 };
-                _landGroups pushBack [_grp];
+                _armorGroups pushBack [_grp];
             } forEach _factionArmor;
         };
     };
@@ -344,33 +348,36 @@ if (_task == 2) then {
     // Armor
     _eligibleArmor = [];
     _eligibleArmorAll = [];
-    if (count _landGroups > 0) then {
-        // Pick a tank group with 2 or less members
-        _eligibleArmorAll = _landGroups select { (count (_x select 0)) <= 2 && ((_x select 0) select 0) isKindOf "Tank"};
+    diag_log format ["DMORBAT: _armorGroups friendly: %1", _armorGroups];
+    if (count _armorGroups > 0) then {
+        // Pick a tank group and resize it
+        _eligibleArmorAll =+ _armorGroups select { _type = [(_x select 0) select 0] call DMORBAT_fnc_vehicleType;  (_type == "Tank" || _type == "Drone Tank") };
+        { (_x select 0) resize 1 } forEach _eligibleArmorAll;
         if (count _eligibleArmorAll > 0) then {
-            _eligibleArmor = _eligibleArmorAll;
+            _eligibleArmor =+ _eligibleArmorAll;
         } else {
             // Otherwise pick any tank group
-            _eligibleArmorAll = _landGroups select { ((_x select 0) select 0) isKindOf "Tank"};
+            _eligibleArmorAll =+ _armorGroups;
             if (count _eligibleArmorAll > 0) then {
-                _eligibleArmor = _eligibleArmorAll;
+                _eligibleArmor =+ _eligibleArmorAll;
             };
         };
+        diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor];
         if (count _eligibleArmor > 0) then {
-            ["Friendly groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 2] call _addGroupsToTaskData;
+            ["Friendly groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 2] call _fnc_addGroupsToTaskData;
         };
     };
 
     // Mechanized infantry
     if (count _mechGroups > 0) then {
         _amount = if (count _eligibleArmor == 0) then { 2 } else { 1 };
-        ["Friendly groups", "Land Vehicles", _mechGroups, _amount] call _addGroupsToTaskData;
+        ["Friendly groups", "Land Vehicles", _mechGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
     // Motorized infantry, if there's no mech inf
     if (count _motGroups > 0 && count _mechGroups == 0) then {
         _amount = if (count _eligibleArmor == 0) then { 3 } else { 1 };
-        ["Friendly groups", "Land Vehicles", _motGroups, _amount] call _addGroupsToTaskData;
+        ["Friendly groups", "Land Vehicles", _motGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
     // AIR
@@ -404,7 +411,7 @@ if (_task == 2) then {
     };
 
     if (count _airGroups > 0) then {
-        ["Friendly groups", "Air Vehicles", _airGroups, 1, 1] call _addGroupsToTaskData;
+        ["Friendly groups", "Air Vehicles", _airGroups, 1, 1] call _fnc_addGroupsToTaskData;
     };
 };
 
@@ -423,7 +430,7 @@ _sniperGroups = _factionGroups select 2;
 _motGroups = _factionGroups select 3;
 _mechGroups = _factionGroups select 4;
 _artilleryGroups = _factionGroups select 5;
-_landGroups = _factionGroups select 6;
+_armorGroups = _factionGroups select 6;
 _airGroups = _factionGroups select 7;
 _waterGroups = _factionGroups select 8;
 
@@ -438,16 +445,16 @@ if (count _mechGroups == 0 && count _motGroups == 0) then {
     diag_log "DMORBAT: Play Now - No mechanized or motorized groups found. Creating custom ones...";
     // Check faction for suitable land units
     _factionLand = [_enemyFaction, "Land"] call DMORBAT_fnc_categorizeUnits;
-    private _landGroupsVeh = [];
+    private _landGroups = [];
     {
         private _grps = _x select 1;
         {
-            _landGroupsVeh pushBack _x;
+            _landGroups pushBack _x;
         } forEach _grps;
     } forEach _factionLand;
 
     // Categorize each vehicle for all the land groups
-    if (count _landGroupsVeh > 0) then {
+    if (count _landGroups > 0) then {
         _factionSoft = [];
         _factionMot = [];
         _factionMech = [];
@@ -470,11 +477,11 @@ if (count _mechGroups == 0 && count _motGroups == 0) then {
 
             if (_type == "Tank") then { _factionArmor pushBack _unit };
             if (_type == "Drone Tank") then { _factionArmor pushBack _unit };
-        } forEach _landGroupsVeh;
+        } forEach _landGroups;
 
         // Add to the vehicles pool
         {
-            for [{private _i = 0}, {_i < 2}, {_i = _i + 1}] do 
+            for [{private _i = 0}, {_i < 3}, {_i = _i + 1}] do 
             {
                 _motGroups pushBack [[_x],[]];
             };
@@ -490,7 +497,7 @@ if (count _mechGroups == 0 && count _motGroups == 0) then {
             {
                 _grp pushBack _x;
             };
-            _landGroups pushBack [_grp];
+            _armorGroups pushBack [_grp];
         } forEach _factionArmor;
 
         {
@@ -501,10 +508,18 @@ if (count _mechGroups == 0 && count _motGroups == 0) then {
 
 // ENEMY INFANTRY
 // Form custom infantry groups if faction doesn't have any defined
-if (count _infGroups == 0) then {
-    diag_log format ["DMORBAT: No infantry groups found for enemy faction %1. Creating custom ones...", _enemyFaction];
-    _infGroups = [_enemyFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
-};
+// if (count _infGroups == 0) then {
+//     diag_log format ["DMORBAT: No infantry groups found for enemy faction %1. Creating custom ones...", _enemyFaction];
+//     _infGroups = [_enemyFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
+// };
+// Always create custom faction groups. Most mods either don't bother, know or want to create proper groups anyway so even if they have them they probably will be useless or lacking
+diag_log format ["DMORBAT: Creating custom groups for faction %1...", _enemyFaction];
+_infGroupsCustom = [_enemyFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
+// _infGroups append _infGroupsCustom;
+_infGroups =+ _infGroupsCustom;
+_SFGroupsCustom = [_enemyFaction, "SF"] call DMORBAT_fnc_createFactionGroups;
+// _SFGroups append _SFGroupsCustom;
+_SFGroups =+ _SFGroupsCustom;
 
 if (_task == 1) then {
     // PATROLS
@@ -512,21 +527,22 @@ if (_task == 1) then {
     _eligiblePatrolsAll = [];
     _eligiblePatrolsJustRifles = [];
     // Select infantry groups with 4 units or less
-    _eligiblePatrolsAll = _infGroups select { (count (_x select 0)) <= 4 };
+    _eligiblePatrolsAll =+ _infGroups select { (count (_x select 0)) <= 4 };
+    // diag_log format ["DMORBAT: Play Now - _eligiblePatrolsAll: %1", _eligiblePatrolsAll];
     if (count _eligiblePatrolsAll > 0) then {
-        // Select patrols without AT, AA, officers, hacker, assistant, diver
-        _eligiblePatrolsJustRifles = _eligiblePatrolsAll select {!((_x select 1) select 0) && !((_x select 1) select 1) && !((_x select 1) select 10) && !((_x select 1) select 11) && !((_x select 1) select 16) && !((_x select 1) select 12)};
+        // Select patrols without AT, AA, officers, hacker, assistant, diver, sniper
+        _eligiblePatrolsJustRifles =+ _eligiblePatrolsAll select {!((_x select 1) select 0) && !((_x select 1) select 1) && !((_x select 1) select 10) && !((_x select 1) select 11) && !((_x select 1) select 12) && !((_x select 1) select 14) && !((_x select 1) select 16)};
         if (count _eligiblePatrolsJustRifles > 0) then {
-            _eligiblePatrols = _eligiblePatrolsJustRifles;
+            _eligiblePatrols =+ _eligiblePatrolsJustRifles;
         } else {
-            _eligiblePatrols = _eligiblePatrolsAll;
+            _eligiblePatrols =+ _eligiblePatrolsAll;
         };
     } else {
-        _eligiblePatrols = _infGroups;
+        _eligiblePatrols =+ _infGroups;
     };
-    // diag_log format ["_eligiblePatrols: %1", _eligiblePatrols];
+    diag_log format ["DMORBAT: _eligiblePatrols: %1", _eligiblePatrols];
     // ["_dataType1", "_dataType2", "_groupsPool", ["_groupsAmount", 1], ["_unitsAmount", 0], ["_variablePresence", false], ["_presenceThreshold", 3], ["_skill", 0]];
-    ["Enemy groups", "Patrols", _eligiblePatrols, 3 + (floor (random 3)), 4, true, 1] call _addGroupsToTaskData;
+    ["Enemy groups", "Patrols", _eligiblePatrols, 3 + (floor (random 3)), 4, true, 1] call _fnc_addGroupsToTaskData;
 
     // Pick a car as another patrol
     _eligiblePatrolsCars = [];
@@ -543,7 +559,8 @@ if (_task == 1) then {
     } else {
         diag_log format ["DMORBAT: _softAll: %1", _softAll];
         if (count _softAll > 0) then {
-            _eligiblePatrolsCars = _softAll select { ((_x select 0) select 0) isKindOf "Car" };
+            // _eligiblePatrolsCars = _softAll select { ((_x select 0) select 0) isKindOf "Car" };
+            _eligiblePatrolsCars =+ _softAll select { _type = [(_x select 0) select 0] call DMORBAT_fnc_vehicleType; (_type == "Car" || _type == "Drone Car") };
         };
     };
     // diag_log format ["_eligiblePatrolsCars: %1", _eligiblePatrolsCars];
@@ -561,26 +578,26 @@ if (_task == 1) then {
                 _patrolCarGroup pushBack _patrolCarInf;
             };
         };
-        ["Enemy groups", "Patrols", [[_patrolCarGroup]], 0.5 + (random 0.5), 0, true, 1] call _addGroupsToTaskData;
+        ["Enemy groups", "Patrols", [[_patrolCarGroup]], 0.5 + (random 0.5), 0, true, 1] call _fnc_addGroupsToTaskData;
     };
 
     // DEFENDERS
     _eligibleDefenders = [];
     // Select infantry groups with 6 or more units
-    _eligibleDefendersAll = _infGroups select { (count (_x select 0)) >= 6 };
+    _eligibleDefendersAll =+ _infGroups select { (count (_x select 0)) >= 6 };
     if (count _eligibleDefendersAll > 0) then {
         // Select defenders without AT or AA
         _eligibleDefendersJustRifles = _eligibleDefendersAll select {!((_x select 1) select 0) && !((_x select 1) select 1)};
         if (count _eligibleDefendersJustRifles > 0) then {
-            _eligibleDefenders = _eligibleDefendersJustRifles;
+            _eligibleDefenders =+ _eligibleDefendersJustRifles;
         } else {
-            _eligibleDefenders = _eligibleDefendersAll;
+            _eligibleDefenders =+ _eligibleDefendersAll;
         };
     } else {
-        _eligibleDefenders = _infGroups;
+        _eligibleDefenders =+ _infGroups;
     };
-    diag_log format ["_eligibleDefenders: %1", _eligibleDefenders];
-    ["Enemy groups", "Defenders", _eligibleDefenders, 1 + (floor (random 2)), 0, true, 1] call _addGroupsToTaskData;
+    diag_log format ["DMORBAT: _eligibleDefenders: %1", _eligibleDefenders];
+    ["Enemy groups", "Defenders", _eligibleDefenders, 1 + (floor (random 2)), 0, true, 1] call _fnc_addGroupsToTaskData;
 };
 
 if (_task == 2) then {
@@ -589,109 +606,110 @@ if (_task == 2) then {
     _eligibleInf = [];
     _eligibleInfAll = [];
     // Pick a group with 8 or more members
-    _eligibleInfAll = _infGroups select { (count (_x select 0)) >= 8 };
+    _eligibleInfAll =+ _infGroups select { (count (_x select 0)) >= 8 };
     if (count _eligibleInfAll > 0) then {
-        _eligibleInf = _eligibleInfAll;
+        _eligibleInf =+ _eligibleInfAll;
     } else {
-        _eligibleInf = _infGroups;
+        _eligibleInf =+ _infGroups;
     };
-    ["Enemy groups", "Infantry", _eligibleInf, 3] call _addGroupsToTaskData;
+    ["Enemy groups", "Infantry", _eligibleInf, 3] call _fnc_addGroupsToTaskData;
 
     // AT Teams
     _eligibleAT = [];
     _eligibleATAll = [];
     // Pick a group with 4 or less members and AT
-    _eligibleATAll = _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 0)};
+    _eligibleATAll =+ _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 0)};
     if (count _eligibleATAll > 0) then {
-        _eligibleAT = _eligibleATAll;
+        _eligibleAT =+ _eligibleATAll;
     } else {
         // Pick a group with 4 or less members
-        _eligibleATAll = _infGroups select { (count (_x select 0)) <= 4 };
+        _eligibleATAll =+ _infGroups select { (count (_x select 0)) <= 4 };
         if (count _eligibleATAll > 0) then {
-            _eligibleAT = _eligibleATAll;
+            _eligibleAT =+ _eligibleATAll;
         } else {
             // Otherwise pick one randomly
-            _eligibleAT = _infGroups;
+            _eligibleAT =+ _infGroups;
         };
     };
-    ["Enemy groups", "Infantry", _eligibleAT, 1, 0, true, 4] call _addGroupsToTaskData;
+    ["Enemy groups", "Infantry", _eligibleAT, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
 
     // AA Teams
     _eligibleAA = [];
     _eligibleAAAll = [];
     // Pick a group with 4 or less members and AA
-    _eligibleAAAll = _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 1)};
+    _eligibleAAAll =+ _infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 1)};
     if (count _eligibleAAAll > 0) then {
-        _eligibleAA = _eligibleAAAll;
+        _eligibleAA =+ _eligibleAAAll;
     } else {
         // Pick a group with 4 or less members
-        _eligibleAAAll = _infGroups select { (count (_x select 0)) <= 4 };
+        _eligibleAAAll =+ _infGroups select { (count (_x select 0)) <= 4 };
         if (count _eligibleAAAll > 0) then {
-            _eligibleAA = _eligibleAAAll;
+            _eligibleAA =+ _eligibleAAAll;
         } else {
             // Otherwise pick one randomly
-            _eligibleAA = _infGroups;
+            _eligibleAA =+ _infGroups;
         };
     };
-    ["Enemy groups", "Infantry", _eligibleAA, 1, 0, true, 4] call _addGroupsToTaskData;
+    ["Enemy groups", "Infantry", _eligibleAA, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
 
     // SF groups
     _eligibleSF = [];
     _eligibleSFAll = [];
     if (count _SFGroups > 0) then {
         // Select SF group
-        // Pick a group with 6 or more members
-        _eligibleSFAll = _SFGroups select { (count (_x select 0)) >= 6 };
+        // Pick a group with 6 or less members
+        _eligibleSFAll =+ _SFGroups select { (count (_x select 0)) <= 6 };
         if (count _eligibleSFAll > 0) then {
-            _eligibleSF = _eligibleSFAll;
+            _eligibleSF =+ _eligibleSFAll;
         } else {
             // Otherwise pick one randomly
-            _eligibleSF = _SFGroups;
+            _eligibleSF =+ _SFGroups;
         };
     } else {
         // Select regular infantry if not SF group
-        // Pick a group with 6 or more members
-        _eligibleSFAll = _infGroups select { (count (_x select 0)) >= 6 };
+        // Pick a group with 6 or less members
+        _eligibleSFAll =+ _infGroups select { (count (_x select 0)) <= 6 };
         if (count _eligibleSFAll > 0) then {
-            _eligibleSF = _eligibleSFAll;
+            _eligibleSF =+ _eligibleSFAll;
         } else {
             // Otherwise pick one randomly
-            _eligibleSF = _infGroups;
+            _eligibleSF =+ _infGroups;
         };
     };
-    ["Enemy groups", "Infantry", _eligibleSF, 1, 0, true, 6, 2] call _addGroupsToTaskData;
+    ["Enemy groups", "Infantry", _eligibleSF, 1, 0, true, 6, 2] call _fnc_addGroupsToTaskData;
 
     // LAND
     // Armor
     _eligibleArmor = [];
     _eligibleArmorAll = [];
-    if (count _landGroups > 0) then {
-        // Pick a tank group with 2 or less members
-        _eligibleArmorAll = _landGroups select { (count (_x select 0)) <= 2 && ((_x select 0) select 0) isKindOf "Tank"};
+    if (count _armorGroups > 0) then {
+        // Pick a tank group and resize it
+        _eligibleArmorAll =+ _armorGroups select { _type = [(_x select 0) select 0] call DMORBAT_fnc_vehicleType;  (_type == "Tank" || _type == "Drone Tank") };
+        { (_x select 0) resize 2 } forEach _eligibleArmorAll;
         if (count _eligibleArmorAll > 0) then {
-            _eligibleArmor = _eligibleArmorAll;
+            _eligibleArmor =+ _eligibleArmorAll;
         } else {
             // Otherwise pick any tank group
-            _eligibleArmorAll = _landGroups select { ((_x select 0) select 0) isKindOf "Tank"};
+            _eligibleArmorAll =+ _armorGroups;
             if (count _eligibleArmorAll > 0) then {
-                _eligibleArmor = _eligibleArmorAll;
+                _eligibleArmor =+ _eligibleArmorAll;
             };
         };
         if (count _eligibleArmor > 0) then {
-            ["Enemy groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 2] call _addGroupsToTaskData;
+            ["Enemy groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 2] call _fnc_addGroupsToTaskData;
         };
     };
 
     // Mechanized infantry
     if (count _mechGroups > 0) then {
-        _amount = if (count _eligibleArmor == 0) then { 4 } else { 1 };
-        ["Enemy groups", "Land Vehicles", _mechGroups, _amount] call _addGroupsToTaskData;
+        _amount = if (count _eligibleArmor == 0) then { 4 } else { 2 };
+        ["Enemy groups", "Land Vehicles", _mechGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
     // Motorized infantry, if there's no mech inf
     if (count _motGroups > 0 && count _mechGroups == 0) then {
-        _amount = if (count _eligibleArmor == 0) then { 4 } else { 1 };
-        ["Enemy groups", "Land Vehicles", _motGroups, _amount] call _addGroupsToTaskData;
+        _amount = if (count _eligibleArmor == 0) then { 4 } else { 3 };
+        ["Enemy groups", "Land Vehicles", _motGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
     // AIR
@@ -725,7 +743,7 @@ if (_task == 2) then {
     };
 
     if (count _airGroups > 0) then {
-        ["Enemy groups", "Air Vehicles", _airGroups, 1, 1] call _addGroupsToTaskData;
+        ["Enemy groups", "Air Vehicles", _airGroups, 1, 1] call _fnc_addGroupsToTaskData;
     };
 
 };
@@ -747,55 +765,6 @@ if (isNil "_thisWorldLocations") then {
     [_locations, worldName, _locationsPredefined] call BIS_fnc_setToPairs
 };
 
-// COMPOSITIONS
-_txt = "Generating compositions...";
-_ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
-// Delete existing ones first
-// [true] call DMORBAT_fnc_compositionRemove;
-// Load default compositions
-#include "..\compositions_default.hpp";
-_compositionsPredefined =+ DMORBAT_compositions_default;
-if (_task == 1) then {
-    // Amount of compositions should match amount of predefined locations
-    _taskLocations = [_locationsPredefined, "Outposts"] call BIS_fnc_getFromPairs;
-    _selectedCompositions = [];
-    {
-        private _coords = _x select 0;
-        diag_log format ["_coords: %1", _coords];
-        private _dir = _x select 1;
-        private _comp =+ selectRandom _compositionsPredefined;
-        private _compName = _comp select 0;
-        private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
-        _comp set [0, _newName];
-        diag_log format ["_selectedComposition: %1", _compName];
-        private _compData = _comp select 1;
-        private _ref = _compData select 0;
-        _ref set [1, [_coords select 0, _coords select 1]];
-        _ref set [2, _dir];
-        _selectedCompositions pushBack _comp;
-    } forEach _taskLocations;
-
-    // Add compositions data to tasks array
-    _compositions = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
-    _thisWorldCompositions = [_compositions, worldName] call BIS_fnc_getFromPairs;
-    if (isNil "_thisWorldCompositions") then {
-        // Add terrain data and include the predefined compositions
-        _newArr = [worldName, _selectedCompositions];
-        [_taskData, "Compositions", [_newArr]] call BIS_fnc_addToPairs;
-    } else {
-        // Add predefined compositions to current terrain
-        [_compositions, worldName, _selectedCompositions] call BIS_fnc_setToPairs
-    };
-
-    {
-        diag_log format ["%1: %2", _x select 0, _x select 1];
-    } forEach _selectedCompositions;
-
-    // Load compositions
-    call DMORBAT_fnc_compositionLoad;
-};
-
 
 {
     diag_log format ["%1:", _x select 0];
@@ -806,10 +775,4 @@ if (_task == 1) then {
 
 
 // Initiate task
-// [] execVM "tasks\taskStart.sqf";
 call DMORBAT_fnc_missionEditTerminate;
-
-// Open menu
-// call DMORBAT_fnc_openMainDialog;
- // Pick global settings
-// [] execVM "menuPages\page7.sqf";

@@ -61,7 +61,7 @@ if (_updateSettings) then {
     // DMORBAT_customWeather = [_overcast, _fog, _rain, _lightnings, _wind, _windStr, _gusts, _waves];
     DMORBAT_customWeather = [_overcast, _fog];
     // Save settings
-    ["Weather"] call DMORBAT_fnc_globalSettingsSave;
+    if (!DMORBAT_automated) then { ["Weather"] call DMORBAT_fnc_globalSettingsSave };
 
     diag_log "DMORBAT: --- WEATHER SET ---";
 };

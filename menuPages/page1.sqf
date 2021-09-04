@@ -14,6 +14,8 @@ _display = findDisplay IDC_MENU_MISSION_EDIT;
 
 DMORBAT_lastPage = CURRENTPAGE;
 
+DMORBAT_automated = false;
+
 // Hide saved data menus
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
 _ctrl ctrlShow false;
