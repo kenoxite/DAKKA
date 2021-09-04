@@ -77,22 +77,23 @@ private _return = false;
         if (_role == "Unarmed" || "unarmed" in _className || "captive" in _className || "survivor" in _className) then { _hasUnarmed = true };
         // if (_role == "Sapper") then { _hasEngi = true };
         // if (_role == "SpecialOperative") then { _hasSF = true };
-        if (_role == "Assistant" || "_aaa" in _className || "_aat" in _className || "_amg" in _className || "_aar" in _className) then { _hasAssistant = true };
+        if (_role == "Assistant" || "_aaa" in _className || "_aat" in _className || "_amg" in _className || "_aar" in _className || "_ahat" in _className) then { _hasAssistant = true };
 
         if (_icon == "iconManLeader" || "_sl" in _className || "_squadleader" in _className || "commander" in _className) then { _hasLeader = true };
         if (_icon == "iconManOfficer" || "officer" in _className || "general" in _className) then { _hasOfficer = true };
         if (_icon == "iconManExplosive" || "explosive" in _className || "sapper" in _className || "mine" in _className || "_exp" in _className) then { _hasDemo = true };
         if (_icon == "iconManEngineer" || "engineer" in _className || "repair" in _className) then { _hasEngi = true };
         if (_icon == "iconManMedic" || _role == "CombatLifeSaver" || "medic" in _className) then { _hasMedic = true };
-        // if (_icon == "iconManAT" || _role == "MissileSpecialist" || "_at" in _className || "_aa" in _className || "_rpg" in _className || "_lat" in _className || "_hat" in _className) then {
-        if ((_threat select 1) > 0.5 || (_threat select 2) > 0.5) then {
+        if ((_threat select 1) > 0.5 || (_threat select 2) > 0.5 || _icon == "iconManAT" || _role == "MissileSpecialist" || "_at" in _className || "_rpg" in _className || "_lat" in _className || "_hat" in _className) then {
             if ((_threat select 2) > 0.5) then {
-                _hasAA = true;
+                if (_icon == "iconManAT" || _role == "MissileSpecialist" || "_aa" in _className) then {
+                    _hasAA = true;
+                };
             } else {
                 _hasAT = true;
             };
         };
-        if (_hacker) then { _hasHacker = true };
+        if (_hacker || "_uav" in _className) then { _hasHacker = true };
         if (_vehicleClass == "MenDiver" || "diver" in _className) then { _hasDiver = true };
         if (_icon == "iconManSniper" || _role == "Marksman" || "marksman" in _className || "sniper" in _className || "spotter" in _className) then {
             if (_vehicleClass == "MenSniper" || "sniper" in _className) then {

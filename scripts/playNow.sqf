@@ -54,8 +54,8 @@ _infGroupsCustom = [_playerFaction, "Infantry"] call DMORBAT_fnc_createFactionGr
 // _infGroups append _infGroupsCustom;
 _infGroups =+ _infGroupsCustom;
 _SFGroupsCustom = [_playerFaction, "SF"] call DMORBAT_fnc_createFactionGroups;
-// _SFGroups append _SFGroupsCustom;
-_SFGroups =+ _SFGroupsCustom;
+_SFGroups append _SFGroupsCustom;
+// _SFGroups =+ _SFGroupsCustom;
 
 // PLAYER GROUP
 _playerGroup = [];
@@ -115,6 +115,8 @@ _playableUnit = floor (random ((count (_playerGroup select 0)) - 1));
 _playerData = [_playableUnit, 0, []];
 [_taskData, "Player data", _playerData] call BIS_fnc_setToPairs;
 
+diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playerGroup select 0) select 0), getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory")];
+
 // FUNCTIONS
 _fnc_addGroupsToTaskData = {
     params ["_dataType1", "_dataType2", "_groupsPool", ["_groupsAmount", 1], ["_unitsAmount", 0], ["_variablePresence", false], ["_presenceThreshold", 3], ["_skill", 0]];
@@ -128,6 +130,14 @@ _fnc_addGroupsToTaskData = {
     private _presenceChance = 1;
     for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do 
     {
+        if (_dataType1 == "Friendly groups" && _dataType2 == "Infantry") then {
+        // Pick only friendly teams of the same editor category as the player team
+            _groupsPool = _groupsPool select {
+                _thisESubCat = getText (configFile >> "CfgVehicles" >> ((_x select 0) select 0) >> "editorSubcategory");
+                _playerESubCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
+                _thisESubCat == _playerESubCat
+            };
+        };
         _selectedGroup = selectRandom _groupsPool;
         private _thisGroupData = [format ["%1 Group %2", _dataType2, _i + 1], [], []];
         {
@@ -518,8 +528,8 @@ _infGroupsCustom = [_enemyFaction, "Infantry"] call DMORBAT_fnc_createFactionGro
 // _infGroups append _infGroupsCustom;
 _infGroups =+ _infGroupsCustom;
 _SFGroupsCustom = [_enemyFaction, "SF"] call DMORBAT_fnc_createFactionGroups;
-// _SFGroups append _SFGroupsCustom;
-_SFGroups =+ _SFGroupsCustom;
+_SFGroups append _SFGroupsCustom;
+// _SFGroups =+ _SFGroupsCustom;
 
 if (_task == 1) then {
     // PATROLS
