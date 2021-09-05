@@ -60,7 +60,7 @@ _checkMags = {
 };
 
 // Check main weapons
-diag_log format ["DMORBAT: isVehicleArmed -- Checking main weapons of %1", _class];
+// diag_log format ["DMORBAT: isVehicleArmed -- Checking main weapons of %1", _class];
 private _armed = false;
 private _checkAmmoParent = true;
 {
@@ -76,7 +76,7 @@ private _checkAmmoParent = true;
 } forEach _parents;
 
 if (!_armed) then {
-    diag_log format ["DMORBAT: isVehicleArmed -- Checking turrets of %1", _class];
+    // diag_log format ["DMORBAT: isVehicleArmed -- Checking turrets of %1", _class];
     // Check turrets
     private _turretsWithMags = -1;
     {

@@ -39,16 +39,71 @@ _armorGroups = _factionGroups select 6;
 _airGroups = _factionGroups select 7;
 _waterGroups = _factionGroups select 8;
 
+DMORBAT_friendlyInfEdCat = "";
+
 _txt = "Assigning player group...";
 _ctrl ctrlSetText _txt; 
 diag_log format ["DMORBAT: Play Now - %1", _txt];
 
-// Form custom infantry groups if faction doesn't have any defined
-// if (count _infGroups == 0) then {
-//     diag_log format ["DMORBAT: No infantry groups found for player faction %1. Creating custom ones...", _playerFaction];
-//     _infGroups = [_playerFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
+// if (count _mechGroups == 0 || count _motGroups == 0) then {
+//     diag_log "DMORBAT: Play Now - No mechanized or motorized groups found. Creating custom ones...";
+    // Check faction for suitable land units
+    _factionLand = [_playerFaction, "Land"] call DMORBAT_fnc_categorizeUnits;
+    private _landGroups = [];
+    {
+        private _grps = _x select 1;
+        {
+            _landGroups pushBack _x;
+        } forEach _grps;
+    } forEach _factionLand;
+
+    // Categorize each vehicle for all the land groups
+    if (count _landGroups > 0) then {
+        private _factionMot = [];
+        private _factionMech = [];
+        private _factionArmor = [];
+        {
+            private _unit = _x select 0;
+            private _type = [_unit, true] call DMORBAT_fnc_vehicleType;
+
+            if (_type == "Wheeled APC") then { _factionMot pushBack _unit };
+            if (_type == "Truck") then { _factionMot pushBack _unit };
+            if (_type == "Car") then { _factionMot pushBack _unit };
+            if (_type == "Drone Wheeled APC") then { _factionMot pushBack _unit };
+            if (_type == "Drone Truck") then { _factionMot pushBack _unit };
+            if (_type == "Drone Car") then { _factionMot pushBack _unit };
+
+            if (_type == "Tracked APC") then { _factionMech pushBack _unit };
+            if (_type == "Drone Tracked APC") then { _factionMech pushBack _unit };
+
+            if (_type == "Tank") then { _factionArmor pushBack _unit };
+            if (_type == "Drone Tank") then { _factionArmor pushBack _unit };
+        } forEach _landGroups;
+
+        // Add to the vehicles pool
+        {
+            for [{private _i = 0}, {_i < 1}, {_i = _i + 1}] do 
+            {
+                _motGroups pushBack [[_x],[]];
+            };
+        } forEach _factionMot;
+
+        {
+            _mechGroups pushBack [[_x],[]];
+        } forEach _factionMech;
+
+        {
+            private _grp = [];
+            for [{private _i = 0}, {_i < 1}, {_i = _i + 1}] do 
+            {
+                _grp pushBack _x;
+            };
+            _armorGroups pushBack [_grp];
+        } forEach _factionArmor;
+    };
 // };
-// Always create custom faction groups. Most mods either don't bother, know or want to create proper groups anyway so even if they have them they probably will be useless or lacking
+
+// Create custom infantry groups
 diag_log format ["DMORBAT: Creating custom groups for faction %1...", _playerFaction];
 _infGroupsCustom = [_playerFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
 _infGroups append _infGroupsCustom;
@@ -115,43 +170,62 @@ _playableUnit = floor (random ((count (_playerGroup select 0)) - 1));
 _playerData = [_playableUnit, 0, []];
 [_taskData, "Player data", _playerData] call BIS_fnc_setToPairs;
 
-diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playerGroup select 0) select 0), getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory")];
+DMORBAT_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
+diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playerGroup select 0) select 0), DMORBAT_friendlyInfEdCat];
 
 // FUNCTIONS
 _fnc_addGroupsToTaskData = {
-    params ["_dataType1", "_dataType2", "_groupsPool", ["_groupsAmount", 1], ["_unitsAmount", 0], ["_variablePresence", false], ["_presenceThreshold", 3], ["_skill", 0], ["_sameCategory", true]];
-    // diag_log format ["_dataType1: %1 _dataType2: %2 _groupsPool: %3", _dataType1, _dataType2, _groupsPool];
+    params ["_sideType", "_groupType", "_groupsPool", ["_groupsAmount", 1], ["_maxUnitAmount", 0], ["_variablePresence", false], ["_presenceThreshold", 3], ["_skill", 0], ["_sameCategory", true], ["_edCat", ""]];
+    // diag_log format ["_sideType: %1 _groupType: %2 _groupsPool: %3 _groupsAmount: %4 _maxUnitAmount: %5 _variablePresence: %6 _presenceThreshold: %7 _skill: %8 _sameCategory: %9 _edCat: %10", _sideType, _groupType, (_groupsPool select 0) select 0, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat];
+
     private _task = DMORBAT_Task;
     private _taskData = DMORBAT_TaskData select (_task - 1);
 
-    private _groupsDataIndex = [_taskData, _dataType1] call BIS_fnc_findInPairs;
+    private _groupsDataIndex = [_taskData, _sideType] call BIS_fnc_findInPairs;
     private _groupsData = (_taskData select _groupsDataIndex) select 1;
     private _selectedGroup = [];
     private _presenceChance = 1;
     for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do 
     {
-        if (_sameCategory && _dataType1 == "Friendly groups" && _dataType2 == "Infantry") then {
-        // Pick only friendly teams of the same editor category as the player team
+        // if (_sameCategory && _sideType == "Friendly groups" && _groupType == "Infantry") then {
+        if (_sameCategory && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat != "") then {
+        // Pick only teams of the same editor category
+            diag_log format ["DMORBAT: Play Now -_fnc_addGroupsToTaskData - Filtering provided groups by category for %1, %2: %3", _sideType, _groupType, _edCat];
             _groupsPoolTemp = _groupsPool select {
                 _thisESubCat = getText (configFile >> "CfgVehicles" >> ((_x select 0) select 0) >> "editorSubcategory");
-                _playerESubCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
-                _thisESubCat == _playerESubCat
+                // _playerESubCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
+                // _thisESubCat == _playerESubCat
+                _thisESubCat == _edCat
             };
-            if (count _groupsPool == 0) exitWith {
-                diag_log format ["DMORBAT: --- ERROR --- Couldn't find groups of the same editor category for %1! Trying again without category limits...", _dataType1];
-                [_dataType1, _dataType2, _groupsPool, _groupsAmount, _unitsAmount, _variablePresence, _presenceThreshold, _skill, false] call _fnc_addGroupsToTaskData
+            if (count _groupsPoolTemp == 0) exitWith {
+                diag_log format ["DMORBAT: --- WARNING --- Couldn't find groups of the same editor category for %1! Trying again without category limits...", _sideType];
+                [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, false] call _fnc_addGroupsToTaskData
             };
             _groupsPool = +_groupsPoolTemp;
         };
         _selectedGroup = selectRandom _groupsPool;
-        private _thisGroupData = [format ["%1 Group %2", _dataType2, _i + 1], [], []];
+         diag_log format ["DMORBAT: Play Now - _fnc_addGroupsToTaskData - _thisGroupData: %1", ((_selectedGroup select 0) select 0)];
+
+        // Set side editor category if it wasn't set already
+        if (_sameCategory && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat == "") exitWith {
+            private _groupEdCat = getText (configFile >> "CfgVehicles" >> ((_selectedGroup select 0) select 0) >> "editorSubcategory");
+            if (_sideType == "Friendly groups") then {
+                DMORBAT_friendlyInfEdCat = _groupEdCat;
+            } else {
+                DMORBAT_enemyInfEdCat = _groupEdCat;
+            };
+            diag_log format ["DMORBAT: --- WARNING --- Editor category wasn't set. Trying again with: %1", _groupEdCat];
+            [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, true, _groupEdCat] call _fnc_addGroupsToTaskData
+        };
+
+        private _thisGroupData = [format ["%1 Group %2", _groupType, _i + 1], [], []];
         {
-            if (_unitsAmount > 0 && _forEachIndex == _unitsAmount) exitWith { true };
+            if (_maxUnitAmount > 0 && _forEachIndex == _maxUnitAmount) exitWith { true };
             if (_variablePresence && {_forEachIndex > _presenceThreshold}) then { _presenceChance = (_presenceChance - 0.25) max 0.25 };
             (_thisGroupData select 1) pushBack [_x, if (_forEachIndex == 0) then {"SERGEANT"} else {"PRIVATE"}, [], _presenceChance, _skill];
         } forEach (_selectedGroup select 0);
         // Add to tasks array
-        [_groupsData, _dataType2, [_thisGroupData]] call BIS_fnc_addToPairs;
+        [_groupsData, _groupType, [_thisGroupData]] call BIS_fnc_addToPairs;
         if (_variablePresence) then { _presenceChance = (1 - (0.1 * _i)) max 0.25 };
     };
 
@@ -261,7 +335,8 @@ if (_task == 2) then {
     } else {
         _eligibleInf = +_infGroups;
     };
-    ["Friendly groups", "Infantry", _eligibleInf, 2] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Friendly groups", "Infantry", _eligibleInf, 2, 0, false, 9, 0, true, DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // AT Teams
     _eligibleAT = [];
@@ -298,7 +373,8 @@ if (_task == 2) then {
             _eligibleAT = +_infGroups;
         };
     };
-    ["Friendly groups", "Infantry", _eligibleAT, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Friendly groups", "Infantry", _eligibleAT, 1, 0, false, 4, 0, true, DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // AA Teams
     _eligibleAA = [];
@@ -317,67 +393,10 @@ if (_task == 2) then {
             _eligibleAA = +_infGroups;
         };
     };
-    ["Friendly groups", "Infantry", _eligibleAA, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Friendly groups", "Infantry", _eligibleAA, 1, 0, false, 4, 0, true, DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // LAND
-    if (count _mechGroups == 0 && count _motGroups == 0) then {
-        diag_log "DMORBAT: Play Now - No mechanized or motorized groups found. Creating custom ones...";
-        // Check faction for suitable land units
-        _factionLand = [_playerFaction, "Land"] call DMORBAT_fnc_categorizeUnits;
-        private _landGroups = [];
-        {
-            private _grps = _x select 1;
-            {
-                _landGroups pushBack _x;
-            } forEach _grps;
-        } forEach _factionLand;
-
-        // Categorize each vehicle for all the land groups
-        if (count _landGroups > 0) then {
-            private _factionMot = [];
-            private _factionMech = [];
-            private _factionArmor = [];
-            {
-                private _unit = _x select 0;
-                private _type = [_unit, true] call DMORBAT_fnc_vehicleType;
-
-                if (_type == "Wheeled APC") then { _factionMot pushBack _unit };
-                if (_type == "Truck") then { _factionMot pushBack _unit };
-                if (_type == "Car") then { _factionMot pushBack _unit };
-                if (_type == "Drone Wheeled APC") then { _factionMot pushBack _unit };
-                if (_type == "Drone Truck") then { _factionMot pushBack _unit };
-                if (_type == "Drone Car") then { _factionMot pushBack _unit };
-
-                if (_type == "Tracked APC") then { _factionMech pushBack _unit };
-                if (_type == "Drone Tracked APC") then { _factionMech pushBack _unit };
-
-                if (_type == "Tank") then { _factionArmor pushBack _unit };
-                if (_type == "Drone Tank") then { _factionArmor pushBack _unit };
-            } forEach _landGroups;
-
-            // Add to the vehicles pool
-            {
-                for [{private _i = 0}, {_i < 1}, {_i = _i + 1}] do 
-                {
-                    _motGroups pushBack [[_x],[]];
-                };
-            } forEach _factionMot;
-
-            {
-                _mechGroups pushBack [[_x],[]];
-            } forEach _factionMech;
-
-            {
-                private _grp = [];
-                for [{private _i = 0}, {_i < 1}, {_i = _i + 1}] do 
-                {
-                    _grp pushBack _x;
-                };
-                _armorGroups pushBack [_grp];
-            } forEach _factionArmor;
-        };
-    };
-
     // Armor
     _eligibleArmor = [];
     _eligibleArmorAll = [];
@@ -397,19 +416,22 @@ if (_task == 2) then {
         };
         diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor];
         if (count _eligibleArmor > 0) then {
-            ["Friendly groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 2] call _fnc_addGroupsToTaskData;
+            // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+            ["Friendly groups", "Land Vehicles", _eligibleArmor, 1] call _fnc_addGroupsToTaskData;
         };
     };
 
     // Mechanized infantry
     if (count _mechGroups > 0) then {
         _amount = if (count _eligibleArmor == 0) then { 2 } else { 1 };
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
         ["Friendly groups", "Land Vehicles", _mechGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
     // Motorized infantry, if there's no mech inf
     if (count _motGroups > 0 && count _mechGroups == 0) then {
         _amount = if (count _eligibleArmor == 0) then { 3 } else { 1 };
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
         ["Friendly groups", "Land Vehicles", _motGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
@@ -444,7 +466,8 @@ if (_task == 2) then {
     };
 
     if (count _airGroups > 0) then {
-        ["Friendly groups", "Air Vehicles", _airGroups, 1, 1] call _fnc_addGroupsToTaskData;
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+        ["Friendly groups", "Air Vehicles", _airGroups, 1] call _fnc_addGroupsToTaskData;
     };
 };
 
@@ -469,13 +492,15 @@ _waterGroups = _factionGroups select 8;
 
 _softAll = [];
 
+DMORBAT_enemyInfEdCat = "";
+
 _txt = "Assigning enemy groups...";
 _ctrl ctrlSetText _txt; 
 diag_log format ["DMORBAT: Play Now - %1", _txt];
 
 
-if (count _mechGroups == 0 && count _motGroups == 0) then {
-    diag_log "DMORBAT: Play Now - No mechanized or motorized groups found. Creating custom ones...";
+// if (count _mechGroups == 0 || count _motGroups == 0) then {
+//     diag_log "DMORBAT: Play Now - No mechanized or motorized groups found. Creating custom ones...";
     // Check faction for suitable land units
     _factionLand = [_enemyFaction, "Land"] call DMORBAT_fnc_categorizeUnits;
     private _landGroups = [];
@@ -537,15 +562,10 @@ if (count _mechGroups == 0 && count _motGroups == 0) then {
             _softAll pushBack [[_x]];
         } forEach _factionSoft;
     };
-};
+// };
 
 // ENEMY INFANTRY
-// Form custom infantry groups if faction doesn't have any defined
-// if (count _infGroups == 0) then {
-//     diag_log format ["DMORBAT: No infantry groups found for enemy faction %1. Creating custom ones...", _enemyFaction];
-//     _infGroups = [_enemyFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
-// };
-// Always create custom faction groups. Most mods either don't bother, know or want to create proper groups anyway so even if they have them they probably will be useless or lacking
+// Create custom infantry groups
 diag_log format ["DMORBAT: Creating custom groups for faction %1...", _enemyFaction];
 _infGroupsCustom = [_enemyFaction, "Infantry"] call DMORBAT_fnc_createFactionGroups;
 _infGroups append _infGroupsCustom;
@@ -573,12 +593,13 @@ if (_task == 1) then {
     } else {
         _eligiblePatrols = +_infGroups;
     };
-    diag_log format ["DMORBAT: _eligiblePatrols: %1", _eligiblePatrols];
-    // ["_dataType1", "_dataType2", "_groupsPool", ["_groupsAmount", 1], ["_unitsAmount", 0], ["_variablePresence", false], ["_presenceThreshold", 3], ["_skill", 0]];
-    ["Enemy groups", "Patrols", _eligiblePatrols, 3 + (floor (random 3)), 4, true, 1] call _fnc_addGroupsToTaskData;
+    // diag_log format ["DMORBAT: _eligiblePatrols: %1", _eligiblePatrols];
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Enemy groups", "Patrols", _eligiblePatrols, 3 + (floor (random 3)), 4, true, 2, 1, true, DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // Pick a car as another patrol
     _eligiblePatrolsCars = [];
+    // diag_log format ["DMORBAT: _motGroups count: %1", count _motGroups];
     if (count _motGroups > 0) then {
         // Select the car of a motorized group
         {
@@ -590,13 +611,13 @@ if (_task == 1) then {
             } forEach _units;
         } forEach _motGroups;
     } else {
-        diag_log format ["DMORBAT: _softAll: %1", _softAll];
+        // diag_log format ["DMORBAT: _softAll: %1", _softAll];
         if (count _softAll > 0) then {
             // _eligiblePatrolsCars = _softAll select { ((_x select 0) select 0) isKindOf "Car" };
             _eligiblePatrolsCars = +_softAll select { _type = [(_x select 0) select 0] call DMORBAT_fnc_vehicleType; (_type == "Car" || _type == "Drone Car") };
         };
     };
-    // diag_log format ["_eligiblePatrolsCars: %1", _eligiblePatrolsCars];
+    // diag_log format ["DMORBAT: _eligiblePatrolsCars: %1", _eligiblePatrolsCars];
     if (count _eligiblePatrolsCars > 0) then {
         _patrolCar = ((selectRandom _eligiblePatrolsCars) select 0) select 0;
         _patrolCarGroup = [_patrolCar];
@@ -605,13 +626,15 @@ if (_task == 1) then {
         if (!_patrolCarArmed) then {
             _patrolCarAmount = 1 + (floor (random 1));
             _patrolCarInf = ((_infGroups select 0) select 0) select 0;
-            diag_log format ["_patrolCarInf: %1", _patrolCarInf];
+            diag_log format ["DMORBAT: _patrolCarInf: %1", _patrolCarInf];
             for [{private _i = 0}, {_i < _patrolCarAmount}, {_i = _i + 1}] do 
             {
                 _patrolCarGroup pushBack _patrolCarInf;
             };
         };
-        ["Enemy groups", "Patrols", [[_patrolCarGroup]], 0.5 + (random 0.5), 0, true, 1] call _fnc_addGroupsToTaskData;
+    // diag_log format ["DMORBAT: Trying to create the patrol car group: %1", _patrolCarGroup];
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+        ["Enemy groups", "Patrols", [[_patrolCarGroup]], floor (0.5 + random (1.5)), 2, true, 1, 1, false] call _fnc_addGroupsToTaskData;
     };
 
     // DEFENDERS
@@ -630,7 +653,8 @@ if (_task == 1) then {
         _eligibleDefenders = +_infGroups;
     };
     diag_log format ["DMORBAT: _eligibleDefenders: %1", _eligibleDefenders];
-    ["Enemy groups", "Defenders", _eligibleDefenders, 1 + (floor (random 2)), 0, true, 1] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Enemy groups", "Defenders", _eligibleDefenders, 1 + (floor (random 2)), 0, true, 1, 0, true, DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 };
 
 if (_task == 2) then {
@@ -645,13 +669,29 @@ if (_task == 2) then {
     } else {
         _eligibleInf = +_infGroups;
     };
-    ["Enemy groups", "Infantry", _eligibleInf, 3] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Enemy groups", "Infantry", _eligibleInf, 3, 0, false, 8, 0, true, DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // AT Teams
     _eligibleAT = [];
     _eligibleATAll = [];
-    // Pick a group with 4 or less members and AT
-    _eligibleATAll = +_infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 0)};
+    // Pick a group with 4 or less members and at least 2 AT
+    _eligibleATAll = +_infGroups select { (count (_x select 0)) <= 4 && ((_x select 1) select 0) };
+    private _i = 0;
+    private _ATgroupsCount = [];
+    private _ATremove = [];
+    {  
+        private _ATcount = 0;
+        private _group = _x select 0;
+        {
+            private _unit = _x;
+            private _roles = [[_unit]] call DMORBAT_fnc_groupRoles;
+            if (_roles select 0) then { _ATcount = _ATcount + 1 };
+        } forEach _group;
+        _ATgroupsCount pushBack [_i, _ATcount];
+        _i = _i + 1;
+     } forEach _eligibleATAll;
+     { if ((_x select 1) < 2) then { _eligibleATAll deleteAt (_x select 0)}; } forEach _ATgroupsCount;
     if (count _eligibleATAll > 0) then {
         _eligibleAT = +_eligibleATAll;
     } else {
@@ -664,7 +704,8 @@ if (_task == 2) then {
             _eligibleAT = +_infGroups;
         };
     };
-    ["Enemy groups", "Infantry", _eligibleAT, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Enemy groups", "Infantry", _eligibleAT, 1, 0, false, 4, 0, true, DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // AA Teams
     _eligibleAA = [];
@@ -683,7 +724,8 @@ if (_task == 2) then {
             _eligibleAA = +_infGroups;
         };
     };
-    ["Enemy groups", "Infantry", _eligibleAA, 1, 0, true, 4] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Enemy groups", "Infantry", _eligibleAA, 1, 0, false, 4, 0, true, DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // SF groups
     _eligibleSF = [];
@@ -709,7 +751,8 @@ if (_task == 2) then {
             _eligibleSF = +_infGroups;
         };
     };
-    ["Enemy groups", "Infantry", _eligibleSF, 1, 0, true, 6, 2] call _fnc_addGroupsToTaskData;
+    // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+    ["Enemy groups", "Infantry", _eligibleSF, 1, 6, true, 4, 1, false] call _fnc_addGroupsToTaskData;
 
     // LAND
     // Armor
@@ -729,19 +772,22 @@ if (_task == 2) then {
             };
         };
         if (count _eligibleArmor > 0) then {
-            ["Enemy groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 2] call _fnc_addGroupsToTaskData;
+            // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
+            ["Enemy groups", "Land Vehicles", _eligibleArmor, 1, 2, true, 1] call _fnc_addGroupsToTaskData;
         };
     };
 
     // Mechanized infantry
     if (count _mechGroups > 0) then {
         _amount = if (count _eligibleArmor == 0) then { 4 } else { 2 };
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
         ["Enemy groups", "Land Vehicles", _mechGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
     // Motorized infantry, if there's no mech inf
     if (count _motGroups > 0 && count _mechGroups == 0) then {
         _amount = if (count _eligibleArmor == 0) then { 4 } else { 3 };
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
         ["Enemy groups", "Land Vehicles", _motGroups, _amount] call _fnc_addGroupsToTaskData;
     };
 
@@ -776,6 +822,7 @@ if (_task == 2) then {
     };
 
     if (count _airGroups > 0) then {
+        // _sideType, _groupType, _groupsPool, _groupsAmount, _maxUnitAmount, _variablePresence, _presenceThreshold, _skill, _sameCategory, _edCat
         ["Enemy groups", "Air Vehicles", _airGroups, 1, 1] call _fnc_addGroupsToTaskData;
     };
 
