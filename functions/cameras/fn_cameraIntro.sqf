@@ -44,7 +44,7 @@ if (count _target == 0) then {
 } else {
     _pos = [_target, 800, random 360] call BIS_fnc_relPos;
     // Make a copy so modifying the passed position doesn't modify the original (which in this case is the global variable for the task location)
-    _target =+ _target;
+    _target = +_target;
 };
 _pos set [2, (getTerrainHeightASL _pos) + 40];
 _camera = "camera" camCreate _pos;

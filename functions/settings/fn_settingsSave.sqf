@@ -36,8 +36,8 @@ if (DMORBAT_automated) exitWith { false };
 
 _savedData = profileNamespace getVariable (format ["DMORBAT_Task%1", DMORBAT_Task]);
 
-_currentTaskData =+ DMORBAT_TaskData select (DMORBAT_Task - 1);
-_defaultTaskData =+ DMORBAT_TaskData_default select (DMORBAT_Task - 1);
+_currentTaskData = +DMORBAT_TaskData select (DMORBAT_Task - 1);
+_defaultTaskData = +DMORBAT_TaskData_default select (DMORBAT_Task - 1);
 _slotIndex = (DMORBAT_saveSlots select (DMORBAT_Task - 1));
 if (isNil "_savedData") then {
     // No saved data found. Create new data

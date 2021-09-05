@@ -51,7 +51,7 @@ diag_log "DMORBAT: Snow: Starting";
             for "_d" from _fi to _max step _fi do {   
    
                 private _pos = ATLtoASL positionCameraToWorld [0,0,0];   
-                private _hpos =+ _pos; _hpos set [2,(_pos select 2)+20]; 
+                private _hpos = +_pos; _hpos set [2,(_pos select 2)+20]; 
 
                 setWind [0,0,true];    
                 0 setRain 0;      
@@ -65,9 +65,9 @@ diag_log "DMORBAT: Snow: Starting";
                     (_pos select 2) + _height   
                 ];      
    
-                private _hdpos =+ _dpos; _hdpos set [2,(_dpos select 2) + 20]; 
+                private _hdpos = +_dpos; _hdpos set [2,(_dpos select 2) + 20]; 
    
-                private _ldpos =+ _dpos; _ldpos set [2,(_pos select 2)+0.1];       
+                private _ldpos = +_dpos; _ldpos set [2,(_pos select 2)+0.1];       
                    
                 if (!lineIntersects [_dpos, _hdpos] || {(_hpos distance2D _hdpos > 7) && (lineIntersects [_pos,_hpos])}) then {     
    

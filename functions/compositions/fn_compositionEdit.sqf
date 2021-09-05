@@ -94,7 +94,7 @@ if (_end) then {
 	call DMORBAT_fnc_mapDisplayCompositions;
 
 } else {
-	_compObjects =+ _thisCompositionData select 1;
+	_compObjects = +_thisCompositionData select 1;
 	_target = (_compObjects select 0) select 0;
 	DMORBAT_editReference = _target;
 	_compObjects deleteAt 0;

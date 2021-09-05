@@ -42,7 +42,7 @@ if (count _thisCategoryGroups > 0) then {
         // _ctrl tvExpand [_i];
         _tooltip = format ["%1\n\nClick to preview and set this group as the target when adding faction units", _groupName];
         // Mod dependencies
-        _knownMods =+ [DMORBAT_settings, "Known mods"] call BIS_fnc_getFromPairs;
+        _knownMods = +[DMORBAT_settings, "Known mods"] call BIS_fnc_getFromPairs;
         // diag_log format ["DMORBAT: updatePlayerGroupTreeList _knownMods:%1", _knownMods];
         if (count _groupMods > 0) then {
             private _noMods = true;

@@ -4,7 +4,7 @@
 // DMORBAT_task1_locPos = _this select 0;
 
 _task_1_checks = [] spawn {
-    private _enemyGroups =+ DMORBAT_patrolGrps_task1 + DMORBAT_defendGrps_task1;
+    private _enemyGroups = +DMORBAT_patrolGrps_task1 + DMORBAT_defendGrps_task1;
 	private _timer = 0;
     private _detectedTimer = 0;
     private _detectedMaxTime = 60;

@@ -272,7 +272,7 @@ DMORBAT_TaskData_default = [
 ];	
 
 // Tasks data saved in profile
-DMORBAT_TaskData =+ DMORBAT_TaskData_default;
+DMORBAT_TaskData = +DMORBAT_TaskData_default;
 
 // TIPS
 DMORBAT_tips = [

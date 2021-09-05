@@ -32,6 +32,7 @@ _fnc_createInfGroup = {
     private _riflemen_SF = [];
     private _riflemenAT = [];
     private _riflemenAT_SF = [];
+    private _riflemenHAT = [];
     private _riflemenAA = [];
     private _riflemenAA_SF = [];
     private _grenadiers = [];
@@ -59,7 +60,7 @@ _fnc_createInfGroup = {
         private _unit = _x select 0;
         // private _unit = toLowerANSI (_x select 0);
         // diag_log format ["DMORBAT: createFactionGroups - Checking unit %1", _unit];
-        // [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter]
+        // [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter, _hasHAT]
         private _roles = [[_unit]] call DMORBAT_fnc_groupRoles;
         if (!_assigned && _roles select 0) then { if !(_roles select 13) then { _riflemenAT pushBackUnique _unit } else { _riflemenAT_SF pushBackUnique _unit }; _assigned = true; };
         if (!_assigned && _roles select 1) then { if !(_roles select 13) then { _riflemenAA pushBackUnique _unit } else { _riflemenAA_SF pushBackUnique _unit }; _assigned = true; };
@@ -80,21 +81,21 @@ _fnc_createInfGroup = {
     } forEach _infGroups;
 
     if !(_isRegular) then {
-        _squadLeaders =+ _squadLeaders_SF;
-        _teamLeaders =+ _teamLeaders_SF;
-        _riflemen =+ _riflemen_SF;
-        _riflemenAT =+ _riflemenAT_SF;
-        _riflemenAA =+ _riflemenAA_SF;
-        _grenadiers =+ _grenadiers_SF;
-        _autoriflemen =+ _autoriflemen_SF;
-        _medics =+ _medics_SF;
-        _marksmen =+ _marksmen_SF;
-        _officers=+ _officers_SF;
-        _snipers =+ _snipers_SF;
-        _spotters =+ _spotters_SF;
-        _JTACs =+ _JTACs_SF;
-        _explosiveSpecialists =+ _explosiveSpecialists_SF;
-        _crewmen =+ _crewmen_SF;
+        _squadLeaders = +_squadLeaders_SF;
+        _teamLeaders = +_teamLeaders_SF;
+        _riflemen = +_riflemen_SF;
+        _riflemenAT = +_riflemenAT_SF;
+        _riflemenAA = +_riflemenAA_SF;
+        _grenadiers = +_grenadiers_SF;
+        _autoriflemen = +_autoriflemen_SF;
+        _medics = +_medics_SF;
+        _marksmen = +_marksmen_SF;
+        _officers= +_officers_SF;
+        _snipers = +_snipers_SF;
+        _spotters = +_spotters_SF;
+        _JTACs = +_JTACs_SF;
+        _explosiveSpecialists = +_explosiveSpecialists_SF;
+        _crewmen = +_crewmen_SF;
     };
 
     // If there's no riflemen, everyone is a rifleman
@@ -134,8 +135,10 @@ _fnc_createInfGroup = {
             "cwr3_b_soldier_m14",
             "cwr3_b_soldier_backpack",
             "cwr3_b_soldier_light",
-            "cwr3_o_soldier_at4",
-            "cwr3_o_soldier_aat4",
+            "cwr3_o_soldier_at_at4",
+            "cwr3_o_soldier_aat_at4",
+            "cwr3_o_spetsnaz_at_at4",
+            "cwr3_o_spetsnaz_aat_at4",
             "cwr3_o_soldier_hg",
             "cwr3_o_soldier_backpack",
             "cwr3_o_soldier_light"
@@ -164,10 +167,101 @@ _fnc_createInfGroup = {
     _explosiveSpecialists = [_explosiveSpecialists, _editorSubCat] call _fnc_trimUnits;
     _crewmen = [_crewmen, _editorSubCat] call _fnc_trimUnits;
 
+    // Separate Light AT units from Heavy AT ones
+    if (count _riflemenAT > 0) then {
+        private _ATlaunchers = [];
+        private _LATlaunchers = [];
+        private _HATlaunchers = [];
+        private _ATremove = [];
+        {
+            private _weaponsArr = getArray (configfile >> "CfgVehicles" >> _x >> "weapons");
+            private _usedLauncher = "";
+            {
+                private _parents = [configFile >> "CfgWeapons" >> _x, true] call BIS_fnc_returnParents;
+                // diag_log format ["DMORBAT: createFactionGroups - _weapon: %1, _parents: %2", _x, _parents];
+                if ("Launcher" in _parents) exitWith {
+                    _usedLauncher = _x;
+                    true
+                };
+            } forEach _weaponsArr;
+            if (_usedLauncher != "" && !("_aa" in _x)) then {
+                private _mags = getArray (configfile >> "CfgVehicles" >> _x >> "magazines");
+                _ATlaunchers pushBackUnique [0, _usedLauncher, _mags];
+            } else {
+                _ATremove pushBack _x;
+            };
+        } forEach _riflemenAT;
+        _riflemenAT = _riflemenAT - _ATremove;
+        // diag_log format ["DMORBAT: createFactionGroups - _riflemenAT (after removing): %1, removed: %2", _riflemenAT, _ATremove];
+        // diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers: %1", _ATlaunchers];
+
+        for [{private _i = 0}, {_i < count _ATlaunchers}, {_i = _i + 1}] do
+        {
+            private _launcherArr = _ATlaunchers select _i;
+            private _launcher = _launcherArr select 1;
+            private _unitMags = _launcherArr select 2;
+            private _launcherMags = getArray (configfile >> "CfgWeapons" >> _launcher >> "magazines");
+        // diag_log format ["DMORBAT: createFactionGroups - _launcher; %1, _launcherMags: %2", _launcher, _launcherMags];
+            private _usedMags = _unitMags arrayIntersect _launcherMags;
+            // Fix for disposable launchers
+            private _fakeMags = false;
+            { if ("fake" in (toLowerANSI _x) && (count _launcherMags) == 1) exitWith {  _fakeMags = true; false } } forEach _launcherMags;
+            if (_fakeMags) then {
+                _launcher = format ["%1%2", _launcher,"_Loaded"];
+                // diag_log format ["DMORBAT: createFactionGroups - _launcher; %1", _launcher];
+                _launcherMags = getArray (configfile >> "CfgWeapons" >> _launcher >> "magazines");
+                _usedMags = _launcherMags;
+            };
+            if (count _usedMags == 0) then { _usedMags = _launcherMags };
+        // diag_log format ["DMORBAT: createFactionGroups - _launcher: %1, _usedMags: %2", _launcher, _usedMags];
+            private _mag = _usedMags select 0;
+            private _ammo = getText (configFile >> "CfgMagazines" >> _mag >> "ammo");
+            private _hit = getNumber (configFile >> "CfgAmmo" >> _ammo >> "hit");
+            _launcherArr set [0, _hit];
+        };
+        // Remove unit mags
+        { _x deleteAt 2; } forEach _ATlaunchers;
+        // diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (dmg): %1", _ATlaunchers];
+
+        // Sort from greater to lower damage
+        _ATlaunchers sort false;
+        // diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (sorted): %1", _ATlaunchers];
+
+        // Separate AT from HAT launchers
+        private _ATammount = count _ATlaunchers;
+        private _ATdmgCut = round(_ATammount / 2);
+        private _ATdmg = [];
+        { private _dmg = _x select 0; _ATdmg pushBack _dmg; } forEach _ATlaunchers;
+        private _ATdmgMean = _ATdmg call BIS_fnc_arithmeticMean;
+        // diag_log format ["DMORBAT: createFactionGroups - _ATammount: %1, _ATdmgCut: %2, _ATdmgMean: %3", _ATammount, _ATdmgCut, _ATdmgMean];
+
+        private _i = 0;
+        // {  if ((_i + 1) > _ATdmgCut) then { _LATlaunchers pushBackUnique (_x select 1) } else { _HATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
+        {  if ((_X select 0) > _ATdmgMean) then { _HATlaunchers pushBackUnique (_x select 1) } else { _LATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
+        // diag_log format ["DMORBAT: createFactionGroups - _LATlaunchers: %1", _LATlaunchers];
+        // diag_log format ["DMORBAT: createFactionGroups - _HATlaunchers: %1", _HATlaunchers];
+
+        // Reassign units based on AT type
+        private _tempRiflemenAT = [];
+        {
+            private _weapons = getArray (configfile >> "CfgVehicles" >> _x >> "weapons");
+            private _unitLauncher = _weapons arrayIntersect _HATlaunchers;
+            // diag_log format ["DMORBAT: createFactionGroups - _unitLauncher: %1", _unitLauncher];
+            // if ((_unitLauncher select 0) in _HATlaunchers) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
+            if (count _unitLauncher > 0 || "_hat" in (toLowerANSI _x)) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
+        } forEach _riflemenAT;
+        _riflemenAT = +_tempRiflemenAT;
+        _tempRiflemenAT = nil;
+    };
+
+    // Exit if no units where found
+    if (count _riflemen == 0) exitWith { diag_log format ["DMORBAT: --- ERROR --- Couldn't create groups for faction %1. No infantry units found!", _faction] };
+
     diag_log format ["DMORBAT: createFactionGroups - _squadLeaders: %1", _squadLeaders];
     diag_log format ["DMORBAT: createFactionGroups - _teamLeaders: %1", _teamLeaders];
     diag_log format ["DMORBAT: createFactionGroups - _riflemen: %1", _riflemen];
     diag_log format ["DMORBAT: createFactionGroups - _riflemenAT: %1", _riflemenAT];
+    diag_log format ["DMORBAT: createFactionGroups - _riflemenHAT: %1", _riflemenHAT];
     diag_log format ["DMORBAT: createFactionGroups - _riflemenAA: %1", _riflemenAA];
     diag_log format ["DMORBAT: createFactionGroups - _grenadiers: %1", _grenadiers];
     diag_log format ["DMORBAT: createFactionGroups - _autoriflemen: %1", _autoriflemen];
@@ -479,17 +573,25 @@ _fnc_createInfGroup = {
             };
         };
     };
-    // Rifleman AT
-    if (count _riflemenAT > 0) then {
-        _group pushBack (selectRandom _riflemenAT);
+    // Rifleman HAT
+    if (count _riflemenHAT > 0) then {
+        _group pushBack (selectRandom _riflemenHAT);
     } else {
-        _group pushBack (selectRandom _riflemen);
+        if (count _riflemenAT > 0) then {
+            _group pushBack (selectRandom _riflemenAT);
+        } else {
+            _group pushBack (selectRandom _riflemen);
+        };
     };
-    // Rifleman AT
-    if (count _riflemenAT > 0) then {
-        _group pushBack (selectRandom _riflemenAT);
+    // Rifleman HAT
+    if (count _riflemenHAT > 0) then {
+        _group pushBack (selectRandom _riflemenHAT);
     } else {
-        _group pushBack (selectRandom _riflemen);
+        if (count _riflemenAT > 0) then {
+            _group pushBack (selectRandom _riflemenAT);
+        } else {
+            _group pushBack (selectRandom _riflemen);
+        };
     };
     // (we won't check for assistnat AT)
     // Rifleman

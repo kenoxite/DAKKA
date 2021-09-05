@@ -45,7 +45,7 @@ diag_log format ["DMORBAT: Task 1 - %1", _txt];
 [true] call DMORBAT_fnc_compositionRemove;
 // Load default compositions
 #include "..\..\compositions_default.hpp";
-_compositionsPredefined =+ DMORBAT_compositions_default;
+_compositionsPredefined = +DMORBAT_compositions_default;
 _locationsPredefined = DMORBAT_locations_Task1;
 // Amount of compositions should match amount of predefined locations
 _taskLocations = [_locationsPredefined, "Outposts"] call BIS_fnc_getFromPairs;
@@ -54,7 +54,7 @@ _selectedCompositions = [];
     private _coords = _x select 0;
     // diag_log format ["_coords: %1", _coords];
     private _dir = _x select 1;
-    private _comp =+ selectRandom _compositionsPredefined;
+    private _comp = +selectRandom _compositionsPredefined;
     private _compName = _comp select 0;
     private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
     _comp set [0, _newName];
@@ -94,7 +94,7 @@ _nul = [] spawn {
         waitUntil { DMORBAT_compositionsLoaded == count _compositionsData };
 
         {
-            _compObjects =+ _x select 1;
+            _compObjects = +_x select 1;
             _compObjects deleteAt 0;
             {
                 _obj = _x select 0;
@@ -249,7 +249,7 @@ playMusic _startingMusic;
 	diag_log "DMORBAT: Task 1 - Spawning enemies";
 	_ctrl ctrlSetText format ["Spawning enemy groups...", ""];
 	_enemyGroups = [_taskData, "Enemy groups"] call BIS_fnc_getFromPairs;
-	_patrolGroups =+ (_enemyGroups select 0) select 1;
+	_patrolGroups = +(_enemyGroups select 0) select 1;
 	for [{private _i = 0}, {_i < count _patrolGroups}, {_i = _i + 1}] do {
 		_grp = [(_patrolGroups select _i) select 1, DMORBAT_task1_locPos, east, 100] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 1 - Spawning enemy patrol #%1 group %2", _i + 1, _grp];
@@ -279,7 +279,7 @@ playMusic _startingMusic;
 		sleep 0.001;
 	}; 
 
-	_defendGroups =+ (_enemyGroups select 1) select 1;
+	_defendGroups = +(_enemyGroups select 1) select 1;
 	for [{private _i = 0}, {_i < count _defendGroups}, {_i = _i + 1}] do {
 		_grp = [(_defendGroups select _i) select 1, DMORBAT_task1_locPos, east, 30] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 1 - Spawning enemy defenders #%1 group %2", _i + 1, _grp];

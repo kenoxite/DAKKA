@@ -50,7 +50,7 @@ diag_log format ["DMORBAT: compositionRemove _compsToDelete: %1", _compsToDelete
     diag_log format ["DMORBAT: compositionRemove _thisCompositionData: %1", _thisCompositionData];
     if (isNil "_thisCompositionData") exitWith { false };
     if (_all) then {
-        _compObjects =+ _thisCompositionData select 1;
+        _compObjects = +_thisCompositionData select 1;
     } else {
         _compObjects = _thisCompositionData select 1;
     };
@@ -59,7 +59,7 @@ diag_log format ["DMORBAT: compositionRemove _compsToDelete: %1", _compsToDelete
     deletevehicle ((_compObjects select 0) select 0);
     _compObjects deleteAt 0;
     // Retrieve and delete the hidden terrain objects list
-    _hiddenObjects =+ _thisCompositionData select 2;
+    _hiddenObjects = +_thisCompositionData select 2;
     _thisCompositionData deleteAt 2;
 
     // Now delete the rest

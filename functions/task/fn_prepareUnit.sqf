@@ -41,8 +41,8 @@ _null = [_unit, _unitLoadout] spawn {
     private _unit = _this select 0;
     private _unitLoadout = _this select 1;
 
-    // RHS: Give AI real ammo for disposable launchers
-    _rhsAIDisposableLauncherFix = {
+    // Give AI real ammo for disposable launchers
+    _AIDisposableLauncherFix = {
         params ["_unit"];
         private _secWep = secondaryWeapon _unit;
         if (_secWep != "" && !(isPlayer _unit)) then {
@@ -108,7 +108,7 @@ _null = [_unit, _unitLoadout] spawn {
             // Check for NVGs and flashlights
             [_x, DMORBAT_forceFlashlights] call DMORBAT_fnc_useNVGflashlight;
             // RHS single-shot launchers for AI fix
-            [_x] call _rhsAIDisposableLauncherFix;
+            [_x] call _AIDisposableLauncherFix;
         } forEach (crew _veh);
     };
 };

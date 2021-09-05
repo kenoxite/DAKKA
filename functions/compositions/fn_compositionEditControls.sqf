@@ -33,7 +33,7 @@ _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPair
 _index = (_selectionPath select 0);
 _thisCompositionData = _compositionsData select _index;
 _compObjects = _thisCompositionData select 1;
-_compObjectsCopy =+ _thisCompositionData select 1;
+_compObjectsCopy = +_thisCompositionData select 1;
 _compObjectsCopy deleteAt 0;
 _hiddenObjects = _thisCompositionData select 2;
 _hideDist = 2;

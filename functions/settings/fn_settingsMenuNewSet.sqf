@@ -31,7 +31,7 @@ if (count _newName == 0 || _newName == " ") exitWith {
 private _savedData = profileNamespace getVariable (format ["DMORBAT_Task%1", DMORBAT_Task]);
 
 // Update profile saved data array
-private _currentTaskData =+ DMORBAT_TaskData_default select (DMORBAT_Task - 1);
+private _currentTaskData = +DMORBAT_TaskData_default select (DMORBAT_Task - 1);
 _savedData pushBack [_newName, _currentTaskData];
 
 // Close popup

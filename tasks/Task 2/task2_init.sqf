@@ -62,6 +62,24 @@ _startPos_B = _posB;
 _startPos_O = _posO;
 DMORBAT_startPos_O = _startPos_O;
 
+// FUNCTIONS
+DMORBAT_relPosRefObj = "Flag_BI_F" createVehicle DMORBAT_task2_locPos;
+DMORBAT_relPosRefObj setDir DMORBAT_task2_locDir;
+DMORBAT_relPosRefObj setPos DMORBAT_task2_locPos;
+DMORBAT_relPosRefObj hideObject true;
+// Return relative position at the given distance and at the sides of the location center
+_fnc_getSpawnPos = {
+    params ["_posLoc", "_relDist", "_distLoc", "_relDir"];
+    // private _relDir = if (_relDist > 0) then { 90 } else { -90 };
+    // private _relPosH = [_posLoc, _relDist, _relDir] call BIS_fnc_relPos;
+    DMORBAT_relPosRefObj setPos DMORBAT_task2_locPos;
+    private _relPosH = DMORBAT_relPosRefObj getRelPos [_relDist, _relDir];
+    DMORBAT_relPosRefObj setPos _relPosH;
+    // [_relPosH, _distLoc, DMORBAT_task2_locDir] call BIS_fnc_relPos
+    // _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_relposH", _relPosH, "mil_dot", "ICON", [1, 1], 0, "Solid", "ColorWEST", 1, ""] call BIS_fnc_stringToMarker;
+    DMORBAT_relPosRefObj getRelPos [_distLoc, 0]
+};
+
 diag_log "DMORBAT: Task 2 - Spawning player group";
 _ctrl ctrlSetText format ["Spawning player group...", ""];
 _dir = [_startPos_B, DMORBAT_task2_locPos] call BIS_fnc_dirTo;
@@ -75,7 +93,8 @@ _playerIsAir = false;
 {
     private _veh = vehicle _x;
     if (!([_veh] call DMORBAT_fnc_isMan) && !([_veh] call DMORBAT_fnc_isAir)) then {
-        private _pos = [DMORBAT_task2_locPos, -750, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+        // private _pos = [DMORBAT_task2_locPos, -750, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+        private _pos = [DMORBAT_task2_locPos, round(random 500), -750, 90 * (selectRandom [0,1]*2-1)] call _fnc_getSpawnPos;
         if (_x == effectiveCommander _veh) then {
             _veh setVehiclePosition [_pos, [], (sizeOf (typeOf _veh) + 100), "NONE"];
         };
@@ -219,29 +238,11 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
 	_ctrl ctrlSetText format ["Spawning enemy groups...", ""];
     // DMORBAT_Task2_SafePositions = (selectBestPlaces [getMarkerPos "DMORBAT_mrkr_Task2_location_area_enemy", 250, "meadow + 2*hills", 50, 50] apply { _x select 0 }) select { !surfaceIsWater _x && (count (nearestTerrainObjects [_x, [], 10])) < 1; }; 
 	_enemyGroups = [_taskData, "Enemy groups"] call BIS_fnc_getFromPairs;
-
-// FUNCTIONS
-DMORBAT_relPosRefObj = "Flag_BI_F" createVehicle DMORBAT_task2_locPos;
-DMORBAT_relPosRefObj setDir DMORBAT_task2_locDir;
-DMORBAT_relPosRefObj setPos DMORBAT_task2_locPos;
-DMORBAT_relPosRefObj hideObject true;
-// Return relative position at the given distance and at the sides of the location center
-_getSpawnPos = {
-    params ["_posLoc", "_relDist", "_distLoc", "_relDir"];
-    // private _relDir = if (_relDist > 0) then { 90 } else { -90 };
-    // private _relPosH = [_posLoc, _relDist, _relDir] call BIS_fnc_relPos;
-    DMORBAT_relPosRefObj setPos DMORBAT_task2_locPos;
-    private _relPosH = DMORBAT_relPosRefObj getRelPos [_relDist, _relDir];
-    DMORBAT_relPosRefObj setPos _relPosH;
-    // [_relPosH, _distLoc, DMORBAT_task2_locDir] call BIS_fnc_relPos
-    // _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_relposH", _relPosH, "mil_dot", "ICON", [1, 1], 0, "Solid", "ColorWEST", 1, ""] call BIS_fnc_stringToMarker;
-    DMORBAT_relPosRefObj getRelPos [_distLoc, 0]
-};
     
     _maxRowDist = 200;
 
     // Ememy infantry
-	_O_InfGrps =+ (_enemyGroups select 0) select 1;
+	_O_InfGrps = +(_enemyGroups select 0) select 1;
     _row = 1;
     _relDist = 100;
     _relDir = 0;
@@ -262,7 +263,7 @@ _getSpawnPos = {
         // Spawn closer if in town location
         _spawnDist = if (_inTown) then { 250 } else { 400 };
         _spawnDist = _spawnDist + (50 * _row);
-        _spawnPos = [DMORBAT_task2_locPos, _relDist, _spawnDist, _relDir] call _getSpawnPos;
+        _spawnPos = [DMORBAT_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
 		_grp = [(_O_InfGrps select _i) select 1, _spawnPos, east, 30] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 2 - Spawning enemy infantry #%1 group %2", _i + 1, _grp];
 		if (!isNull _grp) then {
@@ -274,7 +275,7 @@ _getSpawnPos = {
 	}; 
 
     // Ememy land vehicles
-    _O_LandGrps =+ (_enemyGroups select 1) select 1;
+    _O_LandGrps = +(_enemyGroups select 1) select 1;
     _row = 1;
     _relDist = 100;
     _relDir = 0;
@@ -299,7 +300,7 @@ _getSpawnPos = {
             _spawnDist = 400;
         };
         _spawnDist = _spawnDist + (50 * _row);
-        _spawnPos = [DMORBAT_task2_locPos, _relDist, _spawnDist, _relDir] call _getSpawnPos;
+        _spawnPos = [DMORBAT_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_LandGrps select _i) select 1, _spawnPos, east, 50] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 2 - Spawning enemy land vehicles #%1 group %2", _i + 1, _grp];
         if (!isNull _grp) then {
@@ -316,7 +317,7 @@ _getSpawnPos = {
     }; 
 
     // Ememy air vehicles
-    _O_AirGrps =+ (_enemyGroups select 2) select 1;
+    _O_AirGrps = +(_enemyGroups select 2) select 1;
     _row = 1;
     _relDist = 100;
     _relDir = 0;
@@ -336,7 +337,7 @@ _getSpawnPos = {
         _relDir = if (_rowElement == 0) then { 0 } else { 90 * _dirMod };
         _spawnDist = 5000;
         _spawnDist = _spawnDist + (50 * _row);
-        _spawnPos = [[(DMORBAT_task2_locPos select 0), (DMORBAT_task2_locPos select 1), 2000], _relDist, _spawnDist, _relDir] call _getSpawnPos;
+        _spawnPos = [[(DMORBAT_task2_locPos select 0), (DMORBAT_task2_locPos select 1), 2000], _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_AirGrps select _i) select 1, _spawnPos, east, 200] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 2 - Spawning enemy air vehicles #%1 group %2", _i + 1, _grp];
         if (!isNull _grp) then {
@@ -354,7 +355,7 @@ _getSpawnPos = {
     _friendlyGroups = [_taskData, "Friendly groups"] call BIS_fnc_getFromPairs;
 
     // Friendly infantry
-    _B_InfGrps =+ (_friendlyGroups select 0) select 1;
+    _B_InfGrps = +(_friendlyGroups select 0) select 1;
     _row = 1;
     _relDist = 100;
     _relDir = 0;
@@ -374,7 +375,7 @@ _getSpawnPos = {
         _relDir = if (_rowElement == 0) then { 0 } else { 90 * _dirMod };
         _spawnDist = 500;
         _spawnDist = _spawnDist + (50 * _row);
-        _spawnPos = [DMORBAT_task2_locPos, _relDist, -_spawnDist, _relDir] call _getSpawnPos;  
+        _spawnPos = [DMORBAT_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;  
         _grp = [(_B_InfGrps select _i) select 1, _spawnPos, west, 30] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 2 - Spawning friendly infantry #%1 group %2", _i + 1, _grp];
         if (!isNull _grp) then {
@@ -386,7 +387,7 @@ _getSpawnPos = {
     }; 
 
     // Friendly land vehicles
-    _B_LandGrps =+ (_friendlyGroups select 1) select 1;
+    _B_LandGrps =+(_friendlyGroups select 1) select 1;
     _row = 1;
     _relDist = 100;
     _relDir = 0;
@@ -411,7 +412,7 @@ _getSpawnPos = {
             _spawnDist = 700;
         };
         _spawnDist = _spawnDist + (50 * _row);
-        _spawnPos = [DMORBAT_task2_locPos, _relDist, -_spawnDist, _relDir] call _getSpawnPos;
+        _spawnPos = [DMORBAT_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_LandGrps select _i) select 1, _spawnPos, west, 50] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 2 - Spawning friendly land vehicles #%1 group %2", _i + 1, _grp];
         if (!isNull _grp) then {
@@ -428,7 +429,7 @@ _getSpawnPos = {
     }; 
 
     // Friendly air vehicles
-    _B_AirGrps =+ (_friendlyGroups select 2) select 1;
+    _B_AirGrps = +(_friendlyGroups select 2) select 1;
     _row = 1;
     _relDist = 100;
     _relDir = 0;
@@ -448,7 +449,7 @@ _getSpawnPos = {
         _relDir = if (_rowElement == 0) then { 0 } else { 90 * _dirMod };
         _spawnDist = 5000;
         _spawnDist = _spawnDist + (50 * _row);
-        _spawnPos = [[(DMORBAT_task2_locPos select 0), (DMORBAT_task2_locPos select 1), 2000], _relDist, -_spawnDist, _relDir] call _getSpawnPos;
+        _spawnPos = [[(DMORBAT_task2_locPos select 0), (DMORBAT_task2_locPos select 1), 2000], _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_AirGrps select _i) select 1, _spawnPos, west, 200] call DMORBAT_fnc_spawnGroup;
         diag_log format ["DMORBAT: Task 2 - Spawning friendly air vehicles #%1 group %2", _i + 1, _grp];
         if (!isNull _grp) then {

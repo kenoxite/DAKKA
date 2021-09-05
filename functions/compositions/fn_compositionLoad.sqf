@@ -61,7 +61,7 @@ _nul = _this spawn {
     	// diag_log format ["DMORBAT: compositionLoad _thisCompositionData: %1", _thisCompositionData];
         diag_log format ["DMORBAT: compositionLoad - Loading composition: %1", _thisCompositionData select 0 ];
     	_compObjects = _thisCompositionData select 1;
-    	_compObjectsCopy =+ _thisCompositionData select 1;
+    	_compObjectsCopy = +_thisCompositionData select 1;
     	_hiddenObjects = [];
     	_ref = (_compObjects select 0) select 0;
         diag_log format ["DMORBAT: compositionLoad _ref 1: %1", _ref ];

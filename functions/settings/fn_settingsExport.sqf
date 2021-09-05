@@ -20,7 +20,7 @@ private _display = findDisplay IDC_MENU_MISSION_EDIT;
 
 private _savedData = profileNamespace getVariable (format ["DMORBAT_Task%1", DMORBAT_Task]);
 private _slotIndex = (DMORBAT_saveSlots select (DMORBAT_Task - 1));
-private _exportedData =+ _savedData select _slotIndex;
+private _exportedData = +_savedData select _slotIndex;
 private _profileName = _exportedData select 0;
 private _taskData = _exportedData select 1;
 
