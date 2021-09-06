@@ -44,24 +44,24 @@ if (isNil "_savedData") then {
     diag_log format ["DMORBAT: settingsSave --- WARNING --- No saved task data found. Creating a new save using default task data", ""];
     _savedData = [[DMORBAT_saveSlotName, _defaultTaskData]];
 /*    {
-        diag_log format ["DMORBAT: settingsSave _savedData (new) %1: %2", _forEachIndex, _x];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsSave _savedData (new) %1: %2", _forEachIndex, _x] };
     } forEach _savedData;*/
 } else {
     // Saved data found
 /*    {
-        diag_log format ["DMORBAT: settingsSave _savedData %1: %2", _forEachIndex, _x];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsSave _savedData %1: %2", _forEachIndex, _x] };
     } forEach _savedData;*/
     if (_slotIndex < 0) then {
         // No existing saves for this terrain. Create a new one
         diag_log format ["DMORBAT: settingsSave --- WARNING --- No saved task data found for this task. Creating a new save using default task data", ""];
         _savedData pushBack [[DMORBAT_saveSlotName, _defaultTaskData]];
-        // diag_log format ["DMORBAT: settingsSave _savedData (new): %1", _savedData];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsSave _savedData (new): %1", _savedData] };
     } else {
         // Existing saves. Overwrite current slot settings
         _savedData set [_slotIndex, [DMORBAT_saveSlotName, _currentTaskData]];
     };
 };
-// diag_log format ["DMORBAT: settingsSave _dataToSave: %1", _savedData];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsSave _dataToSave: %1", _savedData] };
 
 profileNamespace setVariable [format ["DMORBAT_Task%1", DMORBAT_Task], _savedData];
 

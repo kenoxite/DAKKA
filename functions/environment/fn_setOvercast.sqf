@@ -16,31 +16,43 @@
 
 */
 
-private ["_overcast", "_overcastMin", "_overcastMed", "_overcastMax", "_month", "_rainMonths_Beg", "_rainMonths_End"];
+private ["_overcast", "_overcastMin", "_overcastMed", "_overcastMax", "_month", "_rainMonths_Start", "_rainMonths_End", "_rainMonthsArr", "_rainDry", "_rainWet"];
 
 // Base overcast on average precipitation of current month
-if ((DMORBAT_rainMonths select 0) > (DMORBAT_rainMonths select 1)) then {
-    _rainMonths_Beg = DMORBAT_rainMonths select 1;
-    _rainMonths_End = DMORBAT_rainMonths select 0;
-} else {
-    _rainMonths_Beg = DMORBAT_rainMonths select 0;
-    _rainMonths_End = DMORBAT_rainMonths select 1;
+_rainMonths_Start = DMORBAT_rainMonths select 0;
+_rainMonths_End = DMORBAT_rainMonths select 1;
+
+_rainMonthsArr = [];
+for [{private _i = 1}, {_i <= 12}, {_i = _i + 1}] do {
+    if (_rainMonths_Start < _rainMonths_End) then {
+        if (_i >= _rainMonths_Start && _i <= _rainMonths_End) then {
+            _rainMonthsArr pushBack _i;
+        };
+    } else {
+        if (_i <= _rainMonths_End || (_i >= _rainMonths_Start && _i <= 12)) then {
+            _rainMonthsArr pushBack _i;
+        };
+    };
 };
+
 _month = date select 1;
-if (_month >= _rainMonths_Beg && _month <= _rainMonths_End) then {
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: setOvercast - _rainMonthsArr: %1, month: %2", _rainMonthsArr, _month] };
+_rainDry = DMORBAT_rain select 0;
+_rainWet = DMORBAT_rain select 1;
+if (_month in _rainMonthsArr) then {
     // Rainy months
     _overcastMin = 0;
-    _overcastMed = ((DMORBAT_overcast / 3) + (((DMORBAT_rain select 1) / 6) min 0.5) + (random ((DMORBAT_rain select 1) / 6))) min 0.9;
+    _overcastMed = ((DMORBAT_overcast / 3) + ((_rainWet / 6) min 0.5) + floor(random (_rainWet / 6))) min 0.9;
     _overcastMax = 1;
 } else {
     // Dry months
     _overcastMin = 0;
-    _overcastMed = ((DMORBAT_overcast / 4) + (((DMORBAT_rain select 0) / 4) min 0.5) + (random 0.5)) min 0.7;
-    _overcastMax = ((DMORBAT_overcast / 4) + ((DMORBAT_rain select 0) / 2) + (random 0.5)) min 0.9;
+    _overcastMed = ((DMORBAT_overcast / 4) + ((_rainDry / 4) min 0.5) + floor(random 0.5)) min 0.7;
+    _overcastMax = ((DMORBAT_overcast / 4) + (_rainDry / 2) + floor(random 0.5)) min 0.9;
 };
 
 _overcast = random [_overcastMin, _overcastMed, _overcastMax];
 
-diag_log format ["DMORBAT: setOvercast _overcast: %1 [%2, %3, %4]", _overcast, _overcastMin, _overcastMed, _overcastMax];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: setOvercast _overcast: %1 [%2, %3, %4]", _overcast, _overcastMin, _overcastMed, _overcastMax] };
 
 _overcast

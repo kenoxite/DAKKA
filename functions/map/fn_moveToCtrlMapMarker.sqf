@@ -19,7 +19,7 @@
 
 params [["_idcTerrain", -1], ["_idcSatellite", -1], ["_mrkr", ""]];
 private ["_display", "_ctrl", "_mrkr"];
-diag_log format ["DMORBAT: moveToCtrlMapMarker _mrkr: %1", _mrkr];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: moveToCtrlMapMarker _mrkr: %1", _mrkr] };
 if (_idcTerrain < 0 || _idcSatellite < 0 || _mrkr == "") exitWith { false };
 
 disableSerialization;

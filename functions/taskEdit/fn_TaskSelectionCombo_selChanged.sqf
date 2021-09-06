@@ -19,7 +19,7 @@
 
 params [["_idc", -1], "_selectionPath"];
 private ["_display", "_ctrl", "_locations", "_mrkr"];
-diag_log format ["DMORBAT: TaskSelectionCombo_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: TaskSelectionCombo_selChanged _selectionPath:%1", _selectionPath] };
 
 disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;

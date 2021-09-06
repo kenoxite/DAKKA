@@ -33,6 +33,6 @@ _loadoutsArr = [];
 	_loadoutsArr pushBack (_x select 2);
 } forEach (_playerGroupData select 1);
 _groupMods = _playerGroupData select 2;
-// diag_log format ["DMORBAT: _unitClassArr: %1", _unitClassArr];
-// diag_log format ["DMORBAT: previewPlayerGroup CALLING PREVIEWGROUP", ""];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitClassArr: %1", _unitClassArr] };
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewPlayerGroup CALLING PREVIEWGROUP", ""] };
 [_unitClassArr, _ranksArr, _loadoutsArr, _groupMods] call DMORBAT_fnc_previewGroup;

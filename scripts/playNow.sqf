@@ -26,7 +26,7 @@ _txt = "Categorizing groups for the player faction...";
 _ctrl ctrlSetText _txt; 
 diag_log format ["DMORBAT: Play Now - %1", _txt];
 _playerFaction = DMORBAT_PlayerFactions select (_task - 1);
-diag_log format ["DMORBAT: _playerFaction: %1", _playerFaction];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: _playerFaction: %1", _playerFaction] };
 _factionGroups = [_playerFaction] call DMORBAT_fnc_categorizeGroups;
 // _categorizeGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups]
 _infGroups = _factionGroups select 0;
@@ -165,16 +165,18 @@ _playerGroupData = ["Custom Player Group", [], []];
 {
     (_playerGroupData select 1) pushBack [_x, if (_forEachIndex == 0) then {"SERGEANT"} else {"PRIVATE"}, [], 1, 2];
 } forEach (_playerGroup select 0);
+_playerGroupCount = count (_playerGroup select 0);
 // Add to tasks array
 [_taskData, "Player group", [_playerGroupData]] call BIS_fnc_addToPairs;
 
 // Assign random unit as playable
 _playableUnit = floor (random ((count (_playerGroup select 0)) - 1));
+// _playableUnit = 0;
 _playerData = [_playableUnit, 0, []];
 [_taskData, "Player data", _playerData] call BIS_fnc_setToPairs;
 
 DMORBAT_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
-diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playerGroup select 0) select 0), DMORBAT_friendlyInfEdCat];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playerGroup select 0) select 0), DMORBAT_friendlyInfEdCat] };
 
 // FUNCTIONS
 /*
@@ -198,7 +200,7 @@ diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playe
 */
 _fnc_addGroupsToTaskData = {
     params ["_sideType", "_groupType", "_groupsPool", ["_groupsAmount", 1], ["_maxUnits", 0], ["_limitPresence", false], ["_minUnits", 3], ["_skill", 0], ["_sameEdCat", true], ["_edCat", ""]];
-    // diag_log format ["_sideType: %1 _groupType: %2 _groupsPool: %3 _groupsAmount: %4 _maxUnits: %5 _limitPresence: %6 _minUnits: %7 _skill: %8 _sameEdCat: %9 _edCat: %10", _sideType, _groupType, (_groupsPool select 0) select 0, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, _sameEdCat, _edCat];
+    // if (DMORBAT_debug) then { diag_log format ["_sideType: %1 _groupType: %2 _groupsPool: %3 _groupsAmount: %4 _maxUnits: %5 _limitPresence: %6 _minUnits: %7 _skill: %8 _sameEdCat: %9 _edCat: %10", _sideType, _groupType, (_groupsPool select 0) select 0, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, _sameEdCat, _edCat] };
 
     private _task = DMORBAT_Task;
     private _taskData = DMORBAT_TaskData select (_task - 1);
@@ -212,7 +214,7 @@ _fnc_addGroupsToTaskData = {
         // if (_sameEdCat && _sideType == "Friendly groups" && _groupType == "Infantry") then {
         if (_sameEdCat && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat != "") then {
         // Pick only teams of the same editor category
-            diag_log format ["DMORBAT: Play Now -_fnc_addGroupsToTaskData - Filtering provided groups by category for %1, %2: %3", _sideType, _groupType, _edCat];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now -_fnc_addGroupsToTaskData - Filtering provided groups by category for %1, %2: %3", _sideType, _groupType, _edCat] };
             _groupsPoolTemp = _groupsPool select {
                 _thisESubCat = getText (configFile >> "CfgVehicles" >> ((_x select 0) select 0) >> "editorSubcategory");
                 // _playerESubCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
@@ -226,7 +228,7 @@ _fnc_addGroupsToTaskData = {
             _groupsPool = +_groupsPoolTemp;
         };
         _selectedGroup = selectRandom _groupsPool;
-         diag_log format ["DMORBAT: Play Now - _fnc_addGroupsToTaskData - _thisGroupData: %1", ((_selectedGroup select 0) select 0)];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _fnc_addGroupsToTaskData - _thisGroupData: %1", ((_selectedGroup select 0) select 0)] };
 
         // Set side editor category if it wasn't set already
         if (_sameEdCat && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat == "") exitWith {
@@ -317,12 +319,28 @@ if (_task == 1 && _playableUnit == 0) then {
     if (!isNil "_factionTransport") then {
         if (count _transportGroups > 0) then {
             // Pick one type randomly
-            _selectedTransportUnit = (selectRandom _transportGroups) select 0;
-            _selectedTransportGroup pushBack _selectedTransportUnit;
+            // _selectedTransportUnit = (selectRandom _transportGroups) select 0;
+            _availableTransportUnits = [];
+            // Check that the amount of passenger seats is enough to carry the player group
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _transportGroups: %1", _transportGroups] };
+            {
+                //["_unitClass", ["_pos", position player], ["_grp", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_autoDelete", true]];
+                private _testUnit = [_x select 0, [0,0,0]] call DMORBAT_fnc_spawnVehicle;
+                _passengerSeats = (fullCrew [_testUnit, "", true]) select {isNull (_x select 0)};
+                _nul = [_testUnit] spawn { [_this select 0] call DMORBAT_fnc_deleteVehicle };
+                diag_log format ["DMORBAT: Play Now - %1 has %2 passenger seats and the player group is %3", (_x select 0), count _passengerSeats, _playerGroupCount];
+                if (count _passengerSeats >= _playerGroupCount) then {
+                    _availableTransportUnits pushBack (_x select 0);
+                };
+            } forEach _transportGroups;
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _availableTransportUnits: %1", _availableTransportUnits] };
+
+            if (count _availableTransportUnits > 0) then {
+                _selectedTransportUnit = selectRandom _availableTransportUnits;
+                _selectedTransportGroup pushBack _selectedTransportUnit;
+            };
         };
     };
-    
-    // TO DO: Check that the amount of passenger seats is enough to carry the player gorup
 
     if (count _selectedTransportGroup > 0) then {
         _supportGroupsDataIndex = [_taskData, "Support groups"] call BIS_fnc_findInPairs;
@@ -370,10 +388,10 @@ if (_task == 2) then {
     {  
         private _ATcount = 0;
         private _group = _x select 0;
-        // diag_log format ["DMORBAT: Play Now - AT team check - _group: %1",_group];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - AT team check - _group: %1",_group] };
         {
             private _unit = _x;
-            // diag_log format ["DMORBAT: Play Now - AT team check - _unit: %1", _unit];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - AT team check - _unit: %1", _unit] };
             private _roles = [[_unit]] call DMORBAT_fnc_groupRoles;
             if (_roles select 0) then { _ATcount = _ATcount + 1 };
         } forEach _group;
@@ -419,7 +437,7 @@ if (_task == 2) then {
     // Armor
     _eligibleArmor = [];
     _eligibleArmorAll = [];
-    diag_log format ["DMORBAT: _armorGroups friendly: %1", _armorGroups];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _armorGroups friendly: %1", _armorGroups] };
     if (count _armorGroups > 0) then {
         // Pick a tank group and resize it
         _eligibleArmorAll = +_armorGroups select { _type = [(_x select 0) select 0] call DMORBAT_fnc_vehicleType;  (_type == "Tank" || _type == "Drone Tank") };
@@ -433,7 +451,7 @@ if (_task == 2) then {
                 _eligibleArmor = +_eligibleArmorAll;
             };
         };
-        diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor] };
         if (count _eligibleArmor > 0) then {
             [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1] call _fnc_addGroupsToTaskData;
         };
@@ -481,10 +499,52 @@ if (_task == 2) then {
         {
             _airGroups pushBack [[_x]];
         } forEach _factionAirVeh;
+
+        _amount = if (count _eligibleArmor == 0) then { 2 } else { 1 };
+        if (count _airGroups > 0) then {
+            [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _airGroups,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1] call _fnc_addGroupsToTaskData;
+        };
     };
 
-    if (count _airGroups > 0) then {
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _airGroups,/*_groupsAmount*/ 1] call _fnc_addGroupsToTaskData;
+
+    // SUPPORT 2
+    // Allow Air Support if there's no friendly armor
+    if (count _eligibleArmor == 0) then {
+        // CAS
+        // Only if player is leader
+        _selectedCASGroup = [];
+        // Check faction units for suitable CAS
+        _factionCAS = [_playerFaction, "CAS"] call DMORBAT_fnc_categorizeUnits;
+        private _CASGroups = [];
+        {
+            private _grps = _x select 1;
+            {
+                _CASGroups pushBack _x;
+            } forEach _grps;
+        } forEach _factionCAS;
+
+        if (!isNil "_factionCAS") then {
+            if (count _CASGroups > 0) then {
+                // Pick one type randomly
+                _selectedCASUnit = (selectRandom _CASGroups) select 0;
+                _selectedCASGroup pushBack _selectedCASUnit;
+            };
+        };
+
+        if (count _selectedCASGroup > 0) then {
+            _supportGroupsDataIndex = [_taskData, "Support groups"] call BIS_fnc_findInPairs;
+            _supportGroupsData = (_taskData select _supportGroupsDataIndex) select 1;
+            _CASGroupDataIndex = [_supportGroupsData, "CAS"] call BIS_fnc_findInPairs;
+            _CASGroupData = (_supportGroupsData select _CASGroupDataIndex) select 1;
+
+            _CASLimit = 1;
+            _CASGroupData set [0, [_CASLimit]];
+            _thisCASGroupData = ["CAS Group", [], []];
+            {
+                (_thisCASGroupData select 1) pushBack [_x, if (_forEachIndex == 0) then {"SERGEANT"} else {"PRIVATE"}, [], 1, 2];
+            } forEach _selectedCASGroup;
+            _CASGroupData set [1, [_thisCASGroupData]];
+        };
     };
 };
 
@@ -494,7 +554,7 @@ _txt = "Categorizing groups for the enemy faction...";
 _ctrl ctrlSetText _txt; 
 diag_log format ["DMORBAT: Play Now - %1", _txt];
 _enemyFaction = DMORBAT_EnemyFactions select (_task - 1);
-diag_log format ["DMORBAT: _enemyFaction: %1", _enemyFaction];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: _enemyFaction: %1", _enemyFaction] };
 _factionGroups = [_enemyFaction] call DMORBAT_fnc_categorizeGroups;
 
 _infGroups = _factionGroups select 0;
@@ -602,7 +662,7 @@ if (_task == 1) then {
     _eligiblePatrolsJustRifles = [];
     // Select infantry groups with 4 units or less
     _eligiblePatrolsAll = +_infGroups select { (count (_x select 0)) <= 4 };
-    // diag_log format ["DMORBAT: Play Now - _eligiblePatrolsAll: %1", _eligiblePatrolsAll];
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _eligiblePatrolsAll: %1", _eligiblePatrolsAll] };
     if (count _eligiblePatrolsAll > 0) then {
         // Select patrols without AT, AA, officers, hacker, assistant, diver, sniper
         _eligiblePatrolsJustRifles = +_eligiblePatrolsAll select {!((_x select 1) select 0) && !((_x select 1) select 1) && !((_x select 1) select 10) && !((_x select 1) select 11) && !((_x select 1) select 12) && !((_x select 1) select 14) && !((_x select 1) select 16)};
@@ -614,12 +674,12 @@ if (_task == 1) then {
     } else {
         _eligiblePatrols = +_infGroups;
     };
-    // diag_log format ["DMORBAT: _eligiblePatrols: %1", _eligiblePatrols];
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligiblePatrols: %1", _eligiblePatrols] };
     [/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 3 + (floor (random 3)),/*_maxUnits*/ 4,/*_limitPresence*/ true,/*_minUnits*/ 2,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // Pick a car as another patrol
     _eligiblePatrolsCars = [];
-    // diag_log format ["DMORBAT: _motGroups count: %1", count _motGroups];
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _motGroups count: %1", count _motGroups] };
     if (count _motGroups > 0) then {
         // Select the car of a motorized group
         {
@@ -631,13 +691,13 @@ if (_task == 1) then {
             } forEach _units;
         } forEach _motGroups;
     } else {
-        // diag_log format ["DMORBAT: _softAll: %1", _softAll];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _softAll: %1", _softAll] };
         if (count _softAll > 0) then {
             // _eligiblePatrolsCars = _softAll select { ((_x select 0) select 0) isKindOf "Car" };
             _eligiblePatrolsCars = +_softAll select { _type = [(_x select 0) select 0] call DMORBAT_fnc_vehicleType; (_type == "Car" || _type == "Drone Car") };
         };
     };
-    // diag_log format ["DMORBAT: _eligiblePatrolsCars: %1", _eligiblePatrolsCars];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligiblePatrolsCars: %1", _eligiblePatrolsCars] };
     if (count _eligiblePatrolsCars > 0) then {
         _patrolCar = ((selectRandom _eligiblePatrolsCars) select 0) select 0;
         _patrolCarGroup = [_patrolCar];
@@ -646,13 +706,13 @@ if (_task == 1) then {
         if (!_patrolCarArmed) then {
             _patrolCarAmount = 1 + (floor (random 1));
             _patrolCarInf = ((_infGroups select 0) select 0) select 0;
-            diag_log format ["DMORBAT: _patrolCarInf: %1", _patrolCarInf];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: _patrolCarInf: %1", _patrolCarInf] };
             for [{private _i = 0}, {_i < _patrolCarAmount}, {_i = _i + 1}] do 
             {
                 _patrolCarGroup pushBack _patrolCarInf;
             };
         };
-        // diag_log format ["DMORBAT: Trying to create the patrol car group: %1", _patrolCarGroup];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Trying to create the patrol car group: %1", _patrolCarGroup] };
         [/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 0.5 + floor (random (1.5)),/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 1,/*_sameEdCat*/ false] call _fnc_addGroupsToTaskData;
     };
 
@@ -671,8 +731,8 @@ if (_task == 1) then {
     } else {
         _eligibleDefenders = +_infGroups;
     };
-    // diag_log format ["DMORBAT: _eligibleDefenders: %1", _eligibleDefenders];
-    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Defenders",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 1 + (floor (random 2)),/*_maxUnits*/ 4,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleDefenders: %1", _eligibleDefenders] };
+    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Defenders",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 1 + (floor (random 2)),/*_maxUnits*/ 9,/*_limitPresence*/ true,/*_minUnits*/ 4,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call _fnc_addGroupsToTaskData;
 };
 
 if (_task == 2) then {
@@ -830,11 +890,12 @@ if (_task == 2) then {
         {
             _airGroups pushBack [[_x]];
         } forEach _factionAirVeh;
+
+        if (count _airGroups > 0) then {
+            [/*_sideType*/ "Enemy groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _airGroups,/*_groupsAmount*/ 1,/*_maxUnits*/ 1] call _fnc_addGroupsToTaskData;
+        };
     };
 
-    if (count _airGroups > 0) then {
-        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _airGroups,/*_groupsAmount*/ 1] call _fnc_addGroupsToTaskData;
-    };
 
 };
 
@@ -857,9 +918,9 @@ if (isNil "_thisWorldLocations") then {
 
 
 {
-    diag_log format ["%1:", _x select 0];
+    if (DMORBAT_debug) then { diag_log format ["%1:", _x select 0] };
     {
-        diag_log format ["%1: %2", _forEachIndex, _x];
+        if (DMORBAT_debug) then { diag_log format ["%1: %2", _forEachIndex, _x] };
     } forEach (_x select 1);
 } forEach _taskData;
 

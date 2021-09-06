@@ -62,7 +62,7 @@ if (count _action > 0) then {
     [_action] call DMORBAT_fnc_fillDate;
 };
 
-diag_log format ["time: %1", time - _initTime];
+if (DMORBAT_debug) then { diag_log format ["time: %1", time - _initTime] };
 // Don't update time and weather when just loading the page to avoid spamming the change X functions
 if (((time - _initTime) > 1) || _dateType == "minutes") then {
     // Update weather (only when changing month)

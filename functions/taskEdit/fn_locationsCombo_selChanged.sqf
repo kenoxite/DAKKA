@@ -19,7 +19,7 @@
 
 params ["_idcTerrain", "_idcSatellite", "_selectionPath", ["_idcButtons", []]];
 private ["_mrkr"];
-diag_log format ["DMORBAT: LocationsCombo_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: LocationsCombo_selChanged _selectionPath:%1", _selectionPath] };
 if (_selectionPath < 0) exitWith { false };
 
 private _locData = (lbData [IDC_COMBO_AO_SELECTION_LOC, lbCurSel IDC_COMBO_AO_SELECTION_LOC]);

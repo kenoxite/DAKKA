@@ -29,12 +29,12 @@ if (count _selectionPath > 0) then {
       ctrlShow [IDC_GRP_SAVEDDATAPROFILES, false];
 };
 if ((count _selectionPath) <= 2) then {
-	diag_log format ["DMORBAT: selected: %1", _selectionPath];
+	if (DMORBAT_debug) then { diag_log format ["DMORBAT: selected: %1", _selectionPath] };
 	if ((count _selectionPath) <= 1) then {
 		ctrlEnable [IDC_BT_ADD_GROUP, false];
 	} else {
 		if (DMORBAT_PreviewGroupID != format ["%1%2%3%4", "F", DMORBAT_PreviewGroupName, _selectionPath select 0, _selectionPath select 1]) then {
-			diag_log format ["DMORBAT: TreeFactionGroups_selChanged CALLING UPDATEUNITSLIST", ""];
+			if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeFactionGroups_selChanged CALLING UPDATEUNITSLIST", ""] };
 			_prepareForPreview = [_selectionPath, _faction] call DMORBAT_fnc_prepareGroupPreview;
 			DMORBAT_PreviewGroupName = tvData [IDC_TREE_FACTION_GROUPS, tvCurSel IDC_TREE_FACTION_GROUPS];
 			DMORBAT_PreviewGroupID = format ["%1%2%3%4", "F", DMORBAT_PreviewGroupName, _selectionPath select 0, _selectionPath select 1];
@@ -45,9 +45,9 @@ if ((count _selectionPath) <= 2) then {
 	DMORBAT_previewUnitisPlayer = false;
     [false] call DMORBAT_fnc_displayVehicleInfo;
 } else {
-	diag_log format ["DMORBAT: selected: %1", (_selectionPath)];
+	if (DMORBAT_debug) then { diag_log format ["DMORBAT: selected: %1", (_selectionPath)] };
 	if ((count _selectionPath) > 2 && DMORBAT_PreviewGroupID != format ["%1%2%3%4", "F", DMORBAT_PreviewGroupName, _selectionPath select 0, _selectionPath select 1]) then {
-		diag_log format ["DMORBAT: TreeFactionGroups_selChanged CALLING UPDATEUNITSLIST", ""];
+		if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeFactionGroups_selChanged CALLING UPDATEUNITSLIST", ""] };
 		[_selectionPath, _faction] call DMORBAT_fnc_prepareGroupPreview;
 		DMORBAT_PreviewGroupName = tvData [IDC_TREE_FACTION_GROUPS, _selectionPath select [0, 2]];
 		DMORBAT_PreviewGroupID = format ["%1%2%3%4", "F", DMORBAT_PreviewGroupName, _selectionPath select 0, _selectionPath select 1];

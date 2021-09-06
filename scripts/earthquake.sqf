@@ -19,7 +19,7 @@ while { DMORBAT_earthquake } do {
     private _intensity = floor (random [1, 2, 4]);
     if (_intensity > 0) then {
         [_intensity] spawn BIS_fnc_earthquake;
-        diag_log format ["DMORBAT: Earthquake: Starting earthquake - intensity: %1 - Damaging buildings: %2", _intensity, _damageBuildings];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: Earthquake: Starting earthquake - intensity: %1 - Damaging buildings: %2", _intensity, _damageBuildings] };
     };
     // Damage buildings while it lasts
     while { true } do {
@@ -29,7 +29,7 @@ while { DMORBAT_earthquake } do {
             if ((_pos distance _lastPos) > (_searchRange / 2) || (count _nearbyBuildings) == 0) then {
                 _nearbyBuildings = nearestObjects [_pos, ["House", "HouseBase", "Building"], _searchRange, true];
             };
-            // diag_log format ["_nearbyBuildings: %1", _nearbyBuildings];
+            // if (DMORBAT_debug) then { diag_log format ["_nearbyBuildings: %1", _nearbyBuildings] };
             // Sort by distance
             if ((_pos distance _lastPos) > 100 || _firstSorting) then {
                 _sortedBuildings = _nearbyBuildings apply { [_x distance _pos, _x] };
@@ -58,7 +58,7 @@ while { DMORBAT_earthquake } do {
                             if !(_glass in _allHitPoints) exitWith { false };
                             private _glassDamage = _building getHit _glass;
                             if (_glassDamage < 1) then {
-                                // diag_log format ["%1 %2 %3", _building, _glass, _glassDamage];
+                                // if (DMORBAT_debug) then { diag_log format ["%1 %2 %3", _building, _glass, _glassDamage] };
                                 _building setHit [_glass, _glassDamage + (_damageDone * 2)];
                             };
                         };

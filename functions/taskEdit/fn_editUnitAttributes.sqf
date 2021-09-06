@@ -32,14 +32,14 @@ if (_groupNumber > 0) then {
     _groupsCategoryData = _groupsData select (_groupNumber - 1);
     _thisCategoryGroups = _groupsCategoryData select 1;
     _thisGroupData = _thisCategoryGroups select _groupIndex;
-    diag_log format ["DMORBAT: editUnitAttributes  _groupIndex: %2 _thisGroupData: %1", _thisGroupData, _groupIndex];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes  _groupIndex: %2 _thisGroupData: %1", _thisGroupData, _groupIndex] };
 } else {
     // Player group
     _groupsData = [_taskData, "Player group"] call BIS_fnc_getFromPairs;
     _thisGroupData = _groupsData select 0;
 };
 _unitsData = _thisGroupData select 1;
-diag_log format ["DMORBAT: editUnitAttributes _unitsData: %1", _unitsData];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _unitsData: %1", _unitsData] };
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
@@ -79,9 +79,9 @@ if ((count _selectionPath) > 1) then {
   _ctrl = (_display displayCtrl IDC_TITLE_UNITEDIT);
   _ctrl ctrlSetText format ["Edit: %1", _displayName];
 };
-// diag_log format ["DMORBAT: editUnitAttributes _thisUnitData: %1", _thisUnitData];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _thisUnitData: %1", _thisUnitData] };
 DMORBAT_editedUnit = _unit;
-diag_log format ["DMORBAT: editUnitAttributes _unit: %1", _unit];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _unit: %1", _unit] };
 DMORBAT_editAccepted = false;
 
 _groupMods = _thisGroupData select 2;
@@ -113,7 +113,7 @@ while { !isNull DMORBAT_editedUnit } do {
             _thisUnitData = _unitsData select _forEachIndex;
           };
           if (!isNil "_thisUnitData") then {
-            diag_log format ["DMORBAT: editUnitAttributes _thisUnitData: %1", _thisUnitData];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _thisUnitData: %1", _thisUnitData] };
             _unitClass = _thisUnitData select 0;
             _unitRank = _thisUnitData select 1;
             _unitLoadout = _thisUnitData select 2;
@@ -159,7 +159,7 @@ while { !isNull DMORBAT_editedUnit } do {
                                     ] call DMORBAT_fnc_createUnitTooltip
                                 ];
 
-            // diag_log format ["DMORBAT: editUnitAttributes new settings: %1", _thisUnitData select [3, 1]];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes new settings: %1", _thisUnitData select [3, 1]] };
           };
       };
     } forEach _units;

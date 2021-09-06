@@ -38,13 +38,13 @@ if (_groupNumber > 0) then {
     _thisGroupData = _groupsData select 0;
 };
 _unitsData = _thisGroupData select 1;
-// diag_log format ["DMORBAT: editUnitLoadout _unitsData: %1", _unitsData];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitsData: %1", _unitsData] };
 _unitArr = _unitsData select _unitIndex;
-// diag_log format ["DMORBAT: editUnitLoadout _unitArr: %1", _unitArr];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitArr: %1", _unitArr] };
 _unitClass = _unitArr select 0;
 _unitRank = _unitArr select 1;
 _unitLoadout = _unitArr select 2;
-	// diag_log format ["DMORBAT: editUnitLoadout _unitLoadout (before): %1", _unitLoadout];
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitLoadout (before): %1", _unitLoadout] };
 _unitPresence = _unitArr select 3;
 _unitSkill = _unitArr select 4;
 
@@ -65,9 +65,9 @@ if (_isPlayer) then {
         _crewRole = DMORBAT_crewSlotRoles select _crewSlot;
     };
     _playerLoadout = _playerData select 2;
-    diag_log format ["DMORBAT: editUnitLoadout _playerLoadout: %1", _playerLoadout];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _playerLoadout: %1", _playerLoadout] };
 };
-diag_log format ["DMORBAT: editUnitLoadout _unit: %1 (%2)", _unit, _unitClass];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unit: %1 (%2)", _unit, _unitClass] };
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
@@ -99,9 +99,9 @@ _crewUnit = objNull;
 	if (_x != _unit) then {
 		(vehicle _x) hideObject true;
     } else {
-        diag_log format ["DMORBAT: editUnitLoadout %1 is the previewed unit", _x];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout %1 is the previewed unit", _x] };
         if (_inVeh) then {
-            diag_log format ["DMORBAT: editUnitLoadout %1 is in a vehicle", _x];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout %1 is in a vehicle", _x] };
             if (_isPlayer) then {
                 _crewUnit = call compile format ["%1 _veh", _crewRole];
                 if (_x == _crewUnit) then {
@@ -111,19 +111,19 @@ _crewUnit = objNull;
                     [_crewUnit] allowGetIn false;
                 };
             } else {
-                // diag_log format ["DMORBAT: editUnitLoadout %1 is in not the player. commander: %2", _x, effectiveCommander _veh];
+                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout %1 is in not the player. commander: %2", _x, effectiveCommander _veh] };
                 //     // private _crewIndex = (crew _veh) find _x;
                 //     // private _crewUnit = (crew _veh) select _crewIndex;
                 //     _veh hideObject true;
                 //     private _crewUnit = effectiveCommander _veh;
-                //     diag_log format ["DMORBAT: editUnitLoadout _unitLoadout: %1", _unitLoadout];
+                //     if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitLoadout: %1", _unitLoadout] };
                 //     _crewUnit setUnitLoadout _unitLoadout;
                 //     moveOut _crewUnit;
                 //     [_crewUnit] allowGetIn false;
                 //     _crewUnit hideObject false;
                 _veh hideObject true;
                 _crewUnit = [effectiveCommander _veh] call DMORBAT_fnc_cloneUnit;
-                diag_log format ["DMORBAT: editUnitLoadout _crewUnit: %1", _crewUnit];
+                if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _crewUnit: %1", _crewUnit] };
                 _crewUnit setUnitLoadout _unitLoadout;
             };
         };
@@ -148,7 +148,7 @@ while { DMORBAT_arsenalOpened } do {
 	// Update unit's loadout
     _editedLoadout = getUnitLoadout (if (isNull _crewUnit) then { _unit } else { _crewUnit });
 	_unitArr set [2, _editedLoadout];
-    diag_log format ["DMORBAT: editUnitLoadout _editedLoadout: %1", _editedLoadout];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _editedLoadout: %1", _editedLoadout] };
 
     // Add loadout to player data is unit is playable
     if (_isPlayer) then {

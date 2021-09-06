@@ -21,7 +21,7 @@ params ["_idc", "_selectionPath", ["_groupNumber", 1], ["_enemy", true], "_idcBu
 private ["_taskData", "_groupsData", "_thisCategoryData", "_thisCategoryGroups", "_thisGroupData", "_unitData", "_thisCategoryName", "_display", "_buttonText", "_unitClassArr", "_ranksArr", "_loadoutsArr", "_groupMods"];
 disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
-diag_log format ["DMORBAT: TreeCustomGroup_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged _selectionPath:%1", _selectionPath] };
 
 if (count _selectionPath > 0) then {
     if ((tvCount [IDC_TREE_GRP1, []]) > 1) then {
@@ -34,7 +34,7 @@ if (count _selectionPath > 0) then {
 	if (_groupNumber != 3) then { tvSetCurSel [IDC_TREE_GRP3, [-1]] };
 
     DMORBAT_customGroupsSelection = [_groupNumber, _selectionPath];
-    diag_log format ["DMORBAT: TreeCustomGroup_selChanged DMORBAT_customGroupsSelection:%1", DMORBAT_customGroupsSelection];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged DMORBAT_customGroupsSelection:%1", DMORBAT_customGroupsSelection] };
 
     _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
     if (!_isSupport) then{
@@ -52,7 +52,7 @@ if (count _selectionPath > 0) then {
     if ((_selectionPath select 0) > 0) then {
         _thisCategoryGroups = _thisCategoryData select 1;  
         _thisGroupData = _thisCategoryGroups select ((_selectionPath select 0) - 1);
-        // diag_log format ["DMORBAT: TreeCustomGroup_selChanged _thisGroupData:%1", _thisGroupData];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged _thisGroupData:%1", _thisGroupData] };
         _unitData = _thisGroupData select 1;
         _groupMods = _thisGroupData select 2;
 
@@ -118,7 +118,7 @@ if ((count _selectionPath) <= 1) then {
 		DMORBAT_PreviewGroupID = format ["%1%2%3%4", _groupNumber, DMORBAT_PreviewGroupName, _selectionPath select 0, _selectionPath select 1];
 	};
 	[_selectionPath select 1] call DMORBAT_fnc_previewUnit;
-	diag_log format ["DMORBAT: TreeCustomGroup_selChanged DMORBAT_SelectedPreviewUnit:%1", DMORBAT_SelectedPreviewUnit];
+	if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged DMORBAT_SelectedPreviewUnit:%1", DMORBAT_SelectedPreviewUnit] };
 	{
 		ctrlEnable [_x, true];
 	} forEach _idcButtons;

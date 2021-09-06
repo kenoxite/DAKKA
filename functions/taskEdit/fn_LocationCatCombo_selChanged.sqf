@@ -19,7 +19,7 @@
 
 params ["_idc", "_selectionPath"];
 private ["_mrkr"];
-diag_log format ["DMORBAT: LocationCatCombo_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: LocationCatCombo_selChanged _selectionPath:%1", _selectionPath] };
 if (_selectionPath < 0) exitWith { false };
 
 [_idc] call DMORBAT_fnc_updateLocationsCombo;

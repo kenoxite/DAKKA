@@ -52,13 +52,13 @@ _taskLocations = [_locationsPredefined, "Outposts"] call BIS_fnc_getFromPairs;
 _selectedCompositions = [];
 {
     private _coords = _x select 0;
-    // diag_log format ["_coords: %1", _coords];
+    // if (DMORBAT_debug) then { diag_log format ["_coords: %1", _coords] };
     private _dir = _x select 1;
     private _comp = +selectRandom _compositionsPredefined;
     private _compName = _comp select 0;
     private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
     _comp set [0, _newName];
-    // diag_log format ["_selectedComposition: %1", _compName];
+    // if (DMORBAT_debug) then { diag_log format ["_selectedComposition: %1", _compName] };
     private _compData = _comp select 1;
     private _ref = _compData select 0;
     _ref set [1, [_coords select 0, _coords select 1]];
@@ -79,7 +79,7 @@ if (isNil "_thisWorldCompositions") then {
 };
 
 // {
-//     diag_log format ["%1: %2", _x select 0, _x select 1];
+//     if (DMORBAT_debug) then { diag_log format ["%1: %2", _x select 0, _x select 1] };
 // } forEach _selectedCompositions;
 
 // Load compositions

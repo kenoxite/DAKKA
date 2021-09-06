@@ -69,6 +69,6 @@ _crew = crew _veh;
 _crew joinSilent _grp;
 _grp addVehicle _veh;
 
-// diag_log format ["DMORBAT: spawnVehicle %1 side: %2", _veh, side _veh ];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnVehicle %1 side: %2", _veh, side _veh ] };
 
 _veh

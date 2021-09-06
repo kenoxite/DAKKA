@@ -25,7 +25,7 @@ _ctrl = _display displayCtrl _idcCombo;
 if (isNull _ctrl) exitWith { 
   diag_log format ["DMORBAT: --- ERROR --- updateCrewSlotsCombo CONTROL %1  could not be found!", _ctrl];
 };
-// diag_log format ["DMORBAT: updateCrewSlotsCombo idc: %3 veh: %1 (%2) _ctrl:%4", _veh, typeOf _veh, _idcCombo, _ctrl];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCrewSlotsCombo idc: %3 veh: %1 (%2) _ctrl:%4", _veh, typeOf _veh, _idcCombo, _ctrl] };
 lbClear _ctrl;
 _crewSlots = [_veh] call DMORBAT_fnc_getCrewSlots;
 _effectiveCommander= assignedVehicleRole (effectiveCommander _veh);
@@ -38,8 +38,8 @@ _fullcrew = fullCrew _veh;
   };
 } forEach _fullcrew;
 
-// diag_log format ["DMORBAT: updateCrewSlotsCombo (lbSize _idcCombo): %1 _effectiveCommander:%2 fullcrew: %3 _commander: %4", (lbSize _idcCombo), _effectiveCommander, _fullCrew, _commander];
-// diag_log format ["DMORBAT: updateCrewSlotsCombo _crewSlots: %1 _commander: %2", _crewSlots, _commander];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCrewSlotsCombo (lbSize _idcCombo): %1 _effectiveCommander:%2 fullcrew: %3 _commander: %4", (lbSize _idcCombo), _effectiveCommander, _fullCrew, _commander] };
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCrewSlotsCombo _crewSlots: %1 _commander: %2", _crewSlots, _commander] };
 for "_i" from 0 to ((count _crewSlots) - 1) do 
 {
   if ((_crewSlots select _i) == 1) then {
@@ -49,7 +49,7 @@ for "_i" from 0 to ((count _crewSlots) - 1) do
     if (_role == _commander) then {
       _ctrl lbSetText [_indexCtrl, format ["*%1", _role]];
     };
-    // diag_log format ["DMORBAT: updateCrewSlotsCombo _indexCtrl:%2 _role: %1", _role, _indexCtrl]; 
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCrewSlotsCombo _indexCtrl:%2 _role: %1", _role, _indexCtrl] }; 
   };
 };
 
@@ -60,11 +60,11 @@ for "_i" from 0 to ((lbSize _idcCombo) - 1) do
   };
 };
 
-// diag_log format ["DMORBAT: updateCrewSlotsCombo _indexCtrl: %1 size: %2", _indexCtrl, lbSize _idcCombo];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCrewSlotsCombo _indexCtrl: %1 size: %2", _indexCtrl, lbSize _idcCombo] };
 if (_indexCtrl > 0) then {
   _ctrl = (_display displayCtrl IDC_GRP_VEH_CREW_SEL);
   _ctrl ctrlShow true;
-  // diag_log format ["DMORBAT: updateCrewSlotsCombo SHOWING crew popup: %1", IDC_GRP_VEH_CREW_SEL];
+  // if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCrewSlotsCombo SHOWING crew popup: %1", IDC_GRP_VEH_CREW_SEL] };
 } else {
   [_idcCombo] call DMORBAT_fnc_setCrewSlot;
 };

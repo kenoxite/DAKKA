@@ -28,7 +28,7 @@ if (isNull _grp || _grpName == "") exitWith { ["ERROR: No group was selected!"]s
 
 // Override current custom group selection with one based on the selected group units type
 _groupNumber = DMORBAT_customGroupsSelection select 0;
-diag_log format ["DMORBAT: addGroupToGroup original _groupNumber: %1", _groupNumber];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup original _groupNumber: %1", _groupNumber] };
 _selectionPath = DMORBAT_customGroupsSelection select 1;
 _grpType = "";
 if (DMORBAT_Task == 2) then {
@@ -48,7 +48,7 @@ if (DMORBAT_Task == 2) then {
     };
   };  
 };
-diag_log format ["DMORBAT: addGroupToGroup final _groupNumber: %1 _grpType: %2", _groupNumber, _grpType];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup final _groupNumber: %1 _grpType: %2", _groupNumber, _grpType] };
 
 _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
 _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs;
@@ -73,11 +73,11 @@ if ((count units _grp) > 1) then {
 } else {
   _grpName = format ["%1", _thisCategoryName];
 };
-// diag_log format ["DMORBAT: addGroupToGroup _grpName: %1", _grpName];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup _grpName: %1", _grpName] };
 _thisCategoryGroups pushBack [_grpName, _unitClasses, _groupMods];
 _index = (count _thisCategoryGroups);
 
-// diag_log format ["DMORBAT: addGroupToGroup _thisCategoryGroups: %1", _thisCategoryGroups];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup _thisCategoryGroups: %1", _thisCategoryGroups] };
 
 [-1, _groupNumber, _enemy] call DMORBAT_fnc_updateCustomGroupsTreeList;
 

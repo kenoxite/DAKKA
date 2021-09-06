@@ -19,7 +19,7 @@
 
 params ["_idc", "_selectionPath"];
 private ["_mrkr"];
-diag_log format ["DMORBAT: TreePlacedCompositions_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreePlacedCompositions_selChanged _selectionPath:%1", _selectionPath] };
 
 if ((_selectionPath select 0) >= 0) then {
 	ctrlEnable [IDC_BT_1_GRP1, true];

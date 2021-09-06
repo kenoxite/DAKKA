@@ -21,7 +21,7 @@ params ["_selectionPath", "_idcPlayerGrp", "_idcGroups", "_idcUnits"];
 private ["_taskData", "_playerGroupData", "_unitsData"];
 
 disableSerialization;
-// diag_log format ["DMORBAT: TreePlayerGroup_selChanged _selectionPath:%1", _selectionPath];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreePlayerGroup_selChanged _selectionPath:%1", _selectionPath] };
 if (count _selectionPath > 0) then {
 	tvSetCurSel [_idcGroups, [-1]];	
 	ctrlEnable [IDC_BT_ADD_GROUP, false];

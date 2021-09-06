@@ -19,7 +19,7 @@
 
 params ["_selectionPath"];
 private ["_display", "_ctrl", "_supportType", "_taskData", "_groupsData", "_catIndex", "_groupsCategoryData", "_thisCategoryData", "_supportLimit"];
-diag_log format ["DMORBAT: supportTypesCombo_selChanged _selectionPath: %1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: supportTypesCombo_selChanged _selectionPath: %1", _selectionPath] };
 if (_selectionPath < 0) exitWith { false };
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
@@ -51,7 +51,7 @@ _groupsCategoryData = _groupsData select _catIndex;
 _thisCategoryData = _groupsCategoryData select 1;
 _supportLimit = (_thisCategoryData select 0) select 0;
 
-diag_log format ["DMORBAT: supportTypesCombo_selChanged _supportLimit: %1", _supportLimit];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: supportTypesCombo_selChanged _supportLimit: %1", _supportLimit] };
 
 _ctrl = _display displayCtrl IDC_TITLE_SUPPORT_LIMIT;
 _ctrl ctrlSetText format ["%1 Request Limit", _supportType];

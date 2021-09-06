@@ -30,7 +30,7 @@ if ((count _selectionPath) > 1) then {
 		call DMORBAT_fnc_previewGroupDelete;
 		DMORBAT_PreviewGroupName = "";	
 		DMORBAT_PreviewGroupID = "";	
-		// diag_log format ["DMORBAT: TreeFactionUnits_selChanged CALLING PREVIEWGROUP", ""];
+		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeFactionUnits_selChanged CALLING PREVIEWGROUP", ""] };
 		[[tvData [_idcUnits, _selectionPath]]] call DMORBAT_fnc_previewGroup;
 		DMORBAT_SelectedPreviewUnit = (units DMORBAT_previewGroup) select 0;
         [true] call DMORBAT_fnc_displayVehicleInfo;

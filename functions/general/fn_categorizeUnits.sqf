@@ -112,7 +112,7 @@ private _factionUnits = [];
 _factionUnits sort true;
 
 // {
-//     diag_log format ["DMORBAT: _factionUnits %2: %1", _x, _forEachIndex];
+//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: _factionUnits %2: %1", _x, _forEachIndex] };
 // } forEach _factionUnits;
 
 _factionUnits

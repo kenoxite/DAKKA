@@ -38,7 +38,7 @@ _knownMods = [DMORBAT_settings, "Known mods"] call BIS_fnc_getFromPairs;
 	};
 } forEach (units _grp);
 _playerGroupData set [0, [format ["%1 (Player) ", _grpName], _unitClasses, _groupMods]];
-// diag_log format ["DMORBAT: addGroupToPlayerGroup player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToPlayerGroup player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)] };
 
 // Reset player unit
 [_taskData, "Player data", [0, 0, []]] call BIS_fnc_setToPairs;
@@ -46,7 +46,7 @@ DMORBAT_previewUnitisPlayer = false;
 
 // Reset player unit data and retrieve playable unit loadout
 [_taskData, "Player data", [0, 0, getUnitLoadout ((units DMORBAT_previewGroup) select 0)]] call BIS_fnc_setToPairs;
-// diag_log format ["DMORBAT: addGroupToPlayerGroup _playerLoadout: %1", getUnitLoadout ((units DMORBAT_previewGroup) select 0)];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToPlayerGroup _playerLoadout: %1", getUnitLoadout ((units DMORBAT_previewGroup) select 0)] };
 
 // Choose crew slot if first unit is vehicle
 _unitClass = (_unitClasses select 0) select 0;

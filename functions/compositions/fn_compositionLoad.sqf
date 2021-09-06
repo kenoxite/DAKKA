@@ -23,7 +23,7 @@ DMORBAT_compositionsLoaded = 0;
 
 _nul = _this spawn {
     params [["_all", true], ["_location", []], ["_distance", 100]];
-    diag_log format ["DMORBAT: _all: %1, _location: %2, _distance: %3", _all, _location, _distance];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _all: %1, _location: %2, _distance: %3", _all, _location, _distance] };
     private ["_taskData", "_worldCompositionsData", "_compositionsData", "_thisCompositionData", "_hiddenObjects", "_compObjects", "_compObjectsCopy", "_ref", "_obj", "_objClass", "_relPos", "_objDir", "_keepHorizontal", "_itemPos", "_finalDir", "_aligned", "_refPos", "_refDir", "_nearTerrObj", "_hideDist", "_return"];
 
     _return = true;
@@ -49,7 +49,7 @@ _nul = _this spawn {
         };
     };
     {
-        diag_log format ["DMORBAT: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1] };
     } forEach _trimmedCompositionsData;
 
 
@@ -58,13 +58,13 @@ _nul = _this spawn {
     for [{private _i = 0}, {_i < count _trimmedCompositionsData}, {_i = _i + 1}] do 
     {
     	_thisCompositionData = _trimmedCompositionsData select _i;
-    	// diag_log format ["DMORBAT: compositionLoad _thisCompositionData: %1", _thisCompositionData];
+    	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _thisCompositionData: %1", _thisCompositionData] };
         diag_log format ["DMORBAT: compositionLoad - Loading composition: %1", _thisCompositionData select 0 ];
     	_compObjects = _thisCompositionData select 1;
     	_compObjectsCopy = +_thisCompositionData select 1;
     	_hiddenObjects = [];
     	_ref = (_compObjects select 0) select 0;
-        diag_log format ["DMORBAT: compositionLoad _ref 1: %1", _ref ];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _ref 1: %1", _ref ] };
     	// Only load if composition does not exist
         if (isNil "_ref") then { _ref = objNull };
         if (typeName _ref == "STRING") then { _ref = objNull };
@@ -74,7 +74,7 @@ _nul = _this spawn {
     		_refPos = _refArr select 1;
     		_refDir = _refArr select 2;
     		_ref = "Flag_BI_F" createVehicle _refPos;
-            diag_log format ["DMORBAT: compositionLoad _ref 2: %1", _ref ];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _ref 2: %1", _ref ] };
     		// Update the composition objects array with the new object
     		(_compObjects select 0) set [0, _ref];
     		_ref setDir _refDir;
@@ -132,9 +132,9 @@ _nul = _this spawn {
 
     		  // Update the composition objects array with the new hidden objects
     		_thisCompositionData set [2, _hiddenObjects];
-    		// diag_log format ["DMORBAT: compositionLoad _hiddenObjects: %1", _thisCompositionData select 2];
+    		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _hiddenObjects: %1", _thisCompositionData select 2] };
 
-    		// diag_log format ["DMORBAT: compositionLoad _compObjects %2: %1", _compObjects, (_forEachIndex + 1)];
+    		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _compObjects %2: %1", _compObjects, (_forEachIndex + 1)] };
         } else {
             _return = false;
     	};

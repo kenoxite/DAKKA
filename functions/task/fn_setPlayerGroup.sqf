@@ -18,6 +18,7 @@
 
 params ["_pos"];
 private ["_grp", "_unit", "_unitTraits", "_indexes", "_playableUnit", "_ldrIsPlayer", "_taskData", "_playerGroupData", "_playerData", "_groupName", "_groupUnits", "_playerIndex", "_playerCrewIndex", "_isMan", "_pos", "_rank", "_units", "_leader", "_veh", "_playerCommander", "_isLeader", "_isAir", "_applyLoadout"]; 
+
 diag_log format ["DMORBAT: Assigning new group to %1", p1];  
 _grp = grpNull; 
 
@@ -144,7 +145,7 @@ if (pitch p1 == 0) then {
 };
 
 // Apply loadout
-diag_log format ["DMORBAT: setPlayerGroup _playerLoadout: %1", _playerLoadout];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: setPlayerGroup _playerLoadout: %1", _playerLoadout] };
 [p1, _playerLoadout, 2] call DMORBAT_fnc_prepareUnit;
 
 // Move player to vehicle crew slot
@@ -267,7 +268,7 @@ _units = (units group p1);
     _passengerSeats = (fullCrew [_x, "", true]) select {isNull (_x select 0)};
     for [{private _i = 0}, {_i < count _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
         (_groupPassengers select 0) moveInAny _x;
-        diag_log format ["DMORBAT: setPlayerGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: setPlayerGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
         _groupPassengers deleteAt 0;
     };
     if ((count _groupPassengers) == 0) exitWith { false };

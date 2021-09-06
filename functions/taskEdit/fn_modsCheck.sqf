@@ -30,5 +30,5 @@ if (_modIndex >= 0) then {
     // Save updated known mods list
     ["Known mods"] call DMORBAT_fnc_globalSettingsSave;
 };
-// diag_log format ["DMORBAT: modsCheck _knownMods: %1", _knownMods];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: modsCheck _knownMods: %1", _knownMods] };
 _mod

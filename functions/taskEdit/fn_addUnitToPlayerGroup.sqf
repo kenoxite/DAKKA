@@ -26,16 +26,16 @@ _ctrl = (findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc;
 
 if (isNull _unit) exitWith { systemChat "DMORBAT: --- ERROR --- No unit was selected!" };
 _realUnit = [DMORBAT_previewGroup, 0] call DMORBAT_fnc_realUnitbyIndex;
-// diag_log format ["DMORBAT: addUnitToPlayerGroup _realUnit: %1", _realUnit];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToPlayerGroup _realUnit: %1", _realUnit] };
 _unitClass = (typeOf _realUnit);
-// diag_log format ["DMORBAT: addUnitToPlayerGroup _unitClass: %1", _unitClass];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToPlayerGroup _unitClass: %1", _unitClass] };
 
 _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
 _playerGroupData = [_taskData, "Player group"] call BIS_fnc_getFromPairs; 
-diag_log format ["DMORBAT: addUnitToPlayerGroup _playerGroupData: %1", _playerGroupData];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToPlayerGroup _playerGroupData: %1", _playerGroupData] };
 // Check for the unit mod dependencies
 _mod = [_unitClass] call DMORBAT_fnc_modsCheck;
-// diag_log format ["DMORBAT: addUnitToPlayerGroup _knownMods: %1", _knownMods];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToPlayerGroup _knownMods: %1", _knownMods] };
 if ((count _playerGroupData) == 0) then {
   // Create new group
   _index = _playerGroupData pushBack ["Custom Group", [[_unitClass, "SERGEANT", [], 1, 0]], [_mod]];
@@ -54,7 +54,7 @@ if ((count _playerGroupData) == 0) then {
 
 // Choose crew slot if unit is vehicle
 if (!([_unitClass] call DMORBAT_fnc_isMan) && [_index] call DMORBAT_fnc_checkIfSelIsPlayer) then {
-  // diag_log format ["DMORBAT: addUnitToPlayerGroup adding unit: %1", _realUnit];
+  // if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToPlayerGroup adding unit: %1", _realUnit] };
   [IDC_COMBO_TASK_GROUPS_CREW, _realUnit] call DMORBAT_fnc_updateCrewSlotsCombo;
 } else {
   [_idc] call DMORBAT_fnc_updatePlayerGroupTreeList;

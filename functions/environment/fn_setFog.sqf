@@ -41,6 +41,6 @@ if (_month <= _rainMonths_Beg || _month >= _rainMonths_End) then {
 
 _fog = random [_fogMin, _forMed, _fogMax];
 
-diag_log format ["DMORBAT: setFog _fog: %1 [%2, %3, %4]", _fog, _fogMin, _forMed, _fogMax];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: setFog _fog: %1 [%2, %3, %4]", _fog, _fogMin, _forMed, _fogMax] };
 
 _fog

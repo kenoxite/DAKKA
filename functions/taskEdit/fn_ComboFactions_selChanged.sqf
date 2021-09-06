@@ -19,7 +19,7 @@
 
 params ["_idcCombo", "_selectionPath", ["_isPlayerFaction", true], ["_updateGroups", false], ["_updateSupportUnits", false]];
 private ["_display", "_ctrl", "_side", "_faction"];
-diag_log format ["DMORBAT: ComboFactions_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: ComboFactions_selChanged _selectionPath:%1", _selectionPath] };
 if (_selectionPath < 0) exitWith { false };
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
@@ -32,12 +32,12 @@ if (_updateGroups) then {
 };
 
 _faction = _ctrl lbData (lbCurSel _ctrl);
-diag_log format ["DMORBAT: ComboFactions_selChanged _faction: %1", _faction];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: ComboFactions_selChanged _faction: %1", _faction] };
 if (isNil "_faction") exitWith { [format ["ERROR: Couldn't find the %1 faction!", _side]] spawn DMORBAT_fnc_displayMessage; false };
 
 call compile format ["DMORBAT_%1Factions set [DMORBAT_Task - 1, _faction];", _side];
 if (_isPlayerFaction) then { DMORBAT_PlayerFaction = DMORBAT_PlayerFactions select (DMORBAT_Task - 1) };
-diag_log format ["DMORBAT: ComboFactions_selChanged DMORBAT_%1Factions: %2", _side, call compile format ["DMORBAT_%1Factions", _side]];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: ComboFactions_selChanged DMORBAT_%1Factions: %2", _side, call compile format ["DMORBAT_%1Factions", _side]] };
 
 [format ["%1 Factions", _side]] call DMORBAT_fnc_globalSettingsSave;
 

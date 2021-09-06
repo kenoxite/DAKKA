@@ -27,7 +27,7 @@ _nul = _this spawn {
     // Create requester module
     _supportLogicGroup = createGroup sideLogic;
     _SupportReq = _supportLogicGroup createUnit ["SupportRequester", _basepos, [], 50, "CAN_COLLIDE"];
-    diag_log format ["DMORBAT: spawnSupport _SupportReq: %1", _SupportReq];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport _SupportReq: %1", _SupportReq] };
 
     //Setup requester limit values
     {
@@ -52,7 +52,7 @@ _nul = _this spawn {
         _supportRadius = if (count _x > 2) then { _x select 2 } else { 300 };
         _blacklist = if (count _x > 3) then { _x select 3 } else { [] };
         _catIndex = [_groupsData, _supportType] call BIS_fnc_findInPairs;
-        diag_log format ["DMORBAT: spawnSupport _catIndex: %1", _catIndex];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport _catIndex: %1", _catIndex] };
         if (_catIndex < 0) exitWith { diag_log format ["DMORBAT: spawnSupport Suppport type ""%1"" not found!", _supportType]; false };
 
         _groupsCategoryData = _groupsData select _catIndex; 
@@ -60,7 +60,7 @@ _nul = _this spawn {
         _thisCategoryData = _groupsCategoryData select 1;
         _supportLimit = (_thisCategoryData select 0) select 0;
         _thisCategoryGroups = _thisCategoryData select 1;
-        diag_log format ["DMORBAT: spawnSupport _thisCategoryGroups: %1", _thisCategoryGroups];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport _thisCategoryGroups: %1", _thisCategoryGroups] };
 
 
         // Create support units
@@ -111,7 +111,7 @@ _nul = _this spawn {
             if (_supportType != "Artillery") then {
                 // DMORBAT_martaHide pushBack _grp;
             };
-            // diag_log format ["DMORBAT: spawnSupport _supportLeader: %1", _supportLeader];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport _supportLeader: %1", _supportLeader] };
 
             // Add to support groups array
             {
@@ -125,7 +125,7 @@ _nul = _this spawn {
                     _ammo = getText (configfile >> "CfgMagazines" >> _x >> "ammo");
                     _ammoParents = [configFile >> "CfgAmmo" >> _ammo, true] call BIS_fnc_returnParents;
                     _isBomb = "BombCore" in _ammoParents;
-                    if (_isBomb) exitWith { diag_log format ["%1 - %2 is a bomb? %3", typeOf _supportLeader, _x, _isBomb]; };
+                    if (_isBomb) exitWith { if (DMORBAT_debug) then { diag_log format ["%1 - %2 is a bomb? %3", typeOf _supportLeader, _x, _isBomb] }; };
                 } forEach _pylonLoadout;
                 if (_isBomb) then {
                     _supportProviderType pushBack "CAS_Bombing";
@@ -213,9 +213,9 @@ _nul = _this spawn {
         {
             // Create support provider module
             _supportLogicGroup = createGroup sideLogic;
-            // diag_log format ["DMORBAT: spawnSupport _supportLogicGroup: %1, _supportProviderType: %2, _basepos; %3", _supportLogicGroup, _supportProviderType, _basepos];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport _supportLogicGroup: %1, _supportProviderType: %2, _basepos; %3", _supportLogicGroup, _supportProviderType, _basepos] };
             _supportProvider = _supportLogicGroup createUnit [format ["SupportProvider_%1", _x], _basepos, [], 30, "CAN_COLLIDE"];
-            diag_log format ["DMORBAT: spawnSupport _supportProvider: %1", _supportProvider];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport _supportProvider: %1", _supportProvider] };
             // Sync provider to requester module
             _supportProvider synchronizeObjectsAdd [_SupportReq];
             _SupportReq synchronizeObjectsAdd [_supportProvider];
@@ -224,9 +224,9 @@ _nul = _this spawn {
             _supportGroups = call compile format ["_%1Groups", _x];
             {
                 _supportProvider synchronizeObjectsAdd [_x];
-                diag_log format ["DMORBAT: spawnSupport - _supportProvider sync objects: %1", synchronizedObjects _supportProvider];
+                if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport - _supportProvider sync objects: %1", synchronizedObjects _supportProvider] };
                 _x synchronizeObjectsAdd [_supportProvider];
-                diag_log format ["DMORBAT: spawnSupport - %1 sync objects: %2", _x, synchronizedObjects _x];
+                if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnSupport - %1 sync objects: %2", _x, synchronizedObjects _x] };
             } forEach _supportGroups;
 
             // Setup provider values

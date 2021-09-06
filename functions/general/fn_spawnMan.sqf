@@ -88,6 +88,6 @@ _nul = [_unit] spawn {
     // _unit allowDamage true;
 };
 
-// diag_log format ["DMORBAT: spawnMan %1 side: %2", _unit, side _unit ];
-// diag_log format ["DMORBAT: spawnMan %1 side grp: %2", _grp, side _grp ];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnMan %1 side: %2", _unit, side _unit ] };
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnMan %1 side grp: %2", _grp, side _grp ] };
 _unit

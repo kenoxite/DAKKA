@@ -21,7 +21,7 @@ private _customGroups = [];
 // Functions
 _fnc_createInfGroup = {
     params ["_groupsType"];
-    diag_log format ["DMORBAT: createFactionGroups - _groupsType: %1", _groupsType];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _groupsType: %1", _groupsType] };
     private _isRegular = if !(_groupsType == "SF") then { true } else { false };
 
     private _squadLeaders = [];
@@ -58,8 +58,8 @@ _fnc_createInfGroup = {
     {
         private _assigned = false;
         private _unit = _x select 0;
-        // private _unit = toLowerANSI (_x select 0);
-        // diag_log format ["DMORBAT: createFactionGroups - Checking unit %1", _unit];
+        private _unitLC = toLowerANSI (_x select 0);
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - Checking unit %1", _unit] };
         // [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter, _hasHAT]
         private _roles = [[_unit]] call DMORBAT_fnc_groupRoles;
         if (!_assigned && _roles select 0) then { if !(_roles select 13) then { _riflemenAT pushBackUnique _unit } else { _riflemenAT_SF pushBackUnique _unit }; _assigned = true; };
@@ -77,7 +77,7 @@ _fnc_createInfGroup = {
         if (!_assigned && _roles select 20) then { if !(_roles select 13) then { _JTACs pushBackUnique _unit } else { _JTACs_SF pushBackUnique _unit }; _assigned = true; };
         if (!_assigned && _roles select 8) then { if !(_roles select 13) then { _explosiveSpecialists pushBackUnique _unit } else { _explosiveSpecialists_SF pushBackUnique _unit }; _assigned = true; };
         // Regular infantry
-        if (!_assigned && !(_roles select 6) && !(_roles select 7) && !(_roles select 11) && !(_roles select 12) && !(_roles select 16) && !(_roles select 17) && !(_roles select 18) && !(_roles select 19) && !("angelina" in _unit)) then { if !(_roles select 13) then { _riflemen pushBackUnique _unit } else { _riflemen_SF pushBackUnique _unit }; _assigned = true; };
+        if (!_assigned && !(_roles select 6) && !(_roles select 7) && !(_roles select 11) && !(_roles select 12) && !(_roles select 16) && !(_roles select 17) && !(_roles select 18) && !(_roles select 19) && !("angelina" in _unitLC) && !("_aa" in _unitLC) && !("pilot" in _unitLC)) then { if !(_roles select 13) then { _riflemen pushBackUnique _unit } else { _riflemen_SF pushBackUnique _unit }; _assigned = true; };
     } forEach _infGroups;
 
     if !(_isRegular) then {
@@ -100,7 +100,7 @@ _fnc_createInfGroup = {
 
     // If there's no riflemen, everyone is a rifleman
     if (count _riflemen == 0) then {
-        diag_log format ["DMORBAT: createFactionGroups - No riflemen found. Everybody is now a rifleman for faction %1", _faction];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - No riflemen found. Everybody is now a rifleman for faction %1", _faction] };
         _riflemen append _squadLeaders; 
         _riflemen append _teamLeaders; 
         _riflemen append _riflemenAT; 
@@ -178,7 +178,7 @@ _fnc_createInfGroup = {
             private _usedLauncher = "";
             {
                 private _parents = [configFile >> "CfgWeapons" >> _x, true] call BIS_fnc_returnParents;
-                // diag_log format ["DMORBAT: createFactionGroups - _weapon: %1, _parents: %2", _x, _parents];
+                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _weapon: %1, _parents: %2", _x, _parents] };
                 if ("Launcher" in _parents) exitWith {
                     _usedLauncher = _x;
                     true
@@ -192,8 +192,8 @@ _fnc_createInfGroup = {
             };
         } forEach _riflemenAT;
         _riflemenAT = _riflemenAT - _ATremove;
-        // diag_log format ["DMORBAT: createFactionGroups - _riflemenAT (after removing): %1, removed: %2", _riflemenAT, _ATremove];
-        // diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers: %1", _ATlaunchers];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _riflemenAT (after removing): %1, removed: %2", _riflemenAT, _ATremove] };
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers: %1", _ATlaunchers] };
 
         for [{private _i = 0}, {_i < count _ATlaunchers}, {_i = _i + 1}] do
         {
@@ -201,19 +201,19 @@ _fnc_createInfGroup = {
             private _launcher = _launcherArr select 1;
             private _unitMags = _launcherArr select 2;
             private _launcherMags = getArray (configfile >> "CfgWeapons" >> _launcher >> "magazines");
-        // diag_log format ["DMORBAT: createFactionGroups - _launcher; %1, _launcherMags: %2", _launcher, _launcherMags];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _launcher; %1, _launcherMags: %2", _launcher, _launcherMags] };
             private _usedMags = _unitMags arrayIntersect _launcherMags;
             // Fix for disposable launchers
             private _fakeMags = false;
             { if ("fake" in (toLowerANSI _x) && (count _launcherMags) == 1) exitWith {  _fakeMags = true; false } } forEach _launcherMags;
             if (_fakeMags) then {
                 _launcher = format ["%1%2", _launcher,"_Loaded"];
-                // diag_log format ["DMORBAT: createFactionGroups - _launcher; %1", _launcher];
+                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _launcher; %1", _launcher] };
                 _launcherMags = getArray (configfile >> "CfgWeapons" >> _launcher >> "magazines");
                 _usedMags = _launcherMags;
             };
             if (count _usedMags == 0) then { _usedMags = _launcherMags };
-        // diag_log format ["DMORBAT: createFactionGroups - _launcher: %1, _usedMags: %2", _launcher, _usedMags];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _launcher: %1, _usedMags: %2", _launcher, _usedMags] };
             private _mag = _usedMags select 0;
             private _ammo = getText (configFile >> "CfgMagazines" >> _mag >> "ammo");
             private _hit = getNumber (configFile >> "CfgAmmo" >> _ammo >> "hit");
@@ -221,11 +221,11 @@ _fnc_createInfGroup = {
         };
         // Remove unit mags
         { _x deleteAt 2; } forEach _ATlaunchers;
-        // diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (dmg): %1", _ATlaunchers];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (dmg): %1", _ATlaunchers] };
 
         // Sort from greater to lower damage
         _ATlaunchers sort false;
-        diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (sorted): %1", _ATlaunchers];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (sorted): %1", _ATlaunchers] };
 
         // Separate AT from HAT launchers
         private _ATammount = count _ATlaunchers;
@@ -233,20 +233,20 @@ _fnc_createInfGroup = {
         private _ATdmg = [];
         { private _dmg = _x select 0; _ATdmg pushBack _dmg; } forEach _ATlaunchers;
         private _ATdmgMean = _ATdmg call BIS_fnc_arithmeticMean;
-        // diag_log format ["DMORBAT: createFactionGroups - _ATammount: %1, _ATdmgCut: %2, _ATdmgMean: %3", _ATammount, _ATdmgCut, _ATdmgMean];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _ATammount: %1, _ATdmgCut: %2, _ATdmgMean: %3", _ATammount, _ATdmgCut, _ATdmgMean] };
 
         private _i = 0;
         // {  if ((_i + 1) > _ATdmgCut) then { _LATlaunchers pushBackUnique (_x select 1) } else { _HATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
         {  if ((_X select 0) > _ATdmgMean) then { _HATlaunchers pushBackUnique (_x select 1) } else { _LATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
-        // diag_log format ["DMORBAT: createFactionGroups - _LATlaunchers: %1", _LATlaunchers];
-        // diag_log format ["DMORBAT: createFactionGroups - _HATlaunchers: %1", _HATlaunchers];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _LATlaunchers: %1", _LATlaunchers] };
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _HATlaunchers: %1", _HATlaunchers] };
 
         // Reassign units based on AT type
         private _tempRiflemenAT = [];
         {
             private _weapons = getArray (configfile >> "CfgVehicles" >> _x >> "weapons");
             private _unitLauncher = _weapons arrayIntersect _HATlaunchers;
-            // diag_log format ["DMORBAT: createFactionGroups - _unitLauncher: %1", _unitLauncher];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _unitLauncher: %1", _unitLauncher] };
             // if ((_unitLauncher select 0) in _HATlaunchers) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
             if ((count _unitLauncher > 0 || "_hat" in (toLowerANSI _x)) && !("_lat" in (toLowerANSI _x))) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
         } forEach _riflemenAT;
@@ -257,22 +257,22 @@ _fnc_createInfGroup = {
     // Exit if no units where found
     if (count _riflemen == 0) exitWith { diag_log format ["DMORBAT: --- ERROR --- Couldn't create groups for faction %1. No infantry units found!", _faction] };
 
-    diag_log format ["DMORBAT: createFactionGroups - _squadLeaders: %1", _squadLeaders];
-    diag_log format ["DMORBAT: createFactionGroups - _teamLeaders: %1", _teamLeaders];
-    diag_log format ["DMORBAT: createFactionGroups - _riflemen: %1", _riflemen];
-    diag_log format ["DMORBAT: createFactionGroups - _riflemenAT: %1", _riflemenAT];
-    diag_log format ["DMORBAT: createFactionGroups - _riflemenHAT: %1", _riflemenHAT];
-    diag_log format ["DMORBAT: createFactionGroups - _riflemenAA: %1", _riflemenAA];
-    diag_log format ["DMORBAT: createFactionGroups - _grenadiers: %1", _grenadiers];
-    diag_log format ["DMORBAT: createFactionGroups - _autoriflemen: %1", _autoriflemen];
-    diag_log format ["DMORBAT: createFactionGroups - _medics: %1", _medics];
-    diag_log format ["DMORBAT: createFactionGroups - _marksmen: %1", _marksmen];
-    diag_log format ["DMORBAT: createFactionGroups - _officers: %1", _officers];
-    diag_log format ["DMORBAT: createFactionGroups - _crewmen: %1", _crewmen];
-    diag_log format ["DMORBAT: createFactionGroups - _snipers: %1", _snipers];
-    diag_log format ["DMORBAT: createFactionGroups - _spotters: %1", _spotters];
-    diag_log format ["DMORBAT: createFactionGroups - _JTACs: %1", _JTACs];
-    diag_log format ["DMORBAT: createFactionGroups - _explosiveSpecialists: %1", _explosiveSpecialists];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _squadLeaders: %1", _squadLeaders] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _teamLeaders: %1", _teamLeaders] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _riflemen: %1", _riflemen] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _riflemenAT: %1", _riflemenAT] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _riflemenHAT: %1", _riflemenHAT] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _riflemenAA: %1", _riflemenAA] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _grenadiers: %1", _grenadiers] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _autoriflemen: %1", _autoriflemen] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _medics: %1", _medics] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _marksmen: %1", _marksmen] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _officers: %1", _officers] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _crewmen: %1", _crewmen] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _snipers: %1", _snipers] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _spotters: %1", _spotters] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _JTACs: %1", _JTACs] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - _explosiveSpecialists: %1", _explosiveSpecialists] };
 
     // -------------------------------------------------------------------------------------
     // SQUAD
@@ -388,7 +388,7 @@ _fnc_createInfGroup = {
     };
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 squad: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - %2 squad: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 
@@ -479,7 +479,7 @@ _fnc_createInfGroup = {
     };
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 fire team: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - %2 fire team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 
@@ -513,7 +513,7 @@ _fnc_createInfGroup = {
     };
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 sentry: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - %2 sentry: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 
@@ -551,7 +551,7 @@ _fnc_createInfGroup = {
     _group pushBack (selectRandom _riflemen);
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 patrol team: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then {  format ["DMORBAT: createFactionGroups - %2 patrol team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 
@@ -598,7 +598,7 @@ _fnc_createInfGroup = {
     _group pushBack (selectRandom _riflemen);
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 team AT: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - %2 team AT: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 
@@ -637,7 +637,7 @@ _fnc_createInfGroup = {
     _group pushBack (selectRandom _riflemen);
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 team AA: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - %2 team AA: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 
@@ -667,7 +667,7 @@ _fnc_createInfGroup = {
     };
 
     // Add to infantry groups array
-    diag_log format ["DMORBAT: createFactionGroups - %2 sniper team: %1", _group, if (_isRegular) then { "" } else { "SF" }];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: createFactionGroups - %2 sniper team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
     private _roles = [_group] call DMORBAT_fnc_groupRoles;
     _customGroups pushBack [_group, _roles];
 };
@@ -675,7 +675,6 @@ _fnc_createInfGroup = {
 // INFANTRY GROUPS
 if (_groupType == "Infantry") then {
     private _factionInfantry = [_faction, "Infantry"] call DMORBAT_fnc_categorizeUnits;
-    // diag_log format ["_factionInfantry: %1", _factionInfantry];
     private _infGroups = [];
     {
         private _grps = _x select 1;
@@ -691,7 +690,6 @@ if (_groupType == "Infantry") then {
 // SPECIAL FORCES GROUPS
 if (_groupType == "SF") then {
     private _factionInfantry = [_faction, "Infantry"] call DMORBAT_fnc_categorizeUnits;
-    // diag_log format ["_factionInfantry: %1", _factionInfantry];
     private _infGroups = [];
     {
         private _grps = _x select 1;

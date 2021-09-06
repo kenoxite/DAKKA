@@ -74,17 +74,17 @@ _null = [_unit, _unitLoadout] spawn {
                 _x setUnitLoadout [_unitLoadout, true];
             };
             // Give weapons if the unit still doesn't have any
-            // diag_log format ["DMORBAT: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit] };
             if (primaryWeapon _unit == "" && handgunWeapon _unit == "") then {
                 _unit addWeapon "hgun_P07_F";
                 _unit addHandgunItem "16Rnd_9x21_Mag";
                 for "_i" from 1 to 3 do {_unit addItemToUniform "16Rnd_9x21_Mag";};
             };
-            // diag_log format ["DMORBAT: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit] };
             // Replace UAV terminals with proper ones for this unit's side
             /*private _side = side _unit;
             private _assignedItems = assignedItems _unit;
-            diag_log format ["DMORBAT: prepareUnit - %1 _assignedItems: %2", _unit, _assignedItems];
+            if (DMORBAT_debug) then { diag_log format ["DMORBAT: prepareUnit - %1 _assignedItems: %2", _unit, _assignedItems] };
             if (_side == west) then {
                 {
                     if (_x == "O_UavTerminal" || _x == "I_UavTerminal" || _x == "C_UavTerminal" || _x == "I_E_UavTerminal") then {

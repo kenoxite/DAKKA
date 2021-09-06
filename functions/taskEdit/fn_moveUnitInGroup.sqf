@@ -30,7 +30,7 @@ _index = _selectionPath select 1;
 _isPlayer = [_index] call DMORBAT_fnc_checkIfSelIsPlayer;
 _playerIndex = ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 6) select 0;
 _unitClass = _unitsArr select _index;
-// diag_log format ["DMORBAT: _unitClass: %1", _unitClass];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitClass: %1", _unitClass] };
 _newIndex=-1;
 _newArray = _unitsArr;
 if (_up) then {
@@ -65,10 +65,10 @@ if (_newIndex >= 0) then {
   _newArray deleteAt _index;
   _newIndex = if (_up) then { _index - 1 } else { _index + 1 };
   _newArray = [_newArray, [_unitClass], _newIndex] call BIS_fnc_arrayInsert;
-  // diag_log format ["DMORBAT: _newArray: %1", _newArray];
+  // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _newArray: %1", _newArray] };
   (((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3) select 0) set [1, _newArray];
   // [_playerIndex] call DMORBAT_fnc_setPlayerUnit;
-  // diag_log format ["DMORBAT: player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)];
+  // if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)] };
 
   ctrlEnable [IDC_BT_1_GRP1, false];
   ctrlEnable [IDC_BT_2_GRP1, false];

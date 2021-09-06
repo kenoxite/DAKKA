@@ -6,4 +6,4 @@ _location = nearestLocation [ATLtoASL positionCameraToWorld [0,0,0], ""];
 _location = player;
 
 _sandstorm = [_location, 0.01, 0.3, false] call BIS_fnc_sandstorm;
-diag_log format ["_sandstorm: %1", _sandstorm];
+if (DMORBAT_debug) then { diag_log format ["_sandstorm: %1", _sandstorm] };

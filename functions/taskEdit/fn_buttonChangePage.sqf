@@ -24,7 +24,7 @@ disableSerialization;
 cutText ["Preparing menus...", "BLACK IN", 999];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
-diag_log format ["DMORBAT: --- buttonChangePage page:%1 changing to %2 page", _currentPage, if (_next) then { "NEXT" } else { "PREVIOUS" }];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: --- buttonChangePage page:%1 changing to %2 page", _currentPage, if (_next) then { "NEXT" } else { "PREVIOUS" }] };
 
 if (_currentPage > 1) then {
   call DMORBAT_fnc_previewGroupDelete;

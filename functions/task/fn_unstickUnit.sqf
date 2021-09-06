@@ -40,7 +40,7 @@ if (!_isMan) then {
 
     private _grp = group _target;
     private _groupIndex = (_target call DMORBAT_fnc_getUnitPositionId) - 1;
-    // diag_log format ["DMORBAT: untstickUnit _groupIndex %1", _groupIndex]; 
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: untstickUnit _groupIndex %1", _groupIndex] }; 
     private _isLeader = false;
     if ((leader _grp) == _target) then {
         _isLeader = true;

@@ -21,14 +21,14 @@
 params ["_idc", "_faction", ["_filterType", "all"]];
 private ["_display", "_ctrl", "_indexCtrl", "_factionInd", "_unitName", "_factionUnits", "_subcat", "_catIndex", "_catUnits", "_unitClass", "_bannedVehicles", "_filter", "_unitIcon", "_unitData"];
 
-diag_log format ["DMORBAT: updateUnitsTreeList _filterType: %1", _filterType];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateUnitsTreeList _filterType: %1", _filterType] };
 
 disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = _display displayCtrl _idc;
 tvClear _ctrl;
 
-// diag_log format ["DMORBAT: _faction:%1", _faction];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _faction:%1", _faction] };
 _factionInd = [DMORBAT_availableFactionsData, _faction] call DMORBAT_fnc_findFirstNested;
 if (_factionInd >= 0) then {
     _factionUnits = [_faction, _filterType] call DMORBAT_fnc_categorizeUnits;

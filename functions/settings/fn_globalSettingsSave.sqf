@@ -85,7 +85,7 @@ switch (_var) do
     };
 };
 
-// diag_log format ["DMORBAT: globalSettingsSave DMORBAT_settings: %1", DMORBAT_settings];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: globalSettingsSave DMORBAT_settings: %1", DMORBAT_settings] };
 
 // Save the updated data
 profileNamespace setVariable ["DMORBAT_settings", DMORBAT_settings];

@@ -36,7 +36,7 @@ _ctrl = _display displayCtrl IDC_EDIT_SUPPORT_LIMIT;
 _supportLimit = floor (parseNumber (ctrlText _ctrl));
 if (_supportLimit < -1) then { _supportLimit = -1; };
 _supportLimitData set [0, _supportLimit];
-diag_log format ["DMORBAT: changeSupportLimit _supportLimit: %1", _supportLimit];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: changeSupportLimit _supportLimit: %1", _supportLimit] };
 
 call DMORBAT_fnc_settingsSave;
 

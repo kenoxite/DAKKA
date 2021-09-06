@@ -37,7 +37,7 @@ _thisCategoryName = _groupsCategoryData select 0;
 _thisCategoryData = _groupsCategoryData select 1;
 _thisCategoryGroups = _thisCategoryData select 1;
 _thisGroupData = _thisCategoryGroups select _groupIndex;
-diag_log format ["DMORBAT: removeFromGroup _thisGroupData:%1", _thisGroupData];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: removeFromGroup _thisGroupData:%1", _thisGroupData] };
 _unitsData = _thisGroupData select 1;
 _groupMods = _thisGroupData select 2;
 
@@ -63,7 +63,7 @@ if ((count _selectionPath) > 1) then {
 ctrlEnable [_idcButtons select 0, false];
 call DMORBAT_fnc_updateSelectedSupportGroupsTreeList;
 
-diag_log format ["DMORBAT: removeFromGroup _unitsData: %1", _unitsData];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: removeFromGroup _unitsData: %1", _unitsData] };
 if (count _unitsData > 0) then {
     private _tvCount = tvCount [_idc, [_selectionPath select 0]];
     _sel = [_selectionPath select 0, (_selectionPath select 1) min (_tvCount - 1)];

@@ -20,7 +20,7 @@ if (typeName _class == "OBJECT") then {
 };
 if (_class == "") exitWith { diag_log format ["DMORBAT: vehicleType --- ERROR --- No unit class or object has been passed"]; "" };
 
-// diag_log format ["DMORBAT: _class: %1 _checkWeapons: %2", _class, _checkWeapons];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _class: %1 _checkWeapons: %2", _class, _checkWeapons] };
 
 private _vehType = "";
 private _subCat = getText (configFile >> "CfgVehicles" >> _class >> "editorSubcategory");
@@ -30,7 +30,7 @@ private _crew = getText (configFile >> "CfgVehicles" >> _class >> "crew");
 private _txt = if (getText (configFile >> "CfgVehicles" >> _crew >> "simulation") == "UAVPilot") then { "Drone " } else { "" };
 
 private _parentClasses = [ configFile >> "CfgVehicles" >> _class, true ] call BIS_fnc_returnParents;
-// diag_log format ["DMORBAT: _class: %1 _parentClasses: %2", _class, _parentClasses];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _class: %1 _parentClasses: %2", _class, _parentClasses] };
 
 if (_subCat == "EdSubcat_Artillery") exitWith { format ["%1Artillery", _txt] };
 

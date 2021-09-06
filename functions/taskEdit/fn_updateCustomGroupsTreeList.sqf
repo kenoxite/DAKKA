@@ -18,7 +18,7 @@
 */
 
 params ["_idc", ["_groupNumber", 1], ["_enemy", true]];
-// diag_log format ["DMORBAT: updateCustomGroupsTreeList params:%1 %2 %3", _idc, _groupNumber, _enemy];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCustomGroupsTreeList params:%1 %2 %3", _idc, _groupNumber, _enemy] };
 private ["_ctrl", "_indexCtrl", "_taskData", "_groupsData", "_thisCategoryData", "_thisCategoryName", "_thisCategoryGroups", "_thisGroupData", "_groupName", "_unitsData", "_unitClass", "_unitName", "_rank", "_rankImg", "_faction", "_factionName", "_unitNameFull", "_tooltip", "_txt", "_presence", "_skill", "_thisUnitData", "_lodaout", "_groupMods", "_ctrlGrpIndex", "_ctrlUnitIndex"];
 disableSerialization;
 if (_idc < 0) then {
@@ -60,7 +60,7 @@ if (count _thisCategoryGroups > 0) then {
     	_groupName = _thisGroupData select 0;
         _unitsData = _thisGroupData select 1;
     	_groupMods = _thisGroupData select 2;
-    	// diag_log format ["DMORBAT: updateCustomGroupsTreeList _groupName:%1", _groupName];
+    	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCustomGroupsTreeList _groupName:%1", _groupName] };
     	_ctrlGrpIndex = _ctrl tvAdd [[], _groupName];
     		_txt = if (_i > 0) then {
 			format ["%1 (Group %2) ", _groupName, _i];
@@ -113,7 +113,7 @@ if (count _thisCategoryGroups > 0) then {
 			// _tooltip = format ["Click to highlight in preview panel\n%1", _unitClass];
 			// if (_j == 0) then { _tooltip = format ["GROUP LEADER\n%1", _tooltip] };
 			_ctrl tvSetTooltip [[_ctrlGrpIndex, _ctrlUnitIndex], [format ["%1 [%2]", _unitName, _factionName], _unitClass, _j, count _lodaout, _presence, _skill, _groupMods] call DMORBAT_fnc_createUnitTooltip];
-			// diag_log format ["DMORBAT: updateCustomGroupsTreeList _unitName:%1", _unitName];
+			// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCustomGroupsTreeList _unitName:%1", _unitName] };
 		};
 	};
 };

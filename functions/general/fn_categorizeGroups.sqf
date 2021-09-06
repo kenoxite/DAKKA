@@ -30,20 +30,20 @@ private _airGroups = [];
 private _waterGroups = [];
 
 {
-    // diag_log format ["DMORBAT: _groupTypeData: %1", _x];
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _groupTypeData: %1", _x] };
     private _groupTypeName = _x select 0;
-    // diag_log format ["DMORBAT: _groupTypeName: %1", _groupTypeName];
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _groupTypeName: %1", _groupTypeName] };
     private _groupsData = _x select 1;
     {
         private _groupName = _x select 0;
-        // diag_log format ["DMORBAT: _groupName: %1", _groupName];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _groupName: %1", _groupName] };
         private _unitsData = _x select 1;
-        // diag_log format ["DMORBAT: _unitsData: %1", _unitsData];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitsData: %1", _unitsData] };
         _classes = [];
         {
             _classes pushBack (_x select 0);
         } forEach _unitsData;
-        // diag_log format ["DMORBAT: _classes: %1", _classes];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _classes: %1", _classes] };
         private _type = [_classes, true] call DMORBAT_fnc_groupType;
 
         private _isInf = false;

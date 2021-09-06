@@ -72,7 +72,7 @@ if (isNil "_faction") then {
     diag_log format ["DMORBAT: --- %1", _error];
 };
 
-diag_log format ["DMORBAT: updateFactionCombo _faction: %1", _faction];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionCombo _faction: %1", _faction] };
 if (_faction == "") then {
     private _error = format ["WARNING: Couldn't find the saved %1 faction!", _side];
     [_error] spawn DMORBAT_fnc_displayMessage;
@@ -87,7 +87,7 @@ _fIndex = -1;
 } forEach DMORBAT_availableFactionsData;
 _ctrl lbSetCurSel (_fIndex max 0);
 
-diag_log format ["DMORBAT: updateFactionCombo _faction: %1", _faction];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionCombo _faction: %1", _faction] };
 if (_fIndex < 0) then {
     private _error = format ["WARNING: Couldn't find the saved %1 faction!", _side];
     [_error] spawn DMORBAT_fnc_displayMessage;
@@ -97,6 +97,6 @@ if (_fIndex < 0) then {
 };
 
 
-diag_log format ["DMORBAT: updateFactionCombo _faction: %1 DMORBAT_PlayerFactions: %2 DMORBAT_EnemyFactions: %3", _faction, DMORBAT_PlayerFactions, DMORBAT_EnemyFactions];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionCombo _faction: %1 DMORBAT_PlayerFactions: %2 DMORBAT_EnemyFactions: %3", _faction, DMORBAT_PlayerFactions, DMORBAT_EnemyFactions] };
 
 true

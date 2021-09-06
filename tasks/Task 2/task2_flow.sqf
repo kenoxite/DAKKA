@@ -143,7 +143,7 @@ _task_2_checks = [] spawn {
             {
                 _enemyUnits append ((units _x) select {alive _x});
             } forEach _enemyGroups;
-            // diag_log format ["DMORBAT: Task 2 - _enemyUnits: %1", _enemyUnits];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Task 2 - _enemyUnits: %1", _enemyUnits] };
             private _inContestedArea = _enemyUnits inAreaArray "DMORBAT_mrkr_Task2_location_area";
             if (_startCountingEnmy) then {
                 if (count _inContestedArea == 0) then {
@@ -214,7 +214,7 @@ _task_2_checks = [] spawn {
             {
                 _friendlyUnits append ((units _x) select {alive _x});
             } forEach _friendlyGroups;
-            // diag_log format ["DMORBAT: Task 2 - _enemyUnits: %1", _enemyUnits];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Task 2 - _enemyUnits: %1", _enemyUnits] };
             private _inContestedArea = _friendlyUnits inAreaArray "DMORBAT_mrkr_Task2_location_area";
             if (_startCountingFrly) then {
                 if (count _inContestedArea == 0) then {

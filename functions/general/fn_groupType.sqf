@@ -28,7 +28,7 @@ if (typeName _grp == "GROUP") then {
 };
 if (count _unitClasses == 0) exitWith { diag_log format ["DMORBAT: groupType --- ERROR --- No unit classes or group has been passed"]; "" };
 
-// diag_log format ["DMORBAT: _unitClasses: %1 _specific: %2", _unitClasses, _specific];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitClasses: %1 _specific: %2", _unitClasses, _specific] };
 
 private _return = "Inf";
 private _land = [];
@@ -46,13 +46,13 @@ private _infCount = 0;
 } forEach _unitClasses;
 
 
-// diag_log format ["DMORBAT: _land: %1 _infCount: %2", str _land, _infCount];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _land: %1 _infCount: %2", str _land, _infCount] };
 // Moto or mech
 if (_specific) then {
     if ((count _land) > 0) then {
         if (_infCount > 0) then {
             private _vehType = [_land select 0] call DMORBAT_fnc_vehicleType;
-            // diag_log format ["DMORBAT: _vehType: %1", _vehType];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _vehType: %1", _vehType] };
             if (_vehType != "Turret" && _vehType != "Artillery") then {
                 if (_vehType == "Car" || _vehType == "Truck") then {
                     _return = "Motorized";
@@ -74,6 +74,6 @@ if (_specific && {(count _land) > 0 && _infCount == 0}) then {
     };
 };
 
-// diag_log format ["DMORBAT: _return: %1", _return];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _return: %1", _return] };
 
 _return

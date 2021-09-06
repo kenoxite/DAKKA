@@ -35,7 +35,7 @@ _thisPlayerGroupData = _playerGroupData select (_selectionPath select 0);
 
 _unitsData = _thisPlayerGroupData select 1;
 
-diag_log format ["DMORBAT: removeFromPlayerGroup _thisPlayerGroupData:%1", _thisPlayerGroupData];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: removeFromPlayerGroup _thisPlayerGroupData:%1", _thisPlayerGroupData] };
 
 if ((count _selectionPath) > 1) then {
   _index = _selectionPath select 1;
@@ -84,7 +84,7 @@ if ((tvCount [_idc, []]) == 0) then {
     tvSetCurSel [IDC_TREE_FACTION_GROUPS, [0, 0]];
 };
 
-// diag_log format ["DMORBAT: player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)] };
 
 // Save task settings
 call DMORBAT_fnc_settingsSave;

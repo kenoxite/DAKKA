@@ -29,17 +29,17 @@ if (isNil "_savedData") exitWith {
 // Saved data found
 private _slotIndex = (DMORBAT_saveSlots select (DMORBAT_Task - 1));
 private _currentSlot = _savedData select _slotIndex;
-// diag_log format ["DMORBAT: settingsLoad _currentSlot: %1", _currentSlot];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsLoad _currentSlot: %1", _currentSlot] };
 private _slotName = _currentSlot select 0;
 DMORBAT_saveSlotName = _slotName;
 private _slotData = _currentSlot select 1;
-// diag_log format ["DMORBAT: settingsLoad _slotData: %1", _slotData];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsLoad _slotData: %1", _slotData] };
 
 
 // Check for existing array of locations, compositions, etc for this terrain
 // Check locations
 private _locations = [_slotData, "Locations"] call BIS_fnc_getFromPairs;
-diag_log format ["DMORBAT: settingsLoad _locations: %1", _locations];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsLoad _locations: %1", _locations] };
 private _thisWorldLocations = [_locations, worldName] call BIS_fnc_getFromPairs;
 
 if (isNil "_thisWorldLocations") then {
@@ -82,8 +82,8 @@ if (isNil "_thisWorldLocations") then {
 DMORBAT_TaskData set [DMORBAT_Task - 1, _slotData];
 
 
-diag_log format ["DMORBAT: settingsLoad DMORBAT_TaskData locations: %1", [DMORBAT_TaskData select (DMORBAT_Task - 1), "Locations"] call BIS_fnc_getFromPairs];
-diag_log format ["DMORBAT: settingsLoad DMORBAT_TaskData Compositions: %1", [DMORBAT_TaskData select (DMORBAT_Task - 1), "Compositions"] call BIS_fnc_getFromPairs];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsLoad DMORBAT_TaskData locations: %1", [DMORBAT_TaskData select (DMORBAT_Task - 1), "Locations"] call BIS_fnc_getFromPairs] };
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: settingsLoad DMORBAT_TaskData Compositions: %1", [DMORBAT_TaskData select (DMORBAT_Task - 1), "Compositions"] call BIS_fnc_getFromPairs] };
 
 diag_log format ["DMORBAT: settingsLoad --- TASK DATA LOADED FOR TASK %1 - Slot: %2 --- ", DMORBAT_Task, _slotIndex];
 

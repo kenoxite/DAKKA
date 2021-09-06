@@ -31,8 +31,8 @@ private _veh = objNull;
 		_vehicles pushBack _x;
 	};
 } forEach (units _grp);
-// diag_log format ["DMORBAT: previewGroupPosition _men: %1", _men];
-// diag_log format ["DMORBAT: previewGroupPosition _vehicles: %1", _vehicles];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroupPosition _men: %1", _men] };
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroupPosition _vehicles: %1", _vehicles] };
 
 // Delete wheelchocks
 private _wheelChock = objNull;
@@ -89,8 +89,8 @@ private _j = 1;
 		_j = 1;
 		_unitPos = _rowCenterPos;
 	};
-	// diag_log format ["DMORBAT: _dist: %1 , _formDir: %2", _dist, _formDir * _lor];
-	// diag_log format ["DMORBAT: _unitPos: %1", _unitPos];
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _dist: %1 , _formDir: %2", _dist, _formDir * _lor] };
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitPos: %1", _unitPos] };
 	_x setPos _unitPos;
 	_x setDir _dir;
 	_bbr = [_x] call DMORBAT_fnc_boundingBoxReal;
@@ -159,7 +159,7 @@ _amountVeh = count _realVehicles;
 
 {
 	_veh = vehicle _x;
-	// diag_log format ["DMORBAT: _x is 1st crew of: %1", _veh];
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _x is 1st crew of: %1", _veh] };
 	_bbr = [_veh] call DMORBAT_fnc_boundingBoxReal;
 	_dist = ((_lastUnitWidth + 2) * _i);
 	if (_k > 0) then {
@@ -210,8 +210,8 @@ _amountVeh = count _realVehicles;
     _veh setPos _unitPos;
 	_veh setDir _dir + 30;
     _veh setVectorUp (surfaceNormal (position _veh));
-	// diag_log format ["DMORBAT: %4[%3] _dist: %1 , _formDir: %2", _dist, _formDir * _lor, typeof _veh, _veh];
-	// diag_log format ["DMORBAT: _unitPos: %1", _unitPos];
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: %4[%3] _dist: %1 , _formDir: %2", _dist, _formDir * _lor, typeof _veh, _veh] };
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitPos: %1", _unitPos] };
 	_veh enableSimulation true;
     _veh setVelocity [0, 0, 0];
 	// Stop air units from taking off
@@ -227,11 +227,11 @@ _amountVeh = count _realVehicles;
 	_veh doWatch _watchPos;
 	// _unitPos = _rowCenterPos;
 	_lastUnitWidth = _bbr select 0;
-	// diag_log format ["DMORBAT: _lastUnitWidth: %1", _lastUnitWidth];
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _lastUnitWidth: %1", _lastUnitWidth] };
 	_j = _j + 1;
 	_k = _k + 1;
 } forEach _realVehicles;
-// diag_log format ["DMORBAT: _amountVeh: %1", _amountVeh];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _amountVeh: %1", _amountVeh] };
 
 // Camera parameters
 

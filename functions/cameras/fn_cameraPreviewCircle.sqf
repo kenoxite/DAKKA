@@ -25,7 +25,7 @@ _angle = 180; // starting angle
 _dir = 0; //Direction of camera movement 0: anti - clockwise, 1: clockwise
 // _speed = 0.1; //lower is faster
 call DMORBAT_fnc_cameraPreviewTerminate;
-// diag_log format ["DMORBAT: DMORBAT_previewCamera:%1", DMORBAT_previewCamera];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: DMORBAT_previewCamera:%1", DMORBAT_previewCamera] };
 waitUntil { isNull DMORBAT_previewCamera };
 // Disable ambient fauna
 enableEnvironment [false, true];

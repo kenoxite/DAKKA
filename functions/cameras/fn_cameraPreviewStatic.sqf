@@ -22,7 +22,7 @@ params ["_pos", ["_dir", 180], ["_FOV", 0.7], ["_relX", 0], ["_relY", 0], ["_rel
 private ["_camera", "_display", "_ctrl", "_targetPos", "_relDir", "_relPos"];
 showcinemaborder false; 
 call DMORBAT_fnc_cameraPreviewTerminate;
-diag_log format ["DMBORBAT: camerapreviewstatic _FOV: %1", _FOV];
+if (DMORBAT_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic _FOV: %1", _FOV] };
 waitUntil { isNull DMORBAT_previewCamera };
 // Disable ambient fauna
 enableEnvironment [false, true];
@@ -33,7 +33,7 @@ DMORBAT_cameraZoom = _FOV;
 DMORBAT_previewCamera = "camera" camCreate [0, 0, 0];
 _camera = DMORBAT_previewCamera;
 DMORBAT_previewCameraPlaying = true;
-diag_log format ["DMBORBAT: camerapreviewstatic _pos: %1", _pos];
+if (DMORBAT_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic _pos: %1", _pos] };
 
 // private _relX = 0.5;
 // private _relY = 12;
@@ -42,7 +42,7 @@ diag_log format ["DMBORBAT: camerapreviewstatic _pos: %1", _pos];
 // private _FOV = 0.35;
 
 _camera cameraEffect ["INTERNAL", "BACK"];
-diag_log format ["DMBORBAT: camerapreviewstatic _target: %1", _target];
+if (DMORBAT_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic _target: %1", _target] };
 if (!isNull _target) then { 
 	_pos = _target getRelPos [_relY, getDir _target];
 	_relDir = ((getPosATL _target) vectorFromTo _pos);

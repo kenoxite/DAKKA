@@ -38,7 +38,7 @@ _fillEvenly = _this param [4, false, [true]];
 _sortHeight = _this param [5, false, [true]];
 _doMove = _this param [6, false, [true]];
 
-diag_log format ["DMORBAT: occupyHOuse - %2 units of Group %1 are trying to occupy nearby buildings", group (_units select 0), count _units];
+diag_log format ["DMORBAT: occupyHouse - %2 units of Group %1 are trying to occupy nearby buildings", group (_units select 0), count _units];
 
 if (_center isEqualTo [0,0,0]) exitWith {
     // player sideChat str "Zen_Occupy House Error : Invalid position given.";

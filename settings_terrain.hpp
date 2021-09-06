@@ -4,7 +4,7 @@
 
 // Overcast settings - should be changed based on general climate of the terrain
 DMORBAT_overcast = 0.3; // average overcast
-DMORBAT_rain = [0.1, 0.5]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
+DMORBAT_rain = [0.1, 4]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
 DMORBAT_rainMonths = [9, 4]; // months where precipitation is at its highest -- you can either start from the beginning of the rainy months or the end, it'll be sorted later
 
 // Fog settings - should be changed based on general climate of the terrain and their average elevation

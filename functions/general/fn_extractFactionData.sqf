@@ -34,7 +34,7 @@ private _addFaction = {
         private _thisSideNum = getNumber (_x >> "side");
         private _txt = format ["Extracting faction data from ""%1""...", _thisFactionName];
         _ctrl ctrlSetText _txt; 
-        diag_log format ["DMORBAT: %1 (%2)", _txt, _factionClass]; 
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 (%2)", _txt, _factionClass] }; 
         private ["_defFlag", "_defIcon", "_color"];
         switch (_thisSideNum) do {
             case 1: {
@@ -60,7 +60,7 @@ private _addFaction = {
         if (_thisFactionFlag == "") then { _thisFactionFlag = _defFlag };
         if (_thisFactionIcon == "") then { _thisFactionIcon = _defIcon };
         private _thisFactionData = [configName _x, _thisFactionName, _thisFactionFlag, _thisFactionIcon, _thisSideNum];
-        // diag_log format ["DMORBAT: _thisFactionData = %1", _thisFactionData];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _thisFactionData = %1", _thisFactionData] };
         _factionsData pushBack _thisFactionData;
     } forEach ("((configName _x) == _factionClass)" configClasses (configFile >> "CfgFactionClasses"));
 };
@@ -120,7 +120,7 @@ diag_log format ["DMORBAT: %1", _txt];
 } forEach ("true" configClasses (configFile >> "CfgFactionClasses"));
 
 // {
-//     diag_log format ["DMORBAT: _validFactions %2: %1", _x, _forEachIndex];
+//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: _validFactions %2: %1", _x, _forEachIndex] };
 // } forEach _validFactions;
 
 _txt = "Faction data extraction has finished!";
@@ -128,7 +128,7 @@ _ctrl ctrlSetText _txt;
 diag_log format ["DMORBAT: ----------------- %1 -----------------", _txt]; 
 
 // {
-//     diag_log format ["DMORBAT: _factionsData %2: %1", _x, _forEachIndex];
+//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: _factionsData %2: %1", _x, _forEachIndex] };
 // } forEach _factionsData;
 
 _factionsData

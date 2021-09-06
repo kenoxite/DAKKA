@@ -28,7 +28,7 @@ _locationsData = [_worldLocationsData, worldName] call BIS_fnc_getFromPairs;
 _indexCat = lbCurSel (_display displayCtrl IDC_COMBO_AO_SELECTION_CAT);
 _categoryData = _locationsData select _indexCat;
 _locations = _categoryData select 1;
-diag_log format ["DMORBAT: mapDisplayLocations _locations: %1", _locations];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: mapDisplayLocations _locations: %1", _locations] };
 
 _markers = [];
 
@@ -85,7 +85,7 @@ if (count _locations == 0) exitWith { false };
   };
 } forEach _locations;
 
-diag_log format ["DMORBAT: mapDisplayLocations _markers: %1", _markers];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: mapDisplayLocations _markers: %1", _markers] };
 if (count _locations > 0) then {
   _mrkrToMove = if (_idcCombo >= 0) then {
     _markers select (lbCurSel _idcCombo) max 0;

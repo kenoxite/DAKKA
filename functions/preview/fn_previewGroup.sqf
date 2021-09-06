@@ -18,31 +18,31 @@
 */
 
 params ["_unitsArr", ["_ranksArr", []], ["_loadoutArr", []], ["_groupMods", []]];
-// diag_log format ["DMORBAT: previewGroup:[%1] [%2] ", _unitsArr, _ranksArr];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroup:[%1] [%2] ", _unitsArr, _ranksArr] };
 private ["_pos", "_unit", "_grp", "_isMan", "_rank"];
-diag_log format ["DMORBAT: 1 previewGroup DMORBAT_previewGroup:%1", DMORBAT_previewGroup];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup DMORBAT_previewGroup:%1", DMORBAT_previewGroup] };
 // waitUntil { isNull DMORBAT_previewGroup };
 if (isNull DMORBAT_previewGroup) then {	
 	cutText ["Loading Preview...", "BLACK IN", 999];
     ctrlShow [IDC_GRP_SAVEDDATAPROFILES, false];
 
-	// diag_log format ["DMORBAT: 1 previewGroup _unitsArr:%1", _unitsArr];
-	// diag_log format ["DMORBAT: 1 previewGroup _ranksArr:%1", _ranksArr];
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup _unitsArr:%1", _unitsArr] };
+	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup _ranksArr:%1", _ranksArr] };
 	_pos = getMarkerPos "DMORBAT_groupPreviewPos";
 	_unit = objNull;
 	_grp = grpNull;
 	_isMan = true;
     private _changeLoadouts = [];
 	{	
-		// diag_log format ["DMORBAT: 2 previewGroup DMORBAT_previewGroup:%1", DMORBAT_previewGroup];
+		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 2 previewGroup DMORBAT_previewGroup:%1", DMORBAT_previewGroup] };
 		if(!isNull DMORBAT_previewGroup) exitWith {
 			diag_log format ["DMORBAT: --- ERROR --- Another instance is already creating preview group (%1) ", DMORBAT_previewGroup];
 			diag_log format ["DMORBAT: --- ERROR --- Units from group that was created: %1", units _grp];
 			[_grp] call DMORBAT_fnc_deleteGroup;
 		};
-		// diag_log format ["DMORBAT: previewGroup _x:%1", _x];
-		// diag_log format ["DMORBAT: _isMan: %1", "Man" in ([configFile >> "CfgVehicles" >> _x, true ] call BIS_fnc_returnParents)];
-		// diag_log format ["DMORBAT: 1 previewGroup _x:%1", _x];
+		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroup _x:%1", _x] };
+		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _isMan: %1", "Man" in ([configFile >> "CfgVehicles" >> _x, true ] call BIS_fnc_returnParents)] };
+		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup _x:%1", _x] };
 		_isMan = [_x] call DMORBAT_fnc_isMan;
 		_unit = if (_isMan) then {
 				([_x, _pos] call DMORBAT_fnc_spawnMan);
@@ -73,7 +73,7 @@ if (isNull DMORBAT_previewGroup) then {
             [getMarkerPos "DMORBAT_groupPreviewPos"] spawn DMORBAT_fnc_cameraPreviewStatic;
 		};
 		// waitUntil {!isNull _unit };
-		// diag_log format ["DMORBAT: previewGroup _unit:%1", _unit];
+		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroup _unit:%1", _unit] };
 
 		if (_forEachIndex == 0) then {
 			_grp = group _unit;

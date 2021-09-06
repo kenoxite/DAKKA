@@ -6,6 +6,7 @@
 #include "settings_terrain.hpp";
 
 // GLOBAL VARIABLES
+DMORBAT_debug = false;
 
 // Weather and date settings
 DMORBAT_missionStart = date;

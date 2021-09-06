@@ -28,7 +28,7 @@ if (DMORBAT_snowIntensity >= 100) then {
 };
 
 diag_log "DMORBAT: Snow: Starting";
-// diag_log format ["DMORBAT: Snow DMORBAT_snowIntensity: %1 DMORBAT_snowVelocity: %2 DMORBAT_snowRefresh: %3", DMORBAT_snowIntensity, DMORBAT_snowVelocity, DMORBAT_snowRefresh];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: Snow DMORBAT_snowIntensity: %1 DMORBAT_snowVelocity: %2 DMORBAT_snowRefresh: %3", DMORBAT_snowIntensity, DMORBAT_snowVelocity, DMORBAT_snowRefresh] };
  
 0 = [] spawn {      
    

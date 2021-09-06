@@ -17,7 +17,7 @@
 
 */
 
-// diag_log format ["DMORBAT: preview group: %1", DMORBAT_previewGroup];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: preview group: %1", DMORBAT_previewGroup] };
 // if (!isNull DMORBAT_previewGroup) then {
 	DMORBAT_PreviewGroupName = "";
 	DMORBAT_PreviewGroupID = "";

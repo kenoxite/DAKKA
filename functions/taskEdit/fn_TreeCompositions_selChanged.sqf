@@ -19,7 +19,7 @@
 
 params ["_idc", "_selectionPath"];
 private ["_mrkr", "_display", "_ctrl"];
-diag_log format ["DMORBAT: TreeCompositions_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCompositions_selChanged _selectionPath:%1", _selectionPath] };
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl _idc);
   ctrlShow [IDC_GRP_SAVEDDATAPROFILES, false];

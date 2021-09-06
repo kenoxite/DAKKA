@@ -24,11 +24,11 @@ private ["_ctrl", "_factionGroups", "_groupTypeData", "_groupTypeName", "_groups
 disableSerialization;
 _ctrl = (findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc;
 tvClear _ctrl;	
-// diag_log format ["DMORBAT: updateGroupsTreeList _faction: %1", _faction];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateGroupsTreeList _faction: %1", _faction] };
 
 _factionGroups = [_faction] call DMORBAT_fnc_extractGroupsData;
 /*{
-    diag_log format ["DMORBAT: updateGroupsTreeList %1: data: %2", _forEachIndex, _x];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateGroupsTreeList %1: data: %2", _forEachIndex, _x] };
 } forEach _factionGroups;*/
 
 for [{private _i = 0}, {_i < count _factionGroups}, {_i = _i + 1}] do

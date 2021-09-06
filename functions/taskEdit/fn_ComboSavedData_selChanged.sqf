@@ -18,7 +18,7 @@
 */
 
 params ["_idc", "_selectionPath"];
-diag_log format ["DMORBAT: ComboSavedData_selChanged _selectionPath:%1", _selectionPath];
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: ComboSavedData_selChanged _selectionPath:%1", _selectionPath] };
 private _slotIndex = (DMORBAT_saveSlots select (DMORBAT_Task - 1));
 if (_selectionPath < 0 || _slotIndex == _selectionPath) exitWith { false };
 

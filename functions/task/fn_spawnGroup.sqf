@@ -142,12 +142,13 @@ _grp setVariable ["VCM_Skilldisable",true]; //This command will disable an AI gr
 // Move passengers to vehicles
 {
     _passengerSeats = (fullCrew [_x, "", true]) select {isNull (_x select 0)};
-    // diag_log format ["DMORBAT: spawnGroup - %1 has %2 passenger seats", typeOf _x, count _passengerSeats];
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - %1 has %2 passenger seats", typeOf _x, count _passengerSeats] };
     for [{private _i = 0}, {_i < count _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
-        // diag_log format ["DMORBAT: spawnGroup - _groupPassengers; %1", _groupPassengers];
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - _groupPassengers; %1", _groupPassengers] };
         (_groupPassengers select 0) moveInAny _x;
-        diag_log format ["DMORBAT: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x];
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
         _groupPassengers deleteAt 0;
+        _x setUnloadInCombat [true, true];
     };
     if ((count _groupPassengers) == 0) exitWith { false };
 } forEach _groupVehicles;

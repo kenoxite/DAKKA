@@ -119,10 +119,10 @@ _task_1_checks = [] spawn {
                     if (_knowsAbout > 3) then {
                         // _detectedPlayerPos = position vehicle leader DMORBAT_PlayerNewGroup;
                     };
-                // diag_log format ["DMORBAT: %1 knowsAbout: %2", _x, (leader _x) knowsAbout (vehicle leader DMORBAT_PlayerNewGroup)];
+                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 knowsAbout: %2", _x, (leader _x) knowsAbout (vehicle leader DMORBAT_PlayerNewGroup)] };
                 };
 			} forEach _enemyGroups;
-                // diag_log format ["DMORBAT: _detectors: %1", _detectors];
+                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _detectors: %1", _detectors] };
 
             // Count time since last detection
             if (count _detectors > 0) then {
@@ -147,7 +147,7 @@ _task_1_checks = [] spawn {
                     if (_detectedTimer < _detectedMaxTime) then {
                         _detectedTimer = _detectedTimer + 1;
                     } else {
-                        diag_log format ["DMORBAT: _detectors: %1", _detectors];
+                        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _detectors: %1", _detectors] };
                         diag_log format ["DMORBAT: Enemies are alerted", ""];
                         DMORBAT_Task1_detected = true;
                         _timeOfDetection = time;
@@ -453,7 +453,7 @@ _task_1_checks = [] spawn {
             {
                 DMORBAT_patrolGrps_task1 deleteAt _x;
             } forEach _deleteGrps;
-            // diag_log format ["DMORBAT: DMORBAT_patrolGrps_task1: %1", DMORBAT_patrolGrps_task1];
+            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: DMORBAT_patrolGrps_task1: %1", DMORBAT_patrolGrps_task1] };
 
             _deleteGrps = [];
 			{     

@@ -53,9 +53,9 @@ _compositions = [];
 _compositions sort true;
 
 // {
-//     diag_log format ["DMORBAT: updateCompositionsTreelist _compositions %2: %1", _x, _forEachIndex];
+//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCompositionsTreelist _compositions %2: %1", _x, _forEachIndex] };
 // } forEach _compositions;
-// diag_log format ["DMORBAT: updateCompositionsTreelist _compositions (full): %1", _compositions];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCompositionsTreelist _compositions (full): %1", _compositions] };
 
 // Populate tree list
 private _i1 = 0;

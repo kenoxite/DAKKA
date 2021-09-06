@@ -20,7 +20,7 @@
 params ["_selectionPath", "_faction"];
 private ["_factionGroups", "_groupTypeName", "_groupTypeIndex", "_groupType", "_groupsData", "_groupName", "_groupIndex", "_thisGroupData", "_unitsData", "_thisUnitData", "_unitClasses", "_ranks", "_unitClass", "_rank"];
 
-// diag_log format ["DMORBAT: updateFactionGroupUnitsList params:%1 %2", _selectionPath, _faction];
+// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionGroupUnitsList params:%1 %2", _selectionPath, _faction] };
 _factionGroups = [_faction] call DMORBAT_fnc_extractGroupsData;
 
 call DMORBAT_fnc_previewGroupDelete;
