@@ -42,12 +42,12 @@ if ("StaticWeapon" in _parentClasses) exitWith {
     }
 };
 
-private _isAA = if (_subCat == "EdSubcat_AAs") then { true } else { false };
+private _isAA = if (_subCat == "EdSubcat_AAs" || _subCat == "rhs_EdSubcat_aa") then { true } else { false };
 
 if ("LandVehicle" in _parentClasses) then {
 
     // Wheeled
-    if ("Wheeled_APC_F" in _parentClasses) exitWith {
+    if ("Wheeled_APC" in _parentClasses) exitWith {
         if (_checkWeapons) then {
             _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then { 
                 if (_isAA) then {
@@ -64,7 +64,7 @@ if ("LandVehicle" in _parentClasses) then {
             }
         }
     };
-    if ("Truck_F" in _parentClasses) exitWith {
+    if ("Truck" in _parentClasses) exitWith {
         if (_checkWeapons) then {
             _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then {
                 if (_isAA) then {
@@ -100,7 +100,7 @@ if ("LandVehicle" in _parentClasses) then {
     };
 
     // Tracked
-    if ("APC_Tracked_01_base_F" in _parentClasses || "APC_Tracked_02_base_F" in _parentClasses || "CUP_M113_Base" in _parentClasses || "CUP_MTLB_Base" in _parentClasses || "CUP_AAV_Base" in _parentClasses || "CUP_M2Bradley_Base" in _parentClasses || "CUP_FV432_Bulldog_Base" in _parentClasses || "CUP_FV510_Base" in _parentClasses || "CUP_MCV80_Base" in _parentClasses) exitWith {
+    if ("APC_Tracked" in _parentClasses || "M113" in _parentClasses || "MTLB" in _parentClasses || "AAV" in _parentClasses || "M2Bradley" in _parentClasses || "FV432_Bulldog" in _parentClasses || "FV510" in _parentClasses || "MCV80" in _parentClasses || "bmp" in _parentClasses || "bmd" in _parentClasses) exitWith {
         if (_checkWeapons) then {
             _vehType = if ([_class] call DMORBAT_fnc_isVehicleArmed) then {
                 if (_isAA) then {

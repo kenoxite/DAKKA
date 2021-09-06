@@ -225,7 +225,7 @@ _fnc_createInfGroup = {
 
         // Sort from greater to lower damage
         _ATlaunchers sort false;
-        // diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (sorted): %1", _ATlaunchers];
+        diag_log format ["DMORBAT: createFactionGroups - _ATlaunchers (sorted): %1", _ATlaunchers];
 
         // Separate AT from HAT launchers
         private _ATammount = count _ATlaunchers;
@@ -248,7 +248,7 @@ _fnc_createInfGroup = {
             private _unitLauncher = _weapons arrayIntersect _HATlaunchers;
             // diag_log format ["DMORBAT: createFactionGroups - _unitLauncher: %1", _unitLauncher];
             // if ((_unitLauncher select 0) in _HATlaunchers) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
-            if (count _unitLauncher > 0 || "_hat" in (toLowerANSI _x)) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
+            if ((count _unitLauncher > 0 || "_hat" in (toLowerANSI _x)) && !("_lat" in (toLowerANSI _x))) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
         } forEach _riflemenAT;
         _riflemenAT = +_tempRiflemenAT;
         _tempRiflemenAT = nil;

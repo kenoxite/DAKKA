@@ -64,7 +64,7 @@ _nul = [_unit] spawn {
     _nearestBuilding = nearestBuilding _unit;
     _nearestBuildingPos = _nearestBuilding buildingPos 1;
     if ((count _nearTerrObj) > 0) then {
-        diag_log format ["DMORBAT: spawnMan - Unit %1 (%2) too close to rocks or non enterable buildints. Trying to relocate it to a safer position...", _unit, _unitClass];
+        diag_log format ["DMORBAT: spawnMan - Unit %1 (%2) too close to rocks or non enterable buildings. Trying to relocate it to a safer position...", _unit, _unitClass];
         _dist = 7;
         if !(_nearestBuilding in _nearTerrObj) then {
             _dist = _unit distance (_nearTerrObj select 0);
