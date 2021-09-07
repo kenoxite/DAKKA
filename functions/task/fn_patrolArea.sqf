@@ -71,7 +71,7 @@ for [{private _i = 0}, {_i < _nodesAmount}, {_i = _i + 1}] do
             if (_isMan) then {
                 _grp setBehaviour "SAFE";
             } else {
-                _grp setBehaviour "COMBAT";
+                _grp setBehaviour "AWARE";
             };
         };
         _grp setCombatMode "RED";

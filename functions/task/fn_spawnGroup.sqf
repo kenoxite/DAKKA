@@ -100,8 +100,9 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                  for [{private _i = 0}, {_i < _tries && !_safeSpotFound}, {_i = _i + 1}] do 
                 {
                     _nearTerrObj = nearestTerrainObjects [_unitPos, [], _safeRadius, false, true];
-                    if ((count _nearTerrObj) > 0) then {
-                        diag_log format ["DMORBAT: spawnGroup - Vehicle %1 (%2) is dangerously close to terrain objects. Trying to repositioning it to a safer place...", _unit, _unitClass];
+                    _nearVeh = nearestObjects [_unitPos, ["Land", "Air"], _safeRadius];
+                    if ((count _nearTerrObj) > 0 || (count _nearVeh) > 0) then {
+                        diag_log format ["DMORBAT: spawnGroup - Vehicle %1 (%2) is dangerously close to other objects. Trying to repositioning it to a safer place...", _unit, _unitClass];
                         // Make sure vehicle has spawned in a safe spot
                         _emptyPos = [_unitPos, _safeRadius, 200 max (_safeRadius + _distMod), 20, 0, 0.5, 0, [], [_unitPos, _unitPos]] call BIS_fnc_findSafePos;
                         if (count _emptyPos < 3) then {

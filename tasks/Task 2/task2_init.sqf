@@ -41,27 +41,6 @@ DMORBAT_task2_locDir = (_categoryLocations select _locationIndex) select 1;
 if (count DMORBAT_task2_locPos < 3) then { DMORBAT_task2_locPos pushBack 0 };
 diag_log format ["DMORBAT: Task 2 - Initializing Location %1", _locationIndex + 1];
 
-// CREATE MARKERS
-_ctrl ctrlSetText format ["Creating markers...", ""];
-// Contested area
-_pos = DMORBAT_task2_locPos;
-_txt = "Contested Area";
-_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_location_area", _pos, "empty", "RECTANGLE", [500, 250], DMORBAT_task2_locDir, "FDiagonal", "ColorEAST", 0.8, _txt] call BIS_fnc_stringToMarker;
-// Friendly spawn
-_posB = [DMORBAT_task2_locPos, -500, DMORBAT_task2_locDir] call BIS_fnc_relPos;
-_txt = "Friendly Spawn Area";
-_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_location_area_friendly", _posB, "empty", "RECTANGLE", [500, 500], DMORBAT_task2_locDir, "Border", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
-// Enemy spawn
-_posO = [DMORBAT_task2_locPos, 500, DMORBAT_task2_locDir] call BIS_fnc_relPos;
-_txt = "Enemy Spawn Area";
-_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_location_area_enemy", _posO, "empty", "RECTANGLE", [500, 500], DMORBAT_task2_locDir, "Border", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
-
-// Find a start position
-_ctrl ctrlSetText format ["Finding starting positions...", ""];
-_startPos_B = _posB;
-_startPos_O = _posO;
-DMORBAT_startPos_O = _startPos_O;
-
 // FUNCTIONS
 DMORBAT_relPosRefObj = "Flag_BI_F" createVehicle DMORBAT_task2_locPos;
 DMORBAT_relPosRefObj setDir DMORBAT_task2_locDir;
@@ -79,6 +58,12 @@ _fnc_getSpawnPos = {
     // _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_relposH", _relPosH, "mil_dot", "ICON", [1, 1], 0, "Solid", "ColorWEST", 1, ""] call BIS_fnc_stringToMarker;
     DMORBAT_relPosRefObj getRelPos [_distLoc, 0]
 };
+
+// Find a start position
+_ctrl ctrlSetText format ["Finding starting positions...", ""];
+_startPos_B = [DMORBAT_task2_locPos, -500, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+_startPos_O = [DMORBAT_task2_locPos, 500, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+DMORBAT_startPos_O = _startPos_O;
 
 diag_log "DMORBAT: Task 2 - Spawning player group";
 _ctrl ctrlSetText format ["Spawning player group...", ""];
@@ -155,6 +140,79 @@ _friendlyLinesPos = [DMORBAT_task2_locPos, -750, DMORBAT_task2_locDir] call BIS_
 
 DMORBAT_playerGroupReady = true;
 
+// CREATE MARKERS
+_ctrl ctrlSetText format ["Creating markers...", ""];
+// Contested area
+_txt = "Contested Area";
+_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_location_area", DMORBAT_task2_locPos, "empty", "RECTANGLE", [250, 250], DMORBAT_task2_locDir, "FDiagonal", "ColorEAST", 0.8, _txt] call BIS_fnc_stringToMarker;
+// Friendly spawn area
+_posFriednlyMrkr = [DMORBAT_task2_locPos, -300, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+_txt = "Friendly Spawn Area";
+_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_location_area_friendly", _posFriednlyMrkr, "empty", "RECTANGLE", [250, 300], DMORBAT_task2_locDir, "Border", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
+// Enemy spawn area
+_posEnemyMrkr = [DMORBAT_task2_locPos, 300, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+_txt = "Enemy Spawn Area";
+_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_location_area_enemy", _posEnemyMrkr, "empty", "RECTANGLE", [250, 300], DMORBAT_task2_locDir, "Border", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
+// Enemy advancement
+_pos_AdvEnemy = [DMORBAT_task2_locPos, 250, 200, 0] call _fnc_getSpawnPos;
+_ref = "Flag_BI_F" createVehicle _pos_AdvEnemy;
+_ref hideObject true;
+_txt = "";
+_mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_enemy_advancement", _pos_AdvEnemy, "mil_arrow", "ICON", [3, 3], (_ref getRelDir DMORBAT_task2_locPos), "Solid", "ColorEAST", 0.5, _txt] call BIS_fnc_stringToMarker;
+deleteVehicle _ref;
+
+_inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","NameCityCapital", "NameCity", "NameVillage"], 500]) > 0) then { true } else { false };
+
+// Prepare location and time texts
+private _infoTextData = [DMORBAT_task2_locPos] call DMORBAT_fnc_showInfoText;
+private _locationStr = _infoTextData select 0;
+private _missionTime = _infoTextData select 1;
+if (_locationStr == "") then {
+    private _location_prefix = selectRandom [
+                "",
+                "Dashing",
+                "Rash",
+                "Fierce",
+                "Strong",
+                "Lame",
+                "Hunter",
+                "Little",
+                "Dank",
+                "Lightning",
+                "Raw",
+                "Slow"
+                ];
+    private _location_suffix = selectRandom [
+                " Ridge",
+                " Hill",
+                " Road",
+                " Rock",
+                " Race",
+                "bridge",
+                "more",
+                "land",
+                "boar",
+                "tiger",
+                "dragon",
+                "horse",
+                "pike"
+                ];
+    _locationStr = format ["%1%2", _location_prefix, _location_suffix];
+}; 
+private _location = format ["Battle of %1",_locationStr];
+
+// BRIEFING
+private _playerFactionName = getText (configFile >> "CfgFactionClasses" >> (DMORBAT_PlayerFactions select 1) >> "displayName");
+private _enemyFactionName = getText (configFile >> "CfgFactionClasses" >> (DMORBAT_EnemyFactions select 1) >> "displayName");
+private _terrainName = getText (configFile >> "CfgWorlds" >> worldName >> "description");
+
+_enemyForces = format ["<font face='RobotoCondensedBold'>%1</font>'s forces approach fast and strong in a combined arms fashion. We can expect anything from soft to heavy armored vehicles. Air units aren't to be discarded.<br/><br/>This is a force to be reckoned with.", _enemyFactionName];
+player createDiaryRecord ["Diary", ["Enemy Forces", _enemyForces], taskNull, "", false];
+
+_situation = format ["<font color='#FF8C00' size='20' face='RobotoCondensedBold'>%1</font><br/><br/><font face='RobotoCondensedBold'>%2</font> forces are making <marker name='DMORBAT_mrkr_Task2_enemy_advancement'>hasty advance</marker> towards <marker name='DMORBAT_mrkr_Task2_location_area'>%3</marker>. This site is of extremely strategic importance to keep our hold of <font face='RobotoCondensedBold'>%4</font>.<br/><br/>We need to push our way through the contested area and either <font face='RobotoCondensedBold'>eliminate all enemy forces</font> found there or <font face='RobotoCondensedBold'>fully deter their advancement</font>.", toUpper (_location), _enemyFactionName, if (_locationStr == "") then { "this area" } else { _locationStr }, _terrainName];
+if (_inTown) then { _situation = format ["%1<br/><br/>Sweep the area for enemies. The enemy will surely try to <font face='RobotoCondensedBold'>garrison some of %2's buildings</font> and mount a defensive position there.", _situation, _locationStr]; };
+player createDiaryRecord ["Diary", ["Situation", _situation], taskNull, "", false];
+
 // Hide marta markers
 p1 setVariable ["MARTA_hide", DMORBAT_martaHide];
 // Show map
@@ -169,9 +227,17 @@ showGPS false;
 openMap true;
 [markerSize "DMORBAT_mrkr_Task2_location_area", markerPos "DMORBAT_mrkr_Task2_location_area", 0] call BIS_fnc_zoomOnArea;
 hintSilent "Close the map to start the task";
-waitUntil { !visibleMap };
+// Stop time
+_initdate = date;
+while {visibleMap} do
+{
+    setdate _initdate;
+    sleep 0.5;
+}; 
+// waitUntil { !visibleMap };
+// deleteMarker "DMORBAT_mrkr_Task2_enemy_advancement";
 hintSilent "";
-cutText ["", "BLACK IN", 2];
+cutText ["", "BLACK IN", 5];
 // Restart loading screen
 _loadingScreen = createDialog "DMORBAT_Loading_Screen";
 waitUntil {_loadingScreen};
@@ -226,8 +292,6 @@ _startingMusic = selectRandom [
 // ["playMusic", [_startingMusic]] call BIS_fnc_jukebox;
 playMusic _startingMusic;
 
-_inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","NameCityCapital", "NameCity", "NameVillage"], 500]) > 0) then { true } else { false };
-
 // Prepare safe empty positions array
 // diag_log "DMORBAT: Task 2 - Preparing safe empty positions";
 // _ctrl ctrlSetText format ["Looking for safe positions...", ""];
@@ -269,7 +333,13 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
 		if (!isNull _grp) then {
 			deleteWaypoint [_grp, 0];
             DMORBAT_O_InfGrps pushBack _grp;
-            [_grp, [_spawnPos, -(_spawnDist), DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "MOVE", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DMORBAT_fnc_occupyHouse;"]] call DMORBAT_fnc_GroupWp;
+            // [_grp, [_spawnPos, -(_spawnDist), DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DMORBAT_fnc_occupyHouse;"]] call DMORBAT_fnc_GroupWp;
+
+            // Move close to contested
+            [_grp, [_spawnPos, -100, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "AWARE", "NORMAL", "LINE", "RED", 25, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+            // Push and search for enemies
+            [_grp, [_spawnPos, -(_spawnDist), DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DMORBAT_fnc_occupyHouse;"]] call DMORBAT_fnc_GroupWp;
 		};
 		sleep 0.001;
 	}; 
@@ -311,7 +381,12 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
                         } else {
                             50
                         };
-            [_grp, [DMORBAT_task2_locPos, _wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "COMBAT", "NORMAL", if (_inTown && (count DMORBAT_O_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 100] call DMORBAT_fnc_GroupWp;
+            // [_grp, [DMORBAT_task2_locPos, _wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "COMBAT", "NORMAL", if (_inTown && (count DMORBAT_O_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 100] call DMORBAT_fnc_GroupWp;
+            // Move close to contested area and dismount cargo
+            [_grp, [_spawnPos, -50, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "UNLOAD", "AWARE", "FULL", "LINE", "RED", 50, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+            // Push and search for enemies
+            [_grp, [_spawnPos, -300, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DMORBAT_O_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
@@ -343,7 +418,7 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
         if (!isNull _grp) then {
             deleteWaypoint [_grp, 0];
             DMORBAT_O_AirGrps pushBack _grp;
-            [_grp, [DMORBAT_task2_locPos, 250, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "COMBAT", "NORMAL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
+            [_grp, [_spawnPos, -50, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
@@ -381,7 +456,13 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
         if (!isNull _grp) then {
             deleteWaypoint [_grp, 0];
             DMORBAT_B_InfGrps pushBack _grp;
-            [_grp, [_spawnPos, _spawnDist + 200, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT"";"]] call DMORBAT_fnc_GroupWp;
+            // [_grp, [_spawnPos, _spawnDist + 200, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT"";"]] call DMORBAT_fnc_GroupWp;
+
+            // Move close to contested
+            [_grp, [_spawnPos, _spawnDist - 200, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "AWARE", "NORMAL", "LINE", "RED", 25, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+            // Push and search for enemies
+            [_grp, [_spawnPos, _spawnDist + 150, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
@@ -423,7 +504,11 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
                         } else {
                             -50
                         };
-            [_grp, [DMORBAT_task2_locPos, -_wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "COMBAT", "NORMAL", if (_inTown && (count DMORBAT_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 100] call DMORBAT_fnc_GroupWp;
+            // Move close to contested area and dismount cargo
+            [_grp, [_spawnPos, _spawnDist-250, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "UNLOAD", "AWARE", "FULL", "LINE", "RED", 50, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+            // Push and search for enemies
+            [_grp, [_spawnPos, _spawnDist -_wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DMORBAT_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", "if (behaviour this != ""COMBAT"") then { if (random 1 > 0.9) then { this globalRadio ""SentClear""; }; };"]] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
@@ -455,7 +540,7 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
         if (!isNull _grp) then {
             deleteWaypoint [_grp, 0];
             DMORBAT_B_AirGrps pushBack _grp;
-            [_grp, [DMORBAT_task2_locPos, -250, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "COMBAT", "NORMAL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
+            [_grp, [_spawnPos, _spawnDist-250, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
@@ -466,13 +551,22 @@ _inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","Name
     _ctrl ctrlSetText format ["Preparing player group...", ""];
     // DMORBAT_martaHide pushBack DMORBAT_PlayerNewGroup;
     _wpDist = if (count DMORBAT_B_InfGrps == 0) then {
-                    -50
+                    -100
                 } else {
-                    200
+                    100
                 };
-    _battleWp = [DMORBAT_PlayerNewGroup, [DMORBAT_task2_locPos, _wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "AWARE", "NORMAL", if (_inTown && (count DMORBAT_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 50, "CLEAR AREA", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT"";"]] call DMORBAT_fnc_GroupWp;
-    _battleWp setWaypointVisible false;
-    _battleWp showWaypoint "EASY";
+    // _battleWp1 = [DMORBAT_PlayerNewGroup, [DMORBAT_task2_locPos, _wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "SAD", "AWARE", "NORMAL", if (_inTown && (count DMORBAT_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 50, "CLEAR AREA", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT"";"]] call DMORBAT_fnc_GroupWp;
+
+    // Move close to contested area
+    _battleWp1 = [DMORBAT_PlayerNewGroup, [DMORBAT_task2_locPos, -200, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "AWARE", "NORMAL", "LINE", "RED", 25, "MOVE", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+    // Push and search for enemies
+    _battleWp2 = [DMORBAT_PlayerNewGroup, [DMORBAT_task2_locPos, _wpDist, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "NORMAL", if (_inTown && (count DMORBAT_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 50, "CLEAR AREA", false, false, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+    _battleWp1 setWaypointVisible false;
+    _battleWp1 showWaypoint "EASY";
+    _battleWp2 setWaypointVisible false;
+    _battleWp2 showWaypoint "EASY";
 
 // Reveal units
 // - BLUFOR
@@ -526,6 +620,11 @@ enableRadio true;
 DMORBAT_missionStartTime = time;
 diag_log "DMORBAT: Task 2 - Initialized";
 
+// Equip NVG to player if night
+_sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
+_isNight = (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1));
+if (_isNight) then { p1 action ["nvGoggles", p1]; };
+
 // Control the flow of the task
 [] execVM "tasks\Task 2\task2_flow.sqf";
 
@@ -538,37 +637,5 @@ saveGame;
 
 sleep 2;
 // Show mission info text
-private _infoTextData = [DMORBAT_task2_locPos] call DMORBAT_fnc_showInfoText;
-private _location = _infoTextData select 0;
-private _missionTime = _infoTextData select 1;
-if (_location == "") then {
-    private _location_prefix = selectRandom [
-                "",
-                "DASHING",
-                "RASH",
-                "FIERCE",
-                "STRONG",
-                "LAME",
-                "HUNTER",
-                "LITTLE",
-                "SNARKY",
-                "LIGHTNING",
-                "RAW",
-                "SLOW"
-                ];
-    private _location_suffix = selectRandom [
-                " CAMINO",
-                " RIDGE",
-                " HILL",
-                "MORE",
-                "LAND",
-                "BOAR",
-                "TIGER",
-                "DRAGON",
-                "ROAD",
-                "PIKE"
-                ];
-    _location = format ["%1%2", _location_prefix, _location_suffix];
-}; 
-_location = format ["BATTLE OF %1",_location];
 [toUpper (_location), _missionTime] spawn BIS_fnc_infoText;
+// [[toUpper (_location), 0.5, 2], [_missionTime, 0.5, 4, 0.5]] spawn BIS_fnc_EXP_camp_SITREP;

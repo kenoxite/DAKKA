@@ -58,7 +58,7 @@ private _factionUnits = [];
                             if (_unitClass isKindOf 'StaticMortar') then {
                                 _allowUnit = true;
                             } else {
-                                if (_subcat == "EdSubcat_Artillery") then {
+                                if (_subCat == "EdSubcat_Artillery" || _subCat == "rhs_EdSubcat_Artillery") then {
                                     _allowUnit = true;
                                 };
                             };
@@ -72,15 +72,15 @@ private _factionUnits = [];
                          _allowUnit = true;
                     } else {
                         if (_filterType == "CAS") then {
-                            if ("CAS_Heli" in _availableForSupportTypes) then {
+                            if ("CAS_Heli" in _availableForSupportTypes || "rhs_CAS_Heli" in _availableForSupportTypes) then {
                                 _allowUnit = true;
                             };
-                            if ("CAS_Bombing" in _availableForSupportTypes) then {
+                            if ("CAS_Bombing" in _availableForSupportTypes || "rhs_CAS_Bombing" in _availableForSupportTypes) then {
                                 _allowUnit = true;
                             };
                         };
                         if (_filterType == "Air Transport") then {
-                            if ("Transport" in _availableForSupportTypes) then {
+                            if ("Transport" in _availableForSupportTypes || "rhs_Transport" in _availableForSupportTypes) then {
                                 _allowUnit = true;
                             };
                         };

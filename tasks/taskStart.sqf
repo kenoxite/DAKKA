@@ -16,14 +16,16 @@ _null = [] spawn {
             setDate _newDate;
             // Random date with full moon
             // setDate selectRandom (2035 call DMORBAT_fnc_fullMoonDates);
-            DMORBAT_noNight = true;
+            DMORBAT_noNight = DMORBAT_noNightAuto;
             [] spawn DMORBAT_fnc_randomTime;
+            DMORBAT_customDate = date;
             // Brighter nights
             // _null = [] spawn {
             //     sleep 0.1;
             //     _sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
             //     if (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1)) then { setAperture 1 } else { setAperture 0 };
             // };
+            DMORBAT_weatherEffect = "None";
             [] spawn DMORBAT_fnc_randomWeather;
         } else {
             sleep 1;
@@ -42,6 +44,7 @@ _null = [] spawn {
         };
 };
 
+[] spawn DMORBAT_fnc_cameraIntro;
 
 // LOCATIONS
 // Set random location if none was specified in a custom game

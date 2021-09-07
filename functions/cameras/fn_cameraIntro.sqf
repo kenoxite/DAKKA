@@ -59,4 +59,7 @@ _camera camSetFocus [10, 1];
 _camera cameraeffect ["INTERNAL", "BACK"];
 _camera camCommit 0;
 
+_sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
+if (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1)) then { camUseNVG true; };
+ 
 cutText ["", "BLACK IN"];

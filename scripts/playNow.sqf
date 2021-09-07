@@ -2,7 +2,6 @@
 
 #include "..\control_defines.hpp";
 
-[] spawn DMORBAT_fnc_cameraIntro;
 cutText ["", "BLACK IN", 999];
 enableRadio false;
 
@@ -175,8 +174,34 @@ _playableUnit = floor (random ((count (_playerGroup select 0)) - 1));
 _playerData = [_playableUnit, 0, []];
 [_taskData, "Player data", _playerData] call BIS_fnc_setToPairs;
 
-DMORBAT_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", ((_playerGroup select 0) select 0), DMORBAT_friendlyInfEdCat] };
+// Check for NVG
+_playerUnitClass = (_playerGroup select 0) select _playableUnit;
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: _playerUnitClass: %1", _playerUnitClass] };
+_playerGear = [];
+_playerLinkedItems =  getArray (configFile >> "CfgVehicles" >> _playerUnitClass >> "linkedItems");
+_playerGear append _playerLinkedItems;
+_playerItems =  getArray (configFile >> "CfgVehicles" >> _playerUnitClass >> "Items");
+_playerGear append _playerItems;
+_playerBackpack = getText (configFile >> "CfgVehicles" >> _playerUnitClass >> "backpack");
+if !(isNil "_playerBackpack") then {
+    if (_playerBackpack != "") then {
+        _playerBackpackItems = getArray (configFile >> "CfgVehicles" >> _playerBackpack >> "TransportItems");
+        _playerGear append _playerBackpackItems;
+    };
+};
+_hasNVG = false;
+{
+    if (_x isKindOf ["NVGoggles", configFile >> "CfgWeapons"]) then {
+        _hasNVG = true;
+    };
+} forEach _playerGear;
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: _playerGear: %1", _playerGear] };
+if (!_hasNVG) then {
+};
+DMORBAT_noNightAuto = if (!_hasNVG) then { true } else { false };
+
+DMORBAT_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> _playerUnitClass >> "editorSubcategory");
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", _playerUnitClass, DMORBAT_friendlyInfEdCat] };
 
 // FUNCTIONS
 /*
@@ -375,7 +400,7 @@ if (_task == 2) then {
     } else {
         _eligibleInf = +_infGroups;
     };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 2,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 9,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 2,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 9,/*_skill*/ 2,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // AT Teams
     _eligibleAT = [];
@@ -412,7 +437,7 @@ if (_task == 2) then {
             _eligibleAT = +_infGroups;
         };
     };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 2,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // AA Teams
     _eligibleAA = [];
@@ -431,7 +456,7 @@ if (_task == 2) then {
             _eligibleAA = +_infGroups;
         };
     };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 2,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call _fnc_addGroupsToTaskData;
 
     // LAND
     // Armor
@@ -453,22 +478,22 @@ if (_task == 2) then {
         };
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor] };
         if (count _eligibleArmor > 0) then {
-            [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1] call _fnc_addGroupsToTaskData;
+            [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 2] call _fnc_addGroupsToTaskData;
         };
     };
 
     // Mechanized infantry
     if (count _mechGroups > 0) then {
-        _amount = if (count _eligibleArmor == 0) then { 2 } else { 1 };
+        _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 3 } else { 1 };
         ["Friendly groups", "Land Vehicles", _mechGroups, _amount] call _fnc_addGroupsToTaskData;
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _mechGroups,/*_groupsAmount*/ _amount] call _fnc_addGroupsToTaskData;
+        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _mechGroups,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 2,/*_skill*/ 2] call _fnc_addGroupsToTaskData;
     };
 
     // Motorized infantry, if there's no mech inf
     if (count _motGroups > 0 && count _mechGroups == 0) then {
-        _amount = if (count _eligibleArmor == 0) then { 3 } else { 1 };
+        _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 4 } else { 1 };
         ["Friendly groups", "Land Vehicles", _motGroups, _amount] call _fnc_addGroupsToTaskData;
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _motGroups,/*_groupsAmount*/ _amount] call _fnc_addGroupsToTaskData;
+        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _motGroups,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 3,/*_skill*/ 2] call _fnc_addGroupsToTaskData;
     };
 
     // AIR
@@ -500,9 +525,9 @@ if (_task == 2) then {
             _airGroups pushBack [[_x]];
         } forEach _factionAirVeh;
 
-        _amount = if (count _eligibleArmor == 0) then { 2 } else { 1 };
+        _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 2 } else { 1 };
         if (count _airGroups > 0) then {
-            [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _airGroups,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1] call _fnc_addGroupsToTaskData;
+            [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _airGroups,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 2] call _fnc_addGroupsToTaskData;
         };
     };
 
@@ -712,8 +737,8 @@ if (_task == 1) then {
                 _patrolCarGroup pushBack _patrolCarInf;
             };
         };
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Trying to create the patrol car group: %1", _patrolCarGroup] };
-        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 0.5 + floor (random (1.5)),/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 1,/*_sameEdCat*/ false] call _fnc_addGroupsToTaskData;
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: Trying to create the patrol car group: %1", _patrolCarGroup] };
+        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ [[_patrolCarGroup]],/*_groupsAmount*/ 0.5 + floor (random (1.5)),/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 1,/*_sameEdCat*/ false] call _fnc_addGroupsToTaskData;
     };
 
     // DEFENDERS

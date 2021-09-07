@@ -41,7 +41,8 @@ private _infCount = 0;
         if (!_specific) exitWith { _return = "Land" };
         _land pushBackUnique _x;
     };
-    if (_x isKindOf "Air" && _forEachIndex == 0) exitWith { _return = "Air" };
+    // if (_x isKindOf "Air" && _forEachIndex == 0) exitWith { _return = "Air" };
+    if (_x isKindOf "Air") exitWith { _return = "Air" };
     if (_x isKindOf "Ship") exitWith { _return = "Ship" };
 } forEach _unitClasses;
 

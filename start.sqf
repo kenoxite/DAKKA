@@ -129,6 +129,7 @@ DMORBAT_PlayerNewGroup = group p1;
 DMORBAT_playerGroupReady = false;
 DMORBAT_loadedSavegame = false;
 DMORBAT_martaHide = [];
+DMORBAT_noNightAuto = false;
 
 // TASK SETUP
 DMORBAT_TasksArr = [1, 2];
@@ -141,7 +142,7 @@ DMORBAT_Task1_Desc_Editor = "The objective is to locate the enemy outpost and th
 // Task 2
 DMORBAT_Task2_Title = "Stop the Enemy Advance";
 DMORBAT_Task2_Image = "images\task2.paa";
-DMORBAT_Task2_Desc_Short = "Join the battle and help stop the enemy advancement.";
+DMORBAT_Task2_Desc_Short = "Join the battle and help stop the enemy advance.";
 DMORBAT_Task2_Desc_Editor = "Your goal is to stop the enemy advancement towards a strategic position. Contact with the enemy will happen in the first minutes and it will last until no enemies are present in the contested area or they retreat.\nThis task gives you an opportunity to try your best in a combined arms battle, although all this will depend on the type and amount of units you use.";
 
 // Default tasks data

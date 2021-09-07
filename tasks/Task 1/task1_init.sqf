@@ -104,7 +104,7 @@ _nul = [] spawn {
             } forEach _compObjects;
         } forEach _compositionsData;
     };
-};
+};	
 
 // CREATE MARKERS
 _ctrl ctrlSetText format ["Creating markers...", ""];
@@ -115,7 +115,7 @@ _searchPos = [[[DMORBAT_task1_locPos, 175]], []] call BIS_fnc_randomPos;
 // Display suggested location on map
 DMORBAT_task1_location = createLocation ["o_installation", _searchPos, 30, 30];
 DMORBAT_task1_location setText "Enemy Outpost?";
-DMORBAT_task1_location setSide east;	
+DMORBAT_task1_location setSide east;
 
 // Find a start position
 _ctrl ctrlSetText format ["Finding a start position...", ""];
@@ -135,7 +135,7 @@ diag_log "DMORBAT: Task 1 - Creating tasks";
 _ctrl ctrlSetText format ["Creating tasks...", ""];
 // Task 1 (main)
 _title = call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task];
-_description = format ["%1<br /><br />We've managed to intercept the enemy radio channel, so you will be up to date of their whereabouts.", call compile format ["DMORBAT_Task%1_Desc_Short", DMORBAT_Task]];
+_description = format ["%1", call compile format ["DMORBAT_Task%1_Desc_Short", DMORBAT_Task]];
 _marker = "";
 _task1 = [DMORBAT_PlayerNewGroup, "DMORBAT_Task1", [_description, _title, _marker], objNull, "ASSIGNED", -1, false, "move1", false] call BIS_fnc_taskCreate;
 // Task 1-1
@@ -156,6 +156,29 @@ _basePos = getPos DMORBAT_officer;
 
 DMORBAT_playerGroupReady = true;
 
+// BRIEFING
+private _playerFactionName = getText (configFile >> "CfgFactionClasses" >> (DMORBAT_PlayerFactions select 0) >> "displayName");
+private _enemyFactionName = getText (configFile >> "CfgFactionClasses" >> (DMORBAT_EnemyFactions select 0) >> "displayName");
+private _terrainName = getText (configFile >> "CfgWorlds" >> worldName >> "description");
+private _infoTextData = [DMORBAT_task1_locPos] call DMORBAT_fnc_showInfoText;
+private _locationStr = _infoTextData select 0;
+private _missionTime = _infoTextData select 1;
+private _location = _locationStr;
+if (_locationStr != "" ) then {
+    _location = format ["near %1", _locationStr];
+} else {
+    _location = format ["somewhere in %1", _terrainName];
+}; 
+
+_intel = format ["The information gathered by the intel guys suggests there's a <font face='RobotoCondensedBold'>%1</font> outpost <marker name='DMORBAT_mrkr_Task1_searchArea'>%2</marker>, currenlty being used as a training center.<br/><br/>Intel has also managed to <font face='RobotoCondensedBold'>intercept the enemy radio channel</font>, so you will be up to date of their whereabouts.<br/><br/>No civilian presence has been detected in the area.", _enemyFactionName, if (_locationStr == "") then { "in this area" } else { _location }];
+player createDiaryRecord ["Diary", ["Intel", _intel], taskNull, "", false];
+
+_enemyForces = format ["Intel suggests that <font face='RobotoCondensedBold'>%1</font>'s forces in the area consist of several patrols equipped with <font face='RobotoCondensedBold'>small arms</font>.<br/><br/>All hints to the contingent present being mostly made up of <font face='RobotoCondensedBold'>inexperienced</font> troops. That doens't mean they can't present a challenge to your team.", _enemyFactionName];
+player createDiaryRecord ["Diary", ["Enemy Forces", _enemyForces], taskNull, "", false];
+
+_situation = format ["The presence of <font face='RobotoCondensedBold'>%1</font> forces in <font face='RobotoCondensedBold'>%2</font> is growing stronger by the day and is menacing the stability of the region. But maybe today we can do something to palliate that.<br/><br/>Our intel guys are confindent that a new training center has been established <marker name='DMORBAT_mrkr_Task1_searchArea'>%3</marker>. Your team will be deployed in the AO with the task of <font face='RobotoCondensedBold'>locating that outpost and neutralizing all enemy activity</font> in the area.<br/><br/>Once the objective is accomplished, you are to <font face='RobotoCondensedBold'>exfil</font> by any means necessary.<br/><br/>If intel is correct, the AO will be patrolled, so <font face='RobotoCondensedBold'>stealth is advised</font>. In any case, you are the ones to decide the course of action once you assess the situation there.", _enemyFactionName, _terrainName, if (_locationStr == "") then { "somewhere in this area" } else { _location }];
+player createDiaryRecord ["Diary", ["Situation", _situation], taskNull, "", false];
+
 // Hide marta markers
 p1 setVariable ["MARTA_hide", DMORBAT_martaHide];
 
@@ -172,9 +195,16 @@ showGPS false;
 openMap true;
 [markerSize "DMORBAT_mrkr_Task1_searchArea", markerPos "DMORBAT_mrkr_Task1_searchArea", 0] call BIS_fnc_zoomOnArea;
 hintSilent "Close the map to start the task";
-waitUntil { !visibleMap };
+// Stop time
+_initdate = date;
+while {visibleMap} do
+{
+    setdate _initdate;
+    sleep 0.5;
+}; 
+// waitUntil { !visibleMap };
 hintSilent "";
-cutText ["", "BLACK IN", 2];
+cutText ["", "BLACK IN", 5];
 // Restart loading screen
 _loadingScreen = createDialog "DMORBAT_Loading_Screen";
 waitUntil {_loadingScreen};
@@ -279,6 +309,7 @@ playMusic _startingMusic;
 		sleep 0.001;
 	}; 
 
+    _garrisonRadius = 50;
 	_defendGroups = +(_enemyGroups select 1) select 1;
 	for [{private _i = 0}, {_i < count _defendGroups}, {_i = _i + 1}] do {
 		_grp = [(_defendGroups select _i) select 1, DMORBAT_task1_locPos, east, 30] call DMORBAT_fnc_spawnGroup;
@@ -300,7 +331,8 @@ playMusic _startingMusic;
                 };
             } forEach (units _grp);
             // Garrison nearest buildings
-            _nonGarrisoned = [DMORBAT_task1_locPos, _freeUnits, 50, true, true, false, false] call DMORBAT_fnc_occupyHouse;
+            if (_i > 0) then { _garrisonRadius = _garrisonRadius * 2; };
+            _nonGarrisoned = [DMORBAT_task1_locPos, _freeUnits, _garrisonRadius, true, true, false, false] call DMORBAT_fnc_occupyHouse;
 
             // Notify of enemy deaths on global radio
             {
@@ -408,6 +440,11 @@ enableRadio true;
 DMORBAT_missionStartTime = time;
 diag_log "DMORBAT: Task 1 - Initialized";
 
+// Equip NVG to player if night
+_sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
+_isNight = (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1));
+if (_isNight) then { player action ["nvGoggles", player]; };
+
 // Control the flow of the task
 [] execVM "tasks\Task 1\task1_flow.sqf";
 
@@ -420,12 +457,5 @@ saveGame;
 
 sleep 2;
 // Show mission info text
-private _infoTextData = [DMORBAT_task1_locPos] call DMORBAT_fnc_showInfoText;
-private _location = _infoTextData select 0;
-private _missionTime = _infoTextData select 1;
-if (_location != "" ) then {
-    _location = format ["NEAR %1", _location];
-} else {
-    _location = format ["SOMEWHERE IN %1", worldName];
-}; 
 [toUpper (_location), _missionTime] spawn BIS_fnc_infoText;
+// [[toUpper (_location), 0.5, 2], [_missionTime, 0.5, 4, 0.5]] spawn BIS_fnc_EXP_camp_SITREP;

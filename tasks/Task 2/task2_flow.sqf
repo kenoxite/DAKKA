@@ -24,7 +24,7 @@ _task_2_checks = [] spawn {
     private _defeated = false;
 
     // Functions
-    _showTimer = {
+    _fnc_showTimer = {
         _ctrl = _display displayCtrl IDC_TXT_TASK2_COUNTER_AREAHOLDER;
         _ctrl ctrlSetText "Area holder:";
         _ctrl ctrlSetBackgroundColor [0,0,0,0.5];
@@ -35,7 +35,7 @@ _task_2_checks = [] spawn {
         _ctrl ctrlSetBackgroundColor [0,0,0,0.5];
         _ctrl ctrlshow true;
     };
-    _hideTimer = {
+    _fnc_hideTimer = {
         _ctrl = _display displayCtrl IDC_TXT_TASK2_COUNTER_AREAHOLDER;
         _ctrl ctrlshow false;
         _ctrl = _display displayCtrl IDC_IMG_TASK2_COUNTER_AREAHOLDER;
@@ -45,7 +45,7 @@ _task_2_checks = [] spawn {
         _ctrl ctrlSetBackgroundColor [0,0,0,0];
         _ctrl ctrlshow false;
     };
-    _popupTimer = {
+    _fnc_popupTimer = {
         // Move timer to top and enbiggen
         _ctrl = _display displayCtrl IDC_TXT_TASK2_COUNTER_TIMER;
         _ctrl ctrlSetPosition[
@@ -58,7 +58,7 @@ _task_2_checks = [] spawn {
         _ctrl ctrlSetBackgroundColor [0,0,0,1];
         _ctrl ctrlCommit 0.1;
     };
-    _resetTimerPos = {
+    _fnc_resetTimerPos = {
         // Reset timer position
         _ctrl = _display displayCtrl IDC_TXT_TASK2_COUNTER_TIMER;
         _ctrl ctrlSetText "";
@@ -89,7 +89,7 @@ _task_2_checks = [] spawn {
             _ctrl ctrlSetText "";
 
             if (_timerPosition == "top") then {
-                call _popupTimer;
+                call _fnc_popupTimer;
             };
 
             "DMORBAT_mrkr_Task2_location_area" setMarkerColor format ["Color%1", _owner];
@@ -133,7 +133,7 @@ _task_2_checks = [] spawn {
         _missionTimePassed = time - DMORBAT_missionStartTime;
         if (!DMORBAT_Task2_1_done) then {
             // Reset timer settings
-            call _showTimer;
+            call _fnc_showTimer;
             "DMORBAT_mrkr_Task2_location_area" setMarkerColor format ["Color%1", _owner];
             _ctrl = _display displayCtrl IDC_IMG_TASK2_COUNTER_AREAHOLDER;
             _ctrl ctrlSetText format ["#(rgb,8,8,3)color(%1,%2,%3,0.5)", _color select 0, _color select 1, _color select 2];
@@ -147,7 +147,7 @@ _task_2_checks = [] spawn {
             private _inContestedArea = _enemyUnits inAreaArray "DMORBAT_mrkr_Task2_location_area";
             if (_startCountingEnmy) then {
                 if (count _inContestedArea == 0) then {
-                    call _showTimer;
+                    call _fnc_showTimer;
                     if (_timeCounterEnmy == 0) then {
                         hintSilent "All enemies are dead or retreating!";
                     };
@@ -157,7 +157,7 @@ _task_2_checks = [] spawn {
                     private _remainingTime = _maxTime - _timeCounterEnmy;
                     if (_remainingTime == 30) then {
                         _timerPosition = "top";
-                        call _popupTimer;
+                        call _fnc_popupTimer;
                         2 fadeMusic 0.5;
                         //playMusic "LeadTrack05_F";
                         ["playMusic", ["LeadTrack05_F"]] call BIS_fnc_jukebox;
@@ -182,7 +182,7 @@ _task_2_checks = [] spawn {
                         DMORBAT_officer sideRadio "SentGenLosing";
                         hintSilent format ["Enemies have entered the contested area!", ""];
                         _timerPosition = "bottom";
-                        call _resetTimerPos;
+                        call _fnc_resetTimerPos;
                         2 fadeMusic 0;
                         _timeCounterEnmy = 0;
                         sleep 3;
@@ -191,7 +191,7 @@ _task_2_checks = [] spawn {
 
                     if ((markerColor "DMORBAT_mrkr_Task2_location_area") != "colorEAST") then {
                         "DMORBAT_mrkr_Task2_location_area" setMarkerColor "ColorEAST";
-                        call _showTimer;
+                        call _fnc_showTimer;
                         _ctrl = _display displayCtrl IDC_IMG_TASK2_COUNTER_AREAHOLDER;
                         _owner = "OPFOR";
                         _color = ["Map", _owner] call BIS_fnc_displayColorGet;
@@ -204,9 +204,9 @@ _task_2_checks = [] spawn {
                 // Only start counting after the first enemy has entered the area or 5 minutes have passed since the start of the mission
                 if (count _inContestedArea > 0 || _missionTimePassed > 300) then {
                     _startCountingEnmy = true;
-                    call _showTimer;
+                    call _fnc_showTimer;
                 };
-                call _hideTimer;
+                call _fnc_hideTimer;
             }; 
 
             // Check if friendlies are in the contested area
@@ -218,7 +218,7 @@ _task_2_checks = [] spawn {
             private _inContestedArea = _friendlyUnits inAreaArray "DMORBAT_mrkr_Task2_location_area";
             if (_startCountingFrly) then {
                 if (count _inContestedArea == 0) then {
-                    call _showTimer;
+                    call _fnc_showTimer;
                     if (_timeCounterFrly == 0) then {
                         DMORBAT_officer sideRadio "SentGenLosing";
                         hintSilent format ["The contested area is undefended!", ""];
@@ -226,7 +226,7 @@ _task_2_checks = [] spawn {
                     private _remainingTime = _maxTime - _timeCounterFrly;
                     if (_remainingTime == 30) then {
                         _timerPosition = "top";
-                        call _popupTimer;
+                        call _fnc_popupTimer;
                         2 fadeMusic 0.5;
                         // playMusic "Defcon";
                         ["playMusic", ["Defcon"]] call BIS_fnc_jukebox;
@@ -244,7 +244,7 @@ _task_2_checks = [] spawn {
                 } else {
                     if (_timeCounterFrly > 0) then {
                         _timerPosition = "bottom";
-                        call _resetTimerPos;
+                        call _fnc_resetTimerPos;
                         hintSilent "";
                         2 fadeMusic 0;
                         _noFriendlies = false;
@@ -263,7 +263,7 @@ _task_2_checks = [] spawn {
         if (DMORBAT_Task2_1_done) then {
             hintSilent "";
             // Hide timer
-            call _hideTimer;
+            call _fnc_hideTimer;
             DMORBAT_Task2_done = true;
             if (!_defeated) then {
                 // Friendlies won
