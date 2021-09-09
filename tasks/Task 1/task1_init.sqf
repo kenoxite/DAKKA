@@ -180,6 +180,7 @@ _situation = format ["The presence of <font face='RobotoCondensedBold'>%1</font>
 player createDiaryRecord ["Diary", ["Situation", _situation], taskNull, "", false];
 
 // Hide marta markers
+DMORBAT_martaHide pushBack DMORBAT_PlayerNewGroup;
 p1 setVariable ["MARTA_hide", DMORBAT_martaHide];
 
 // Show map
@@ -192,8 +193,9 @@ showHUD [false, false, false, false, false, false, false, false, false];
 showWatch false;
 showCompass false;
 showGPS false;
+disableMapIndicators [true, true, true, true];
 openMap true;
-[markerSize "DMORBAT_mrkr_Task1_searchArea", markerPos "DMORBAT_mrkr_Task1_searchArea", 0] call BIS_fnc_zoomOnArea;
+[[1500, 1500], markerPos "DMORBAT_mrkr_Task1_searchArea", 0] call BIS_fnc_zoomOnArea;
 hintSilent "Close the map to start the task";
 // Stop time
 _initdate = date;
@@ -215,6 +217,9 @@ showHUD _shownHUD;
 showWatch true;
 showCompass true;
 showGPS true;
+disableMapIndicators [false, false, false, false];
+DMORBAT_martaHide = DMORBAT_martaHide - [DMORBAT_PlayerNewGroup];
+p1 setVariable ["MARTA_hide", DMORBAT_martaHide];
 
 // Music
 0 fadeMusic 0.5;
@@ -441,9 +446,7 @@ DMORBAT_missionStartTime = time;
 diag_log "DMORBAT: Task 1 - Initialized";
 
 // Equip NVG to player if night
-_sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
-_isNight = (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1));
-if (_isNight) then { player action ["nvGoggles", player]; };
+if ([DMORBAT_customDate] call DMORBAT_fnc_isNight) then { player action ["nvGoggles", player]; };
 
 // Control the flow of the task
 [] execVM "tasks\Task 1\task1_flow.sqf";

@@ -272,27 +272,31 @@ class CfgFunctions
 	{
 		tag = "DMORBAT";
 
-		class General
-		{
-			file = "functions\general";
+        class Categorization
+        {
+            file = "functions\categorization";
 
-            // Data extraction
-            class extractFactionData {};
-            class extractGroupsData {};
-
-            // Data categorization
             class categorizeGroups {};
             class categorizeUnits {};
+            class categorizeInf {};
+            class categorizeATunits {};
+            
             class createFactionGroups {};
+            class createCustomInfGroups {};
+            class createCustomLandGroups {};
+            class createCustomAirGroups {};
 
-            // Units and groups
-            class spawnMan {};
-            class spawnVehicle {};
-            class deleteGroup {};
-            class deleteMan {};
-            class deleteVehicle {};
-            class cloneUnit {};
-            class spawnEnemy {};
+            class filterInfantryGroups {};
+            class filterSFGroups {};
+            class filterATteamGroups {};
+            class filterAAteamGroups {};
+            class filterArmorGroups {};
+            class filterMechGroups {};
+            class filterMotGroups {};
+            class filterAirGroups {};
+            class filterPatrolGroups {};
+            class filterPatrolCarGroups {};
+            class filterDefenderGroups {};
 
             // Type checks
             class isMan {};
@@ -302,6 +306,19 @@ class CfgFunctions
             class groupRoles {};
             class vehicleType {};
             class isVehicleArmed {};
+        };
+
+        class DataExtraction
+        {
+            file = "functions\dataextraction";
+
+            class extractFactionData {};
+            class extractGroupsData {};
+        };
+
+		class General
+		{
+			file = "functions\general";
 
             // Misc
             class realUnitbyIndex {};
@@ -309,7 +326,7 @@ class CfgFunctions
 			class middlePoint {};
 			class boundingBoxReal {};
 			class convertToSimpleObject {};
-			class useNVGflashlight {};
+            class countPassengerSeats {};
 
             // 3rd party
             class loadedFromSave { preInit = 1; };
@@ -439,6 +456,9 @@ class CfgFunctions
             class setOvercast {};
             class startWeatherEffect {};
             class resetWeatherEffects {};
+            class isNight {};
+
+            // Unused
             class fullMoonDates {};
         };
 
@@ -508,23 +528,30 @@ class CfgFunctions
 
             // Start
             class showInfoText {};
-            class setPlayerGroup {};
-            class spawnGroup {};
-            class prepareUnit {};
 
 			class GroupWp {};
 			class patrolArea {};
 			class targetVisible {};
 			class enemiesClose {};
-
-            // Misc
-            class stopAndHeal {};
-            class setUnitSkill {};
-            class unstickUnit {};
+            class addGroupsToTaskData {};
 
             // End
             class endMission {};
 		};
+
+        class SpawnDelete
+        {
+            file = "functions\spawn";
+            class spawnMan {};
+            class spawnVehicle {};
+            class spawnCrew {};
+            class spawnEnemy {};
+            class spawnGroup {};
+            class deleteGroup {};
+            class deleteMan {};
+            class deleteVehicle {};
+            class cloneUnit {};
+        };
 
 		class Support
 		{
@@ -532,5 +559,18 @@ class CfgFunctions
 
 			class spawnSupport {};
 		};
+
+        class unitsMisc
+        {
+            file = "functions\units";
+
+            class setPlayerGroup {};
+            class prepareUnit {};
+            class stopAndHeal {};
+            class setUnitSkill {};
+            class unstickUnit {};
+            class checkNVG {};
+            class useNVGflashlight {};            
+        };
 	};
 };

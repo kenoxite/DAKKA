@@ -19,17 +19,10 @@ params ["_unit", ["_giveFlashlight", true]];
 if !([_unit] call DMORBAT_fnc_isMan) exitWith { false };
 
 // Exit if it isn't dark
-// if (sunOrMoon == 1) exitWith { false };
-private _sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
-if (daytime > (_sunriseSunsetTime select 0) && daytime < (_sunriseSunsetTime select 1)) exitWith { false };
+if !([DMORBAT_customDate] call DMORBAT_fnc_isNight) exitWith { false };
 
 // Check for equipped NVG
-private _hasNVG = false;
-{
-    if (_x isKindOf ["NVGoggles", configFile >> "CfgWeapons"]) then {
-        _hasNVG = true;
-    };
-} forEach (assignedItems _unit);
+private _hasNVG = [_unit] call DMORBAT_fnc_checkNVG;
 if (_hasNVG) exitWith { true };
 
 // Check for stored NVG

@@ -19,16 +19,20 @@
 
 private ["_randomTime", "_sunriseSunsetTime", "_dawn", "_dusk", "_hour", "_minutes", "_newDate"];
 
+_sunriseSunsetTime = DMORBAT_customDate call BIS_fnc_sunriseSunsetTime;
+_dawn = ceil (_sunriseSunsetTime select 0);
+_dusk = floor (_sunriseSunsetTime select 1);
+
 if (DMORBAT_noNight) then {
-    _sunriseSunsetTime = DMORBAT_customDate call BIS_fnc_sunriseSunsetTime;
-    _dawn = ceil (_sunriseSunsetTime select 0);
-    _dusk = floor (_sunriseSunsetTime select 1);
-    _randomTime = [_dawn, _dusk - 1] call BIS_fnc_randomInt;
-    _hour = floor _randomTime;
+    _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
     _minutes = floor (random 59);
 } else {
-    // _randomTime = random 24;
-    _hour = floor (random 23);
+    private _chanceNight = if (DMORBAT_Task == 1) then { 0.6 } else { 0.3 };
+    if (floor (random 1) <= _chanceNight) then {
+        _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
+    } else {
+        _hour = floor (random 23);
+    };
     _minutes = floor (random 59);
 };
 

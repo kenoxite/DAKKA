@@ -17,7 +17,7 @@
 
 */
 
-params ["_unitsArr", "_pos", "_side", ["_maxDist", 30], ["_fly", true]]; 
+params ["_unitsArr", "_pos", "_side", ["_maxDist", 30], ["_fly", true], ["_faction", ""]]; 
 
 private _grp = grpNull;
 private _unit = objNull;
@@ -50,12 +50,16 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
     _unitLoadout = _x select 2;
     _unitSkill = _x select 4;
     _isMan = [_unitClass] call DMORBAT_fnc_isMan;
-    _unit = if (_isMan) then {
-            ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist, "NONE", true] call DMORBAT_fnc_spawnMan);
-          } else {
-            _isAir = [_unitClass] call DMORBAT_fnc_isAir;
-            ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, true] call DMORBAT_fnc_spawnVehicle);
-          };
+    _defaultVehicles = ["C_Offroad_01_F", "C_Van_01_transport_F", "C_Heli_Light_01_civil_F"];
+    _isDefaultVeh = _faction != "" && _unitClass in _defaultVehicles;
+    _unit = objNull;
+    _enableRandom = true;
+    if (_isMan) then {
+        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist, "NONE", _enableRandom] call DMORBAT_fnc_spawnMan);
+    } else {
+        _isAir = [_unitClass] call DMORBAT_fnc_isAir;
+        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, _faction] call DMORBAT_fnc_spawnVehicle);
+    };
     _unit setCaptive true;
     _unit disableAI "TARGET";
     _unit disableAI "AUTOTARGET";
@@ -76,6 +80,7 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
         } forEach (crew vehicle _unit);
         _groupVehicles pushBack _unit;
         _grp addVehicle _unit;
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - Vehicle group %1 is side %2", _grp, side _grp ] };
         if (!_isAir || (_isAir && !_fly)) then {
             _nul = [_unit, _isAir, _fly] spawn {
                 _unit = _this select 0;
@@ -86,9 +91,11 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                 // Reposition if objects are too close
                 _tries = 3;
                 _distMod = 50;
+                _distCheckArr = [100, 200, 300];
                 _safeRadius = 20 + (sizeOf _unitClass);
                 _safeSpotFound = false;
                 _alowedDamage = isDamageAllowed _unit;
+                _unit hideObject true;
                 _unit enableSimulation false;
                 _unit setVelocity [0, 0, 0];
                 _unit allowDamage false;
@@ -101,26 +108,35 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                 {
                     _nearTerrObj = nearestTerrainObjects [_unitPos, [], _safeRadius, false, true];
                     _nearVeh = nearestObjects [_unitPos, ["Land", "Air"], _safeRadius];
-                    if ((count _nearTerrObj) > 0 || (count _nearVeh) > 0) then {
-                        diag_log format ["DMORBAT: spawnGroup - Vehicle %1 (%2) is dangerously close to other objects. Trying to repositioning it to a safer place...", _unit, _unitClass];
+                    if ((count _nearTerrObj) > 0 || (count _nearVeh) > 0 || ((!_isAir || (_isAir && !_fly)) && (surfaceIsWater _unitPos || (getTerrainHeightASL _unitPos) < 0.5))) then {
+                        diag_log format ["DMORBAT: spawnGroup - Vehicle %1 - %2 (%3) is dangerously close to other objects. Trying to repositioning it to a safer place...", group _unit, _unit, _unitClass];
                         // Make sure vehicle has spawned in a safe spot
-                        _emptyPos = [_unitPos, _safeRadius, 200 max (_safeRadius + _distMod), 20, 0, 0.5, 0, [], [_unitPos, _unitPos]] call BIS_fnc_findSafePos;
+                        // [center, minDist, maxDist, objDist, waterMode, maxGrad, shoreMode, blacklistPos, defaultPos]
+                        _emptyPos = [_unitPos, _safeRadius, (_safeRadius + _distMod), _safeRadius, 0, 0.5, 0, [], [_unitPos, _unitPos]] call BIS_fnc_findSafePos;
                         if (count _emptyPos < 3) then {
                             // _emptyPos = (getPos _unit) findEmptyPosition [_safeRadius, 200, _unitClass];
                             // if (count _emptyPos > 0) then {
-                            diag_log format ["DMORBAT: spawnGroup - FOUND safe position for %1 (%2): %3", _unit, _unitClass, _emptyPos];
-                            _unit setPos _emptyPos;
+                            diag_log format ["DMORBAT: spawnGroup - FOUND safe position for %1 - %2 (%3): %4", group _unit, _unit, _unitClass, _emptyPos];
+                            // _unit setPos _emptyPos;
+                            _unit hideObject false;
+                            _unit setVehiclePosition [_emptyPos, [], _safeRadius, "NONE"];
                             // _unit setVectorUp (surfaceNormal (position _unit));
                             _safeSpotFound = true;
                         } else {
-                            diag_log format ["DMORBAT: spawnGroup - %1: NOT FOUND safe position for %2 (%3)", _i + 1, _unit, _unitClass];
+                            diag_log format ["DMORBAT: spawnGroup - %1: NOT FOUND safe position for %2 - %3 (%4)", _i + 1, group _unit, _unit, _unitClass];
                             if (_isAir && !_fly) then {
                                 diag_log "DMORBAT: spawnGroup - Unit can fly but it wasn't spawned flying. Postioning it high so it will try to fly and stay safe.";
                                 _unit setPosASL [_unitPos select 0, _unitPos select 1, 1000];
                             };
                         };
+                        if (!_safeSpotFound && _i == (_tries - 1)) then { diag_log format ["DMORBAT: spawnGroup --- WARNING --- COULDN'T FIND A SAFE POSITION for %1 - %2 (%3)!",  group _unit, _unit, _unitClass]; };
+                    } else {
+                        _unit hideObject false;
+                        _unit setVehiclePosition [_unitPos, [], _safeRadius + _distMod, "NONE"];
                     };
-                    _distMod = _distMod * (_i + 2);
+                    // _distMod = _distMod * (_i + 1);
+                    _distMod = if (_i < count _distCheckArr) then { _distCheckArr select _i } else { _distMod };
+                    _unit hideObject false;
                     _unit enableSimulation true;
                     _unit allowDamage _alowedDamage;
                     {
@@ -142,15 +158,14 @@ _grp setVariable ["VCM_Skilldisable",true]; //This command will disable an AI gr
 
 // Move passengers to vehicles
 {
-    _passengerSeats = (fullCrew [_x, "", true]) select {isNull (_x select 0)};
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - %1 has %2 passenger seats", typeOf _x, count _passengerSeats] };
-    for [{private _i = 0}, {_i < count _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
+    _passengerSeats = [typeOf _x] call DMORBAT_fnc_countPassengerSeats;
+    for [{private _i = 0}, {_i < _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
         // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - _groupPassengers; %1", _groupPassengers] };
         (_groupPassengers select 0) moveInAny _x;
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
         _groupPassengers deleteAt 0;
-        _x setUnloadInCombat [true, true];
     };
+    _x setUnloadInCombat [true, true];
     if ((count _groupPassengers) == 0) exitWith { false };
 } forEach _groupVehicles;
 

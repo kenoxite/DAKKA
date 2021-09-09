@@ -18,10 +18,7 @@
 
 params ["_unit", ["_unitLoadout", []], ["_unitSkill", 0]]; 
 
-private _sunriseSunsetTime = DMORBAT_customDate call BIS_fnc_sunriseSunsetTime;
-private _dawn = ceil (_sunriseSunsetTime select 0);
-private _dusk = floor (_sunriseSunsetTime select 1);
-private _applyFlareFix = DMORBAT_flares && (daytime < (_dawn) || daytime > (_dusk + 1));
+private _applyFlareFix = [DMORBAT_customDate] call DMORBAT_fnc_isNight;
 private _veh = vehicle _unit;
 if (_unit == effectiveCommander _veh) then {
     {

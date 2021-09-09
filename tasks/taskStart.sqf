@@ -10,21 +10,13 @@ _null = [] spawn {
         if (DMORBAT_automated) then {
             // Random date
             _newDate = DMORBAT_customDate;
-            _newDate set [0, 2035];
+            _newDate set [0, 1985];
             _newDate set [1, [1, 12] call BIS_fnc_randomInt];
             _newDate set [2, [1, 28] call BIS_fnc_randomInt];
             setDate _newDate;
-            // Random date with full moon
-            // setDate selectRandom (2035 call DMORBAT_fnc_fullMoonDates);
             DMORBAT_noNight = DMORBAT_noNightAuto;
             [] spawn DMORBAT_fnc_randomTime;
             DMORBAT_customDate = date;
-            // Brighter nights
-            // _null = [] spawn {
-            //     sleep 0.1;
-            //     _sunriseSunsetTime = date call BIS_fnc_sunriseSunsetTime;
-            //     if (daytime <= (_sunriseSunsetTime select 0) || daytime >= (_sunriseSunsetTime select 1)) then { setAperture 1 } else { setAperture 0 };
-            // };
             DMORBAT_weatherEffect = "None";
             [] spawn DMORBAT_fnc_randomWeather;
         } else {

@@ -166,10 +166,7 @@ _nul = _this spawn {
                         _veh engineOn false;
                         // Apply flare fix
                         if (DMORBAT_flares) then {
-                            private _sunriseSunsetTime = DMORBAT_customDate call BIS_fnc_sunriseSunsetTime;
-                            private _dawn = ceil (_sunriseSunsetTime select 0);
-                            private _dusk = floor (_sunriseSunsetTime select 1);
-                            if (daytime > (_dawn + 1) && daytime < (_dusk - 1)) exitWith { false };
+                            if !([DMORBAT_customDate] call DMORBAT_fnc_isNight) exitWith { false };
                             _veh addEventHandler ["Fired",{private ["_al_flare"]; _al_flare = _this select 6;[[_al_flare],"AL_flare_fix\al_flare_enhance.sqf"] remoteExec ["execVM",0,true]}];
                         };
                     };

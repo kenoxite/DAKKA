@@ -94,6 +94,7 @@ private _factionUnits = [];
                     };
                 };
             };
+            
             if (_allowUnit) then {
                 private _catName = getText (configFile >> "CfgEditorSubcategories" >> _subcat >> "displayName"); 
                 private _catIndex = [_factionUnits, _catName] call DMORBAT_fnc_findFirstNested;

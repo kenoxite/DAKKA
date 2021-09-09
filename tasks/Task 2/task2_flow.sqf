@@ -325,6 +325,8 @@ _task_2_checks = [] spawn {
                                 _x removeAllEventHandlers "FiredNear";
                                 _x forceSpeed -1;
                                 _x doFollow leader _grp;
+
+                                _x setCaptive true;
                                 
                                 // DISABLE AI MODS
                                 // LAMBS Danger
@@ -342,6 +344,8 @@ _task_2_checks = [] spawn {
                                         _x removeAllEventHandlers "FiredNear";
                                         _x forceSpeed -1;
                                         _x doFollow leader _grp;
+
+                                        _x setCaptive true;
                                 
                                         // DISABLE AI MODS
                                         // LAMBS Danger

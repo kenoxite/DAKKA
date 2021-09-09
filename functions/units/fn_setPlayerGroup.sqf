@@ -127,7 +127,9 @@ private _presentUnits = [];
 _grp setVariable ["VCM_Skilldisable",true]; //This command will disable an AI group from being impacted by Vcom AI skill changes.
 
 // Retrieve playable unit
-_playableUnit = (units _grp) select _playerIndex;   
+_playableUnit = (units _grp) select _playerIndex; 
+waitUntil {!(isNil "_playableUnit")};
+ 
 _veh = vehicle _playableUnit; 
 _leader = leader _grp; 
 _isLeader = _leader == _playableUnit;
@@ -275,20 +277,22 @@ _units = (units group p1);
 } forEach _groupVehicles;
 
 // UNIT VOICE-OVERS FIX
-_nul = [_voice] spawn {
-    private ["_voice"];
-    _voice = _this select 0;
+if !(isNil "_voice") then {
+    _nul = [_voice] spawn {
+        private ["_voice"];
+        _voice = _this select 0;
 
-    // Reset
-    player setVariable ["UVO_voice",nil,true];
-    // player setVariable ["UVO_speaking",nil,true];
-    player setVariable ["UVO_suppressBuffer",nil,true];
-    player setVariable ["UVO_allowDeathShouts",false,true];
+        // Reset
+        player setVariable ["UVO_voice",nil,true];
+        // player setVariable ["UVO_speaking",nil,true];
+        player setVariable ["UVO_suppressBuffer",nil,true];
+        player setVariable ["UVO_allowDeathShouts",false,true];
 
-    // Apply
-    player setVariable ["UVO_voice",_voice,true];
-    player setVariable ["UVO_suppressBuffer",0,true];
-    player setVariable ["UVO_allowDeathShouts",missionNamespace getVariable ["uvo_main_UVO" + _voice,true],true];
+        // Apply
+        player setVariable ["UVO_voice",_voice,true];
+        player setVariable ["UVO_suppressBuffer",0,true];
+        player setVariable ["UVO_allowDeathShouts",missionNamespace getVariable ["uvo_main_UVO" + _voice,true],true];
+    };
 };
 
 group p1 
