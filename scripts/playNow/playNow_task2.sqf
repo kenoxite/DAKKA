@@ -25,7 +25,7 @@ _waterGroups = _factionGroups select 8;
 DMORBAT_friendlyInfEdCat = "";
 
 // Create custom groups
-// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups]
+// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]
 diag_log format ["DMORBAT: Creating custom groups for faction %1...", _playerFaction];
 _allGroupsCustom = [_playerFaction, "All"] call DMORBAT_fnc_createFactionGroups;
 _infGroupsCustom =  _allGroupsCustom select 0;
@@ -259,7 +259,7 @@ _softAll = [];
 DMORBAT_enemyInfEdCat = "";
 
 // Create custom groups
-// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups]
+// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]
 diag_log format ["DMORBAT: Creating custom groups for faction %1...", _enemyFaction];
 _allGroupsCustom = [_enemyFaction, "All"] call DMORBAT_fnc_createFactionGroups;
 _infGroupsCustom =  _allGroupsCustom select 0;

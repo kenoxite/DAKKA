@@ -223,12 +223,12 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
     };
 
     // -------------------------------------------------------------------------------------
-    // MOTORIZED PATROL
+    // MOTORIZED PATROL (ARMED)
     private _group = [];
     // Form motorized patrol: car, grenadier
     _validCars = _cars select { (_x select 1) >= 1 };
     if (count _validCars == 0) then {
-        _validCars = _cars_unarmed select { (_x select 1) >= 1 };
+        _validCars = _cars_unarmed select { (_x select 1) >= 1 &&  (_x select 1) <= 3 };
     };
     if (count _validCars > 0) then {
         // Car
@@ -242,7 +242,32 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized patrol: %1", _group] };
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized patrol (armed): %1", _group] };
+        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        _customMotoGroups pushBack [_group, _roles];
+    };
+
+    // -------------------------------------------------------------------------------------
+    // MOTORIZED PATROL (UNARMED)
+    private _group = [];
+    // Form motorized patrol: car, grenadier
+    _validCars = _carsAll select { (_x select 1) >= 1 };
+    if (count _validCars == 0) then {
+        _validCars = _cars_unarmed select { (_x select 1) >= 1 && (_x select 1) <= 3 };
+    };
+    if (count _validCars > 0) then {
+        // Car
+        _group pushBack ((selectRandom _validCars) select 0);
+
+        // Grenadier
+        if (count _grenadiers > 0) then {
+            _group pushBack (selectRandom _grenadiers);
+        } else {
+            _group pushBack (selectRandom _riflemen);
+        };
+
+        // Add to land groups array
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized patrol (unarmed): %1", _group] };
         private _roles = [_group] call DMORBAT_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };

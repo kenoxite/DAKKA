@@ -16,7 +16,7 @@
 
 */
 
-params [["_class", ""]];
+params [["_class", "", [""]]];
 
 if (_class == "") exitWith { 0 };
 

@@ -63,6 +63,7 @@ private _validHelos = [];
 
 private _customPlaneGroups = [];
 private _customHeloGroups = [];
+private _customTransportHeloGroups = [];
 
 {
     private _unitClass = _x select 0;
@@ -70,8 +71,9 @@ private _customHeloGroups = [];
 
     if (_type == "Plane") then { _planes pushBack _unitClass; };
     if (_type == "Drone Plane") then { _planeDrones pushBack _unitClass; };
-    if (_type == "Helicopter") then { _helos pushBack _unitClass; };
-    if (_type == "Drone Helicopter") then { _heloDrones pushBack _unitClass; };
+    if (_type == "Helicopter") then { _helos pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
+    if (_type == "Helicopter (unarmed)") then { _helos_unarmed pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
+    if (_type == "Drone Helicopter") then { _heloDrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
 } forEach _airGroups;
 
 // Add to air groups array
@@ -123,6 +125,7 @@ if (_groupsType == "Plane" || _groupsType == "Air") then {
 };
 
 if (_groupsType == "Helo" || _groupsType == "Air") then {
+    _helosAll = [];
     _helosAll append _helos;
     _helosAll append _heloDrones;
 
@@ -133,7 +136,7 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
     _validHelos = _helosAll;
     if (count _validHelos > 0) then {
         // Helo
-        _group pushBack (selectRandom _validHelos);
+        _group pushBack ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - helo 1: %1", _group] };
@@ -147,7 +150,7 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
     _validHelos = _helosAll;
     if (count _validHelos > 0) then {
         // Helo
-        _group pushBack (selectRandom _validHelos);
+        _group pushBack ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - helo 2: %1", _group] };
@@ -161,7 +164,7 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
     _validHelos = _helosAll;
     if (count _validHelos > 0) then {
         // Helo
-        _group pushBack (selectRandom _validHelos);
+        _group pushBack ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - helo 3: %1", _group] };
@@ -169,5 +172,52 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
     };
 };
 
+if (_groupsType == "Transport Helo" || _groupsType == "Air") then {
+    _helosAll = [];
+    _helosAll append _helos;
+    _helosAll append _heloDrones;
+    _helosAll append _helos_unarmed;
 
-[_customPlaneGroups, _customHeloGroups]
+    // -------------------------------------------------------------------------------------
+    // TRANSPORT HELO 1
+    // ***** Beware that we will use a 1D array for the transports, so we will just concatename their name classes *****
+    // Form attack helo in format: 1x helo
+    _validHelos = _helosAll select { (_x select 1) >= 1 };
+    if (count _validHelos > 0) then {
+        // Helo
+        private _helo = ((selectRandom _validHelos) select 0);
+
+        // Add to air groups array
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - transport helo 1: %1", _helo] };
+        _customTransportHeloGroups pushBack _helo;
+    };
+
+    // -------------------------------------------------------------------------------------
+    // TRANSPORT HELO 2
+    // Form attack helo in format: 1x helo
+    _validHelos = _helosAll select { (_x select 1) >= 1 };
+    if (count _validHelos > 0) then {
+        // Helo
+        private _helo = ((selectRandom _validHelos) select 0);
+
+        // Add to air groups array
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - transport helo 2: %1", _helo] };
+        _customTransportHeloGroups pushBack _helo;
+    };
+
+    // -------------------------------------------------------------------------------------
+    // TRANSPORT HELO 3
+    // Form attack helo in format: 1x helo
+    _validHelos = _helosAll select { (_x select 1) >= 1 };
+    if (count _validHelos > 0) then {
+        // Helo
+        private _helo = ((selectRandom _validHelos) select 0);
+
+        // Add to air groups array
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - transport helo 3: %1", _helo] };
+        _customTransportHeloGroups pushBack _helo;
+    };
+};
+
+
+[_customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]

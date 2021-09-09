@@ -25,7 +25,7 @@ _waterGroups = _factionGroups select 8;
 DMORBAT_friendlyInfEdCat = "";
 
 // Create custom groups
-// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups]
+// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]
 diag_log format ["DMORBAT: Creating custom groups for faction %1...", _playerFaction];
 _allGroupsCustom = [_playerFaction, "All"] call DMORBAT_fnc_createFactionGroups;
 _infGroupsCustom =  _allGroupsCustom select 0;
@@ -42,6 +42,7 @@ _planeGroupsCustom =  _allGroupsCustom select 5;
 _airGroups append _planeGroupsCustom;
 _heloGroupsCustom =  _allGroupsCustom select 6;
 _airGroups append _heloGroupsCustom;
+_transportHeloGroupsCustom =  _allGroupsCustom select 6;
 
 // -------------------------------------------------------------------------------------
 // PLAYER GROUP
@@ -151,7 +152,7 @@ if (count _selectedArtyGroup > 0) then {
 
 // Transport
 // Only if player is leader
-if (_task == 1 && _playableUnit == 0) then {
+if (_playableUnit == 0) then {
     _selectedTransportGroup = [];
     // Check faction units for suitable air transport
     _factionTransport = [_playerFaction, "Air Transport"] call DMORBAT_fnc_categorizeUnits;
@@ -163,24 +164,32 @@ if (_task == 1 && _playableUnit == 0) then {
         } forEach _grps;
     } forEach _factionTransport;
 
-    if (!isNil "_factionTransport") then {
-        if (count _transportGroups > 0) then {
-            _availableTransportUnits = [];
-            // Check that the amount of passenger seats is enough to carry the player group
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _transportGroups: %1", _transportGroups] };
-            {
-                _passengerSeats = [_x select 0] call DMORBAT_fnc_countPassengerSeats;
-                diag_log format ["DMORBAT: Play Now - %1 has %2 passenger seats and the player group is %3", (_x select 0), _passengerSeats, _playerGroupCount];
-                if (_passengerSeats >= _playerGroupCount) then {
-                    _availableTransportUnits pushBack (_x select 0);
-                };
-            } forEach _transportGroups;
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _availableTransportUnits: %1", _availableTransportUnits] };
+    _transportGroups append _transportHeloGroupsCustom;
 
-            if (count _availableTransportUnits > 0) then {
-                _selectedTransportUnit = selectRandom _availableTransportUnits;
-                _selectedTransportGroup pushBack _selectedTransportUnit;
+    {
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now: _transportGroups %1: %2", _forEachIndex, _x select 0] };
+    } forEach _transportGroups;
+
+    if (!isNil "_factionTransport" || count _transportGroups > 0) then {
+        _availableTransportUnits = [];
+        // Check that the amount of passenger seats is enough to carry the player group
+        {
+            private _vehClass = if (typeName (_x select 0) == "ARRAY") then {
+                (_x select 0) select 0
+            } else {
+                _x select 0
             };
+            _passengerSeats = [_vehClass] call DMORBAT_fnc_countPassengerSeats;
+            diag_log format ["DMORBAT: Play Now - %1 has %2 passenger seats and the player group is %3", _vehClass, _passengerSeats, _playerGroupCount];
+            if (_passengerSeats >= _playerGroupCount) then {
+                _availableTransportUnits pushBackUnique _vehClass;
+            };
+        } forEach _transportGroups;
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _availableTransportUnits: %1", _availableTransportUnits] };
+
+        if (count _availableTransportUnits > 0) then {
+            _selectedTransportUnit = selectRandom _availableTransportUnits;
+            _selectedTransportGroup pushBack _selectedTransportUnit;
         };
     };
 
@@ -222,7 +231,7 @@ _softAll = [];
 DMORBAT_enemyInfEdCat = "";
 
 // Create custom groups
-// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups]
+// [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]
 diag_log format ["DMORBAT: Creating custom groups for faction %1...", _enemyFaction];
 _allGroupsCustom = [_enemyFaction, "All"] call DMORBAT_fnc_createFactionGroups;
 _infGroupsCustom =  _allGroupsCustom select 0;

@@ -25,6 +25,7 @@ private _customArmorGroups = [];
 private _customLandGroups = [];
 private _customPlaneGroups = [];
 private _customHeloGroups = [];
+private _customTransportHeloGroups = [];
 private _customAirGroups = [];
 
 // REGULAR INFANTRY & SF GROUPS
@@ -59,13 +60,17 @@ if (_groupType == "Plane") then {
     _customPlaneGroups = (["Plane", _faction] call DMORBAT_fnc_createCustomAirGroups) select 0;
 };
 if (_groupType == "Helo") then {
-    _customPlaneGroups = (["Helo", _faction] call DMORBAT_fnc_createCustomAirGroups) select 1;
+    _customHeloGroups = (["Helo", _faction] call DMORBAT_fnc_createCustomAirGroups) select 1;
+};
+if (_groupType == "Transport Helo") then {
+    _customTransportHeloGroups = (["Transport Helo", _faction] call DMORBAT_fnc_createCustomAirGroups) select 2;
 };
 if (_groupType == "Air") then {
     _customAirGroups = ["Air", _faction] call DMORBAT_fnc_createCustomAirGroups;
     if (count _customAirGroups > 0) then {
         _customPlaneGroups = _customAirGroups select 0;
         _customHeloGroups = _customAirGroups select 1;
+        _customTransportHeloGroups = _customAirGroups select 2;
     };
 };
 
@@ -83,7 +88,8 @@ if (_groupType == "All") then {
     if (count _customAirGroups > 0) then {
         _customPlaneGroups = _customAirGroups select 0;
         _customHeloGroups = _customAirGroups select 1;
+        _customTransportHeloGroups = _customAirGroups select 2;
     };
 };
 
-[_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups]
+[_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]

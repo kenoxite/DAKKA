@@ -71,7 +71,11 @@ for [{private _i = 0}, {_i < _nodesAmount}, {_i = _i + 1}] do
             if (_isMan) then {
                 _grp setBehaviour "SAFE";
             } else {
-                _grp setBehaviour "AWARE";
+                if ([DMORBAT_customDate] call DMORBAT_fnc_isNight) then { 
+                    _grp setBehaviour "AWARE";
+                } else {
+                    _grp setBehaviour "COMBAT";
+                };
             };
         };
         _grp setCombatMode "RED";

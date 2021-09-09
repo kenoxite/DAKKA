@@ -27,11 +27,12 @@ if (DMORBAT_noNight) then {
     _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
     _minutes = floor (random 59);
 } else {
-    private _chanceNight = if (DMORBAT_Task == 1) then { 0.6 } else { 0.3 };
+    private _chanceNight = if (DMORBAT_Task == 1) then { 0.7 } else { 0.3 };
     if (floor (random 1) <= _chanceNight) then {
-        _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
+        // _hour = floor (random 23);
+        _hour = floor ([0, _dusk] call BIS_fnc_randomInt);
     } else {
-        _hour = floor (random 23);
+        _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
     };
     _minutes = floor (random 59);
 };
