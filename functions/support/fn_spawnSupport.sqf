@@ -84,7 +84,7 @@ _nul = _this spawn {
             _minRange = _supportRadius;
             _maxRange = _supportRadius * 3; 
             _spawnRadius = 300;  
-            _fly = false;  
+            _fly = true;  
         };
 
         _artilleryGroups = [];

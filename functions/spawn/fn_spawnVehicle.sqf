@@ -60,7 +60,7 @@ if (_spawnCrew) then {
     if (isNull _grp) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnVehicle GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
 
     _veh = [_veh, _grp, _faction] call DMORBAT_fnc_spawnCrew;
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnVehicle %1 side: %2", _veh, side _grp ] };
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnVehicle %1 side: %2", _veh, side _grp ] };
     if (isNull _veh) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnVehicle VEHICLE %1 COULDN'T BE SPAWNED!", _unitClass]; objNull };
 };
 

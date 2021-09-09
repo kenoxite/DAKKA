@@ -85,7 +85,7 @@ private _return = false;
         if (_icon == "iconManEngineer" || "engineer" in _className || "repair" in _className) then { _hasEngi = true };
         if (_icon == "iconManMedic" || _role == "CombatLifeSaver" || "medic" in _className) then { _hasMedic = true };
         if ((_threat select 1) > 0.5 || (_threat select 2) > 0.5 || _icon == "iconManAT" || _role == "MissileSpecialist" || "_at" in _className || "_rpg" in _className || "_lat" in _className || "_hat" in _className) then {
-            if (((_threat select 2) > 0.5 || _icon == "iconManAA" || _role == "MissileSpecialist" || "_aa" in _className) && !("_aaa" in _className) && !("_ar" in _className) && !("_mg" in _className) && !("support" in _className) && !("_at" in _className) && !("_lat" in _className)) then {
+            if (((_threat select 2) > 0.5 || _icon == "iconManAA" || _role == "MissileSpecialist" || "_aa" in _className) && !("_aaa" in _className) && !("_aat" in _className) && !("_ar" in _className) && !("_mg" in _className) && !("support" in _className) && !("_at" in _className) && !("_lat" in _className)) then {
                 _hasAA = true;
             } else {
                 if ((_icon == "iconManAT" || _role == "MissileSpecialist") && !("_aa" in _className) && !("_ar" in _className) && !("_mg" in _className) && !("support" in _className)) then {

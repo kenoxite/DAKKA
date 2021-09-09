@@ -45,7 +45,17 @@ diag_log format ["DMORBAT: Task 1 - %1", _txt];
 [true] call DMORBAT_fnc_compositionRemove;
 // Load default compositions
 #include "..\..\compositions_default.hpp";
+#include "..\..\compositions_CUP.hpp";
 _compositionsPredefined = +DMORBAT_compositions_default;
+// Use CUP compositions if that mod is loaded
+_fnc_CUPcheck = {
+    private _CUPtest = "CUP_metalcrate" createVehicle [0,0,0];
+    private _CUP = if (!isNil "_CUPtest") then { true } else { false };
+    [_CUPtest] spawn { deleteVehicle (_this select 0) };
+    _CUP
+};
+if (call _fnc_CUPcheck) then { _compositionsPredefined = +DMORBAT_compositions_CUP };
+
 _locationsPredefined = DMORBAT_locations_Task1;
 // Amount of compositions should match amount of predefined locations
 _taskLocations = [_locationsPredefined, "Outposts"] call BIS_fnc_getFromPairs;

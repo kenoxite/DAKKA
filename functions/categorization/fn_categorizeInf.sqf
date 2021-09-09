@@ -149,6 +149,8 @@ private _fnc_trimUnits = {
         "cwr3_b_soldier_light",
         "cwr3_o_soldier_at_at4",
         "cwr3_o_soldier_aat_at4",
+        "cwr3_o_vdv_soldier_at_at4",
+        "cwr3_o_vdv_soldier_aat_at4",
         "cwr3_o_spetsnaz_at_at4",
         "cwr3_o_spetsnaz_aat_at4",
         "cwr3_o_soldier_hg",

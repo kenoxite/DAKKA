@@ -105,9 +105,10 @@ _Zen_ArrayShuffle = {
 if (_buildingRadius < 0) then {
     _buildingsArray = [nearestBuilding _center];
 } else {
-    _buildingsArray0 = nearestObjects [_center, ["house"], _buildingRadius];
-    _buildingsArray1 = nearestObjects [_center, ["building"], _buildingRadius];
-    _buildingsArray = _buildingsArray0 arrayIntersect _buildingsArray1;
+    // _buildingsArray0 = nearestObjects [_center, ["house"], _buildingRadius];
+    // _buildingsArray1 = nearestObjects [_center, ["building"], _buildingRadius];
+    // _buildingsArray = _buildingsArray0 arrayIntersect _buildingsArray1;
+    _buildingsArray = nearestObjects [_center, ["house", "building", "bunker", "fortress", "view-tower", "ruin", "fence"], _buildingRadius];
 };
 
 if (count _buildingsArray == 0) exitWith {

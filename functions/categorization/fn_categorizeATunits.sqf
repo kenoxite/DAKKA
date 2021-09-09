@@ -19,6 +19,8 @@ params [["_riflemenAT", []]];
 
 if (count _riflemenAT == 0) exitWith { [] };
 
+if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - Categorizing AT units..."] };
+
 private _ATlaunchers = [];
 private _LATlaunchers = [];
 private _HATlaunchers = [];
@@ -28,9 +30,9 @@ private _properUnitClassNames = [];
     if ("_lat" in (toLowerANSI _x) || "_hat" in (toLowerANSI _x)) then { _properUnitClassNames pushBackUnique _x };
 } forEach _riflemenAT;
 
-if (count _riflemenAT != count _properUnitClassNames) then {
+if (count _riflemenAT == count _properUnitClassNames) then {
     // If all units classnames include LAT, AT or HAT just use the extensions to categorize them
-
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - AT units follow proper suffixes. Categorizing..."] };
     // Reassign units based on AT type
     private _tempRiflemenAT = [];
     {
@@ -49,7 +51,7 @@ if (count _riflemenAT != count _properUnitClassNames) then {
     _riflemenAT = +_tempRiflemenAT;
     _tempRiflemenAT = nil;
 } else {
-    // If units have varied classname suffixes that don't necessarily include LAT, AT or HAT then we must check each launcher and categorize based on hit damage
+    // If units have varied classname suffixes then we must check each launcher and categorize based on hit damage
 
     // Check for the launcher of each AT unit
     private _ATremove = [];
@@ -124,18 +126,26 @@ if (count _riflemenAT != count _properUnitClassNames) then {
 
     private _i = 0;
     // {  if ((_i + 1) > _ATdmgCut) then { _LATlaunchers pushBackUnique (_x select 1) } else { _HATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
-    {  if ((_X select 0) > _ATdmgMean) then { _HATlaunchers pushBackUnique (_x select 1) } else { _LATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - _LATlaunchers: %1", _LATlaunchers] };
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - _HATlaunchers: %1", _HATlaunchers] };
+    // {  if ((_X select 0) > _ATdmgMean) then { _HATlaunchers pushBackUnique (_x select 1) } else { _LATlaunchers pushBackUnique (_x select 1) }; _i = _i + 1; } forEach _ATlaunchers;
+
+    // Move the least powerful to LAT and the rest to HAT
+    private _peashooterAT = (_ATlaunchers select (count _ATlaunchers) - 1) select 1;
+    _LATlaunchers pushBackUnique _peashooterAT;
+    { if ((_x select 1) != _peashooterAT) then { _HATlaunchers pushBackUnique (_x select 1) } } forEach _ATlaunchers;
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - _LATlaunchers: %1", _LATlaunchers] };
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - _HATlaunchers: %1", _HATlaunchers] };
 
     // Reassign units based on AT type
     private _tempRiflemenAT = [];
+    private _unitLauncher = [];
     {
         private _weapons = getArray (configfile >> "CfgVehicles" >> _x >> "weapons");
-        private _unitLauncher = _weapons arrayIntersect _HATlaunchers;
+        // _unitLauncher = (_weapons arrayIntersect _HATlaunchers) select 0;
         // if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - _unitLauncher: %1", _unitLauncher] };
-        // if ((_unitLauncher select 0) in _HATlaunchers) then { _riflemenHAT pushBack _x } else { _tempRiflemenAT pushBack _x };
-        if (count _unitLauncher > 0 || (("_hat" in (toLowerANSI _x)) && !("_lat" in (toLowerANSI _x)))) then { _riflemenHAT pushBackUnique _x } else { _tempRiflemenAT pushBackUnique _x };
+        // if (((count _unitLauncher) > 0 || ("_hat" in (toLowerANSI _x))) && !("_lat" in (toLowerANSI _x))) then { _riflemenHAT pushBackUnique _x };
+        _unitLauncher = _weapons arrayIntersect _LATlaunchers;
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeATunits - _unitLauncher: %1", _unitLauncher] };
+        if (((count _unitLauncher) > 0 || ("_lat" in (toLowerANSI _x))) && !("_hat" in (toLowerANSI _x))) then { _tempRiflemenAT pushBackUnique _x } else { _riflemenHAT pushBackUnique _x };
     } forEach _riflemenAT;
     _riflemenAT = +_tempRiflemenAT;
     _tempRiflemenAT = nil;
@@ -155,9 +165,9 @@ if (count _riflemenAT != count _properUnitClassNames) then {
                 _riflemenHAT pushBackUnique _x;
             };
         } forEach _riflemenAT;
+        _dupAT = _riflemenAT arrayIntersect _riflemenHAT;
+        _riflemenAT = _riflemenAT - _dupAT;
     };
-    _dupAT = _riflemenAT arrayIntersect _riflemenHAT;
-    _riflemenAT = _riflemenAT - _dupAT;
 };
 
 [_riflemenAT, _riflemenHAT]

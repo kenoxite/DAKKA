@@ -59,6 +59,6 @@ _camera camSetFocus [10, 1];
 _camera cameraeffect ["INTERNAL", "BACK"];
 _camera camCommit 0;
 
-if ([DMORBAT_customDate] call DMORBAT_fnc_isNight) then { camUseNVG true; };
+if ([DMORBAT_customDate] call DMORBAT_fnc_isNight) then { camUseNVG true; } else { camUseNVG false; };
 
 cutText ["", "BLACK IN"];
