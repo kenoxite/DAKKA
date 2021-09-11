@@ -148,6 +148,9 @@ _task_2_checks = [] spawn {
             if (_startCountingEnmy) then {
                 if (count _inContestedArea == 0) then {
                     call _fnc_showTimer;
+                    if (count _enemyGroups == 0) then {
+                        _maxTime = 30
+                    };
                     if (_timeCounterEnmy == 0) then {
                         hintSilent "All enemies are dead or retreating!";
                     };
@@ -201,7 +204,7 @@ _task_2_checks = [] spawn {
 
                 };
             } else {
-                // Only start counting after the first enemy has entered the area or 5 minutes have passed since the start of the mission
+                // Only start counting after the first enemy has entered the area or if 5 minutes have passed since the start of the mission
                 if (count _inContestedArea > 0 || _missionTimePassed > 300) then {
                     _startCountingEnmy = true;
                     call _fnc_showTimer;
@@ -294,7 +297,7 @@ _task_2_checks = [] spawn {
 
         // Force more consistent fleeing behaviour
         if ((_timer % 5) == 0) then {
-            _deleteGrps = [];
+            private _deleteGrps = [];
             {   
                 private _grp = _x;
                 // Remove from array if all dead
@@ -312,21 +315,34 @@ _task_2_checks = [] spawn {
                         // (group _x) setVariable ["VCM_NORESCUE",true]; //This command will stop the AI squad from responding to calls for backup.
                         // (group _x) setVariable ["VCM_TOUGHSQUAD",true]; //This command will stop the AI squad from calling for backup.
                         diag_log format ["DMORBAT: Group %1 is FLEEING!", _grp]; 
+
+                        _grp setCombatBehaviour "AWARE";
+                        _grp setCombatMode "WHITE";
+                        _grp setSpeedMode "FULL";
+
+                        private _destination = [DMORBAT_task2_locPos, 1000, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+
                         {
                             private _veh = vehicle _x;
                             if (_x == effectiveCommander _veh) then {
+                                _grp leaveVehicle _veh;
+
                                 _x disableAI "TARGET";
                                 _x disableAI "AUTOTARGET";
                                 _x disableAI "FSM";
                                 _x disableAI "SUPPRESSION";
                                 _x disableAI "COVER";
                                 _x disableAI "AUTOCOMBAT";
+
+                                _x enableAI "MOVE";
+
+                                unassignVehicle _x;
                                 
                                 _x removeAllEventHandlers "FiredNear";
                                 _x forceSpeed -1;
                                 _x doFollow leader _grp;
 
-                                _x setCaptive true;
+                                // _x setCaptive true;
                                 
                                 // DISABLE AI MODS
                                 // LAMBS Danger
@@ -341,24 +357,33 @@ _task_2_checks = [] spawn {
                                         _x disableAI "COVER";
                                         _x disableAI "AUTOCOMBAT";
 
+                                        _x enableAI "MOVE";
+
+                                        unassignVehicle _x;
+
                                         _x removeAllEventHandlers "FiredNear";
                                         _x forceSpeed -1;
                                         _x doFollow leader _grp;
 
-                                        _x setCaptive true;
+                                        // _x setCaptive true;
                                 
                                         // DISABLE AI MODS
                                         // LAMBS Danger
                                         _x setVariable ["lambs_danger_disableAI", true];
                                     } forEach (crew _veh);
                                 };
+                            
+                                // Fix for when AI refuses to move
+                                _x doMove _destination;
                             };
                         } forEach (units _grp); 
-                        [_grp, [DMORBAT_task2_locPos, 1000, DMORBAT_task2_locDir] call BIS_fnc_relPos, 100, -1, "", "MOVE", "AWARE", "FULL" ,"WEDGE", "GREEN", 300, "", true, true, [0,0,0], ["true", "{ _x setUnitPos ""DOWN""; _x disableAI ""MOVE""; } forEach (units this);"]] call DMORBAT_fnc_GroupWp;
+                        [_grp, _destination, 100, -1, "", "MOVE", "AWARE", "FULL" ,"WEDGE", "WHITE", 300, "", true, true, [0,0,0], ["true", "{ _x setUnitPos ""DOWN""; _x disableAI ""MOVE""; } forEach (units this);"]] call DMORBAT_fnc_GroupWp;
+
                         _deleteGrps pushback _forEachIndex;
                     } else {
                         // Force enemies to attack player if x minutes have passed
-                        if (_missionTimePassed > (20 * 60)) then {
+                        private _minutes = 15;
+                        if (_missionTimePassed > (_minutes * 60)) then {
                             diag_log "DMORBAT: All enemies are moving towards the player group!";
                             // Reset unit (in case of being affected by occupyHouse function)
                             {

@@ -71,7 +71,7 @@ if ((count _selectionPath) > 1) then {
   _ctrl = (_display displayCtrl IDC_COMBO_UNITEDIT_PRESENCE);
   _ctrl lbSetCurSel 4;
   _ctrl = (_display displayCtrl IDC_COMBO_UNITEDIT_SKILL);
-  _ctrl lbSetCurSel 0;
+  _ctrl lbSetCurSel 1;
 
   // Edit title
   _ctrl = (_display displayCtrl _idc);

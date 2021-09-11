@@ -226,9 +226,9 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
     // MOTORIZED PATROL (ARMED)
     private _group = [];
     // Form motorized patrol: car, grenadier
-    _validCars = _cars select { (_x select 1) >= 1 && (_x select 1) <= 3 };
+    _validCars = _cars select { (_x select 1) >= 0 && (_x select 1) <=1 };
     if (count _validCars == 0) then {
-        _validCars = _cars_unarmed select { (_x select 1) >= 1 && (_x select 1) <= 3 };
+        _validCars = _carsAll select { (_x select 1) >= 0 && (_x select 1) <= 3 };
     };
     if (count _validCars > 0) then {
         // Car
@@ -251,9 +251,9 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
     // MOTORIZED PATROL (UNARMED)
     private _group = [];
     // Form motorized patrol: car, grenadier
-    _validCars = _carsAll select { (_x select 1) >= 1 && (_x select 1) <= 3 };
+    _validCars = _cars_unarmed select { (_x select 1) >= 1 && (_x select 1) <= 3 };
     if (count _validCars == 0) then {
-        _validCars = _cars_unarmed select { (_x select 1) >= 1 && (_x select 1) <= 3 };
+        _validCars = _carsAll select { (_x select 1) >= 0 && (_x select 1) <= 1 };
     };
     if (count _validCars > 0) then {
         // Car

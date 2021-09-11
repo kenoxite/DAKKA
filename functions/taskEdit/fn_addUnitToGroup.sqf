@@ -77,7 +77,7 @@ _mod = [_unitClass] call DMORBAT_fnc_modsCheck;
 
 if (_groupIndex < 0) then {
     // Add group to groups array
-    _thisCategoryGroups pushBack [format ["%1", _thisCategoryName], [[_unitClass, "SERGEANT", [], 1, 0]], [_mod]];
+    _thisCategoryGroups pushBack [format ["%1", _thisCategoryName], [[_unitClass, "SERGEANT", [], 1, 1]], [_mod]];
     // if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToGroup _thisCategoryGroups: %1", _thisCategoryGroups] };
     _groupIndex = (count _thisCategoryGroups);
     _index = 0;
@@ -87,7 +87,7 @@ if (_groupIndex < 0) then {
     // if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToGroup _groupIndex: %2 _thisGroupData: %1", _thisGroupData, _groupIndex] };
     _unitsData = _thisGroupData select 1;
     // if (DMORBAT_debug) then { diag_log format ["DMORBAT: addUnitToGroup _unitsData: %1", _unitsData] };
-    _unitsData pushBack [_unitClass, "PRIVATE", [], 1, 0];
+    _unitsData pushBack [_unitClass, "PRIVATE", [], 1, 1];
     DMORBAT_PreviewGroupName = "";  
     DMORBAT_PreviewGroupID = "";
     _groupIndex = (_selectionPath select 0);

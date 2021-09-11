@@ -21,7 +21,7 @@
   Examples:
 
 */
-params ["_unitClass", ["_pos", position player], ["_grp", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_autoDelete", true]];  
+params ["_unitClass", ["_pos", position player], ["_grp", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_checkPos", true], ["_autoDelete", true]];  
 private ["_unit", "_side"];
 
 // Create group if needed
@@ -56,36 +56,38 @@ if (!_enableRandom) then {
 };
 
 // Temptative fix to avoid units spawning inside things
-_nul = [_unit] spawn {
-    _unit = _this select 0;
-    _unitPos = getPos _unit;
-    _unitClass = typeOf _unit;
-    _nearTerrObj = nearestTerrainObjects [_unitPos, ["ROCK", "ROCKS", "BUILDING", "HOUSE"], 15, true, true];
-    _nearestBuilding = nearestBuilding _unit;
-    _nearestBuildingPos = _nearestBuilding buildingPos 1;
-    if ((count _nearTerrObj) > 0) then {
-        diag_log format ["DMORBAT: spawnMan - Unit %1 (%2) too close to rocks or non enterable buildings. Trying to relocate it to a safer position...", _unit, _unitClass];
-        _dist = 7;
-        if !(_nearestBuilding in _nearTerrObj) then {
-            _dist = _unit distance (_nearTerrObj select 0);
-        } else {
-            if (_nearestBuilding in _nearTerrObj && {_nearestBuildingPos isEqualTo [0,0,0]}) then {
-                _dist = _unit distance _nearestBuilding;
+if (_checkPos) then {
+    _nul = [_unit] spawn {
+        _unit = _this select 0;
+        _unitPos = getPos _unit;
+        _unitClass = typeOf _unit;
+        _nearTerrObj = nearestTerrainObjects [_unitPos, ["ROCK", "ROCKS", "BUILDING", "HOUSE"], 15, true, true];
+        _nearestBuilding = nearestBuilding _unit;
+        _nearestBuildingPos = _nearestBuilding buildingPos 1;
+        if ((count _nearTerrObj) > 0) then {
+            diag_log format ["DMORBAT: spawnMan - Unit %1 (%2) too close to rocks or non enterable buildings. Trying to relocate it to a safer position...", _unit, _unitClass];
+            _dist = 7;
+            if !(_nearestBuilding in _nearTerrObj) then {
+                _dist = _unit distance (_nearTerrObj select 0);
+            } else {
+                if (_nearestBuilding in _nearTerrObj && {_nearestBuildingPos isEqualTo [0,0,0]}) then {
+                    _dist = _unit distance _nearestBuilding;
+                };
             };
+            _newPos = [_unitPos, 0, 50, _dist, 0, 0.5, 0] call BIS_fnc_findSafePos;
+            _unit setPos _newPos;
         };
-        _newPos = [_unitPos, 0, 50, _dist, 0, 0.5, 0] call BIS_fnc_findSafePos;
-        _unit setPos _newPos;
-    };
 
-    // _unit allowDamage false;
-    // _pos = getPosATL _unit;
-    // _start = +_pos;
-    // _start set [2, 2];
-    // while { (lineIntersects [ATLToASL _start, ATLToASL _pos]) } do {
-    //     _pos set [2, ((_pos select 2) + 0.25)]
-    // };
-    // _unit setPosATL _pos;
-    // _unit allowDamage true;
+        // _unit allowDamage false;
+        // _pos = getPosATL _unit;
+        // _start = +_pos;
+        // _start set [2, 2];
+        // while { (lineIntersects [ATLToASL _start, ATLToASL _pos]) } do {
+        //     _pos set [2, ((_pos select 2) + 0.25)]
+        // };
+        // _unit setPosATL _pos;
+        // _unit allowDamage true;
+    };
 };
 
 // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnMan %1 side: %2", _unit, side _unit ] };

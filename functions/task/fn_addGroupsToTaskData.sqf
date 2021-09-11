@@ -25,7 +25,7 @@
 
 */
 
-params ["_sideType", "_groupType", "_groupsPool", ["_groupsAmount", 1], ["_maxUnits", 0], ["_limitPresence", false], ["_minUnits", 3], ["_skill", 0], ["_sameEdCat", true], ["_edCat", ""]];
+params ["_sideType", "_groupType", "_groupsPool", ["_groupsAmount", 1], ["_maxUnits", 0], ["_limitPresence", false], ["_minUnits", 3], ["_skill", 1], ["_sameEdCat", true], ["_edCat", ""]];
 // if (DMORBAT_debug) then { diag_log format ["_sideType: %1 _groupType: %2 _groupsPool: %3 _groupsAmount: %4 _maxUnits: %5 _limitPresence: %6 _minUnits: %7 _skill: %8 _sameEdCat: %9 _edCat: %10", _sideType, _groupType, (_groupsPool select 0) select 0, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, _sameEdCat, _edCat] };
 
 private _task = DMORBAT_Task;
@@ -45,7 +45,7 @@ for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do
             _thisESubCat = getText (configFile >> "CfgVehicles" >> ((_x select 0) select 0) >> "editorSubcategory");
             // _playerESubCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
             // _thisESubCat == _playerESubCat
-            _thisESubCat == _edCat
+            _thisESubCat == _edCat;
         };
         if (count _groupsPoolTemp == 0) exitWith {
             diag_log format ["DMORBAT: --- WARNING --- Couldn't find groups of the same editor category for %1! Trying again without category limits...", _sideType];
@@ -56,15 +56,22 @@ for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do
     _selectedGroup = selectRandom _groupsPool;
     // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _fnc_addGroupsToTaskData - _thisGroupData: %1", ((_selectedGroup select 0) select 0)] };
 
+    private _groupEdCat = getText (configFile >> "CfgVehicles" >> ((_selectedGroup select 0) select 0) >> "editorSubcategory");
+    private _friendly = if (_sideType == "Friendly groups") then { true } else { false };
+    if (("snow" in toLowerAnsi(_groupEdCat) || "winter" in toLowerAnsi(_groupEdCat)) && isNil format ["DMORBAT_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }]) exitWith {
+        diag_log format ["DMORBAT: --- WARNING --- Unit camo is 'Snow' and it usually looks silly in most terrains. Trying again...", _sideType];
+        missionNamespace setVariable [format ["DMORBAT_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }], true];
+        [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill] call DMORBAT_fnc_addGroupsToTaskData
+    };
+
     // Set side editor category if it wasn't set already
     if (_sameEdCat && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat == "") exitWith {
-        private _groupEdCat = getText (configFile >> "CfgVehicles" >> ((_selectedGroup select 0) select 0) >> "editorSubcategory");
         if (_sideType == "Friendly groups") then {
             DMORBAT_friendlyInfEdCat = _groupEdCat;
         } else {
             DMORBAT_enemyInfEdCat = _groupEdCat;
         };
-        diag_log format ["DMORBAT: --- WARNING --- Editor category wasn't set. Trying again with: %1", _groupEdCat];
+        diag_log format ["DMORBAT: Editor category wasn't set. Trying again with: %1", _groupEdCat];
         [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, true, _groupEdCat] call DMORBAT_fnc_addGroupsToTaskData
     };
 

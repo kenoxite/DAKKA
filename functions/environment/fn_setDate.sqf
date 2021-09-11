@@ -81,4 +81,7 @@ if (((time - _initTime) > 1) || _dateType == "minutes") then {
         diag_log "DMORBAT: --- TIME SET ---";
     };
 
+    if (DMORBAT_cameraIntroPlaying) then {
+        [] spawn DMORBAT_fnc_cameraIntro;
+    };
 };

@@ -24,15 +24,15 @@ _dawn = ceil (_sunriseSunsetTime select 0);
 _dusk = floor (_sunriseSunsetTime select 1);
 
 if (DMORBAT_noNight) then {
-    _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
+    _hour = [_dawn + 1, _dusk - 1] call BIS_fnc_randomInt;
     _minutes = floor (random 59);
 } else {
-    private _chanceNight = if (DMORBAT_Task == 1) then { 0.8 } else { 0.3 };
+    private _chanceNight = if (DMORBAT_Task == 1) then { 0.8 } else { 0.2 };
     if (floor (random 1) <= _chanceNight) then {
         // _hour = floor (random 23);
-        _hour = floor ([0, _dusk] call BIS_fnc_randomInt);
+        _hour = [_dusk, _dawn] call BIS_fnc_randomInt;
     } else {
-        _hour = floor ([_dawn + 1, _dusk - 1] call BIS_fnc_randomInt);
+        _hour = [_dawn + 1, _dusk - 1] call BIS_fnc_randomInt;
     };
     _minutes = floor (random 59);
 };
@@ -41,9 +41,14 @@ _newDate = DMORBAT_customDate;
 _newDate set [3, _hour];
 _newDate set [4, _minutes];
 setDate _newDate;
+DMORBAT_customDate = _newDate;
 
 // skipTime _randomTime;
  ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_HOUR) lbSetCurSel (_hour);
  ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_MINUTES) lbSetCurSel (_minutes);
+
+if (DMORBAT_cameraIntroPlaying) then {
+    [] spawn DMORBAT_fnc_cameraIntro;
+};
 
 diag_log "DMORBAT: --- RANDOM TIME GENERATED ---";

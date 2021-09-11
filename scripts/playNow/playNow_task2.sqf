@@ -9,7 +9,11 @@ _task = DMORBAT_Task;
 _taskData = DMORBAT_TaskData select (_task - 1);
 
 // -------------------------------------------------------------------------------------
-// FRIENDLY GROUPS
+// FRIENDLY GROUPS - CATEGORIZATION
+_txt = "Categorizing groups for the friendly faction...";
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Play Now - %1", _txt];
+
 // _categorizeGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups]
 _factionGroups = _factionGroupsFriendly;
 _infGroups = _factionGroups select 0;
@@ -146,15 +150,15 @@ diag_log format ["DMORBAT: Play Now - %1", _txt];
 // INFANTRY
 // Regular squads
 _eligibleInf = [8, _infGroups] call DMORBAT_fnc_filterInfantryGroups;
-[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 2,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 9,/*_skill*/ 2,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 2,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 9,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // AT Teams
 _eligibleAT = [4, _infGroups] call DMORBAT_fnc_filterATteamGroups;
-[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 2,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // AA Teams
 _eligibleAA = [4, _infGroups] call DMORBAT_fnc_filterAAteamGroups;
-[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 2,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // LAND
 // Armor
@@ -164,23 +168,23 @@ if (count _armorGroups > 0) then {
     _eligibleArmor = [_armorGroups] call DMORBAT_fnc_filterArmorGroups;
     if (count _eligibleArmor > 0) then {
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor] };
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 2] call DMORBAT_fnc_addGroupsToTaskData;
+        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
     };
 };
 
 // Mechanized infantry
 if (count _mechGroups > 0) then {
     _eligibleMech = [_mechGroups] call DMORBAT_fnc_filterMechGroups;
-    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 3 } else { 1 };
+    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 2 } else { 1 };
     // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleMech friendly: %1", _eligibleMech] };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMech,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 2,/*_skill*/ 2] call DMORBAT_fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMech,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 2,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
 };
 
 // Motorized infantry, if there's no mech inf
 if (count _motGroups > 0 && count _mechGroups == 0) then {
     _eligibleMot = [_motGroups] call DMORBAT_fnc_filterMotGroups;
-    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 4 } else { 1 };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMot,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 3,/*_skill*/ 2] call DMORBAT_fnc_addGroupsToTaskData;
+    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 3 } else { 1 };
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMot,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 3,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
 };
 
 // AIR
@@ -190,7 +194,7 @@ if (count _airGroups > 0) then {
     if (count _eligibleAir > 0) then {
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAir friendly: %1", _eligibleAir] };
         _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 2 } else { 1 };
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 2] call DMORBAT_fnc_addGroupsToTaskData;
+        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
     };
 };
 
@@ -288,15 +292,15 @@ diag_log format ["DMORBAT: Play Now - %1", _txt];
 // INFANTRY
 // Regular squads
 _eligibleInf = [8, _infGroups] call DMORBAT_fnc_filterInfantryGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 6,/*_maxUnits*/ 5,/*_limitPresence*/ true,/*_minUnits*/ 3,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 3,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 8,/*_skill*/ [1, 2] call BIS_fnc_randomInt,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // AT Teams
 _eligibleAT = [4, _infGroups] call DMORBAT_fnc_filterATteamGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // AA Teams
 _eligibleAA = [4, _infGroups] call DMORBAT_fnc_filterAAteamGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // SF groups
 _eligibleSF = [6, _SFGroups, _infGroups] call DMORBAT_fnc_filterSFGroups;
@@ -315,14 +319,14 @@ if (count _armorGroups > 0) then {
 // Mechanized infantry
 if (count _mechGroups > 0) then {
     _eligibleMech = [_mechGroups] call DMORBAT_fnc_filterMechGroups;
-    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 3 } else { 1 };
+    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 4 } else { 2 };
     [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _mechGroups,/*_groupsAmount*/ _amount] call DMORBAT_fnc_addGroupsToTaskData;
 };
 
 // Motorized infantry, if there's no mech inf
 if (count _motGroups > 0 && count _mechGroups == 0) then {
     _eligibleMot = [_motGroups] call DMORBAT_fnc_filterMotGroups;
-    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 4 } else { 1 };
+    _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 5 } else { 1 };
     [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _motGroups,/*_groupsAmount*/ _amount] call DMORBAT_fnc_addGroupsToTaskData;
 };
 
@@ -331,6 +335,7 @@ if (count _motGroups > 0 && count _mechGroups == 0) then {
 if (count _airGroups > 0) then {
     _eligibleAir = [_airGroups] call DMORBAT_fnc_filterAirGroups;
     if (count _eligibleAir > 0) then {
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAir enemy: %1", _eligibleAir] };
         [/*_sideType*/ "Enemy groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ 1,/*_maxUnits*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
     };
 };

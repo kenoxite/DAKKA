@@ -6,7 +6,7 @@
 #include "settings_terrain.hpp";
 
 // GLOBAL VARIABLES
-DMORBAT_debug = true;
+DMORBAT_debug = false;
 
 // Weather and date settings
 DMORBAT_missionStart = date;
@@ -111,11 +111,14 @@ DMORBAT_mapCoords = [0, 0];
 DMORBAT_mapSatellite = false;
 DMORBAT_compositionsLoaded = 0;
 
+// Compositions
+DMORBAT_spawnCompRefs = [];
+
 // Unit editing
 DMORBAT_arsenalOpened = false;
 DMORBAT_editedUnit = objNull;
 DMORBAT_editAccepted = false;
-DMORBAT_skillLevels = ["Default", "Untrained", "Elite"];
+DMORBAT_skillLevels = ["Untrained", "Normal", "Elite"];
 DMORBAT_editReference = objNull;
 
 // Profile settings management

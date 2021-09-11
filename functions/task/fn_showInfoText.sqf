@@ -19,7 +19,7 @@
 params [["_pos", position player], ["_format", "mil"]];
 
 private _location = "";
-private _locationList = nearestLocations [_pos, ["NameLocal", "CityCenter", "NameCityCapital", "NameCity", "NameVillage", "NameMarine", "Name", "Area"] , 1000];
+private _locationList = nearestLocations [_pos, ["NameLocal", "CityCenter", "NameCityCapital", "NameCity", "NameVillage", "NameMarine", "Name", "Area"] , 400];
 
 private _fnc_BRPVP_getWeekDay = {
     private _date = [_this select 0,_this select 1,_this select 2,0,0];

@@ -10,6 +10,10 @@ _taskData = DMORBAT_TaskData select (_task - 1);
 
 // -------------------------------------------------------------------------------------
 // FRIENDLY GROUPS
+_txt = "Categorizing groups for the friendly faction...";
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Play Now - %1", _txt];
+
 // _categorizeGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups]
 _factionGroups = _factionGroupsFriendly;
 _infGroups = _factionGroups select 0;
@@ -256,19 +260,19 @@ _airGroups append _heloGroupsCustom;
 // PATROLS
 _eligiblePatrols = [4, _infGroups] call DMORBAT_fnc_filterPatrolGroups;
 // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligiblePatrols: %1", _eligiblePatrols] };
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 3 + (floor (random 3)),/*_maxUnits*/ 4,/*_limitPresence*/ true,/*_minUnits*/ 2,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrols,/*_groupsAmount*/ 3 + (floor (random 3)),/*_maxUnits*/ 4,/*_limitPresence*/ true,/*_minUnits*/ 2,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 // Pick a car as another patrol
 _eligiblePatrolCars = [1, _motGroups] call DMORBAT_fnc_filterPatrolCarGroups;
 // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligiblePatrolCars: %1", _eligiblePatrolCars] };
 if (count _eligiblePatrolCars > 0) then {
-    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrolCars,/*_groupsAmount*/ 0.5 + floor (random (1.5)),/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 1,/*_sameEdCat*/ false] call DMORBAT_fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrolCars,/*_groupsAmount*/ 0.5 + floor (random (1.5)),/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 0,/*_sameEdCat*/ false] call DMORBAT_fnc_addGroupsToTaskData;
 };
 
 // DEFENDERS
 _eligibleDefenders = [8, _infGroups] call DMORBAT_fnc_filterDefenderGroups;
 // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleDefenders: %1", _eligibleDefenders] };
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Defenders",/*_groupsPool*/ _eligibleDefenders,/*_groupsAmount*/ 1 + (floor (random 2)),/*_maxUnits*/ 9,/*_limitPresence*/ true,/*_minUnits*/ 4,/*_skill*/ 0,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Defenders",/*_groupsPool*/ _eligibleDefenders,/*_groupsAmount*/ 1 + (floor (random 2)),/*_maxUnits*/ 9,/*_limitPresence*/ true,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
 
 
 // -------------------------------------------------------------------------------------

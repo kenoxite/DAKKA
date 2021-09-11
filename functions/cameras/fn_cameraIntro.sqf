@@ -16,7 +16,7 @@
   Examples:
 
 */
-params [["_target", []]];
+params [["_target", [], [[]]]];
 private ["_camera", "_pos", "_dir", "_landPos"];
 cutText ["Loading preview...", "BLACK IN", 999];
 // 0 fadeSound 0;

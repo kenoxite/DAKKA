@@ -19,20 +19,29 @@
 params ["_unit", "_unitSkill"]; 
 
 switch (_unitSkill) do {
+    case 0: {
+        // UNTRAINED
+        _unit disableAI "FSM"; 
+        _unit setskill 0.15; 
+        _unit setUnitAbility 0.15; 
+        _unit setskill ["aimingAccuracy", random [0.06, 0.08, 0.1]]; 
+        _unit setskill ["aimingShake", random [0.6, 0.8, 1]]; 
+        _unit setskill ["aimingSpeed", random [0.2, 0.5, 0.7]]; 
+        _unit setskill ["spotDistance", random [0.2, 0.3, 0.5]]; 
+        _unit setskill ["spotTime",random [0.6, 0.8, 1]]; 
+        _unit setskill ["commanding",random [0.8, 1, 1.2]]; 
+        _unit setskill ["courage",random [0.2, 0.4, 0.6]]; 
+        _unit setskill ["general", random [0.1, 0.3, 0.5]]; 
+        _unit setskill ["reloadSpeed",random [0.01, 0.1, 0.3]]; 
+
+        _unit allowFleeing 1;
+    };
 	case 1: {
-		// UNTRAINED
-		_unit disableAI "FSM"; 
-		_unit setskill 0.15; 
-		_unit setUnitAbility 0.15; 
-		_unit setskill ["aimingAccuracy", random [0.06, 0.08, 0.1]]; 
-		_unit setskill ["aimingShake", random [0.6, 0.8, 1]]; 
-		_unit setskill ["aimingSpeed", random [0.2, 0.5, 0.7]]; 
-		_unit setskill ["spotDistance", random [0.2, 0.3, 0.5]]; 
-		_unit setskill ["spotTime",random [0.6, 0.8, 1]]; 
-		_unit setskill ["commanding",random [0.8, 1, 1.2]]; 
-		_unit setskill ["courage",random [0.2, 0.4, 0.6]]; 
-		_unit setskill ["general", random [0.1, 0.3, 0.5]]; 
-		_unit setskill ["reloadSpeed",random [0.01, 0.1, 0.3]]; 
+		// NORMAL
+		_unit setskill 0.5; 
+		_unit setUnitAbility 0.5; 
+
+        _unit allowFleeing 0.3;
 	};
 	case 2: {
 		// ELITE
@@ -47,11 +56,12 @@ switch (_unitSkill) do {
 		_unit setskill ["courage", 1]; 
 		_unit setskill ["general", random [0.7, 0.8, 0.9]]; 
 		_unit setskill ["reloadSpeed",random [0.01, 0.03, 0.05]]; 
+        
         _unit allowFleeing 0;
 
-        // DISABLE AI MODS
+        // AI MODS
         // Vcom AI
-        (group _unit) setVariable ["VCM_TOUGHSQUAD",true]; //This command will stop the AI squad from calling for backup.
+        // (group _unit) setVariable ["VCM_TOUGHSQUAD",true]; //This command will stop the AI squad from calling for backup.
 	};
 };
 

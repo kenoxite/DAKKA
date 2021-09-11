@@ -81,8 +81,10 @@ _nul = _this spawn {
         };
         if (_supportType == "Air Transport") then {
             _supportProviderType pushBack "Transport";
-            _minRange = _supportRadius;
-            _maxRange = _supportRadius * 3; 
+            // _minRange = _supportRadius;
+            // _maxRange = _supportRadius * 3; 
+            _minRange = _supportRadius * 2;
+            _maxRange = 3000;
             _spawnRadius = 300;  
             _fly = true;  
         };

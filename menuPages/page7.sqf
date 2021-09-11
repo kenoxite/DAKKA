@@ -116,14 +116,14 @@ _ctrl = (_display displayCtrl IDC_CHK_ENVSETTINGS_RANDOMTIME);
 _ctrl ctrlSetEventHandler ["CheckedChanged", '
     if ((_this select 1) == 1) then { 
         DMORBAT_randomTime = true;
-        [] spawn DMORBAT_fnc_randomTime; 
+        [] spawn DMORBAT_fnc_randomTime;
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_TXT_ENVSETTINGS_EXCLUDENIGHT) ctrlShow true;
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_CHK_ENVSETTINGS_EXCLUDENIGHT) ctrlShow true;
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_HOUR) ctrlEnable false;
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_MINUTES) ctrlEnable false;
     } else { 
         DMORBAT_randomTime = false; 
-        setDate DMORBAT_customDate; 
+        setDate DMORBAT_customDate;
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_HOUR) lbSetCurSel ((DMORBAT_missionStart select 3)); 
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_MINUTES) lbSetCurSel ((DMORBAT_missionStart select 4)); 
         ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_TXT_ENVSETTINGS_EXCLUDENIGHT) ctrlShow false;

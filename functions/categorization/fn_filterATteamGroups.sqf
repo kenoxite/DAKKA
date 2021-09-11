@@ -21,7 +21,7 @@ private _eligibleAT = [];
 _eligibleATAll = +_infGroups select { (count (_x select 0)) <= _unitCount && ((_x select 1) select 0) };
 private _ATgroupsCount = [];
 {
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleATAll (pre-filter) %1: %2", _forEachIndex, _x select 0] };
+    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleATAll (pre-filter) %1: %2", _forEachIndex, _x select 0] };
 } forEach _eligibleATAll;
 // Pick a group with at least 2 AT
 {  

@@ -17,14 +17,16 @@
 
 */
 
-params [["_all", true], ["_location", []], ["_distance", 100]];
+params [["_amount", -1], ["_location", []], ["_distance", 100]];
+
+if (_amount == 0) exitWith { false };
 
 DMORBAT_compositionsLoaded = 0;
 
 _nul = _this spawn {
-    params [["_all", true], ["_location", []], ["_distance", 100]];
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _all: %1, _location: %2, _distance: %3", _all, _location, _distance] };
-    private ["_taskData", "_worldCompositionsData", "_compositionsData", "_thisCompositionData", "_hiddenObjects", "_compObjects", "_compObjectsCopy", "_ref", "_obj", "_objClass", "_relPos", "_objDir", "_keepHorizontal", "_itemPos", "_finalDir", "_aligned", "_refPos", "_refDir", "_nearTerrObj", "_hideDist", "_return"];
+    params [["_amount", -1], ["_location", []], ["_distance", 100]];
+    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _amount: %1, _location: %2, _distance: %3", _amount, _location, _distance] };
+    private ["_taskData", "_worldCompositionsData", "_compositionsData", "_thisCompositionData", "_hiddenObjects", "_compObjects", "_compObjectsCopy", "_ref", "_obj", "_objClass", "_relPos", "_objDir", "_keepHorizontal", "_itemPos", "_finalDir", "_aligned", "_refPos", "_refDir", "_nearTerrObj", "_hideDist", "_return", "_rePosOriginal"];
 
     _return = true;
     _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
@@ -33,7 +35,7 @@ _nul = _this spawn {
 
     private _trimmedCompositionsData = [];
     // Check for distance if not all compositions want to be spawned
-    if (!_all) then {
+    if (_amount >= 0) then {
         for [{private _i = 0}, {_i < count _compositionsData}, {_i = _i + 1}] do 
         {
             private _thisCompositionData = _compositionsData select _i;
@@ -47,9 +49,11 @@ _nul = _this spawn {
                 _trimmedCompositionsData pushBack _thisCompositionData;
             };
         };
+    } else {
+        _trimmedCompositionsData = +_compositionsData;
     };
     {
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1] };
+        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1] };
     } forEach _trimmedCompositionsData;
 
 
@@ -65,18 +69,44 @@ _nul = _this spawn {
     	_hiddenObjects = [];
     	_ref = (_compObjects select 0) select 0;
         if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _ref 1: %1", _ref ] };
+
     	// Only load if composition does not exist
         if (isNil "_ref") then { _ref = objNull };
         if (typeName _ref == "STRING") then { _ref = objNull };
     	if (isNull _ref) then {
     		// Load composition objects
     		_refArr = _compObjectsCopy select 0;
-    		_refPos = _refArr select 1;
-    		_refDir = _refArr select 2;
+            _refPos = _refArr select 1;
+            // Place the next compositions around the first one if the amount of compositions to spawn isn't all nor just one
+            if (_amount > 1 && _i > 0) then {
+                private _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+                if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 200]],[], {}] call BIS_fnc_randomPos; };
+                if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 250), (_rePosOriginal select 1) + floor(random 250), _refPos select 2]; };
+                if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _newRefPos: %1", _newRefPos ] };
+                _refPos = +_newRefPos;
+            } else {
+                _rePosOriginal = +_refPos;
+                private _newRefPos = [[[_rePosOriginal, 100]],["water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+                if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 100]],[], {}] call BIS_fnc_randomPos; };
+                if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 50), (_rePosOriginal select 1) + floor(random 50), _refPos select 2]; };
+                _refPos = +_newRefPos;
+            };
+
+            _mrkr = format ["DMORBAT_mrkr_Task%1_comp_%2", DMORBAT_Task, _i + 1];
+            _mrkr setMarkerPos _refPos;
+
     		_ref = "Flag_BI_F" createVehicle _refPos;
+            DMORBAT_spawnCompRefs pushBack _ref;
             if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _ref 2: %1", _ref ] };
     		// Update the composition objects array with the new object
     		(_compObjects select 0) set [0, _ref];
+            _refDir = _refArr select 2;
+            // Place the next compositions around the first one if the amount of compositions to spawn isn't all nor just one
+            if (_amount > 1 && _i > 0) then {
+                private _relDir = _ref getRelDir _refPos;
+                private _compDir = (_relDir + 180) mod 360;
+                _refDir = _compDir;
+            };
     		_ref setDir _refDir;
     		_ref setPos _refPos;
     		_ref hideObject true;
@@ -113,8 +143,6 @@ _nul = _this spawn {
               } forEach _nearTerrObj;
     		  // Update the composition objects array with the new object
     		  (_compObjects select (_forEachIndex + 1)) set [0, _obj];
-    		  // _obj allowDamage true;
-    		  // _obj enableSimulation true;
 
                 // Fix for CUP compositions
                 if ((configSourceMod (configFile >> "CfgVehicles" >> _objClass)) == "@CUP Terrains - Core") then {
@@ -128,6 +156,10 @@ _nul = _this spawn {
     		  } else {
     		    _obj setVectorUp (surfaceNormal (position _obj));
     		  };
+
+              _obj enableSimulation true;
+              _obj allowDamage true;
+              
     		} forEach _compObjectsCopy;
 
     		  // Update the composition objects array with the new hidden objects
@@ -152,6 +184,5 @@ _nul = _this spawn {
         _return = false;
     };
 
+    _return
 };
-
-// _return

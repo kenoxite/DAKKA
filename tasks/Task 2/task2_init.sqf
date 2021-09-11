@@ -32,14 +32,16 @@ _locationsData = [_worldLocationsData, worldName] call BIS_fnc_getFromPairs;
 _categoryData = _locationsData select 0;
 _categoryLocations = _categoryData select 1;
 _locationIndex = if (count _categoryLocations > 1) then {
-                floor ([0, (count _categoryLocations) - 1] call BIS_fnc_randomInt);
+                [0, (count _categoryLocations) - 1] call BIS_fnc_randomInt;
             } else {
                 0;
             };
 DMORBAT_task2_locPos = (_categoryLocations select _locationIndex) select 0;
 DMORBAT_task2_locDir = (_categoryLocations select _locationIndex) select 1;
 if (count DMORBAT_task2_locPos < 3) then { DMORBAT_task2_locPos pushBack 0 };
-diag_log format ["DMORBAT: Task 2 - Initializing Location %1", _locationIndex + 1];
+_txt = format ["Initializing Location %1", _locationIndex + 1];
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Task 2 - %1", _txt];
 
 // FUNCTIONS
 DMORBAT_relPosRefObj = "Flag_BI_F" createVehicle DMORBAT_task2_locPos;
@@ -59,18 +61,159 @@ _fnc_getSpawnPos = {
     DMORBAT_relPosRefObj getRelPos [_distLoc, 0]
 };
 
+_fnc_getcitylimits =
+// finds citylimits for the position given
+// if 2nd param is true, script will concentrate more on actual houses
+// returns the radius of the city limits and the house count within that
+{
+private ["_locpos","_countonlyhouses","_oldringshousecount","_rads","_houses","_dummyhouses","_ringhousecount","_allhousecount", "_finalhousecount", "_myradius", "_rings", "_foundhouses", "_myhouse", "_excludedbuildings", "_exitit", "_previousringhousecount", "_excludedcount",  "_previousringhousecount", "_excludedcount"];
+params ["_locpos", "_countonlyhouses"];
+_locpos set [2,0];
+_ringhousecount = 0;_oldringshousecount = 0;_previousringhousecount = 0;_rads = 300;_finalhousecount = 0; _excludedcount = 0;
+_excludedbuildings = ["Land_TTowerSmall_1_F", "Land_Dome_Big_F", "Cargo_Patrol_base_F", "Cargo_House_base_F", "Cargo_Tower_base_F", "Cargo_HQ_base_F","Piers_base_F", "PowerLines_base_F", "PowerLines_Wires_base_F", "PowerLines_Small_base_F", "Land_PowerPoleWooden_L_F",  /*"Lamps_base_F",*/ "Land_Research_HQ_F", "Land_Research_house_V1_F", "Land_MilOffices_V1_F", "Land_TBox_F", "Land_Chapel_V1_F","Land_Chapel_Small_V2_F",  "Land_Chapel_Small_V1_F", "Land_BellTower_01_V1_F", "Land_BellTower_02_V1_F", "Land_fs_roof_F","Land_fs_feed_F", "Land_Windmill01_ruins_F", "Land_d_Windmill01_F", "Land_i_Windmill01_F","Land_i_Barracks_V2_F", "Land_spp_Transformer_F", "Land_dp_smallFactory_F", "Land_Shed_Big_F", "Land_Metal_Shed_F","Land_i_Shed_Ind_F","Land_Communication_anchor_F", "Land_TTowerSmall_2_F", "Land_Communication_F","Land_cmp_Shed_F", "Land_cmp_Tower_F", "Land_u_Shed_Ind_F", "Land_TBox_F"];
+for "_myradius" from 75 to 450 step 75 do
+    {
+    _houses = []; _excludedcount = 0;
+    _dummyhouses = (_locpos nearObjects ["House_F", _myradius]);
+        {
+        if (_countonlyhouses) then
+            {
+            _myhouse = _x;_exitit = false;
+                {
+
+                if (_myhouse isKindOf _x) exitWith {_exitit = true};
+                } foreach _excludedbuildings;
+            if (_exitit) then {/*diag_log format ["%1 excluded because is %2", typeof _myhouse, _x];*/ _excludedcount = _excludedcount +1;} else {_houses pushBack _myhouse;};
+
+            } else {_houses = _dummyhouses};
+        } foreach _dummyhouses;
+
+    _allhousecount = (count _houses);
+    _ringhousecount = _allhousecount - _oldringshousecount;
+    //diag_log format ["houses count = %1 at ring %2 meters", _ringhousecount, _myradius];
+    if ((_ringhousecount < _previousringhousecount) and (_myradius > 99)) exitWith {_rads = _myradius; _finalhousecount = _ringhousecount; };
+    _oldringshousecount = _oldringshousecount +  _ringhousecount;
+    _previousringhousecount = _ringhousecount;
+    };
+[_rads, _finalhousecount]
+};
+
+_nearestLocations = nearestLocations [DMORBAT_task2_locPos, ["CityCenter","NameCityCapital", "NameCity", "NameVillage"], 300];
+_inTown = if (count _nearestLocations > 0) then { true } else { false };
+
+// COMPOSITIONS
+_compositions = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+_thisWorldCompositions = [_compositions, worldName] call BIS_fnc_getFromPairs;
+_compAmount = 0;
+if (DMORBAT_automated || (!DMORBAT_automated && isNil "_thisWorldCompositions")) then {
+    _txt = "Generating compositions...";
+    _ctrl ctrlSetText _txt; 
+    diag_log format ["DMORBAT: Task 2 - %1", _txt];
+    // Delete existing ones first
+    [true] call DMORBAT_fnc_compositionRemove;
+    // Load default compositions
+    #include "..\..\compositions_default.hpp";
+    #include "..\..\compositions_CUP.hpp";
+    // Use CUP compositions if that mod is loaded
+    _fnc_CUPcheck = {
+        private _CUPtest = "FlagCarrierTakistanKingdom_EP1" createVehicle [0,0,0];
+        private _CUP = if (!isNull _CUPtest) then { true } else { false };
+        [_CUPtest] spawn { deleteVehicle (_this select 0) };
+        _CUP
+    };
+    _compositionsPredefined = [];
+    if (call _fnc_CUPcheck) then { _compositionsPredefined = +_compositions_CUP } else { 
+    _compositionsPredefined = +_compositions_default };
+
+    _locationsPredefined = DMORBAT_locations_Task2;
+    // Amount of compositions should match amount of predefined locations
+    _taskLocations = [_locationsPredefined, "Contested Areas"] call BIS_fnc_getFromPairs;
+    _compAmount = if (_inTown) then { 3 } else { 5 };
+    _selectedCompositions = [];
+    {
+        for [{private _i = 0}, {_i < _compAmount}, {_i = _i + 1}] do
+        {
+            private _coords = _x select 0;
+            // if (DMORBAT_debug) then { diag_log format ["_coords: %1", _coords] };
+            private _dir = _x select 1;
+            private _comp = +selectRandom _compositionsPredefined;
+            private _compName = _comp select 0;
+            private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
+            _comp set [0, _newName];
+            // if (DMORBAT_debug) then { diag_log format ["_selectedComposition: %1", _compName] };
+            private _compData = _comp select 1;
+            private _ref = _compData select 0;
+            private _refPosOriginal = [_coords select 0, _coords select 1, 0];
+            _ref set [1, _refPosOriginal];
+            _ref set [2, _dir];
+            // _ref set [2, floor(random 360)];
+            _selectedCompositions pushBack _comp;
+        };
+    } forEach _taskLocations;
+
+    // Add compositions data to tasks array
+    // _compositions = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+    // _thisWorldCompositions = [_compositions, worldName] call BIS_fnc_getFromPairs;
+    if (isNil "_thisWorldCompositions") then {
+        // Add terrain data and include the predefined compositions
+        _newArr = [worldName, _selectedCompositions];
+        [_taskData, "Compositions", [_newArr]] call BIS_fnc_addToPairs;
+    } else {
+        // Add predefined compositions to current terrain
+        [_compositions, worldName, _selectedCompositions] call BIS_fnc_setToPairs
+    };
+
+    // {
+    //     if (DMORBAT_debug) then { diag_log format ["%1: %2", _x select 0, _x select 1] };
+    // } forEach _selectedCompositions;
+
+    // Load compositions
+    _compPos = [[[DMORBAT_task2_locPos, 50]],["water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+    if (count _compPos < 3) then { _compPos = DMORBAT_task2_locPos };
+    [_compAmount, _compPos] call DMORBAT_fnc_compositionLoad;
+
+    // Enable simulation for all composition objects
+/*        _nul = [_compAmount] spawn {
+            params ["_compAmount"];
+            _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+            _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+            _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
+            if (!isNil "_compositionsData") then {
+                waitUntil { DMORBAT_compositionsLoaded == _compAmount };
+
+                {
+                    _compObjects = +_x select 1;
+                    _compObjects deleteAt 0;
+                    {
+                        _obj = _x select 0;
+                        _obj enableSimulation true;
+                        // _obj setVelocity [0, 0, 0];
+                        _obj allowDamage true;
+                    } forEach _compObjects;
+                } forEach _compositionsData;
+            };
+        }; */
+
+    if (DMORBAT_debug) then {
+        call DMORBAT_fnc_mapDisplayCompositions;
+    };
+};
+
 // Find a start position
-_ctrl ctrlSetText format ["Finding starting positions...", ""];
+_txt = "Finding starting positions....";
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Task 2 - %1", _txt];
 _startPos_B = [DMORBAT_task2_locPos, -500, DMORBAT_task2_locDir] call BIS_fnc_relPos;
 _startPos_O = [DMORBAT_task2_locPos, 500, DMORBAT_task2_locDir] call BIS_fnc_relPos;
 DMORBAT_startPos_O = _startPos_O;
 
-diag_log "DMORBAT: Task 2 - Spawning player group";
-_ctrl ctrlSetText format ["Spawning player group...", ""];
+_txt = "Spawning player group...";
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Task 2 - %1", _txt];
 _dir = [_startPos_B, DMORBAT_task2_locPos] call BIS_fnc_dirTo;
 p1 setPos _startPos_B;
 DMORBAT_PlayerNewGroup = [_startPos_B] call DMORBAT_fnc_setPlayerGroup; 
-if (isNull DMORBAT_PlayerNewGroup) then { diag_log ["DMORBAT: Task 1 --- ERROR --- Could not create DMORBAT_PlayerNewGroup!", ""]; terminate _thisScript};
+if (isNull DMORBAT_PlayerNewGroup) then { diag_log ["DMORBAT: Task 2 --- ERROR --- Could not create DMORBAT_PlayerNewGroup!", ""]; terminate _thisScript};
 // Reposition land vehicles in player group to friendly land vehicles spawn area
 _playerIsInf = true;
 _playerIsLand = false;
@@ -128,8 +271,9 @@ _marker = "";
 _task2_1 = [DMORBAT_PlayerNewGroup, ["DMORBAT_Task2_1", "DMORBAT_Task2"], [_description, _title, _marker], DMORBAT_task2_locPos, "CREATED", -1, false, "attack", false] call BIS_fnc_taskCreate;
 
 // SUPPORT
-diag_log "DMORBAT: Task 2 - Spawning support groups";
-_ctrl ctrlSetText format ["Spawning support groups...", ""];
+_txt = "Spawning support groups...";
+_ctrl ctrlSetText _txt; 
+diag_log format ["DMORBAT: Task 2 - %1", _txt];
 _basePos = getPos DMORBAT_officer;
 _friendlyLinesPos = [DMORBAT_task2_locPos, -750, DMORBAT_task2_locDir] call BIS_fnc_relPos;
 [[
@@ -161,12 +305,11 @@ _txt = "";
 _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", "DMORBAT_mrkr_Task2_enemy_advancement", _pos_AdvEnemy, "mil_arrow", "ICON", [3, 3], (_ref getRelDir DMORBAT_task2_locPos), "Solid", "ColorEAST", 0.5, _txt] call BIS_fnc_stringToMarker;
 deleteVehicle _ref;
 
-_inTown = if (count (nearestLocations [DMORBAT_task2_locPos, ["CityCenter","NameCityCapital", "NameCity", "NameVillage"], 500]) > 0) then { true } else { false };
-
 // Prepare location and time texts
 private _infoTextData = [DMORBAT_task2_locPos] call DMORBAT_fnc_showInfoText;
 private _locationStr = _infoTextData select 0;
 private _missionTime = _infoTextData select 1;
+private _location = format ["Battle of %1", _locationStr];
 if (_locationStr == "") then {
     private _location_prefix = selectRandom [
                 "",
@@ -197,9 +340,8 @@ if (_locationStr == "") then {
                 "horse",
                 "pike"
                 ];
-    _locationStr = format ["%1%2", _location_prefix, _location_suffix];
+    _location = format ["Battle of %1%2", _location_prefix, _location_suffix];
 }; 
-private _location = format ["Battle of %1",_locationStr];
 
 // BRIEFING
 private _playerFaction = DMORBAT_PlayerFactions select 1;
@@ -305,8 +447,9 @@ playMusic _startingMusic;
 // _ready = DMORBAT_task2_locPos findEmptyPositionReady [250, 1000];
 // waitUntil { _ready };
 
-	diag_log "DMORBAT: Task 2 - Spawning enemies";
-	_ctrl ctrlSetText format ["Spawning enemy groups...", ""];
+    _txt = "Spawning enemy groups...";
+    _ctrl ctrlSetText _txt; 
+    diag_log format ["DMORBAT: Task 2 - %1", _txt];
     // DMORBAT_Task2_SafePositions = (selectBestPlaces [getMarkerPos "DMORBAT_mrkr_Task2_location_area_enemy", 250, "meadow + 2*hills", 50, 50] apply { _x select 0 }) select { !surfaceIsWater _x && (count (nearestTerrainObjects [_x, [], 10])) < 1; }; 
 	_enemyGroups = [_taskData, "Enemy groups"] call BIS_fnc_getFromPairs;
     
@@ -332,11 +475,13 @@ playMusic _startingMusic;
         _dirMod = if ((_rowElement % 2) == 0) then { 1 } else { -1 };
         _relDir = if (_rowElement == 0) then { 0 } else { 90 * _dirMod };
         // Spawn closer if in town location
-        _spawnDist = if (_inTown) then { 250 } else { 400 };
+        _spawnDist = if (_inTown) then { 200 } else { 400 };
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DMORBAT_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
 		_grp = [(_O_InfGrps select _i) select 1, _spawnPos, east, 30] call DMORBAT_fnc_spawnGroup;
-        diag_log format ["DMORBAT: Task 2 - Spawning enemy infantry #%1 group %2", _i + 1, _grp];
+        _txt = format ["Spawning enemy infantry #%1 group %2", _i + 1, _grp];
+        if (DMORBAT_debug) then { _ctrl ctrlSetText _txt }; 
+        diag_log format ["DMORBAT: Task 2 - %1", _txt];
 		if (!isNull _grp) then {
             DMORBAT_O_InfGrps pushBack _grp;
             // [_grp, [_spawnPos, -(_spawnDist), DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DMORBAT_fnc_occupyHouse;"]] call DMORBAT_fnc_GroupWp;
@@ -346,7 +491,7 @@ playMusic _startingMusic;
             [_grp, _destination, 0, -1, "", "MOVE", "AWARE", "NORMAL", "LINE", "RED", 25, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
 
             // Push and search for enemies
-            [_grp, [_spawnPos, -(_spawnDist), DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DMORBAT_fnc_occupyHouse;"]] call DMORBAT_fnc_GroupWp;
+            [_grp, [_spawnPos, -(_spawnDist), DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; _unusedUnits = [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DMORBAT_fnc_occupyHouse; [getPos this, _unusedUnits, 100, true, true, false, true] call DMORBAT_fnc_occupyHouse;"]] call DMORBAT_fnc_GroupWp;
 
             // Fix for when AI refuses to move
             (leader _grp) doMove _destination;
@@ -382,7 +527,9 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DMORBAT_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_LandGrps select _i) select 1, _spawnPos, east, 50, true, _enemyFaction] call DMORBAT_fnc_spawnGroup;
-        diag_log format ["DMORBAT: Task 2 - Spawning enemy land vehicles #%1 group %2", _i + 1, _grp];
+        _txt = format ["Spawning enemy land vehicles #%1 group %2", _i + 1, _grp];
+        if (DMORBAT_debug) then { _ctrl ctrlSetText _txt }; 
+        diag_log format ["DMORBAT: Task 2 - %1", _txt];
         if (!isNull _grp) then {
             DMORBAT_O_LandGrps pushBack _grp;
             _wpDist = if (count DMORBAT_O_InfGrps == 0) then {
@@ -428,20 +575,30 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [[(DMORBAT_task2_locPos select 0), (DMORBAT_task2_locPos select 1), 2000], _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_AirGrps select _i) select 1, _spawnPos, east, 200, true, _enemyFaction] call DMORBAT_fnc_spawnGroup;
-        diag_log format ["DMORBAT: Task 2 - Spawning enemy air vehicles #%1 group %2", _i + 1, _grp];
+        _txt = format ["Spawning enemy air vehicles #%1 group %2", _i + 1, _grp];
+        if (DMORBAT_debug) then { _ctrl ctrlSetText _txt }; 
+        diag_log format ["DMORBAT: Task 2 - %1", _txt];
         if (!isNull _grp) then {
-            deleteWaypoint [_grp, 0];
             DMORBAT_O_AirGrps pushBack _grp;
-            [_grp, [_spawnPos, -50, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
+            // [_grp, [_spawnPos, 150, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
+
+            // Move close to contested
+            _destination = [DMORBAT_task2_locPos, -100, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+            [_grp, _destination, 0, -1, "", "MOVE", "AWARE", "FULL", "LINE", "RED", 100, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+            // Push and search for enemies
+            [_grp, [DMORBAT_task2_locPos, 500, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED", 150, "", false, false, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
 
 
-    diag_log "DMORBAT: Task 2 - Spawning friendlies";
-    _ctrl ctrlSetText format ["Spawning friendly groups...", ""];
+    _txt = "Spawning friendly groups...";
+    _ctrl ctrlSetText _txt; 
+    diag_log format ["DMORBAT: Task 2 - %1", _txt];
     // DMORBAT_Task2_SafePositions = (selectBestPlaces [getMarkerPos "DMORBAT_mrkr_Task2_location_area_friendly", 250, "meadow + 2*hills", 50, 50] apply { _x select 0 }) select { !surfaceIsWater _x && (count (nearestTerrainObjects [_x, [], 10])) < 1; }; 
     _friendlyGroups = [_taskData, "Friendly groups"] call BIS_fnc_getFromPairs;
+    _compGrps = [];
 
     // Friendly infantry
     _B_InfGrps = +(_friendlyGroups select 0) select 1;
@@ -466,9 +623,17 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DMORBAT_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;  
         _grp = [(_B_InfGrps select _i) select 1, _spawnPos, west, 30] call DMORBAT_fnc_spawnGroup;
-        diag_log format ["DMORBAT: Task 2 - Spawning friendly infantry #%1 group %2", _i + 1, _grp];
+        _txt = format ["Spawning friendly infantry #%1 group %2", _i + 1, _grp];
+        if (DMORBAT_debug) then { _ctrl ctrlSetText _txt }; 
+        diag_log format ["DMORBAT: Task 2 - %1", _txt];
         if (!isNull _grp) then {
             DMORBAT_B_InfGrps pushBack _grp;
+
+            // Units of first group will be used for spawning units in compositions
+            if (_i == 0) then {
+                _compGrps = (_B_InfGrps select _i) select 1;
+            };
+
             // [_grp, [_spawnPos, _spawnDist + 200, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT"";"]] call DMORBAT_fnc_GroupWp;
 
             // Move close to contested
@@ -512,7 +677,9 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DMORBAT_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_LandGrps select _i) select 1, _spawnPos, west, 50, true, _playerFaction] call DMORBAT_fnc_spawnGroup;
-        diag_log format ["DMORBAT: Task 2 - Spawning friendly land vehicles #%1 group %2", _i + 1, _grp];
+        _txt = format ["Spawning friendly land vehicles #%1 group %2", _i + 1, _grp];
+        if (DMORBAT_debug) then { _ctrl ctrlSetText _txt }; 
+        diag_log format ["DMORBAT: Task 2 - %1", _txt];
         if (!isNull _grp) then {
             DMORBAT_B_LandGrps pushBack _grp;
             _wpDist = if (count DMORBAT_B_InfGrps == 0) then {
@@ -556,19 +723,60 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [[(DMORBAT_task2_locPos select 0), (DMORBAT_task2_locPos select 1), 2000], _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_AirGrps select _i) select 1, _spawnPos, west, 200, true, _playerFaction] call DMORBAT_fnc_spawnGroup;
-        diag_log format ["DMORBAT: Task 2 - Spawning friendly air vehicles #%1 group %2", _i + 1, _grp];
+        _txt = format ["Spawning friendly air vehicles #%1 group %2", _i + 1, _grp];
+        if (DMORBAT_debug) then { _ctrl ctrlSetText _txt }; 
+        diag_log format ["DMORBAT: Task 2 - %1", _txt];
         if (!isNull _grp) then {
-            deleteWaypoint [_grp, 0];
             DMORBAT_B_AirGrps pushBack _grp;
-            [_grp, [_spawnPos, _spawnDist-250, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
+            // [_grp, [_spawnPos, _spawnDist-50, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DMORBAT_fnc_GroupWp;
+
+            // Move close to contested
+            _destination = [DMORBAT_task2_locPos, 100, DMORBAT_task2_locDir] call BIS_fnc_relPos;
+            [_grp, _destination, 0, -1, "", "MOVE", "AWARE", "FULL", "LINE", "RED", 100, "", true, true, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
+
+            // Push and search for enemies
+            [_grp, [DMORBAT_task2_locPos, -500, DMORBAT_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED", 150, "", false, false, [0,0,0], ["true", ""]] call DMORBAT_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
 
+    // Friendly infantry in compositions
+    if (count _compGrps > 0) then {
+        _nul = [_compGrps, _compAmount, _ctrl] spawn {
+            params ["_compGrps", "_compAmount", "_ctrl"];
+            _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+            _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+            _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
+            if (!isNil "_compositionsData") then {
+                waitUntil { DMORBAT_compositionsLoaded == _compAmount };
+                _txt = "Spawning infantry in compositions...";
+                _ctrl ctrlSetText _txt; 
+                diag_log format ["DMORBAT: Task 2 - %1", _txt];
+
+                for [{private _i = 0}, {_i < _compAmount}, {_i = _i + 1}] do
+                {
+                    _refPos = getPos (DMORBAT_spawnCompRefs select _i);
+                    _compGrpsTrimmed = +_compGrps;
+                    _compGrpsTrimmed resize (2 + floor (random 2));
+                    { _x set [4, 0] } forEach _compGrpsTrimmed;
+                    _grp = [_compGrpsTrimmed, _refPos, west, 10, true, "", false] call DMORBAT_fnc_spawnGroup;
+                    if (!isNull _grp) then {
+                        { _x allowFleeing 0 } forEach (units _grp);
+                        _grp setBehaviour "COMBAT";
+                        _unusedUnits = [_refPos, units _grp, 50, true, true, false, false] call DMORBAT_fnc_occupyHouse;
+                        { _x setDamage 1 } forEach _unusedUnits;
+                    };
+                    sleep 0.001;
+                };
+            };
+        };
+    };
+
 
     // PLAYER GROUP - PREPARE
-    diag_log "DMORBAT: Task 2 - Preparing player group";
-    _ctrl ctrlSetText format ["Preparing player group...", ""];
+    _txt = "Preparing player group...";
+    _ctrl ctrlSetText _txt; 
+    diag_log format ["DMORBAT: Task 2 - %1", _txt];
     _wpDist = if (count DMORBAT_B_InfGrps == 0) then {
                     -100
                 } else {

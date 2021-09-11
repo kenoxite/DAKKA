@@ -61,7 +61,7 @@ _groupMods = [];
 {
   _veh = vehicle _x;
   if (_x == effectiveCommander _veh) then {
-    _unitClasses pushBack [(typeOf _veh), rank _veh, [], 1, 0];
+    _unitClasses pushBack [(typeOf _veh), rank _veh, [], 1, 1];
     // Check for the unit mod dependencies
     _mod = [typeOf _veh] call DMORBAT_fnc_modsCheck;
     _groupMods pushBackUnique _mod;

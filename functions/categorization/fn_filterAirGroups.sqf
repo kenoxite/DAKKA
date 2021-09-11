@@ -18,31 +18,45 @@
 params ["_airGroups"];
 private _eligibleAir = [];
 private _eligibleAirAll = +_airGroups;
+
+// Flatten the array
+_eligibleAirAllTemp = [];
+{
+
+} forEach _eligibleAirAll;
+
 private _eligibleAirFiltered = [];
 {
-    diag_log format ["DMORBAT: _eligibleAirAll - x: %1", _x];
     private _units = _x select 0;
     private _isMissile = false;
+    private _isRocket = false;
     private _airClass = "";
     private _group = _x;
     private _groupIndex = _forEachIndex;
     {
         _airClass = _x;
+        if (typeName _airClass == "ARRAY") then { _airClass = (_x select 0) select 0 };
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - Looking for missiles and rockets in %1", _airClass] };
         if ([_airClass] call DMORBAT_fnc_isAir) then {
             private _testUnit = [_airClass, [0,random 500,0]] call DMORBAT_fnc_spawnVehicle;
             private _pylonLoadout = getPylonMagazines _testUnit;
             private _nul = [_testUnit] spawn { [_this select 0] call DMORBAT_fnc_deleteVehicle };
             _isMissile = false;
+            _isRocket = false;
             {
                 private _ammo = getText (configfile >> "CfgMagazines" >> _x >> "ammo");
                 private _ammoParents = [configFile >> "CfgAmmo" >> _ammo, true] call BIS_fnc_returnParents;
+                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - _ammo: %1, _ammoParents: %2", _ammo, _ammoParents] };
                 _isMissile = "MissileCore" in _ammoParents;
-                if (_isMissile) exitWith { if (DMORBAT_debug) then { diag_log format ["%1 - %2 is a missile? %3", _airClass, _x, _isMissile] }; };
+                _isRocket = "RocketCore" in _ammoParents;
+                if (_isMissile || _isRocket) exitWith { if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - %1 HAS MISSILES OR ROCKETS: %2", _airClass, _x] }; };
             } forEach _pylonLoadout;
         };
     } forEach _units;
     if (_isMissile) then {
         _eligibleAirFiltered pushBackUnique _group;
+    } else {
+        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - %1 DOESN'T HAVE MISSILES OR ROCKETS", _airClass] };
     };
 } forEach _eligibleAirAll;
 
