@@ -1,4 +1,3 @@
-# DMORBAT
-*Mission for Arma 3*
+# DAKKA - Downright Awesome Kinetic Kit for Arma
 
 Simple and flexible dynamic mission framework with instant action capabilities.
