@@ -1,11 +1,11 @@
-# DAKKA
-### Downright Awesome Kinetic Kit for Arma
+# DAKKA 
+#### Downright Awesome Kinetic Kit for Arma
 [![Version](https://img.shields.io/badge/Version-0.1-green)](https://github.com/kenoxite/DAKKA/releases/latest)
 [![License](https://img.shields.io/badge/License-APL--SA-lightgrey)](https://github.com/kenoxite/DAKKA/blob/master/LICENSE)
 
 ### Info
 
-Simple and flexible _**dynamic mission framework**_ with _**instant action**_ capabilities for Arma 3.
+Simple and flexible _**Dynamic Mission Framework**_ with _**Instant Action**_ capabilities for Arma 3.
 
 ### License
 
