@@ -5,7 +5,7 @@
 
 ### Info
 
-Simple and flexible _**dynamic mission framework**_ with _**instant action**_ capabilities.
+Simple and flexible _**dynamic mission framework**_ with _**instant action**_ capabilities for Arma 3.
 
 ### License
 
