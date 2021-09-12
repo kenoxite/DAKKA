@@ -401,7 +401,7 @@ if (!_loadingScreen) then { systemChat "Loading screen could not be opened!" };
 // EXTRACT FACTIONS DATA
 private _initTime = time;
 DAKKA_availableFactionsData = call DAKKA_fnc_extractFactionData;
-systemChat format ["Faction data extracted in %1s", time - _initTime];
+if (DMORBAT_debug) then { systemChat format ["Faction data extracted in %1s", time - _initTime] };
 
 // PLAYER SETUP
 (units p1) joinSilent (createGroup [west, true]);

@@ -38,7 +38,8 @@ _ctrl ctrlEnable false;
 
 // Main Title
 _ctrl = (_display displayCtrl IDC_MM_TITLE);
-_ctrl ctrlSetText "DAKKA\nDownright\nAwesome Kit\nfor Arma";
+// _ctrl ctrlSetText "images\logo.paa";
+// _ctrl ctrlSetText "DAKKA\nDownright\nAwesome Kit\nfor Arma";
 // _ctrl = (_display displayCtrl IDC_MM_TITLE_1);
 // _ctrl ctrlSetStructuredText parseText "<t size='2.8' align='center' valign='middle'>DYNAMIC</t>";
 // _ctrl = (_display displayCtrl IDC_MM_TITLE_2);

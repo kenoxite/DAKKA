@@ -256,23 +256,24 @@ class DAKKA_Menu_Mission_Edit
 					h = safezoneH;
 
 					class Controls {
-						class DAKKA_Title_MainMenu:DAKKA_StaticText
+						class DAKKA_Title_MainMenu:RscPicture
 						{
 							idc = IDC_MM_TITLE;
 
 							x = 0 * pixelGridNoUIScale * pixelW;
-							y = 3 * pixelGridNoUIScale * pixelH;
+							y = 2 * pixelGridNoUIScale * pixelH;
 							w = 25 * pixelGridNoUIScale * pixelW;	
-							h = 10 * pixelGridNoUIScale * pixelH;
+							h = 14 * pixelGridNoUIScale * pixelH;
 
-							colorText[] = {1,1,1,1};
-							colorBackground[] = {0.2,0.2,0.2,0};
-							text = "";
-							font = GUI_FONT_BOLD;
-							style = ST_CENTER + ST_MULTI;
-						    sizeEx = ((pixelH * pixelGridNoUIScale * 2) * 3.8) * 0.5;
-						    lineSpacing = 0.6;
-							tooltip = "";
+							// colorText[] = {1,1,1,1};
+							// colorBackground[] = {0.2,0.2,0.2,0};
+							// font = GUI_FONT_BOLD;
+							// style = ST_CENTER + ST_MULTI;
+                            // sizeEx = ((pixelH * pixelGridNoUIScale * 2) * 3.8) * 0.5;
+                            // lineSpacing = 0.6;
+							// tooltip = "";
+
+                            text = "images\logo.paa";
 						};
 
                         // Task selection

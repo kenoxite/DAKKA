@@ -5,6 +5,9 @@
 #include "dialogs\dialog_main.hpp"
 #include "dialogs\dialog_task2.hpp"
 
+author = "kenoxite";
+onLoadName = "DAKKA";
+
 class CfgSounds
 {
     sounds[] = {};
