@@ -69,9 +69,10 @@ if (isNil (call compile format ["'DAKKA_%1_%2'", "Infantry", _faction])) then {
 } else {
     _catInf = call compile format ["DAKKA_%1_%2", "Infantry", _faction];
 };
-// if (isNil "_catInf") exitWith { diag_log format ["DAKKA: createCustomLandGroups --- ERROR --- No custom infantry groups found. Custom land groups won't be created for faction %1", _faction]; [] };
+if (isNil "_catInf") exitWith { diag_log format ["DAKKA: createCustomLandGroups --- ERROR --- No custom infantry groups found. Custom land groups won't be created for faction %1", _faction]; [] };
+// if (count _catInf == 0) exitWith { diag_log format ["DAKKA: createCustomLandGroups --- ERROR --- No custom infantry groups found. Custom land groups won't be created for faction %1", _faction]; [] };
 
-if (!isNil "_catInf") then {
+if (count _catInf > 0) then {
     private _squadLeaders = _catInf select 0;
     private _teamLeaders = _catInf select 1;
     private _riflemen = _catInf select 2;
@@ -145,7 +146,7 @@ private _customArmorGroups = [];
 } forEach _landGroups;
 
 // Add to land groups array
-if (!isNil "_catInf" && (_groupsType == "Motorized" || _groupsType == "Land")) then {
+if (count _catInf > 0 && (_groupsType == "Motorized" || _groupsType == "Land")) then {
     if (count _cars == 0 && count _cars_unarmed == 0) then { _cars_unarmed = [["C_Offroad_01_F", ["C_Offroad_01_F"] call DAKKA_fnc_countPassengerSeats]] };
     if (count _trucks == 0 && count _trucks_unarmed == 0) then { _trucks_unarmed = [["C_Van_01_transport_F", ["C_Van_01_transport_F"] call DAKKA_fnc_countPassengerSeats]] };
     _carsAll append _cars;
@@ -509,7 +510,7 @@ if (!isNil "_catInf" && (_groupsType == "Motorized" || _groupsType == "Land")) t
     };
 };
 
-if (!isNil "_catInf" && (_groupsType == "Mechanized" || _groupsType == "Land")) then {
+if (count _catInf > 0 && (_groupsType == "Mechanized" || _groupsType == "Land")) then {
     _APCsAll append _wheeledAPCs;
     _APCsAll append _trackedAPCs;
     _APCsAll append _wheeledAPCdrones;

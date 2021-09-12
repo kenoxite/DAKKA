@@ -220,6 +220,7 @@ _playerIsLand = false;
 _playerIsAir = false;
 {
     private _veh = vehicle _x;
+    // Player in land vehicle
     if (!([_veh] call DAKKA_fnc_isMan) && !([_veh] call DAKKA_fnc_isAir)) then {
         // private _pos = [DAKKA_task2_locPos, -750, DAKKA_task2_locDir] call BIS_fnc_relPos;
         private _pos = [DAKKA_task2_locPos, round(random 500), -750, 90 * (selectRandom [0,1]*2-1)] call _fnc_getSpawnPos;
@@ -236,9 +237,19 @@ if (_playerIsInf) then {
     {
         private _veh = vehicle _x;
         if ([_veh] call DAKKA_fnc_isAir) then {
+
             private _pos = [[(DAKKA_task2_locPos select 0) + (floor random 200), (DAKKA_task2_locPos select 1), 2000], -5000, DAKKA_task2_locDir] call BIS_fnc_relPos;
             if (_x == effectiveCommander _veh) then {
-                _veh setVehiclePosition [_pos, [], (sizeOf (typeOf _veh) + 100), "FLY"];
+                _veh setVehiclePosition [[_pos select 0, _pos select 1, 5000], [], (sizeOf (typeOf _veh) + 100), "FLY"];
+                [_veh] spawn {
+                    params ["_veh"];
+                    _veh allowDamage false;
+                    while {visibleMap} do {
+                        _veh setVelocity [0,0,0];
+                        sleep 0.01;
+                    };
+                    _veh allowDamage true;
+                };
             };
             _playerIsInf = false;
             _playerIsAir = true;
@@ -494,7 +505,7 @@ playMusic _startingMusic;
             [_grp, [_spawnPos, -(_spawnDist), DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; _unusedUnits = [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DAKKA_fnc_occupyHouse; [getPos this, _unusedUnits, 100, true, true, false, true] call DAKKA_fnc_occupyHouse;"]] call DAKKA_fnc_GroupWp;
 
             // Fix for when AI refuses to move
-            (leader _grp) doMove _destination;
+            (effectiveCommander (vehicle leader _grp)) doMove _destination;
 		};
 		sleep 0.001;
 	}; 
@@ -547,7 +558,7 @@ playMusic _startingMusic;
             [_grp, [_spawnPos, -300, DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DAKKA_O_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 75, "", false, false, [0,0,0], ["true", ""]] call DAKKA_fnc_GroupWp;
 
             // Fix for when AI refuses to move
-            (leader _grp) doMove _destination;
+            (effectiveCommander (vehicle leader _grp)) doMove _destination;
         };
         sleep 0.001;
     }; 
@@ -644,7 +655,7 @@ playMusic _startingMusic;
             [_grp, [_spawnPos, _spawnDist + 150, DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", false, false, [0,0,0], ["true", ""]] call DAKKA_fnc_GroupWp;
 
             // Fix for when AI refuses to move
-            (leader _grp) doMove _destination;
+            (effectiveCommander (vehicle leader _grp)) doMove _destination;
         };
         sleep 0.001;
     }; 
@@ -695,7 +706,7 @@ playMusic _startingMusic;
             [_grp, [_spawnPos, _spawnDist -_wpDist, DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DAKKA_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 75, "", false, false, [0,0,0], ["true", "if (behaviour this != ""COMBAT"") then { if (random 1 > 0.9) then { this globalRadio ""SentClear""; }; };"]] call DAKKA_fnc_GroupWp;
 
             // Fix for when AI refuses to move
-            (leader _grp) doMove _destination;
+            (effectiveCommander (vehicle leader _grp)) doMove _destination;
         };
         sleep 0.001;
     }; 
@@ -841,7 +852,14 @@ waitUntil {isNull _display};
 call DAKKA_fnc_cameraIntroTerminate;
 cutText ["", "BLACK IN", 2];
 2 fadeSound 1;
-// enableRadio true;
+
+if (DAKKA_cinematics) then {
+    showHUD [false, false, false, false, false, false, false, false, false];
+    enableRadio false;
+    // [DAKKA_SupportReq, "Artillery", 0] call BIS_fnc_limitSupport;
+} else {
+    enableRadio true;
+};
 
 // Start time
 DAKKA_missionStartTime = time;

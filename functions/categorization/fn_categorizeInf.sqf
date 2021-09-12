@@ -108,10 +108,9 @@ if !(_isRegular) then {
     _pilots = +_pilots_SF;
 };
 
-// If there's no riflemen, everyone is a rifleman
-if (count _riflemen == 0) then {
-    if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - No riflemen found. Everybody is now a %2 rifleman for faction %1", _faction, if (_isRegular) then { "regular" } else { "SF" }] };
-    _riflemen append _squadLeaders; 
+// If there's no riflemen, terminate
+if (count _riflemen == 0) exitWith { diag_log format ["DAKKA: categorizeInf --- ERROR --- No %2 riflemen found for faction %1!", _faction, if (_isRegular) then { "regular" } else { "SF" }]; [] };
+/*    _riflemen append _squadLeaders; 
     _riflemen append _teamLeaders; 
     _riflemen append _riflemenAT; 
     _riflemen append _riflemenAA; 
@@ -126,7 +125,7 @@ if (count _riflemen == 0) then {
     _riflemen append _engineers;
     _riflemen append _drivers;
     _riflemen append _heavyGunners;
-};
+};*/
 
 // Pick the editor subcategory all units will belong to
 if (_editorSubCat == "") then { _editorSubCat = getText (configFile >> "CfgVehicles" >> (selectRandom _riflemen) >> "editorSubcategory") };

@@ -36,10 +36,15 @@ private _veh = objNull;
 
 // Delete wheelchocks
 private _wheelChock = objNull;
-{
-  deleteVehicle _x;
-} forEach DAKKA_wheelChock;
-DAKKA_wheelChock = []; 
+[] spawn {
+    private _wheelChocks = +DAKKA_wheelChock;
+    private _wheelChocksDel = [];
+    {
+      deleteVehicle _x;
+      _wheelChocksDel pushBackUnique _x;
+    } forEach _wheelChocks;
+    DAKKA_wheelChock = DAKKA_wheelChock - _wheelChocksDel; 
+};
   
 private _cameraPos = _pos;
 private _cameraDir = _dir;
@@ -159,6 +164,7 @@ _amountVeh = count _realVehicles;
 
 {
 	_veh = vehicle _x;
+    _isAir = [_veh] call DAKKA_fnc_isAir;
 	// if (DAKKA_debug) then { diag_log format ["DAKKA: _x is 1st crew of: %1", _veh] };
 	_bbr = [_veh] call DAKKA_fnc_boundingBoxReal;
 	_dist = ((_lastUnitWidth + 2) * _i);
@@ -209,15 +215,23 @@ _amountVeh = count _realVehicles;
     // _veh setPos [_unitPos select 0, _unitPos select 1, 0.3];
     _veh setPos _unitPos;
 	_veh setDir _dir + 30;
-    _veh setVectorUp (surfaceNormal (position _veh));
 	// if (DAKKA_debug) then { diag_log format ["DAKKA: %4[%3] _dist: %1 , _formDir: %2", _dist, _formDir * _lor, typeof _veh, _veh] };
 	// if (DAKKA_debug) then { diag_log format ["DAKKA: _unitPos: %1", _unitPos] };
-	_veh enableSimulation true;
+	if (!_isAir) then { _veh enableSimulation true };
+    _veh setVectorUp (surfaceNormal (position _veh));
     _veh setVelocity [0, 0, 0];
+/*    [_veh, _dir, _unitPos] spawn {
+        params ["_veh", "_dir", "_unitPos"];
+        _veh setPos _unitPos;
+        _veh setDir _dir + 30;
+        _veh setVectorUp (surfaceNormal (position _veh));
+        _veh setVelocity [0, 0, 0];
+    };*/
 	// Stop air units from taking off
 	if (_veh isKindOf "Plane") then {
 		_wheelChock = createVehicle ["Land_WheelChock_01_F", [getPos _veh, 3, getDir _veh] call BIS_fnc_relPos, [], 0, "CAN_COLLIDE"];
 		_wheelChock setDir (getDir _veh) + 90;
+        _wheelChock enableSimulation false;
 		DAKKA_wheelChock pushBack _wheelChock;
 	};
 	if (_veh isKindOf "Helicopter") then {

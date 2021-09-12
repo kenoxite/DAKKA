@@ -90,7 +90,6 @@ if (isNull DAKKA_previewGroup) then {
             private _unitLoadout = _loadoutArr select _forEachIndex;
             _changeLoadouts pushBack [_unit, _unitLoadout];
 		};
-		_unit setVelocity [0, 0, 0];
 		_unit disableAI "FSM";
 		_unit disableAI "MOVE";
 		_unit disableAI "PATH";
@@ -100,6 +99,8 @@ if (isNull DAKKA_previewGroup) then {
 		_unit disableAI "AUTOCOMBAT";
 		_unit setCaptive true;
 		_unit allowDamage false;
+        _unit setVectorUp (surfaceNormal (position _unit));
+        _unit setVelocity [0, 0, 0];
 		{
 			_x setCaptive true;
 			_x allowDamage false;

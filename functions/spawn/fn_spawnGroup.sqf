@@ -66,7 +66,7 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
         _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist, "NONE", _enableRandom, _checkManPos] call DAKKA_fnc_spawnMan);
     } else {
         _isAir = [_unitClass] call DAKKA_fnc_isAir;
-        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, _faction] call DAKKA_fnc_spawnVehicle);
+        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, if (_isDefaultVeh) then { _faction } else { "" }] call DAKKA_fnc_spawnVehicle);
     };
     _unit setCaptive true;
     _unit disableAI "TARGET";

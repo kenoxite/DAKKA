@@ -43,7 +43,8 @@ if (isNil (call compile format ["'DAKKA_%1_%2'", _groupsType, _faction])) then {
     _catInf = call compile format ["DAKKA_%1_%2", _groupsType, _faction];
 };
 
-if (count _catInf == 0) exitWith { [] };
+if (isNil "_catInf") exitWith { diag_log format ["DAKKA: createCustomInfGroups --- ERROR --- No custom %2 infantry groups found. Custom infantry groups won't be created for faction %1", _faction, if (_isRegular) then { "regular" } else { "SF" }]; [] };
+if (count _catInf == 0) exitWith { diag_log format ["DAKKA: createCustomInfGroups --- ERROR --- No custom %2 infantry groups found. Custom infantry groups won't be created for faction %1", _faction, if (_isRegular) then { "regular" } else { "SF" }]; [] };
 
 private _squadLeaders = _catInf select 0;
 private _teamLeaders = _catInf select 1;

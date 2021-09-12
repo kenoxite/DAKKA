@@ -15,7 +15,7 @@
 
 */
 params ["_veh", ["_grp", grpNull], ["_faction", ""], ["_autoDelete", true]];  
-
+// diag_log format ["DAKKA: spawnCrew - _veh: %1, _grp: %2, _faction: %3", typeOf _veh, _grp, _faction ];
 
 
 private _vehClass = typeOf _veh;

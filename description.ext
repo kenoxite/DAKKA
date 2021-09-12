@@ -309,6 +309,7 @@ class CfgFunctions
             class groupRoles {};
             class vehicleType {};
             class isVehicleArmed {};
+            class returnCrew {};
         };
 
         class DataExtraction
@@ -322,6 +323,8 @@ class CfgFunctions
 		class General
 		{
 			file = "functions\general";
+
+            class start {};
 
             // Misc
             class realUnitbyIndex {};
