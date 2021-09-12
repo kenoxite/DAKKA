@@ -19,26 +19,26 @@
 
 private ["_display", "_ctrl"];
 
-if(!isNull DMORBAT_previewCamera) then {
-  DMORBAT_previewCamera cameraEffect ["TERMINATE", "BACK"];
-  camDestroy DMORBAT_previewCamera;
-  DMORBAT_previewCameraPlaying = false;
-  DMORBAT_previewCamera = objNull;
-  deleteVehicle DMORBAT_cameraTarget;
-  DMORBAT_cameraTarget = objNull;
+if(!isNull DAKKA_previewCamera) then {
+  DAKKA_previewCamera cameraEffect ["TERMINATE", "BACK"];
+  camDestroy DAKKA_previewCamera;
+  DAKKA_previewCameraPlaying = false;
+  DAKKA_previewCamera = objNull;
+  deleteVehicle DAKKA_cameraTarget;
+  DAKKA_cameraTarget = objNull;
 
   _display = findDisplay IDC_MENU_MISSION_EDIT;
   _ctrl = (_display displayCtrl IDC_GRP_CAM_CONTROLS);
   _ctrl ctrlShow false;
-  DMORBAT_cameraZoom = 0.75;
-  DMORBAT_cameraX = 0;
-  DMORBAT_cameraY = 0;
+  DAKKA_cameraZoom = 0.75;
+  DAKKA_cameraX = 0;
+  DAKKA_cameraY = 0;
   _ctrl = (_display displayCtrl IDC_GRP_EDIT_CONTROLS);
   _ctrl ctrlShow false;
-  DMORBAT_editReference = objNull;
+  DAKKA_editReference = objNull;
   _ctrl = (_display displayCtrl IDC_GRP_CAM_TYPE);
   _ctrl ctrlShow false;
 
   // Enable ambient fauna
-  // enableEnvironment DMORBAT_environment;
+  // enableEnvironment DAKKA_environment;
 };  

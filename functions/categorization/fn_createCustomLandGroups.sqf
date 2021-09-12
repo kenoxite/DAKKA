@@ -16,12 +16,12 @@
 */
 
 params [["_groupsType", []], ["_faction", ""]];
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - _groupsType: %1", _groupsType] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - _groupsType: %1", _groupsType] };
 
 if (count _groupsType == 0) exitWith { [] };
 
 // Check faction for suitable land units
-private _factionLand = [_faction, "Land"] call DMORBAT_fnc_categorizeUnits;
+private _factionLand = [_faction, "Land"] call DAKKA_fnc_categorizeUnits;
 private _landGroups = [];
 {
     private _grps = _x select 1;
@@ -34,10 +34,10 @@ private _landGroups = [];
 private _usingParentFaction = [
     ["BLU_W_F", "BLU_F"]
 ];
-private _parentFactionIndex = [_usingParentFaction, _faction] call DMORBAT_fnc_findFirstNested;
+private _parentFactionIndex = [_usingParentFaction, _faction] call DAKKA_fnc_findFirstNested;
 if (_parentFactionIndex >= 0) then {
     private _parentFaction = (_usingParentFaction select _parentFactionIndex) select 1;
-    private _factionLand = [_parentFaction, "Land"] call DMORBAT_fnc_categorizeUnits;
+    private _factionLand = [_parentFaction, "Land"] call DAKKA_fnc_categorizeUnits;
     {
         private _grps = _x select 1;
         {
@@ -51,9 +51,9 @@ if (_parentFactionIndex >= 0) then {
 // Categorize infantry
 // [_squadLeaders, _teamLeaders, _riflemen, _riflemenAT, _riflemenHAT, _riflemenAA, _grenadiers, _autoriflemen, _medics, _marksmen, _officers, _drivers, _crewmen, _snipers, _spotters, _JTACs, _engineers, _explosiveSpecialists, _heavyGunners, _pilots]
 private _catInf = [];
-if (isNil (call compile format ["'DMORBAT_%1_%2'", "Infantry", _faction])) then {
+if (isNil (call compile format ["'DAKKA_%1_%2'", "Infantry", _faction])) then {
 // Check faction for suitable infantry units
-    private _factionInfantry = [_faction, "Infantry"] call DMORBAT_fnc_categorizeUnits;
+    private _factionInfantry = [_faction, "Infantry"] call DAKKA_fnc_categorizeUnits;
     private _infGroups = [];
     {
         private _grps = _x select 1;
@@ -64,32 +64,35 @@ if (isNil (call compile format ["'DMORBAT_%1_%2'", "Infantry", _faction])) then 
 
     if (count _infGroups == 0) exitWith { [] };
 
-    _catInf = [_infGroups, _isRegular] call DMORBAT_fnc_categorizeInf;
-    missionNamespace setVariable [format ["DMORBAT_%1_%2", "Infantry", _faction], _catInf];
+    _catInf = [_infGroups, _isRegular] call DAKKA_fnc_categorizeInf;
+    missionNamespace setVariable [format ["DAKKA_%1_%2", "Infantry", _faction], _catInf];
 } else {
-    _catInf = call compile format ["DMORBAT_%1_%2", "Infantry", _faction];
+    _catInf = call compile format ["DAKKA_%1_%2", "Infantry", _faction];
 };
+// if (isNil "_catInf") exitWith { diag_log format ["DAKKA: createCustomLandGroups --- ERROR --- No custom infantry groups found. Custom land groups won't be created for faction %1", _faction]; [] };
 
-private _squadLeaders = _catInf select 0;
-private _teamLeaders = _catInf select 1;
-private _riflemen = _catInf select 2;
-private _riflemenAT = _catInf select 3;
-private _riflemenHAT = _catInf select 4;
-private _riflemenAA = _catInf select 5;
-private _grenadiers = _catInf select 6;
-private _autoriflemen = _catInf select 7;
-private _medics = _catInf select 8;
-private _marksmen = _catInf select 9;
-private _officers = _catInf select 10;
-private _drivers = _catInf select 11;
-private _crewmen = _catInf select 12;
-private _snipers = _catInf select 13;
-private _spotters = _catInf select 14;
-private _JTACs = _catInf select 15;
-private _engineers = _catInf select 16;
-private _explosiveSpecialists = _catInf select 17;
-private _heavyGunners = _catInf select 18;
-private _pilots = _catInf select 19;
+if (!isNil "_catInf") then {
+    private _squadLeaders = _catInf select 0;
+    private _teamLeaders = _catInf select 1;
+    private _riflemen = _catInf select 2;
+    private _riflemenAT = _catInf select 3;
+    private _riflemenHAT = _catInf select 4;
+    private _riflemenAA = _catInf select 5;
+    private _grenadiers = _catInf select 6;
+    private _autoriflemen = _catInf select 7;
+    private _medics = _catInf select 8;
+    private _marksmen = _catInf select 9;
+    private _officers = _catInf select 10;
+    private _drivers = _catInf select 11;
+    private _crewmen = _catInf select 12;
+    private _snipers = _catInf select 13;
+    private _spotters = _catInf select 14;
+    private _JTACs = _catInf select 15;
+    private _engineers = _catInf select 16;
+    private _explosiveSpecialists = _catInf select 17;
+    private _heavyGunners = _catInf select 18;
+    private _pilots = _catInf select 19;
+};
 
 // Categorize all the land vehicles
 private _cars = [];
@@ -123,28 +126,28 @@ private _customArmorGroups = [];
 
 {
     private _unitClass = _x select 0;
-    private _type = [_unitClass, true] call DMORBAT_fnc_vehicleType;
+    private _type = [_unitClass, true] call DAKKA_fnc_vehicleType;
 
-    if (_type == "Car") then { _cars pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Car (unarmed)") then { _cars_unarmed pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Truck") then { _trucks pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Truck (unarmed)") then { _trucks_unarmed pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Drone Car") then { _carDrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Drone Truck") then { _truckDrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
+    if (_type == "Car") then { _cars pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Car (unarmed)") then { _cars_unarmed pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Truck") then { _trucks pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Truck (unarmed)") then { _trucks_unarmed pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Drone Car") then { _carDrones pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Drone Truck") then { _truckDrones pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
 
-    if (_type == "Wheeled APC") then { _wheeledAPCs pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Tracked APC") then { _trackedAPCs pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Drone Wheeled APC") then { _wheeledAPCdrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Drone Tracked APC") then { _trackedAPCdrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats];  };
+    if (_type == "Wheeled APC") then { _wheeledAPCs pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Tracked APC") then { _trackedAPCs pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Drone Wheeled APC") then { _wheeledAPCdrones pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Drone Tracked APC") then { _trackedAPCdrones pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats];  };
 
-    if (_type == "Tank") then { _tanks pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Drone Tank") then { _tankDrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
+    if (_type == "Tank") then { _tanks pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Drone Tank") then { _tankDrones pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
 } forEach _landGroups;
 
 // Add to land groups array
-if (_groupsType == "Motorized" || _groupsType == "Land") then {
-    if (count _cars == 0 && count _cars_unarmed == 0) then { _cars_unarmed = [["C_Offroad_01_F", ["C_Offroad_01_F"] call DMORBAT_fnc_countPassengerSeats]] };
-    if (count _trucks == 0 && count _trucks_unarmed == 0) then { _trucks_unarmed = [["C_Van_01_transport_F", ["C_Van_01_transport_F"] call DMORBAT_fnc_countPassengerSeats]] };
+if (!isNil "_catInf" && (_groupsType == "Motorized" || _groupsType == "Land")) then {
+    if (count _cars == 0 && count _cars_unarmed == 0) then { _cars_unarmed = [["C_Offroad_01_F", ["C_Offroad_01_F"] call DAKKA_fnc_countPassengerSeats]] };
+    if (count _trucks == 0 && count _trucks_unarmed == 0) then { _trucks_unarmed = [["C_Van_01_transport_F", ["C_Van_01_transport_F"] call DAKKA_fnc_countPassengerSeats]] };
     _carsAll append _cars;
     _carsAll append _cars_unarmed;
     _carsAll append _carDrones;
@@ -178,8 +181,8 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         _group pushBack (selectRandom _riflemen);
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized AA team: %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized AA team: %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 
@@ -217,8 +220,8 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         _group pushBack (selectRandom _riflemen);
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized AT team: %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized AT team: %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 
@@ -242,8 +245,8 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized patrol (armed): %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized patrol (armed): %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 
@@ -267,8 +270,8 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized patrol (unarmed): %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized patrol (unarmed): %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 
@@ -302,8 +305,8 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized team: %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized team: %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 
@@ -395,8 +398,8 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized reinforcements: %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized reinforcements: %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 
@@ -500,13 +503,13 @@ if (_groupsType == "Motorized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - motorized reinforcements: %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - motorized reinforcements: %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMotoGroups pushBack [_group, _roles];
     };
 };
 
-if (_groupsType == "Mechanized" || _groupsType == "Land") then {
+if (!isNil "_catInf" && (_groupsType == "Mechanized" || _groupsType == "Land")) then {
     _APCsAll append _wheeledAPCs;
     _APCsAll append _trackedAPCs;
     _APCsAll append _wheeledAPCdrones;
@@ -582,8 +585,8 @@ if (_groupsType == "Mechanized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - mechanized rifle squad (6): %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - mechanized rifle squad (6): %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMechGroups pushBack [_group, _roles];
     };
 
@@ -657,8 +660,8 @@ if (_groupsType == "Mechanized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - mechanized rifle squad (8): %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - mechanized rifle squad (8): %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMechGroups pushBack [_group, _roles];
     };
 
@@ -750,8 +753,8 @@ if (_groupsType == "Mechanized" || _groupsType == "Land") then {
         };
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - mechanized rifle squad (9): %1", _group] };
-        private _roles = [_group] call DMORBAT_fnc_groupRoles;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - mechanized rifle squad (9): %1", _group] };
+        private _roles = [_group] call DAKKA_fnc_groupRoles;
         _customMechGroups pushBack [_group, _roles];
     };
 };
@@ -776,7 +779,7 @@ if (_groupsType == "Armor" || _groupsType == "Land") then {
         _group pushBack ((selectRandom _validTanks) select 0);
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - tank platoon: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - tank platoon: %1", _group] };
         _customArmorGroups pushBack [_group];
     };
 
@@ -792,7 +795,7 @@ if (_groupsType == "Armor" || _groupsType == "Land") then {
         _group pushBack ((selectRandom _validTanks) select 0);
 
         // Add to land groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomLandGroups - tank section: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomLandGroups - tank section: %1", _group] };
         _customArmorGroups pushBack [_group];
     };
 };

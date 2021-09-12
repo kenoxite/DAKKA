@@ -20,14 +20,14 @@
 params ["_idc", ["_cameraAngle", "top"], ["_end", false]];
 private ["_display", "_ctrl", "_selectionPath", "_taskData", "_worldCompositionsData", "_compositionsData", "_index", "_thisCompositionData", "_compObjects", "_target", "_cameraRadius", "_cameraHeightCircle", "_circlingPos", "_dist", "_camDist", "_mrkr", "_ref"];
 
-call DMORBAT_fnc_cameraPreviewTerminate;
+call DAKKA_fnc_cameraPreviewTerminate;
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl _idc);
 _selectionPath = tvCurSel _ctrl;
-if ((count _selectionPath) < 1) exitWith { [format ["ERROR: No composition was selected!"]] spawn DMORBAT_fnc_displayMessage;; };
+if ((count _selectionPath) < 1) exitWith { [format ["ERROR: No composition was selected!"]] spawn DAKKA_fnc_displayMessage;; };
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 _index = _selectionPath select 0;
@@ -37,7 +37,7 @@ if (_end) then {
 	// Show things
 	ctrlShow [IDC_GRP_AO_MAP_CONTROLS, true];
     ctrlShow [IDC_IMG_MAPCROSSHAIR, true];
-	  if (DMORBAT_mapSatellite) then {
+	  if (DAKKA_mapSatellite) then {
 	    ctrlShow [IDC_MAP_AO_SEL_T, false];
 	    ctrlShow [IDC_MAP_AO_SEL_S, true];
 	  } else {
@@ -60,7 +60,7 @@ if (_end) then {
     // Control the buttons display
     ctrlShow [IDC_BT_3_GRP1, false];
     ctrlShow [IDC_BT_4_GRP1, false];
-    if (DMORBAT_Task == 1) then {
+    if (DAKKA_Task == 1) then {
         ctrlShow [IDC_BT_AO_SEL_ROTATE_LEFT, false];
         ctrlShow [IDC_BT_AO_SEL_ROTATE_RIGHT, false];
     };
@@ -91,12 +91,12 @@ if (_end) then {
 	ctrlSetFocus _ctrl;
 
 	// Update markers
-	call DMORBAT_fnc_mapDisplayCompositions;
+	call DAKKA_fnc_mapDisplayCompositions;
 
 } else {
 	_compObjects = +_thisCompositionData select 1;
 	_target = (_compObjects select 0) select 0;
-	DMORBAT_editReference = _target;
+	DAKKA_editReference = _target;
 	_compObjects deleteAt 0;
 
 	// Check for furthers object from center to set a camera distance
@@ -118,9 +118,9 @@ if (_end) then {
 	  _cameraRadius = _camDist * 2;
 	  _cameraHeightCircle = _camDist;
 	  _circlingPos = getPosATL _target;
-	  [_circlingPos, _cameraRadius, _cameraHeightCircle, 0.2] spawn DMORBAT_fnc_cameraPreviewCircle;
+	  [_circlingPos, _cameraRadius, _cameraHeightCircle, 0.2] spawn DAKKA_fnc_cameraPreviewCircle;
 	} else {
-		[_target, _cameraAngle, _camDist] spawn DMORBAT_fnc_cameraEdit;
+		[_target, _cameraAngle, _camDist] spawn DAKKA_fnc_cameraEdit;
 	};
 
 	// Disable buttons

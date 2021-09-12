@@ -33,7 +33,7 @@ _ctrlH =  ((_ctrlPos select 3) / 2);
 
 _mapCenter = [(_ctrlW + _ctrlX), (_ctrlH + _ctrlY)];
 _finalPos = _ctrlCurrent ctrlMapScreenToWorld _mapCenter;
-"DMORBAT_mrkr_MapCenter" setMarkerPos _finalPos;
+"DAKKA_mrkr_MapCenter" setMarkerPos _finalPos;
 
 _ctrlOther ctrlMapAnimAdd [0, ctrlMapScale _ctrlCurrent, _finalPos];
 ctrlMapAnimCommit _ctrlOther;

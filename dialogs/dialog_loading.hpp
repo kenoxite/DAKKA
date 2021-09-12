@@ -1,6 +1,6 @@
 #include "..\control_defines.hpp"
 
-class DMORBAT_Loading_Screen
+class DAKKA_Loading_Screen
 {
 
 	idd = IDC_LOADING_SCREEN;
@@ -19,7 +19,7 @@ class DMORBAT_Loading_Screen
 	class Controls
 	{
 		// Loading screen
-		class DMORBAT_Grp_LoadingScreen: DMORBAT_Controls_Group {
+		class DAKKA_Grp_LoadingScreen: DAKKA_Controls_Group {
 			idc = IDC_GRP_LOADINGSCREEN;	
 			x = safezoneX;
 			y = safezoneY;
@@ -27,7 +27,7 @@ class DMORBAT_Loading_Screen
 			h = safezoneH;	
 
 			class Controls {
-				class DMORBAT_Bckg_LoadingScreen:RscPicture
+				class DAKKA_Bckg_LoadingScreen:RscPicture
 				{
 					idc = -1;
 					x = 0 * pixelGridNoUIScale * pixelW;
@@ -37,7 +37,7 @@ class DMORBAT_Loading_Screen
 					
 					text = "#(rgb,8,8,3)color(0,0,0,0.8)";
 				};
-				class DMORBAT_txt_LoadingBar:DMORBAT_StaticText
+				class DAKKA_txt_LoadingBar:DAKKA_StaticText
 				{
 					idc = IDC_TXT_LOADINGSCREEN;
 

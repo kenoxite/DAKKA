@@ -25,7 +25,7 @@ private _ctrl =  _display displayCtrl _idcCombo;
 
 lbClear _ctrl;
 
-private _savedData = profileNamespace getVariable (format ["DMORBAT_Task%1", DMORBAT_Task]);
+private _savedData = profileNamespace getVariable (format ["DAKKA_Task%1", DAKKA_Task]);
 
 for [{private _i = 0}, {_i < count _savedData}, {_i = _i + 1}] do
 {

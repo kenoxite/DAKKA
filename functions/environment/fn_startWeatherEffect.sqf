@@ -17,13 +17,13 @@
 */
 
 private _editing = false;
-if !(isNil "DMORBAT_mainDialogOpened") then {
-    _editing = DMORBAT_mainDialogOpened;
+if !(isNil "DAKKA_mainDialogOpened") then {
+    _editing = DAKKA_mainDialogOpened;
 };
 
-enableEnvironment DMORBAT_environment;
+enableEnvironment DAKKA_environment;
 
-switch (DMORBAT_weatherEffect) do
+switch (DAKKA_weatherEffect) do
 {
     case "snow":
     {  

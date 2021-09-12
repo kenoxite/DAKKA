@@ -20,7 +20,7 @@
 params [["_dateType", ""], ["_initTime", time]];
 private ["_display", "_ctrl", "_newDate", "_value", "_action"];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
-_newDate = DMORBAT_customDate;
+_newDate = DAKKA_customDate;
 _action = [];
 switch (_dateType) do {
     case "year":
@@ -57,31 +57,31 @@ switch (_dateType) do {
     };
 };
 setDate _newDate;
-DMORBAT_customDate = _newDate;
+DAKKA_customDate = _newDate;
 if (count _action > 0) then {
-    [_action] call DMORBAT_fnc_fillDate;
+    [_action] call DAKKA_fnc_fillDate;
 };
 
-if (DMORBAT_debug) then { diag_log format ["time: %1", time - _initTime] };
+if (DAKKA_debug) then { diag_log format ["time: %1", time - _initTime] };
 // Don't update time and weather when just loading the page to avoid spamming the change X functions
 if (((time - _initTime) > 1) || _dateType == "minutes") then {
     // Update weather (only when changing month)
     if (_dateType == "month") then {
-        if (DMORBAT_randomWeather) then {
-            [] spawn DMORBAT_fnc_randomWeather;
+        if (DAKKA_randomWeather) then {
+            [] spawn DAKKA_fnc_randomWeather;
         } else {
-            [DMORBAT_customWeather] spawn DMORBAT_fnc_setWeather;
+            [DAKKA_customWeather] spawn DAKKA_fnc_setWeather;
         };
     };
 
     // Save settings
-    if (!DMORBAT_randomTime) then {
-        ["Date"] call DMORBAT_fnc_globalSettingsSave;
+    if (!DAKKA_randomTime) then {
+        ["Date"] call DAKKA_fnc_globalSettingsSave;
     } else {
-        diag_log "DMORBAT: --- TIME SET ---";
+        diag_log "DAKKA: --- TIME SET ---";
     };
 
-    if (DMORBAT_cameraIntroPlaying) then {
-        [] spawn DMORBAT_fnc_cameraIntro;
+    if (DAKKA_cameraIntroPlaying) then {
+        [] spawn DAKKA_fnc_cameraIntro;
     };
 };

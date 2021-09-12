@@ -16,15 +16,15 @@
 
 */
 
-DMORBAT_snow = false;
-DMORBAT_sandstorm = false;
-DMORBAT_earthquake = false;
-DMORBAT_postapocalyptic = false;
+DAKKA_snow = false;
+DAKKA_sandstorm = false;
+DAKKA_earthquake = false;
+DAKKA_postapocalyptic = false;
 
-DMORBAT_duststorm = false;
+DAKKA_duststorm = false;
 al_duststorm_on = false;
 
-DMORBAT_monsoon = false;
+DAKKA_monsoon = false;
 al_monsoon_om = false;
 
 true

@@ -22,7 +22,7 @@ private ["_ctrl", "_indexCtrl", "_compositions", "_catArr", "_subCat", "_catClas
 disableSerialization;
 _ctrl = (findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc;
 if (isNull _ctrl) exitWith { 
-  diag_log format ["DMORBAT: --- ERROR --- updateCompositionsTreeList CONTROL %1  could not be found!", _ctrl];
+  diag_log format ["DAKKA: --- ERROR --- updateCompositionsTreeList CONTROL %1  could not be found!", _ctrl];
 };
 tvClear _ctrl;
 
@@ -53,9 +53,9 @@ _compositions = [];
 _compositions sort true;
 
 // {
-//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCompositionsTreelist _compositions %2: %1", _x, _forEachIndex] };
+//     if (DAKKA_debug) then { diag_log format ["DAKKA: updateCompositionsTreelist _compositions %2: %1", _x, _forEachIndex] };
 // } forEach _compositions;
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCompositionsTreelist _compositions (full): %1", _compositions] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: updateCompositionsTreelist _compositions (full): %1", _compositions] };
 
 // Populate tree list
 private _i1 = 0;
@@ -97,7 +97,7 @@ for [{private _i = 0}, {_i < count _compositions}, {_i = _i + 1}] do
   };
   // Delete category if there's no compositions in any subcategory
   if ((_ctrl tvCount [_indexCat]) == 0 || _catName == "") then {
-    // systemChat format ["DMORBAT: updateCompositionsTreeList NO COMPOSITIONS IN %1", _catName];
+    // systemChat format ["DAKKA: updateCompositionsTreeList NO COMPOSITIONS IN %1", _catName];
     _ctrl tvDelete [_indexCat];
   };
   _i1 = _i1 + 1;

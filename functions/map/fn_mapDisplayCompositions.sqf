@@ -19,17 +19,17 @@
 
 private ["_taskData", "_worldCompositionsData", "_compositionsData", "_mrkr", "_txt", "_pos", "_dir"];
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 
 // Reset markers
-call DMORBAT_fnc_deleteCompositionMarkers;
+call DAKKA_fnc_deleteCompositionMarkers;
 
 // Create markers
 // "|MARKERNAME|markerPos|markerType|markerShape|markerSize|markerDir|markerBrush|markerColor|markerAlpha|markerText"
 {
-  _mrkr = format ["DMORBAT_mrkr_Task%1_comp_%2", DMORBAT_Task, _forEachIndex + 1];
+  _mrkr = format ["DAKKA_mrkr_Task%1_comp_%2", DAKKA_Task, _forEachIndex + 1];
   _txt = format ["%1. %2", _forEachIndex + 1, _x select 0];
   _pos = ((_x select 1) select 0) select 1;
   _dir = ((_x select 1) select 0) select 2;

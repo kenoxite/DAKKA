@@ -21,15 +21,15 @@
   true
         
   Examples:
-  ["Enemy groups","Air Vehicles",_airGroups,1] call DMORBAT_fnc_addGroupsToTaskData;   
+  ["Enemy groups","Air Vehicles",_airGroups,1] call DAKKA_fnc_addGroupsToTaskData;   
 
 */
 
 params ["_sideType", "_groupType", "_groupsPool", ["_groupsAmount", 1], ["_maxUnits", 0], ["_limitPresence", false], ["_minUnits", 3], ["_skill", 1], ["_sameEdCat", true], ["_edCat", ""]];
-// if (DMORBAT_debug) then { diag_log format ["_sideType: %1 _groupType: %2 _groupsPool: %3 _groupsAmount: %4 _maxUnits: %5 _limitPresence: %6 _minUnits: %7 _skill: %8 _sameEdCat: %9 _edCat: %10", _sideType, _groupType, (_groupsPool select 0) select 0, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, _sameEdCat, _edCat] };
+// if (DAKKA_debug) then { diag_log format ["_sideType: %1 _groupType: %2 _groupsPool: %3 _groupsAmount: %4 _maxUnits: %5 _limitPresence: %6 _minUnits: %7 _skill: %8 _sameEdCat: %9 _edCat: %10", _sideType, _groupType, (_groupsPool select 0) select 0, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, _sameEdCat, _edCat] };
 
-private _task = DMORBAT_Task;
-private _taskData = DMORBAT_TaskData select (_task - 1);
+private _task = DAKKA_Task;
+private _taskData = DAKKA_TaskData select (_task - 1);
 
 private _groupsDataIndex = [_taskData, _sideType] call BIS_fnc_findInPairs;
 private _groupsData = (_taskData select _groupsDataIndex) select 1;
@@ -40,7 +40,7 @@ for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do
     // if (_sameEdCat && _sideType == "Friendly groups" && _groupType == "Infantry") then {
     if (_sameEdCat && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat != "") then {
     // Pick only teams of the same editor category
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now -_fnc_addGroupsToTaskData - Filtering provided groups by category for %1, %2: %3", _sideType, _groupType, _edCat] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: Play Now -_fnc_addGroupsToTaskData - Filtering provided groups by category for %1, %2: %3", _sideType, _groupType, _edCat] };
         _groupsPoolTemp = _groupsPool select {
             _thisESubCat = getText (configFile >> "CfgVehicles" >> ((_x select 0) select 0) >> "editorSubcategory");
             // _playerESubCat = getText (configFile >> "CfgVehicles" >> ((_playerGroup select 0) select 0) >> "editorSubcategory");
@@ -48,31 +48,31 @@ for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do
             _thisESubCat == _edCat;
         };
         if (count _groupsPoolTemp == 0) exitWith {
-            diag_log format ["DMORBAT: --- WARNING --- Couldn't find groups of the same editor category for %1! Trying again without category limits...", _sideType];
-            [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, false] call DMORBAT_fnc_addGroupsToTaskData
+            diag_log format ["DAKKA: --- WARNING --- Couldn't find groups of the same editor category for %1! Trying again without category limits...", _sideType];
+            [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, false] call DAKKA_fnc_addGroupsToTaskData
         };
         _groupsPool = +_groupsPoolTemp;
     };
     _selectedGroup = selectRandom _groupsPool;
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: Play Now - _fnc_addGroupsToTaskData - _thisGroupData: %1", ((_selectedGroup select 0) select 0)] };
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: Play Now - _fnc_addGroupsToTaskData - _thisGroupData: %1", ((_selectedGroup select 0) select 0)] };
 
     private _groupEdCat = getText (configFile >> "CfgVehicles" >> ((_selectedGroup select 0) select 0) >> "editorSubcategory");
     private _friendly = if (_sideType == "Friendly groups") then { true } else { false };
-    if (("snow" in toLowerAnsi(_groupEdCat) || "winter" in toLowerAnsi(_groupEdCat)) && isNil format ["DMORBAT_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }]) exitWith {
-        diag_log format ["DMORBAT: --- WARNING --- Unit camo is 'Snow' and it usually looks silly in most terrains. Trying again...", _sideType];
-        missionNamespace setVariable [format ["DMORBAT_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }], true];
-        [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill] call DMORBAT_fnc_addGroupsToTaskData
+    if (("snow" in toLowerAnsi(_groupEdCat) || "winter" in toLowerAnsi(_groupEdCat)) && isNil format ["DAKKA_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }]) exitWith {
+        diag_log format ["DAKKA: --- WARNING --- Unit camo is 'Snow' and it usually looks silly in most terrains. Trying again...", _sideType];
+        missionNamespace setVariable [format ["DAKKA_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }], true];
+        [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill] call DAKKA_fnc_addGroupsToTaskData
     };
 
     // Set side editor category if it wasn't set already
     if (_sameEdCat && (_groupType == "Infantry" || _groupType == "Patrols" || _groupType == "Defenders") && _edCat == "") exitWith {
         if (_sideType == "Friendly groups") then {
-            DMORBAT_friendlyInfEdCat = _groupEdCat;
+            DAKKA_friendlyInfEdCat = _groupEdCat;
         } else {
-            DMORBAT_enemyInfEdCat = _groupEdCat;
+            DAKKA_enemyInfEdCat = _groupEdCat;
         };
-        diag_log format ["DMORBAT: Editor category wasn't set. Trying again with: %1", _groupEdCat];
-        [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, true, _groupEdCat] call DMORBAT_fnc_addGroupsToTaskData
+        diag_log format ["DAKKA: Editor category wasn't set. Trying again with: %1", _groupEdCat];
+        [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill, true, _groupEdCat] call DAKKA_fnc_addGroupsToTaskData
     };
 
     private _thisGroupData = [format ["%1 Group %2", _groupType, _i + 1], [], []];

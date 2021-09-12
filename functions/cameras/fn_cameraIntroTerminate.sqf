@@ -17,11 +17,11 @@
 
 */
 
-if (!isNull DMORBAT_cameraIntro) then {
-  DMORBAT_cameraIntro cameraEffect ["TERMINATE", "BACK"];
-  camDestroy DMORBAT_cameraIntro;
-  DMORBAT_cameraIntroPlaying = false;
-  DMORBAT_cameraIntro = objNull;
+if (!isNull DAKKA_cameraIntro) then {
+  DAKKA_cameraIntro cameraEffect ["TERMINATE", "BACK"];
+  camDestroy DAKKA_cameraIntro;
+  DAKKA_cameraIntroPlaying = false;
+  DAKKA_cameraIntro = objNull;
 
-  // [group DMORBAT_introTarget] call DMORBAT_fnc_deleteGroup;
+  // [group DAKKA_introTarget] call DAKKA_fnc_deleteGroup;
 };  

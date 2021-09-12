@@ -314,7 +314,7 @@ _g=[] spawn {
                     } else {
                         // Chance for the UAV imaginary controller giving up due to frustration
                         systemChat "UAV inert. No controlling signal is detected.";
-                        diag_log format ["DMORBAT: Operator is frutrated of all the jamming and won't try to control the UAV (%1 - %2) anymore", _unit, typeOf _unit];
+                        diag_log format ["DAKKA: Operator is frutrated of all the jamming and won't try to control the UAV (%1 - %2) anymore", _unit, typeOf _unit];
                         _sa_local_jamm_givenUp pushBackUnique _unit;
                         // Allow unit to move
                         _unit enableAI "PATH";

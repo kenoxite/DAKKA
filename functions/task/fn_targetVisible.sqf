@@ -38,7 +38,7 @@ if (_targetArea > 0) then {
 
 {  
     private _unit = _x;
-    private _zoom = call DMORBAT_fnc_trueZoom;
+    private _zoom = call DAKKA_fnc_trueZoom;
     private _maxDist = if ((_unit != p1 && cameraView == "Gunner") || (_unit == p1 && _zoom >= 1.9)) then {
                         _aidedViewDist;
                     } else {

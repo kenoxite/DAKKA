@@ -20,16 +20,16 @@ delay_thunder       - number, based on this number a delay will be generated bet
 
 sleep 1;
 
-diag_log "DMORBAT: Monsoon: Initializing";
+diag_log "DAKKA: Monsoon: Initializing";
 
 _overcast = random [0.7, 0.9, 1];
-_fog = [] call DMORBAT_fnc_setFog;
+_fog = [] call DAKKA_fnc_setFog;
 _weather = [_overcast, _fog];
-[_weather, false] spawn DMORBAT_fnc_setWeather;
+[_weather, false] spawn DAKKA_fnc_setWeather;
 sleep 0.5;
  
-while {DMORBAT_monsoon} do { 
-    diag_log "DMORBAT: Dust Storm: Starting a new one";
+while {DAKKA_monsoon} do { 
+    diag_log "DAKKA: Dust Storm: Starting a new one";
     my_monsoon_duration = 240 + random 600;
     pause_between_monsoon = 240 + random 600;
     null = [100, my_monsoon_duration, true, true, true, true, true, random [0.5, 1, 5]] execvm "AL_monsoon\al_monsoon.sqf";
@@ -38,4 +38,4 @@ while {DMORBAT_monsoon} do {
 }; 
 
 
-diag_log "DMORBAT: Monsoon: End";
+diag_log "DAKKA: Monsoon: End";

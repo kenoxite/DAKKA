@@ -21,15 +21,15 @@ params [["_amount", -1], ["_location", []], ["_distance", 100]];
 
 if (_amount == 0) exitWith { false };
 
-DMORBAT_compositionsLoaded = 0;
+DAKKA_compositionsLoaded = 0;
 
 _nul = _this spawn {
     params [["_amount", -1], ["_location", []], ["_distance", 100]];
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _amount: %1, _location: %2, _distance: %3", _amount, _location, _distance] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: _amount: %1, _location: %2, _distance: %3", _amount, _location, _distance] };
     private ["_taskData", "_worldCompositionsData", "_compositionsData", "_thisCompositionData", "_hiddenObjects", "_compObjects", "_compObjectsCopy", "_ref", "_obj", "_objClass", "_relPos", "_objDir", "_keepHorizontal", "_itemPos", "_finalDir", "_aligned", "_refPos", "_refDir", "_nearTerrObj", "_hideDist", "_return", "_rePosOriginal"];
 
     _return = true;
-    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
     _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
     _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 
@@ -53,7 +53,7 @@ _nul = _this spawn {
         _trimmedCompositionsData = +_compositionsData;
     };
     {
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: _trimmedCompositionsData - %1: %2", _x select 0, _x select 1] };
     } forEach _trimmedCompositionsData;
 
 
@@ -62,13 +62,13 @@ _nul = _this spawn {
     for [{private _i = 0}, {_i < count _trimmedCompositionsData}, {_i = _i + 1}] do 
     {
     	_thisCompositionData = _trimmedCompositionsData select _i;
-    	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _thisCompositionData: %1", _thisCompositionData] };
-        diag_log format ["DMORBAT: compositionLoad - Loading composition: %1", _thisCompositionData select 0 ];
+    	// if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _thisCompositionData: %1", _thisCompositionData] };
+        diag_log format ["DAKKA: compositionLoad - Loading composition: %1", _thisCompositionData select 0 ];
     	_compObjects = _thisCompositionData select 1;
     	_compObjectsCopy = +_thisCompositionData select 1;
     	_hiddenObjects = [];
     	_ref = (_compObjects select 0) select 0;
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _ref 1: %1", _ref ] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _ref 1: %1", _ref ] };
 
     	// Only load if composition does not exist
         if (isNil "_ref") then { _ref = objNull };
@@ -82,7 +82,7 @@ _nul = _this spawn {
                 private _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
                 if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 200]],[], {}] call BIS_fnc_randomPos; };
                 if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 250), (_rePosOriginal select 1) + floor(random 250), _refPos select 2]; };
-                if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _newRefPos: %1", _newRefPos ] };
+                if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _newRefPos: %1", _newRefPos ] };
                 _refPos = +_newRefPos;
             } else {
                 _rePosOriginal = +_refPos;
@@ -92,12 +92,12 @@ _nul = _this spawn {
                 _refPos = +_newRefPos;
             };
 
-            _mrkr = format ["DMORBAT_mrkr_Task%1_comp_%2", DMORBAT_Task, _i + 1];
+            _mrkr = format ["DAKKA_mrkr_Task%1_comp_%2", DAKKA_Task, _i + 1];
             _mrkr setMarkerPos _refPos;
 
     		_ref = "Flag_BI_F" createVehicle _refPos;
-            DMORBAT_spawnCompRefs pushBack _ref;
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _ref 2: %1", _ref ] };
+            DAKKA_spawnCompRefs pushBack _ref;
+            if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _ref 2: %1", _ref ] };
     		// Update the composition objects array with the new object
     		(_compObjects select 0) set [0, _ref];
             _refDir = _refArr select 2;
@@ -111,7 +111,7 @@ _nul = _this spawn {
     		_ref setPos _refPos;
     		_ref hideObject true;
     		_compObjectsCopy deleteAt 0;
-            // _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", format["DMORBAT_mrkr_comp%1", random 999], _refPos, "mil_dot", "ICON", [1, 1], 0, "Solid", "ColorWEST", 1, "Composition"] call BIS_fnc_stringToMarker;
+            // _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", format["DAKKA_mrkr_comp%1", random 999], _refPos, "mil_dot", "ICON", [1, 1], 0, "Solid", "ColorWEST", 1, "Composition"] call BIS_fnc_stringToMarker;
     		_hideDist = 2;
     		{
     		  _objClass = _x select 1;
@@ -164,20 +164,20 @@ _nul = _this spawn {
 
     		  // Update the composition objects array with the new hidden objects
     		_thisCompositionData set [2, _hiddenObjects];
-    		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _hiddenObjects: %1", _thisCompositionData select 2] };
+    		// if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _hiddenObjects: %1", _thisCompositionData select 2] };
 
-    		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: compositionLoad _compObjects %2: %1", _compObjects, (_forEachIndex + 1)] };
+    		// if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _compObjects %2: %1", _compObjects, (_forEachIndex + 1)] };
         } else {
             _return = false;
     	};
 
-        DMORBAT_compositionsLoaded = DMORBAT_compositionsLoaded + 1;
+        DAKKA_compositionsLoaded = DAKKA_compositionsLoaded + 1;
         sleep 0.01;
     };
 
     // Save task settings
-    if (!DMORBAT_automated) then {
-        call DMORBAT_fnc_settingsSave;
+    if (!DAKKA_automated) then {
+        call DAKKA_fnc_settingsSave;
     };
 
     if (count _compositionsData == 0) then {

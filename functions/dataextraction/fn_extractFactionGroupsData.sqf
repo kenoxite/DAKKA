@@ -60,7 +60,7 @@ private _factionGroups = [];
                         _unitsData pushBack [_unitClass, _rank];
                     } forEach ("true" configClasses _groupClass);
 
-                    private _groupTypeInd = [_factionGroups, _groupTypeName] call DMORBAT_fnc_findFirstNested;
+                    private _groupTypeInd = [_factionGroups, _groupTypeName] call DAKKA_fnc_findFirstNested;
                     if (_groupTypeInd < 0) then {
                         _factionGroups pushBack [_groupTypeName, [[_groupName, _unitsData]]];
                     } else {

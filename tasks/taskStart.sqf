@@ -5,51 +5,51 @@
 cutText ["", "BLACK IN"];
 
 // RANDOM DATE, TIME & WEATHER
-call DMORBAT_fnc_resetWeatherEffects;
+call DAKKA_fnc_resetWeatherEffects;
 _null = [] spawn {
-        if (DMORBAT_automated) then {
+        if (DAKKA_automated) then {
             // Random date
-            _newDate = DMORBAT_customDate;
+            _newDate = DAKKA_customDate;
             _newDate set [0, 1985];
             _newDate set [1, [1, 12] call BIS_fnc_randomInt];
             _newDate set [2, [1, 28] call BIS_fnc_randomInt];
             setDate _newDate;
-            DMORBAT_noNight = DMORBAT_noNightAuto;
-            [] spawn DMORBAT_fnc_randomTime;
-            DMORBAT_customDate = date;
-            DMORBAT_weatherEffect = "None";
-            [] spawn DMORBAT_fnc_randomWeather;
+            DAKKA_noNight = DAKKA_noNightAuto;
+            [] spawn DAKKA_fnc_randomTime;
+            DAKKA_customDate = date;
+            DAKKA_weatherEffect = "None";
+            [] spawn DAKKA_fnc_randomWeather;
         } else {
             sleep 1;
             // Weather effect
-            if (DMORBAT_weatherEffect != "None") then {
-                call compile format ["DMORBAT_%1 = true", DMORBAT_weatherEffect];
-                call DMORBAT_fnc_startWeatherEffect;
+            if (DAKKA_weatherEffect != "None") then {
+                call compile format ["DAKKA_%1 = true", DAKKA_weatherEffect];
+                call DAKKA_fnc_startWeatherEffect;
             };
             // Random time and weather
-            if (DMORBAT_randomTime) then {
-               [] spawn DMORBAT_fnc_randomTime;
+            if (DAKKA_randomTime) then {
+               [] spawn DAKKA_fnc_randomTime;
             };
-            if (DMORBAT_randomWeather && (DMORBAT_weatherEffect == "None" || DMORBAT_weatherEffect == "earthquake")) then {
-               [] spawn DMORBAT_fnc_randomWeather;
+            if (DAKKA_randomWeather && (DAKKA_weatherEffect == "None" || DAKKA_weatherEffect == "earthquake")) then {
+               [] spawn DAKKA_fnc_randomWeather;
             };
         };
 };
 
-[] spawn DMORBAT_fnc_cameraIntro;
+[] spawn DAKKA_fnc_cameraIntro;
 
 // LOCATIONS
 // Set random location if none was specified in a custom game
-if (!DMORBAT_automated) then {
+if (!DAKKA_automated) then {
     // Retrieve data for this task
-    _task = DMORBAT_Task;
-    _taskData = DMORBAT_TaskData select (_task - 1);
+    _task = DAKKA_Task;
+    _taskData = DAKKA_TaskData select (_task - 1);
     _worldLocationsData = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
     _locationsData = [_worldLocationsData, worldName] call BIS_fnc_getFromPairs;
     _categoryData = _locationsData select 0;
     _categoryLocations = _categoryData select 1;
     if (count _categoryLocations == 0) then {
-        _locationsPredefined = call compile format ["DMORBAT_locations_Task%1", _task];
+        _locationsPredefined = call compile format ["DAKKA_locations_Task%1", _task];
         // Add locations data to tasks array
         _locations = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
         _thisWorldLocations = [_locations, worldName] call BIS_fnc_getFromPairs;
@@ -65,29 +65,29 @@ if (!DMORBAT_automated) then {
 };
 
 // Start loading screen
-if (!DMORBAT_automated) then {
-    _loadingScreen = createDialog "DMORBAT_Loading_Screen";
+if (!DAKKA_automated) then {
+    _loadingScreen = createDialog "DAKKA_Loading_Screen";
 };
 
 // SPAWN ANNOUNCER UNIT
-_faction = DMORBAT_PlayerFactions select (DMORBAT_Task - 1); 
+_faction = DAKKA_PlayerFactions select (DAKKA_Task - 1); 
 _officerClass = "";
 // Return the first "man" class
 {
 	if (_officerClass == "") exitWith { _officerClass = (configName _x); };
 } forEach (("getText (_x >> 'faction') == _faction && (getNumber (_x >> 'scope') == 2) && (configName _x) isKindOf 'Man'") configClasses (configfile >> "CfgVehicles")); 
 if (_officerClass == "") then { _officerClass = typeOf player };
-DMORBAT_officer = [_officerClass, position player] call DMORBAT_fnc_spawnMan;
-removeAllWeapons DMORBAT_officer;        
-removeVest DMORBAT_officer;         
-removeBackpack DMORBAT_officer;
-DMORBAT_officer setUnitRank "COLONEL";
-DMORBAT_officer disableAI "PATH";
-DMORBAT_officer setCaptive true;
-DMORBAT_officer allowDamage false;
-(group DMORBAT_officer) setGroupId ["Base"];
-DMORBAT_martaHide pushBack (group DMORBAT_officer);
-_basepos = getPos DMORBAT_officer;
+DAKKA_officer = [_officerClass, position player] call DAKKA_fnc_spawnMan;
+removeAllWeapons DAKKA_officer;        
+removeVest DAKKA_officer;         
+removeBackpack DAKKA_officer;
+DAKKA_officer setUnitRank "COLONEL";
+DAKKA_officer disableAI "PATH";
+DAKKA_officer setCaptive true;
+DAKKA_officer allowDamage false;
+(group DAKKA_officer) setGroupId ["Base"];
+DAKKA_martaHide pushBack (group DAKKA_officer);
+_basepos = getPos DAKKA_officer;
 
 // Create marta module
 _supportLogicGroup = createGroup sideLogic;
@@ -95,4 +95,4 @@ _marta = _supportLogicGroup createUnit ["MartaManager", _basepos, [], 50, "CAN_C
 setGroupIconsVisible [false, false];
 
 // Init the task
-[] execVM format ["tasks\Task %1\task%1_init.sqf", DMORBAT_Task];
+[] execVM format ["tasks\Task %1\task%1_init.sqf", DAKKA_Task];

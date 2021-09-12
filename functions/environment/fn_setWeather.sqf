@@ -46,7 +46,7 @@ if (!_rain) then {
 };
 
 // time setFog [fogValue <0..1>, fogDecay <-1..1>, fogBase <-5000..5000>] 
-0 setFog [_fog, DMORBAT_fogDecay, DMORBAT_fogBase];
+0 setFog [_fog, DAKKA_fogDecay, DAKKA_fogBase];
 
 //     0 setRain _rain;
 //     0 setLightnings _lightnings;
@@ -58,12 +58,12 @@ if (!_rain) then {
 
 
 if (_updateSettings) then {
-    // DMORBAT_customWeather = [_overcast, _fog, _rain, _lightnings, _wind, _windStr, _gusts, _waves];
-    DMORBAT_customWeather = [_overcast, _fog];
+    // DAKKA_customWeather = [_overcast, _fog, _rain, _lightnings, _wind, _windStr, _gusts, _waves];
+    DAKKA_customWeather = [_overcast, _fog];
     // Save settings
-    if (!DMORBAT_automated) then { ["Weather"] call DMORBAT_fnc_globalSettingsSave };
+    if (!DAKKA_automated) then { ["Weather"] call DAKKA_fnc_globalSettingsSave };
 
-    diag_log "DMORBAT: --- WEATHER SET ---";
+    diag_log "DAKKA: --- WEATHER SET ---";
 };
 
 sleep 1;

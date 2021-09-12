@@ -21,14 +21,14 @@ private ["_display", "_ctrl", "_unit"];
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
-_unit = if (isNull DMORBAT_SelectedPreviewUnit) then { 
-            vehicle DMORBAT_previewUnit;
+_unit = if (isNull DAKKA_SelectedPreviewUnit) then { 
+            vehicle DAKKA_previewUnit;
         } else {
-            vehicle DMORBAT_SelectedPreviewUnit;
+            vehicle DAKKA_SelectedPreviewUnit;
         };
 
 
-private _isMan = [_unit] call DMORBAT_fnc_isMan;
+private _isMan = [_unit] call DAKKA_fnc_isMan;
 
 if (_show && !_isMan && !isNull _unit) then {
     // Fill data

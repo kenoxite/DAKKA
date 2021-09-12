@@ -16,13 +16,13 @@
 */
 params ["_unit", ["_giveFlashlight", true]];
 
-if !([_unit] call DMORBAT_fnc_isMan) exitWith { false };
+if !([_unit] call DAKKA_fnc_isMan) exitWith { false };
 
 // Exit if it isn't dark
-if !([DMORBAT_customDate] call DMORBAT_fnc_isNight) exitWith { false };
+if !([DAKKA_customDate] call DAKKA_fnc_isNight) exitWith { false };
 
 // Check for equipped NVG
-private _hasNVG = [_unit] call DMORBAT_fnc_checkNVG;
+private _hasNVG = [_unit] call DAKKA_fnc_checkNVG;
 if (_hasNVG) exitWith { true };
 
 // Check for stored NVG

@@ -3,13 +3,13 @@ _damageBuildings = if (count _this > 0) then  { _this select 0 } else { true };
 
 sleep 1;
 
-DMORBAT_postapocalyptic = true;
+DAKKA_postapocalyptic = true;
 
-waitUntil { DMORBAT_playerGroupReady };
+waitUntil { DAKKA_playerGroupReady };
 
-_pos = call compile format ["DMORBAT_task%1_locPos", DMORBAT_Task];
+_pos = call compile format ["DAKKA_task%1_locPos", DAKKA_Task];
 
-diag_log "DMORBAT: Post-apocalyptic: Initializing";
+diag_log "DAKKA: Post-apocalyptic: Initializing";
 
 enableEnvironment [false, true];
 
@@ -44,10 +44,10 @@ _PPeffect_grain ppEffectCommit 0;
 
 // Destroy and wreck
 if (_damageBuildings) then {
-    diag_log "DMORBAT: Post-apocalyptic: Destroying everything";
+    diag_log "DAKKA: Post-apocalyptic: Destroying everything";
     // Exclude compositions
     _compositions = [];
-    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
     _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
     _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
     {
@@ -97,7 +97,7 @@ if (_damageBuildings) then {
     } forEach nearestObjects [_pos, [], 1000];
 
     // Place vehicle wrecks
-    diag_log "DMORBAT: Post-apocalyptic: Placing wrecks";
+    diag_log "DAKKA: Post-apocalyptic: Placing wrecks";
     _wreckTypes = [
         "Land_Wreck_BMP2_F",
         "Land_Wreck_BRDM2_F",
@@ -144,8 +144,8 @@ if (_damageBuildings) then {
 // Place crows
 [_pos, 1000] call BIS_fnc_crows;
 
-diag_log "DMORBAT: Post-apocalyptic: Started";
-while { DMORBAT_postapocalyptic } do {
+diag_log "DAKKA: Post-apocalyptic: Started";
+while { DAKKA_postapocalyptic } do {
     ["ChromAberration", 200, [0.008, 0.008, true]] spawn { 
      params ["_name", "_priority", "_effect", "_handle"]; 
      while { 
@@ -164,7 +164,7 @@ while { DMORBAT_postapocalyptic } do {
     };
 
     if ((random 1) > 0.5) then {
-        diag_log "DMORBAT: Post-apocalyptic: Changing weather";
+        diag_log "DAKKA: Post-apocalyptic: Changing weather";
         10 setOvercast random [0.55, 0.55, 1];
         0 setFog _fog_apoc;
         0 setLightnings 0.1;
@@ -173,7 +173,7 @@ while { DMORBAT_postapocalyptic } do {
 
     // Wait for the next round
     private _wait = 10 + (random 180);
-    for [{private _i = 0}, {(_i < _wait) && DMORBAT_postapocalyptic}, {_i = _i + 1}] do
+    for [{private _i = 0}, {(_i < _wait) && DAKKA_postapocalyptic}, {_i = _i + 1}] do
     {
         sleep 1;
     };
@@ -192,7 +192,7 @@ skipTime 24;
 0 setFog _fog;
 setWind [_wind select 0, _wind select 1];
 0 setLightnings _lightnings;
-enableEnvironment DMORBAT_environment;
+enableEnvironment DAKKA_environment;
 
 
-diag_log "DMORBAT: Post-apocalyptic: End";
+diag_log "DAKKA: Post-apocalyptic: End";

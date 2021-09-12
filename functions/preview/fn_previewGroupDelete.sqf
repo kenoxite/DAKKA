@@ -17,13 +17,13 @@
 
 */
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: preview group: %1", DMORBAT_previewGroup] };
-// if (!isNull DMORBAT_previewGroup) then {
-	DMORBAT_PreviewGroupName = "";
-	DMORBAT_PreviewGroupID = "";
-	DMORBAT_previewUnit = objNull;
-	DMORBAT_SelectedPreviewUnit = objNull;
-	DMORBAT_previewUnitisPlayer = false;
-    [DMORBAT_previewGroup] call DMORBAT_fnc_deleteGroup;
-    DMORBAT_previewGroup = grpNull;
+// if (DAKKA_debug) then { diag_log format ["DAKKA: preview group: %1", DAKKA_previewGroup] };
+// if (!isNull DAKKA_previewGroup) then {
+	DAKKA_PreviewGroupName = "";
+	DAKKA_PreviewGroupID = "";
+	DAKKA_previewUnit = objNull;
+	DAKKA_SelectedPreviewUnit = objNull;
+	DAKKA_previewUnitisPlayer = false;
+    [DAKKA_previewGroup] call DAKKA_fnc_deleteGroup;
+    DAKKA_previewGroup = grpNull;
 // };

@@ -26,17 +26,17 @@ ctrlEnable [IDC_BT_ADD_GROUP, false];
 tvSetCurSel [IDC_TREE_FACTION_UNITS, [-1]];
 ctrlEnable [IDC_BT_ADD_UNIT, false];
 
-if ((count _selectionPath) < 1 || ((count _selectionPath) == 1 && (_selectionPath select 0) == 0)) exitWith { ["ERROR: No unit or group was selected!"] spawn DMORBAT_fnc_displayMessage; };
+if ((count _selectionPath) < 1 || ((count _selectionPath) == 1 && (_selectionPath select 0) == 0)) exitWith { ["ERROR: No unit or group was selected!"] spawn DAKKA_fnc_displayMessage; };
 tvDelete [_idc, _selectionPath];
 
 _groupIndex = (_selectionPath select 0) - 1;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs;
 _thisCategoryData = _groupsData select (_groupNumber - 1);
 _thisCategoryGroups = _thisCategoryData select 1;
 _thisGroupData = _thisCategoryGroups select _groupIndex;
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: removeFromGroup _thisGroupData:%1", _thisGroupData] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: removeFromGroup _thisGroupData:%1", _thisGroupData] };
 _unitsData = _thisGroupData select 1;
 _groupMods = _thisGroupData select 2;
 
@@ -46,23 +46,23 @@ if ((count _selectionPath) > 1) then {
   _unitsData deleteAt _unitIndex;
   if (count _unitsData == 0) then {
     _thisCategoryGroups deleteAt _groupIndex;
-    call DMORBAT_fnc_previewGroupDelete;
+    call DAKKA_fnc_previewGroupDelete;
   } else {
-    DMORBAT_PreviewGroupName = "";  
-    DMORBAT_PreviewGroupID = "";  
-    [_unitsData, [], _groupMods] call DMORBAT_fnc_previewGroup;
+    DAKKA_PreviewGroupName = "";  
+    DAKKA_PreviewGroupID = "";  
+    [_unitsData, [], _groupMods] call DAKKA_fnc_previewGroup;
   };
 } else {
     // Remove group
   _thisCategoryGroups deleteAt _groupIndex;
-  call DMORBAT_fnc_previewGroupDelete;
+  call DAKKA_fnc_previewGroupDelete;
   _unitsData = [];
 };
 
 ctrlEnable [_idcButtons select 0, false];
-[-1, _groupNumber, _enemy] call DMORBAT_fnc_updateCustomGroupsTreeList;
+[-1, _groupNumber, _enemy] call DAKKA_fnc_updateCustomGroupsTreeList;
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: removeFromGroup _unitsData: %1", _unitsData] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: removeFromGroup _unitsData: %1", _unitsData] };
 if (count _unitsData > 0) then {
     private _tvCount = tvCount [_idc, [_selectionPath select 0]];
     _sel = [_selectionPath select 0, (_selectionPath select 1) min (_tvCount - 1)];
@@ -79,4 +79,4 @@ if ((tvCurSel _idc) isEqualTo [0]) then {
 };
 
 // Save task settings
-call DMORBAT_fnc_settingsSave;
+call DAKKA_fnc_settingsSave;

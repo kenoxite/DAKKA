@@ -5,16 +5,16 @@
 params ["_playerFaction", "_enemyFaction", "_factionGroupsFriendly", "_factionGroupsEnemy", "_display", "_ctrl"];
 
 // Retrieve data for this task
-_task = DMORBAT_Task;
-_taskData = DMORBAT_TaskData select (_task - 1);
+_task = DAKKA_Task;
+_taskData = DAKKA_TaskData select (_task - 1);
 
 // -------------------------------------------------------------------------------------
 // FRIENDLY GROUPS - CATEGORIZATION
 _txt = "Categorizing groups for the friendly faction...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
+diag_log format ["DAKKA: Play Now - %1", _txt];
 
-// _categorizeGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups]
+// _categorizeFactionGroups = [_infGroups, _SFGroups, _sniperGroups, _motGroups, _mechGroups, _artilleryGroups, _armorGroups, _airGroups, _waterGroups]
 _factionGroups = _factionGroupsFriendly;
 _infGroups = _factionGroups select 0;
 _SFGroups = _factionGroups select 1;
@@ -26,12 +26,12 @@ _armorGroups = _factionGroups select 6;
 _airGroups = _factionGroups select 7;
 _waterGroups = _factionGroups select 8;
 
-DMORBAT_friendlyInfEdCat = "";
+DAKKA_friendlyInfEdCat = "";
 
 // Create custom groups
 // [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]
-diag_log format ["DMORBAT: Creating custom groups for faction %1...", _playerFaction];
-_allGroupsCustom = [_playerFaction, "All"] call DMORBAT_fnc_createFactionGroups;
+diag_log format ["DAKKA: Creating custom groups for faction %1...", _playerFaction];
+_allGroupsCustom = [_playerFaction, "All"] call DAKKA_fnc_createFactionGroups;
 _infGroupsCustom =  _allGroupsCustom select 0;
 _infGroups append _infGroupsCustom;
 _SFGroupsCustom =  _allGroupsCustom select 1;
@@ -51,7 +51,7 @@ _airGroups append _heloGroupsCustom;
 // PLAYER GROUP
 _txt = "Assigning player group...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
+diag_log format ["DAKKA: Play Now - %1", _txt];
 
 _playerGroup = [];
 _eligiblePlayerGroups = [];
@@ -67,7 +67,7 @@ if (count _eligiblePlayerGroups > 0) then {
 
 // No suitable player group found
 if (count _eligiblePlayerGroups == 0) then {
-    diag_log format ["DMORBAT: No suitable player group found in faction %1!", _playerFaction];
+    diag_log format ["DAKKA: No suitable player group found in faction %1!", _playerFaction];
 };
 // Create proper group array
 // [[<group name>, [[<unit1 class>, <unit1 rank>, <unit1 loadout>, <unit1 presence>, <unit1 skill>], [<unit2 class>, ...], ...], [<group mod dependencies>]]]
@@ -86,20 +86,20 @@ _playerData = [_playableUnit, 0, []];
 [_taskData, "Player data", _playerData] call BIS_fnc_setToPairs;
 
 _playerUnitClass = (_playerGroup select 0) select _playableUnit;
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: _playerUnitClass: %1", _playerUnitClass] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: _playerUnitClass: %1", _playerUnitClass] };
 
 // If player unit has NVG then allow night missions
-_hasNVG = [_playerUnitClass] call DMORBAT_fnc_checkNVG;
-DMORBAT_noNightAuto = if (!_hasNVG) then { true } else { false };
+_hasNVG = [_playerUnitClass] call DAKKA_fnc_checkNVG;
+DAKKA_noNightAuto = if (!_hasNVG) then { true } else { false };
 
-DMORBAT_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> _playerUnitClass >> "editorSubcategory");
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group leader: %1, editor subcat: %2", _playerUnitClass, DMORBAT_friendlyInfEdCat] };
+DAKKA_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> _playerUnitClass >> "editorSubcategory");
+if (DAKKA_debug) then { diag_log format ["DAKKA: player group leader: %1, editor subcat: %2", _playerUnitClass, DAKKA_friendlyInfEdCat] };
 
 // -------------------------------------------------------------------------------------
 // SUPPORT
 _txt = "Generating support options...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
+diag_log format ["DAKKA: Play Now - %1", _txt];
 // Artillery
 _selectedArtyGroup = [];
 if (count _artilleryGroups > 0) then {
@@ -107,7 +107,7 @@ if (count _artilleryGroups > 0) then {
     _selectedArtyGroup = selectRandom (_artilleryGroups select 0);
 } else {
     // Check faction units for suitable artillery
-    _factionArtillery = [_playerFaction, "Artillery"] call DMORBAT_fnc_categorizeUnits;
+    _factionArtillery = [_playerFaction, "Artillery"] call DAKKA_fnc_categorizeUnits;
     private _artilleryGroups = [];
     {
         private _grps = _x select 1;
@@ -145,56 +145,56 @@ if (count _selectedArtyGroup > 0) then {
 // FRIENDLY GROUPS
 _txt = "Assigning friendly groups...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
+diag_log format ["DAKKA: Play Now - %1", _txt];
 
 // INFANTRY
 // Regular squads
-_eligibleInf = [8, _infGroups] call DMORBAT_fnc_filterInfantryGroups;
-[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 2,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 9,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleInf = [8, _infGroups] call DAKKA_fnc_filterInfantryGroups;
+[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 2,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 9,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DAKKA_friendlyInfEdCat] call DAKKA_fnc_addGroupsToTaskData;
 
 // AT Teams
-_eligibleAT = [4, _infGroups] call DMORBAT_fnc_filterATteamGroups;
-[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleAT = [4, _infGroups] call DAKKA_fnc_filterATteamGroups;
+[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DAKKA_friendlyInfEdCat] call DAKKA_fnc_addGroupsToTaskData;
 
 // AA Teams
-_eligibleAA = [4, _infGroups] call DMORBAT_fnc_filterAAteamGroups;
-[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_friendlyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleAA = [4, _infGroups] call DAKKA_fnc_filterAAteamGroups;
+[/*_sideType*/ "Friendly groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DAKKA_friendlyInfEdCat] call DAKKA_fnc_addGroupsToTaskData;
 
 // LAND
 // Armor
 _eligibleArmor = [];
 if (count _armorGroups > 0) then {
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: _armorGroups friendly: %1", _armorGroups] };
-    _eligibleArmor = [_armorGroups] call DMORBAT_fnc_filterArmorGroups;
+    if (DAKKA_debug) then { diag_log format ["DAKKA: _armorGroups friendly: %1", _armorGroups] };
+    _eligibleArmor = [_armorGroups] call DAKKA_fnc_filterArmorGroups;
     if (count _eligibleArmor > 0) then {
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleArmor friendly: %1", _eligibleArmor] };
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleArmor friendly: %1", _eligibleArmor] };
+        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 1] call DAKKA_fnc_addGroupsToTaskData;
     };
 };
 
 // Mechanized infantry
 if (count _mechGroups > 0) then {
-    _eligibleMech = [_mechGroups] call DMORBAT_fnc_filterMechGroups;
+    _eligibleMech = [_mechGroups] call DAKKA_fnc_filterMechGroups;
     _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 2 } else { 1 };
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleMech friendly: %1", _eligibleMech] };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMech,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 2,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleMech friendly: %1", _eligibleMech] };
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMech,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 2,/*_skill*/ 1] call DAKKA_fnc_addGroupsToTaskData;
 };
 
 // Motorized infantry, if there's no mech inf
 if (count _motGroups > 0 && count _mechGroups == 0) then {
-    _eligibleMot = [_motGroups] call DMORBAT_fnc_filterMotGroups;
+    _eligibleMot = [_motGroups] call DAKKA_fnc_filterMotGroups;
     _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 3 } else { 1 };
-    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMot,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 3,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Friendly groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleMot,/*_groupsAmount*/ _amount,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 3,/*_skill*/ 1] call DAKKA_fnc_addGroupsToTaskData;
 };
 
 // AIR
 // Air units
 if (count _airGroups > 0) then {
-    _eligibleAir = [_airGroups] call DMORBAT_fnc_filterAirGroups;
+    _eligibleAir = [_airGroups] call DAKKA_fnc_filterAirGroups;
     if (count _eligibleAir > 0) then {
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAir friendly: %1", _eligibleAir] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleAir friendly: %1", _eligibleAir] };
         _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 2 } else { 1 };
-        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
+        [/*_sideType*/ "Friendly groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ _amount,/*_maxUnits*/ 1,/*_limitPresence*/ false,/*_minUnits*/ 1,/*_skill*/ 1] call DAKKA_fnc_addGroupsToTaskData;
     };
 };
 
@@ -207,7 +207,7 @@ if (count _eligibleArmor == 0) then {
     // Only if player is leader
     _selectedCASGroup = [];
     // Check faction units for suitable CAS
-    _factionCAS = [_playerFaction, "CAS"] call DMORBAT_fnc_categorizeUnits;
+    _factionCAS = [_playerFaction, "CAS"] call DAKKA_fnc_categorizeUnits;
     private _CASGroups = [];
     {
         private _grps = _x select 1;
@@ -245,7 +245,7 @@ if (count _eligibleArmor == 0) then {
 // ENEMY GROUPS
 _txt = "Categorizing groups for the enemy faction...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
+diag_log format ["DAKKA: Play Now - %1", _txt];
 
 _factionGroups = _factionGroupsEnemy;
 _infGroups = _factionGroups select 0;
@@ -260,12 +260,12 @@ _waterGroups = _factionGroups select 8;
 
 _softAll = [];
 
-DMORBAT_enemyInfEdCat = "";
+DAKKA_enemyInfEdCat = "";
 
 // Create custom groups
 // [_customInfGroups, _customSFGroups, _customMotoGroups, _customMechGroups, _customArmorGroups, _customPlaneGroups, _customHeloGroups, _customTransportHeloGroups]
-diag_log format ["DMORBAT: Creating custom groups for faction %1...", _enemyFaction];
-_allGroupsCustom = [_enemyFaction, "All"] call DMORBAT_fnc_createFactionGroups;
+diag_log format ["DAKKA: Creating custom groups for faction %1...", _enemyFaction];
+_allGroupsCustom = [_enemyFaction, "All"] call DAKKA_fnc_createFactionGroups;
 _infGroupsCustom =  _allGroupsCustom select 0;
 _infGroups append _infGroupsCustom;
 _SFGroupsCustom =  _allGroupsCustom select 1;
@@ -287,56 +287,56 @@ _airGroups append _heloGroupsCustom;
 
 _txt = "Assigning enemy groups...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
+diag_log format ["DAKKA: Play Now - %1", _txt];
 
 // INFANTRY
 // Regular squads
-_eligibleInf = [8, _infGroups] call DMORBAT_fnc_filterInfantryGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 3,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 8,/*_skill*/ [1, 2] call BIS_fnc_randomInt,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleInf = [8, _infGroups] call DAKKA_fnc_filterInfantryGroups;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleInf,/*_groupsAmount*/ 3,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 8,/*_skill*/ [1, 2] call BIS_fnc_randomInt,/*_sameEdCat*/ true,/*_edCat*/ DAKKA_enemyInfEdCat] call DAKKA_fnc_addGroupsToTaskData;
 
 // AT Teams
-_eligibleAT = [4, _infGroups] call DMORBAT_fnc_filterATteamGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleAT = [4, _infGroups] call DAKKA_fnc_filterATteamGroups;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAT,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DAKKA_enemyInfEdCat] call DAKKA_fnc_addGroupsToTaskData;
 
 // AA Teams
-_eligibleAA = [4, _infGroups] call DMORBAT_fnc_filterAAteamGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DMORBAT_enemyInfEdCat] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleAA = [4, _infGroups] call DAKKA_fnc_filterAAteamGroups;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleAA,/*_groupsAmount*/ 1,/*_maxUnits*/ 0,/*_limitPresence*/ false,/*_minUnits*/ 4,/*_skill*/ 1,/*_sameEdCat*/ true,/*_edCat*/ DAKKA_enemyInfEdCat] call DAKKA_fnc_addGroupsToTaskData;
 
 // SF groups
-_eligibleSF = [6, _SFGroups, _infGroups] call DMORBAT_fnc_filterSFGroups;
-[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleSF,/*_groupsAmount*/ 1,/*_maxUnits*/ 6,/*_limitPresence*/ true,/*_minUnits*/ 4,/*_skill*/ 2,/*_sameEdCat*/ false] call DMORBAT_fnc_addGroupsToTaskData;
+_eligibleSF = [6, _SFGroups, _infGroups] call DAKKA_fnc_filterSFGroups;
+[/*_sideType*/ "Enemy groups",/*_groupType*/ "Infantry",/*_groupsPool*/ _eligibleSF,/*_groupsAmount*/ 1,/*_maxUnits*/ 6,/*_limitPresence*/ true,/*_minUnits*/ 4,/*_skill*/ 2,/*_sameEdCat*/ false] call DAKKA_fnc_addGroupsToTaskData;
 
 // LAND
 // Armor
 _eligibleArmor = [];
 if (count _armorGroups > 0) then {
-    _eligibleArmor = [_armorGroups] call DMORBAT_fnc_filterArmorGroups;
+    _eligibleArmor = [_armorGroups] call DAKKA_fnc_filterArmorGroups;
     if (count _eligibleArmor > 0) then {
-        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
+        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _eligibleArmor,/*_groupsAmount*/ 1,/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1] call DAKKA_fnc_addGroupsToTaskData;
     };
 };
 
 // Mechanized infantry
 if (count _mechGroups > 0) then {
-    _eligibleMech = [_mechGroups] call DMORBAT_fnc_filterMechGroups;
+    _eligibleMech = [_mechGroups] call DAKKA_fnc_filterMechGroups;
     _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 4 } else { 2 };
-    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _mechGroups,/*_groupsAmount*/ _amount] call DMORBAT_fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _mechGroups,/*_groupsAmount*/ _amount] call DAKKA_fnc_addGroupsToTaskData;
 };
 
 // Motorized infantry, if there's no mech inf
 if (count _motGroups > 0 && count _mechGroups == 0) then {
-    _eligibleMot = [_motGroups] call DMORBAT_fnc_filterMotGroups;
+    _eligibleMot = [_motGroups] call DAKKA_fnc_filterMotGroups;
     _amount = if (count _eligibleArmor == 0 || count _selectedArtyGroup == 0) then { 5 } else { 1 };
-    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _motGroups,/*_groupsAmount*/ _amount] call DMORBAT_fnc_addGroupsToTaskData;
+    [/*_sideType*/ "Enemy groups",/*_groupType*/ "Land Vehicles",/*_groupsPool*/ _motGroups,/*_groupsAmount*/ _amount] call DAKKA_fnc_addGroupsToTaskData;
 };
 
 // AIR
 // Air units
 if (count _airGroups > 0) then {
-    _eligibleAir = [_airGroups] call DMORBAT_fnc_filterAirGroups;
+    _eligibleAir = [_airGroups] call DAKKA_fnc_filterAirGroups;
     if (count _eligibleAir > 0) then {
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAir enemy: %1", _eligibleAir] };
-        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ 1,/*_maxUnits*/ 1] call DMORBAT_fnc_addGroupsToTaskData;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleAir enemy: %1", _eligibleAir] };
+        [/*_sideType*/ "Enemy groups",/*_groupType*/ "Air Vehicles",/*_groupsPool*/ _eligibleAir,/*_groupsAmount*/ 1,/*_maxUnits*/ 1] call DAKKA_fnc_addGroupsToTaskData;
     };
 };
 
@@ -345,8 +345,8 @@ if (count _airGroups > 0) then {
 // LOCATIONS
 _txt = "Picking AO locations...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: Play Now - %1", _txt];
-_locationsPredefined = call compile format ["DMORBAT_locations_Task%1", _task];
+diag_log format ["DAKKA: Play Now - %1", _txt];
+_locationsPredefined = call compile format ["DAKKA_locations_Task%1", _task];
 // Add locations data to tasks array
 _locations = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
 _thisWorldLocations = [_locations, worldName] call BIS_fnc_getFromPairs;
@@ -361,13 +361,13 @@ if (isNil "_thisWorldLocations") then {
 
 
 {
-    if (DMORBAT_debug) then { diag_log format ["%1:", _x select 0] };
+    if (DAKKA_debug) then { diag_log format ["%1:", _x select 0] };
     {
-        if (DMORBAT_debug) then { diag_log format ["%1: %2", _forEachIndex, _x] };
+        if (DAKKA_debug) then { diag_log format ["%1: %2", _forEachIndex, _x] };
     } forEach (_x select 1);
 } forEach _taskData;
 
 
 // -------------------------------------------------------------------------------------
 // Initiate task
-call DMORBAT_fnc_missionEditTerminate;
+call DAKKA_fnc_missionEditTerminate;

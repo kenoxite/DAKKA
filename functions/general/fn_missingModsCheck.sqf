@@ -29,13 +29,13 @@ _classFilter = "CfgVehicles";
 
 {
 	_mod = configSourceMod _x;
-	if (DMORBAT_debug) then { diag_log format ["DMORBAT: missingModsCheck _mod: %1", _mod] };
-	if (_mod == "") exitWith { diag_log format ["DMORBAT: missingModsCheck --- OK --- Class ""%1"" is from base game", _class]; _modPresent = true; };
+	if (DAKKA_debug) then { diag_log format ["DAKKA: missingModsCheck _mod: %1", _mod] };
+	if (_mod == "") exitWith { diag_log format ["DAKKA: missingModsCheck --- OK --- Class ""%1"" is from base game", _class]; _modPresent = true; };
 	if ((modParams [_mod, ["active"]]) select 0) exitWith {
 		_modPresent = true;
 	};
 } forEach ("(configName _x) == _class" configClasses (configFile >> _classFilter));
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: missingModsCheck class ""%1"" _modPresent: %2", _class, _modPresent] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: missingModsCheck class ""%1"" _modPresent: %2", _class, _modPresent] };
 
 [_modPresent, _mod]

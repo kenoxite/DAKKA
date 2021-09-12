@@ -49,7 +49,7 @@ _hasNVG
 
 
 /*
-if !([_unit] call DMORBAT_fnc_isMan) exitWith { false };
+if !([_unit] call DAKKA_fnc_isMan) exitWith { false };
 
 // Check for equipped NVG
 private _hasNVG = false;

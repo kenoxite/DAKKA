@@ -2,50 +2,50 @@
 
 sleep 1;
 
-diag_log "DMORBAT: Snow: Initializing";
+diag_log "DAKKA: Snow: Initializing";
  
-DMORBAT_environment = environmentEnabled;
+DAKKA_environment = environmentEnabled;
 // setViewDistance 500;
 _overcast = random [0.6, 0.8, 1];
-_fog = [] call DMORBAT_fnc_setFog;
+_fog = [] call DAKKA_fnc_setFog;
 _weather = [_overcast, _fog];
-[_weather, false, false] spawn DMORBAT_fnc_setWeather;
+[_weather, false, false] spawn DAKKA_fnc_setWeather;
 // setWind [0, -5, true];
 sleep 0.5;
 
-DMORBAT_snow = true;    
-DMORBAT_snowIntensity = if (count _this > 0) then { (_this select 0) } else { 700 };
-DMORBAT_snowTempIntensity = 700;    
-DMORBAT_snowVelocity =  if (count _this > 1) then { (_this select 1) } else { 1.25 };    
-DMORBAT_snowFidelity = 5;    
-DMORBAT_snowMaxDistance = 35;    
-DMORBAT_snowTTL = 0.1;
-DMORBAT_TTL = 0.5;
-DMORBAT_snowRefresh = if (count _this > 2) then { (_this select 2) } else { 0.2 }; 
+DAKKA_snow = true;    
+DAKKA_snowIntensity = if (count _this > 0) then { (_this select 0) } else { 700 };
+DAKKA_snowTempIntensity = 700;    
+DAKKA_snowVelocity =  if (count _this > 1) then { (_this select 1) } else { 1.25 };    
+DAKKA_snowFidelity = 5;    
+DAKKA_snowMaxDistance = 35;    
+DAKKA_snowTTL = 0.1;
+DAKKA_TTL = 0.5;
+DAKKA_snowRefresh = if (count _this > 2) then { (_this select 2) } else { 0.2 }; 
 
-if (DMORBAT_snowIntensity >= 100) then {
+if (DAKKA_snowIntensity >= 100) then {
     enableEnvironment [true, false];
 };
 
-diag_log "DMORBAT: Snow: Starting";
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: Snow DMORBAT_snowIntensity: %1 DMORBAT_snowVelocity: %2 DMORBAT_snowRefresh: %3", DMORBAT_snowIntensity, DMORBAT_snowVelocity, DMORBAT_snowRefresh] };
+diag_log "DAKKA: Snow: Starting";
+// if (DAKKA_debug) then { diag_log format ["DAKKA: Snow DAKKA_snowIntensity: %1 DAKKA_snowVelocity: %2 DAKKA_snowRefresh: %3", DAKKA_snowIntensity, DAKKA_snowVelocity, DAKKA_snowRefresh] };
  
 0 = [] spawn {      
    
-    while {DMORBAT_snow} do {      
+    while {DAKKA_snow} do {      
    
         private _a = 0;      
-        while {_a < DMORBAT_snowIntensity} do {      
+        while {_a < DAKKA_snowIntensity} do {      
    
-            private _fi = DMORBAT_snowFidelity;      
-            private _max = DMORBAT_snowMaxDistance;     
+            private _fi = DAKKA_snowFidelity;      
+            private _max = DAKKA_snowMaxDistance;     
    
             if (vehicle player != player) then {    
                 _max = _max * 2;   
-                smowTempIntensity = DMORBAT_snowIntensity;    
-                DMORBAT_snowIntensity = DMORBAT_snowIntensity * 9;    
+                smowTempIntensity = DAKKA_snowIntensity;    
+                DAKKA_snowIntensity = DAKKA_snowIntensity * 9;    
             } else {    
-                DMORBAT_snowIntensity = DMORBAT_snowTempIntensity;   
+                DAKKA_snowIntensity = DAKKA_snowTempIntensity;   
             };      
    
             for "_d" from _fi to _max step _fi do {   
@@ -71,15 +71,15 @@ diag_log "DMORBAT: Snow: Starting";
                    
                 if (!lineIntersects [_dpos, _hdpos] || {(_hpos distance2D _hdpos > 7) && (lineIntersects [_pos,_hpos])}) then {     
    
-                    private _ttl = (_height*DMORBAT_TTL);    
+                    private _ttl = (_height*DAKKA_TTL);    
                     private _surfaces = lineIntersectsSurfaces [_dpos,_ldpos,player,player,true,1];    
                     private _size = (0.02 + (random 0.06));
-                    private _vel = (_size*10)*DMORBAT_snowVelocity;   
+                    private _vel = (_size*10)*DAKKA_snowVelocity;   
                     if (count _surfaces > 0) then {   
    
                         _surfHeight = _surfaces select 0 select 0 select 2;   
                         private _dist = (_dpos select 2) - _surfHeight;   
-                        _ttl = ((_dist / _vel) * DMORBAT_snowTTL) min (_height * DMORBAT_snowTTL);                           
+                        _ttl = ((_dist / _vel) * DAKKA_snowTTL) min (_height * DAKKA_snowTTL);                           
    
                     };    
   
@@ -96,9 +96,9 @@ diag_log "DMORBAT: Snow: Starting";
                 _a = _a + 1;      
             };                 
         };    
-        sleep DMORBAT_snowRefresh;         
+        sleep DAKKA_snowRefresh;         
     };      
 };
 
-enableEnvironment DMORBAT_environment;
-diag_log "DMORBAT: Snow: End";
+enableEnvironment DAKKA_environment;
+diag_log "DAKKA: Snow: End";

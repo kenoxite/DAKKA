@@ -30,24 +30,24 @@ private _customAirGroups = [];
 
 // REGULAR INFANTRY & SF GROUPS
 if (_groupType == "Infantry") then {
-    _customInfGroups = ["Infantry", _faction] call DMORBAT_fnc_createCustomInfGroups;
+    _customInfGroups = ["Infantry", _faction] call DAKKA_fnc_createCustomInfGroups;
 };
 if (_groupType == "SF") then {
-    _customSFGroups = ["SF", _faction] call DMORBAT_fnc_createCustomInfGroups;
+    _customSFGroups = ["SF", _faction] call DAKKA_fnc_createCustomInfGroups;
 };
 
 // LAND VEHICLE GROUPS
 if (_groupType == "Motorized") then {
-    _customMotoGroups = (["Motorized", _faction] call DMORBAT_fnc_createCustomLandGroups) select 0;
+    _customMotoGroups = (["Motorized", _faction] call DAKKA_fnc_createCustomLandGroups) select 0;
 };
 if (_groupType == "Mechanized") then {
-    _customMechGroups = (["Mechanized", _faction] call DMORBAT_fnc_createCustomLandGroups) select 1;
+    _customMechGroups = (["Mechanized", _faction] call DAKKA_fnc_createCustomLandGroups) select 1;
 };
 if (_groupType == "Armor") then {
-    _customArmorGroups = (["Armor", _faction] call DMORBAT_fnc_createCustomLandGroups) select 2;
+    _customArmorGroups = (["Armor", _faction] call DAKKA_fnc_createCustomLandGroups) select 2;
 };
 if (_groupType == "Land") then {
-    _customLandGroups = ["Land", _faction] call DMORBAT_fnc_createCustomLandGroups;
+    _customLandGroups = ["Land", _faction] call DAKKA_fnc_createCustomLandGroups;
     if (count _customLandGroups > 0) then {
         _customMotoGroups = _customLandGroups select 0;
         _customMechGroups = _customLandGroups select 1;
@@ -57,16 +57,16 @@ if (_groupType == "Land") then {
 
 // AIR VEHICLE GROUPS
 if (_groupType == "Plane") then {
-    _customPlaneGroups = (["Plane", _faction] call DMORBAT_fnc_createCustomAirGroups) select 0;
+    _customPlaneGroups = (["Plane", _faction] call DAKKA_fnc_createCustomAirGroups) select 0;
 };
 if (_groupType == "Helo") then {
-    _customHeloGroups = (["Helo", _faction] call DMORBAT_fnc_createCustomAirGroups) select 1;
+    _customHeloGroups = (["Helo", _faction] call DAKKA_fnc_createCustomAirGroups) select 1;
 };
 if (_groupType == "Transport Helo") then {
-    _customTransportHeloGroups = (["Transport Helo", _faction] call DMORBAT_fnc_createCustomAirGroups) select 2;
+    _customTransportHeloGroups = (["Transport Helo", _faction] call DAKKA_fnc_createCustomAirGroups) select 2;
 };
 if (_groupType == "Air") then {
-    _customAirGroups = ["Air", _faction] call DMORBAT_fnc_createCustomAirGroups;
+    _customAirGroups = ["Air", _faction] call DAKKA_fnc_createCustomAirGroups;
     if (count _customAirGroups > 0) then {
         _customPlaneGroups = _customAirGroups select 0;
         _customHeloGroups = _customAirGroups select 1;
@@ -76,15 +76,15 @@ if (_groupType == "Air") then {
 
 // ALL
 if (_groupType == "All") then {
-    _customInfGroups = ["Infantry", _faction] call DMORBAT_fnc_createCustomInfGroups;
-    _customSFGroups = ["SF", _faction] call DMORBAT_fnc_createCustomInfGroups;
-    _customLandGroups = ["Land", _faction] call DMORBAT_fnc_createCustomLandGroups;
+    _customInfGroups = ["Infantry", _faction] call DAKKA_fnc_createCustomInfGroups;
+    _customSFGroups = ["SF", _faction] call DAKKA_fnc_createCustomInfGroups;
+    _customLandGroups = ["Land", _faction] call DAKKA_fnc_createCustomLandGroups;
     if (count _customLandGroups > 0) then {
         _customMotoGroups = _customLandGroups select 0;
         _customMechGroups = _customLandGroups select 1;
         _customArmorGroups = _customLandGroups select 2;
     };
-    _customAirGroups = ["Air", _faction] call DMORBAT_fnc_createCustomAirGroups;
+    _customAirGroups = ["Air", _faction] call DAKKA_fnc_createCustomAirGroups;
     if (count _customAirGroups > 0) then {
         _customPlaneGroups = _customAirGroups select 0;
         _customHeloGroups = _customAirGroups select 1;

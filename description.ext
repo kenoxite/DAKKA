@@ -268,15 +268,15 @@ class CfgSounds
 
 class CfgFunctions
 {
-	class DMORBAT
+	class DAKKA
 	{
-		tag = "DMORBAT";
+		tag = "DAKKA";
 
         class Categorization
         {
             file = "functions\categorization";
 
-            class categorizeGroups {};
+            class categorizeFactionGroups {};
             class categorizeUnits {};
             class categorizeInf {};
             class categorizeATunits {};
@@ -313,7 +313,7 @@ class CfgFunctions
             file = "functions\dataextraction";
 
             class extractFactionData {};
-            class extractGroupsData {};
+            class extractFactionGroupsData {};
         };
 
 		class General

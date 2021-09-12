@@ -18,7 +18,7 @@
 */
 
 params ["_unitsArr", "_pos", "_side", ["_maxDist", 30], ["_fly", true], ["_faction", ""], ["_checkManPos", true]]; 
-// diag_log format ["DMORBAT: spawnGroup - _unitsArr: %1", _unitsArr];
+// diag_log format ["DAKKA: spawnGroup - _unitsArr: %1", _unitsArr];
 private _grp = grpNull;
 private _oldGrp = grpNull;
 private _unit = objNull;
@@ -42,7 +42,7 @@ private _presentUnits = [];
     };
 } forEach _unitsArr;
 // Exit if no units
-if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup GROUP NOT SPAWNED. All units failed probability check!", ""]; grpNull };
+if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GROUP NOT SPAWNED. All units failed probability check!", ""]; grpNull };
 
 // Spawn the group
 {
@@ -50,7 +50,7 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
     _unitRank = _x select 1;
     _unitLoadout = _x select 2;
     _unitSkill = _x select 4;
-    _isMan = [_unitClass] call DMORBAT_fnc_isMan;
+    _isMan = [_unitClass] call DAKKA_fnc_isMan;
     _defaultVehicles = ["C_Offroad_01_F", "C_Van_01_transport_F", "C_Heli_Light_01_civil_F"];
     _isDefaultVeh = _faction != "" && _unitClass in _defaultVehicles;
     _unit = objNull;
@@ -58,15 +58,15 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
     // Check if leader is dead due to bad spawning pos
     _oldGrp = _grp;
     if (!isNull _grp && !alive vehicle (leader _grp)) then {
-        diag_log format ["DMORBAT: spawnGroup LEADER OF GROUP %1 (%2) IS DEAD! Next unit (%3) is now the leader", (leader _oldGrp), _oldGrp, _unitClass];
+        diag_log format ["DAKKA: spawnGroup LEADER OF GROUP %1 (%2) IS DEAD! Next unit (%3) is now the leader", (leader _oldGrp), _oldGrp, _unitClass];
         _grp = grpNull;
     };
 
     if (_isMan) then {
-        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist, "NONE", _enableRandom, _checkManPos] call DMORBAT_fnc_spawnMan);
+        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist, "NONE", _enableRandom, _checkManPos] call DAKKA_fnc_spawnMan);
     } else {
-        _isAir = [_unitClass] call DMORBAT_fnc_isAir;
-        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, _faction] call DMORBAT_fnc_spawnVehicle);
+        _isAir = [_unitClass] call DAKKA_fnc_isAir;
+        _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, _faction] call DAKKA_fnc_spawnVehicle);
     };
     _unit setCaptive true;
     _unit disableAI "TARGET";
@@ -88,13 +88,13 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
         } forEach (crew vehicle _unit);
         _groupVehicles pushBack _unit;
         _grp addVehicle _unit;
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - Vehicle group %1 is side %2", _grp, side _grp ] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - Vehicle group %1 is side %2", _grp, side _grp ] };
         if (!_isAir || (_isAir && !_fly)) then {
             _nul = [_unit, _isAir, _fly] spawn {
                 params ["_unit", "_isAir", "_fly"];
                 _unitPos = getPos _unit;
                 _unitClass = typeOf _unit;
-                _unitType = [_unitClass] call DMORBAT_fnc_vehicleType;
+                _unitType = [_unitClass] call DAKKA_fnc_vehicleType;
                 // Reposition if objects are too close
                 _tries = 3;
                 _distMod = 50;
@@ -119,14 +119,14 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                     // _nearVeh = nearestObjects [_unitPos, ["Land", "Air"], _safeRadius];
                     _nearVeh = _unit nearEntities _safeRadius;
                     if ((count _nearTerrObj) > 0 || (count _nearVeh) > 0 || (!_isAir || (_isAir && !_fly) && (surfaceIsWater _unitPos || (getTerrainHeightASL _unitPos) < 0.5))) then {
-                        diag_log format ["DMORBAT: spawnGroup - Vehicle %1 - %2 (%3) is dangerously close to other objects. Trying to repositioning it to a safer place...", group _unit, _unit, _unitClass];
+                        diag_log format ["DAKKA: spawnGroup - Vehicle %1 - %2 (%3) is dangerously close to other objects. Trying to repositioning it to a safer place...", group _unit, _unit, _unitClass];
                         // Make sure vehicle has spawned in a safe spot
                         // [center, minDist, maxDist, objDist, waterMode, maxGrad, shoreMode, blacklistPos, defaultPos]
                         _emptyPos = [_unitPos, _safeRadius, (_safeRadius + _distMod), _safeRadius, 0, 0.5, 0, [], [_unitPos, _unitPos]] call BIS_fnc_findSafePos;
                         if (count _emptyPos < 3) then {
                             // _emptyPos = (getPos _unit) findEmptyPosition [_safeRadius, 200, _unitClass];
                             // if (count _emptyPos > 0) then {
-                            diag_log format ["DMORBAT: spawnGroup - FOUND safe position for %1 - %2 (%3): %4", group _unit, _unit, _unitClass, _emptyPos];
+                            diag_log format ["DAKKA: spawnGroup - FOUND safe position for %1 - %2 (%3): %4", group _unit, _unit, _unitClass, _emptyPos];
                             // _unit setPos _emptyPos;
                             _unit hideObject false;
                             // _unit setVehiclePosition [_emptyPos, [], 2, "NONE"];
@@ -134,14 +134,14 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
                             // _unit setVectorUp (surfaceNormal (position _unit));
                             _safeSpotFound = true;
                         } else {
-                            diag_log format ["DMORBAT: spawnGroup - %1: NOT FOUND safe position for %2 - %3 (%4)", _i + 1, group _unit, _unit, _unitClass];
+                            diag_log format ["DAKKA: spawnGroup - %1: NOT FOUND safe position for %2 - %3 (%4)", _i + 1, group _unit, _unit, _unitClass];
                             if (_isAir && !_fly) then {
-                                diag_log "DMORBAT: spawnGroup - Unit can fly but it wasn't spawned flying. Postioning it high so it will try to fly and stay safe.";
+                                diag_log "DAKKA: spawnGroup - Unit can fly but it wasn't spawned flying. Postioning it high so it will try to fly and stay safe.";
                                 _unit setPosASL [_unitPos select 0, _unitPos select 1, 1000];
                             };
                         };
                         if (!_safeSpotFound && _i == (_tries - 1)) then {
-                            diag_log format ["DMORBAT: spawnGroup --- WARNING --- COULDN'T FIND A SAFE POSITION for %1 - %2 (%3)!",  group _unit, _unit, _unitClass];
+                            diag_log format ["DAKKA: spawnGroup --- WARNING --- COULDN'T FIND A SAFE POSITION for %1 - %2 (%3)!",  group _unit, _unit, _unitClass];
                             _unit hideObject false;
                             _unit setVehiclePosition [_unitPos, [], _safeRadius + _distMod, "NONE"];
                         };
@@ -167,7 +167,7 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DMORBAT: spawnGroup G
     };
     _unit setUnitRank _unitRank;
 
-    [_unit, _unitLoadout, _unitSkill] call DMORBAT_fnc_prepareUnit;
+    [_unit, _unitLoadout, _unitSkill] call DAKKA_fnc_prepareUnit;
 } forEach _presentUnits;
 
 // Add units of old group to new group if old group leader is dead
@@ -185,11 +185,11 @@ _grp setVariable ["VCM_Skilldisable",true]; //This command will disable an AI gr
 // Move passengers to vehicles - only if vehicle is still alive
 if (isNull _oldGrp) then {
     {
-        _passengerSeats = [typeOf _x] call DMORBAT_fnc_countPassengerSeats;
+        _passengerSeats = [typeOf _x] call DAKKA_fnc_countPassengerSeats;
         for [{private _i = 0}, {_i < _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
-            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - _groupPassengers; %1", _groupPassengers] };
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - _groupPassengers; %1", _groupPassengers] };
             (_groupPassengers select 0) moveInAny _x;
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
+            if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
             _groupPassengers deleteAt 0;
         };
         _x setUnloadInCombat [true, true];

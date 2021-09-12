@@ -24,9 +24,9 @@ private ["_display", "_ctrl", "_selectionPath", "_ref", "_posRef", "_dirRef", "_
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl _idc);
 _selectionPath = tvCurSel _ctrl;
-if ((_selectionPath select 0) < 0) exitWith { systemChat format ["DMORBAT: --- ERROR --- No composition was selected!"]; };
+if ((_selectionPath select 0) < 0) exitWith { systemChat format ["DAKKA: --- ERROR --- No composition was selected!"]; };
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 
@@ -43,7 +43,7 @@ _hideDist = 2;
 } forEach _hiddenObjects;
 _thisCompositionData deleteAt 2;
 
-_ref = DMORBAT_editReference;
+_ref = DAKKA_editReference;
 _posRef = getPosATL _ref;
 _dirRef = getDir _ref;
 
@@ -124,6 +124,6 @@ _hiddenObjects = [];
 _thisCompositionData pushBack _hiddenObjects;
 
 // Save task settings
-call DMORBAT_fnc_settingsSave;
+call DAKKA_fnc_settingsSave;
 
 true

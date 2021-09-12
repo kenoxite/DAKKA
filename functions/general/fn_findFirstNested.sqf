@@ -14,7 +14,7 @@
 
   Examples:
   _arr = [[1, "First element in the nested array"], [2, "Second element in the nested array"]];
-  result = [_arr, 2] call DMORBAT_fnc_findFirstNested; // Returns: 1
+  result = [_arr, 2] call DAKKA_fnc_findFirstNested; // Returns: 1
 
 */
 private ["_ele", "_a", "_i", "_r", "_a1"];

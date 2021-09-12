@@ -17,7 +17,7 @@
 
 params ["_faction"];
 // Extract faction groups
-private _factionGroups = [_faction] call DMORBAT_fnc_extractGroupsData;
+private _factionGroups = [_faction] call DAKKA_fnc_extractFactionGroupsData;
 
 private _infGroups = [];
 private _SFGroups = [];
@@ -30,21 +30,21 @@ private _airGroups = [];
 private _waterGroups = [];
 
 {
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _groupTypeData: %1", _x] };
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: _groupTypeData: %1", _x] };
     private _groupTypeName = _x select 0;
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _groupTypeName: %1", _groupTypeName] };
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: _groupTypeName: %1", _groupTypeName] };
     private _groupsData = _x select 1;
     {
         private _groupName = _x select 0;
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _groupName: %1", _groupName] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: _groupName: %1", _groupName] };
         private _unitsData = _x select 1;
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitsData: %1", _unitsData] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: _unitsData: %1", _unitsData] };
         _classes = [];
         {
             _classes pushBack (_x select 0);
         } forEach _unitsData;
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _classes: %1", _classes] };
-        private _type = [_classes, true] call DMORBAT_fnc_groupType;
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: _classes: %1", _classes] };
+        private _type = [_classes, true] call DAKKA_fnc_groupType;
 
         private _isInf = false;
 
@@ -52,7 +52,7 @@ private _waterGroups = [];
             case "Inf":
             {
                 _isInf = true;
-                private _groupRoles = [_classes] call DMORBAT_fnc_groupRoles;
+                private _groupRoles = [_classes] call DAKKA_fnc_groupRoles;
                 // _groupRoles = [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter]
                 // SF
                 if (_isInf && {_groupRoles select 13}) then {
@@ -71,12 +71,12 @@ private _waterGroups = [];
             };
             case "Motorized":
             {
-                private _groupRoles = [_classes] call DMORBAT_fnc_groupRoles;
+                private _groupRoles = [_classes] call DAKKA_fnc_groupRoles;
                 _motGroups pushBack [_classes, _groupRoles];
             };
             case "Mechanized":
             {
-                private _groupRoles = [_classes] call DMORBAT_fnc_groupRoles;
+                private _groupRoles = [_classes] call DAKKA_fnc_groupRoles;
                 _mechGroups pushBack [_classes, _groupRoles];
 
             };

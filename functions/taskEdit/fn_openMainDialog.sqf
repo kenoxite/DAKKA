@@ -16,8 +16,8 @@
 
 */
 
-// [] spawn DMORBAT_fnc_cameraIntro;
-createdialog "DMORBAT_Menu_Mission_Edit";
+// [] spawn DAKKA_fnc_cameraIntro;
+createdialog "DAKKA_Menu_Mission_Edit";
 
 private _display = findDisplay IDC_MENU_MISSION_EDIT;
 
@@ -57,4 +57,4 @@ private _hide = [
 
 [] execVM "menuPages\page1.sqf";
 
-DMORBAT_mainDialogOpened = true;
+DAKKA_mainDialogOpened = true;

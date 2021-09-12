@@ -18,7 +18,7 @@
 
 params ["_grp", "_pos", ["_radius", 0], ["_index", -1], ["_name", ""], ["_type","MOVE"], ["_beh", "AWARE"], ["_speed", "NORMAL"], ["_form", "WEDGE"], ["_combatMode", "YELLOW"], ["_completionRadius", 30], ["_description", ""], ["_delete", true], ["_setCurrent", false], ["_timeout", [0,0,0]], ["_statements", ["true", ""]]]; 
 
-if (typeName _grp != "GROUP") exitWith { diag_log format ["DMORBAT: --- ERROR --- groupWp - %1 is not a group! Aborting assignment of waypoint...", _grp]; [group _grp, 0] };
+if (typeName _grp != "GROUP") exitWith { diag_log format ["DAKKA: --- ERROR --- groupWp - %1 is not a group! Aborting assignment of waypoint...", _grp]; [group _grp, 0] };
 
 if (_delete) then { 
 	{

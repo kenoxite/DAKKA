@@ -28,7 +28,7 @@ if (typeName _grp == "GROUP") then {
     _unitClasses = _grp;
 };
 
-if (count _unitClasses == 0) exitWith { diag_log format ["DMORBAT: groupRoles --- ERROR --- No unit classes or group has been passed"]; if (_roleCheck != "") then { false } else { [] } };
+if (count _unitClasses == 0) exitWith { diag_log format ["DAKKA: groupRoles --- ERROR --- No unit classes or group has been passed"]; if (_roleCheck != "") then { false } else { [] } };
 
 private _hasAT = false;
 private _hasAA = false;

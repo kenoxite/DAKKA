@@ -16,12 +16,12 @@
 */
 
 params [["_groupsType", []], ["_faction", ""]];
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - _groupsType: %1", _groupsType] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - _groupsType: %1", _groupsType] };
 
 if (count _groupsType == 0) exitWith { [] };
 
 // Check faction for suitable land units
-private _factionAir = [_faction, "Air"] call DMORBAT_fnc_categorizeUnits;
+private _factionAir = [_faction, "Air"] call DAKKA_fnc_categorizeUnits;
 private _airGroups = [];
 {
     private _grps = _x select 1;
@@ -34,10 +34,10 @@ private _airGroups = [];
 private _usingParentFaction = [
     ["BLU_W_F", "BLU_F"]
 ];
-private _parentFactionIndex = [_usingParentFaction, _faction] call DMORBAT_fnc_findFirstNested;
+private _parentFactionIndex = [_usingParentFaction, _faction] call DAKKA_fnc_findFirstNested;
 if (_parentFactionIndex >= 0) then {
     private _parentFaction = (_usingParentFaction select _parentFactionIndex) select 1;
-    private _factionAir = [_parentFaction, "Air"] call DMORBAT_fnc_categorizeUnits;
+    private _factionAir = [_parentFaction, "Air"] call DAKKA_fnc_categorizeUnits;
     {
         private _grps = _x select 1;
         {
@@ -67,13 +67,13 @@ private _customTransportHeloGroups = [];
 
 {
     private _unitClass = _x select 0;
-    private _type = [_unitClass, true] call DMORBAT_fnc_vehicleType;
+    private _type = [_unitClass, true] call DAKKA_fnc_vehicleType;
 
     if (_type == "Plane") then { _planes pushBack _unitClass; };
     if (_type == "Drone Plane") then { _planeDrones pushBack _unitClass; };
-    if (_type == "Helicopter") then { _helos pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Helicopter (unarmed)") then { _helos_unarmed pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
-    if (_type == "Drone Helicopter") then { _heloDrones pushBack [_unitClass, [_unitClass] call DMORBAT_fnc_countPassengerSeats]; };
+    if (_type == "Helicopter") then { _helos pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Helicopter (unarmed)") then { _helos_unarmed pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
+    if (_type == "Drone Helicopter") then { _heloDrones pushBack [_unitClass, [_unitClass] call DAKKA_fnc_countPassengerSeats]; };
 } forEach _airGroups;
 
 // Add to air groups array
@@ -91,7 +91,7 @@ if (_groupsType == "Plane" || _groupsType == "Air") then {
         _group pushBack (selectRandom _validPlanes);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - plane 1: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - plane 1: %1", _group] };
         _customPlaneGroups pushBack [_group];
     };
 
@@ -105,7 +105,7 @@ if (_groupsType == "Plane" || _groupsType == "Air") then {
         _group pushBack (selectRandom _validPlanes);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - plane 2: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - plane 2: %1", _group] };
         _customPlaneGroups pushBack [_group];
     };
 
@@ -119,7 +119,7 @@ if (_groupsType == "Plane" || _groupsType == "Air") then {
         _group pushBack (selectRandom _validPlanes);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - plane 3: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - plane 3: %1", _group] };
         _customPlaneGroups pushBack [_group];
     };
 };
@@ -139,7 +139,7 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
         _group pushBack ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - helo 1: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - helo 1: %1", _group] };
         _customHeloGroups pushBack [_group];
     };
 
@@ -153,7 +153,7 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
         _group pushBack ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - helo 2: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - helo 2: %1", _group] };
         _customHeloGroups pushBack [_group];
     };
 
@@ -167,7 +167,7 @@ if (_groupsType == "Helo" || _groupsType == "Air") then {
         _group pushBack ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - helo 3: %1", _group] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - helo 3: %1", _group] };
         _customHeloGroups pushBack [_group];
     };
 };
@@ -188,7 +188,7 @@ if (_groupsType == "Transport Helo" || _groupsType == "Air") then {
         private _helo = ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - transport helo 1: %1", _helo] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - transport helo 1: %1", _helo] };
         _customTransportHeloGroups pushBack _helo;
     };
 
@@ -201,7 +201,7 @@ if (_groupsType == "Transport Helo" || _groupsType == "Air") then {
         private _helo = ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - transport helo 2: %1", _helo] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - transport helo 2: %1", _helo] };
         _customTransportHeloGroups pushBack _helo;
     };
 
@@ -214,7 +214,7 @@ if (_groupsType == "Transport Helo" || _groupsType == "Air") then {
         private _helo = ((selectRandom _validHelos) select 0);
 
         // Add to air groups array
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomAirGroups - transport helo 3: %1", _helo] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomAirGroups - transport helo 3: %1", _helo] };
         _customTransportHeloGroups pushBack _helo;
     };
 };

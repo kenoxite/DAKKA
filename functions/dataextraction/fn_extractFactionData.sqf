@@ -15,7 +15,7 @@
 
 */
 
-// _loadingScreen = createDialog "DMORBAT_Loading_Screen";
+// _loadingScreen = createDialog "DAKKA_Loading_Screen";
 // if (!_loadingScreen) then { systemChat "Loading screen could not be opened!" };
 
 private _display = findDisplay IDC_LOADING_SCREEN;
@@ -34,7 +34,7 @@ private _addFaction = {
         private _thisSideNum = getNumber (_x >> "side");
         private _txt = format ["Extracting faction data from ""%1""...", _thisFactionName];
         _ctrl ctrlSetText _txt; 
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 (%2)", _txt, _factionClass] }; 
+        if (DAKKA_debug) then { diag_log format ["DAKKA: %1 (%2)", _txt, _factionClass] }; 
         private ["_defFlag", "_defIcon", "_color"];
         switch (_thisSideNum) do {
             case 1: {
@@ -60,7 +60,7 @@ private _addFaction = {
         if (_thisFactionFlag == "") then { _thisFactionFlag = _defFlag };
         if (_thisFactionIcon == "") then { _thisFactionIcon = _defIcon };
         private _thisFactionData = [configName _x, _thisFactionName, _thisFactionFlag, _thisFactionIcon, _thisSideNum];
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _thisFactionData = %1", _thisFactionData] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: _thisFactionData = %1", _thisFactionData] };
         _factionsData pushBack _thisFactionData;
     } forEach ("((configName _x) == _factionClass)" configClasses (configFile >> "CfgFactionClasses"));
 };
@@ -68,7 +68,7 @@ private _addFaction = {
 
 _txt = "Faction data extraction has started!";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: ----------------- %1 -----------------", _txt]; 
+diag_log format ["DAKKA: ----------------- %1 -----------------", _txt]; 
 
 private _bannedFactions = [
     "Virtual_F"
@@ -77,7 +77,7 @@ private _bannedFactions = [
 // Check for factions with valid units
 private _txt = "Extracting data from factions with valid units...";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: %1", _txt];
+diag_log format ["DAKKA: %1", _txt];
 {
     private _factionClass = configName _x;
     if !(_factionClass in _bannedFactions) then {
@@ -120,15 +120,15 @@ diag_log format ["DMORBAT: %1", _txt];
 } forEach ("true" configClasses (configFile >> "CfgFactionClasses"));
 
 // {
-//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: _validFactions %2: %1", _x, _forEachIndex] };
+//     if (DAKKA_debug) then { diag_log format ["DAKKA: _validFactions %2: %1", _x, _forEachIndex] };
 // } forEach _validFactions;
 
 _txt = "Faction data extraction has finished!";
 _ctrl ctrlSetText _txt; 
-diag_log format ["DMORBAT: ----------------- %1 -----------------", _txt]; 
+diag_log format ["DAKKA: ----------------- %1 -----------------", _txt]; 
 
 // {
-//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: _factionsData %2: %1", _x, _forEachIndex] };
+//     if (DAKKA_debug) then { diag_log format ["DAKKA: _factionsData %2: %1", _x, _forEachIndex] };
 // } forEach _factionsData;
 
 _factionsData

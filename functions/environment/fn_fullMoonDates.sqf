@@ -15,7 +15,7 @@
   Examples:
 
   Set random full moon date in year 1970:
-  setDate selectRandom (1970 call DMORBAT_fnc_fullMoonDates);
+  setDate selectRandom (1970 call DAKKA_fnc_fullMoonDates);
 
 */
 

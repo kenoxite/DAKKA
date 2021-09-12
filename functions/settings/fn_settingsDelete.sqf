@@ -16,11 +16,11 @@
 */
 
 // Global settings
-profileNamespace setVariable ["DMORBAT_settings", nil];
+profileNamespace setVariable ["DAKKA_settings", nil];
 
 // Task settings
 {
-	profileNamespace setVariable [format ["DMORBAT_Task%1", _forEachIndex + 1], nil];
-} forEach DMORBAT_TasksArr;
+	profileNamespace setVariable [format ["DAKKA_Task%1", _forEachIndex + 1], nil];
+} forEach DAKKA_TasksArr;
 
 true

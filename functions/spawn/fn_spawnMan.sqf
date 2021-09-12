@@ -45,11 +45,11 @@ if (typeName _grp == "SIDE") then {
 };
 
 // Check for global group limit reached
-if (isNull _grp) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
+if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
 
 // Create unit
 _unit = _grp createUnit [_unitClass, _pos, _markers, _radius, _special];
-if (isNull _unit) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
+if (isNull _unit) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
 [_unit] joinSilent _grp;  // Fix for wrong side when using createUnit
 if (!_enableRandom) then {
   _unit setVariable ["BIS_enableRandomization", false];
@@ -65,7 +65,7 @@ if (_checkPos) then {
         _nearestBuilding = nearestBuilding _unit;
         _nearestBuildingPos = _nearestBuilding buildingPos 1;
         if ((count _nearTerrObj) > 0) then {
-            diag_log format ["DMORBAT: spawnMan - Unit %1 (%2) too close to rocks or non enterable buildings. Trying to relocate it to a safer position...", _unit, _unitClass];
+            diag_log format ["DAKKA: spawnMan - Unit %1 (%2) too close to rocks or non enterable buildings. Trying to relocate it to a safer position...", _unit, _unitClass];
             _dist = 7;
             if !(_nearestBuilding in _nearTerrObj) then {
                 _dist = _unit distance (_nearTerrObj select 0);
@@ -90,6 +90,6 @@ if (_checkPos) then {
     };
 };
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnMan %1 side: %2", _unit, side _unit ] };
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnMan %1 side grp: %2", _grp, side _grp ] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: spawnMan %1 side: %2", _unit, side _unit ] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: spawnMan %1 side grp: %2", _grp, side _grp ] };
 _unit

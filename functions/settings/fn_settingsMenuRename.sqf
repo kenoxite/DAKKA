@@ -17,7 +17,7 @@
 
 disableSerialization;
 private _display = findDisplay IDC_MENU_MISSION_EDIT;
-private _currentName = DMORBAT_saveSlotName;
+private _currentName = DAKKA_saveSlotName;
 
 // Display popup
 _ctrl = (_display displayCtrl IDC_GRP_DATARENAME);
@@ -39,7 +39,7 @@ _ctrl ctrlSetTooltip "";
 
 _ctrl = (_display displayCtrl IDC_BT_DATARENAME_OK);
 _ctrl ctrlSetText "Accept";
-_ctrl ctrlSetEventHandler ["ButtonClick", '[] call DMORBAT_fnc_settingsMenuRenameSet;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", '[] call DAKKA_fnc_settingsMenuRenameSet;'];
 _ctrl ctrlSetTooltip "";
 
 true

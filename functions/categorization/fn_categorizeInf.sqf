@@ -62,9 +62,9 @@ private _pilots_SF = [];
     private _assigned = false;
     private _unit = _x select 0;
     private _unitLC = toLowerANSI (_x select 0);
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - Checking unit %1", _unit] };
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - Checking unit %1", _unit] };
     // [0:_hasAT, 1:_hasAA, 2:_hasMedic, 3:_hasMG, 4:_hasGrenadier, 5:_hasMarksman, 6:_hasUnarmed, 7:_hasEngi, 8:_hasDemo, 9:_hasLeader, 10:_hasOfficer, 11:_hasHacker, 12:_hasDiver, 13:_hasSF, 14:_hasSniper, 15:_hasCrew, 16:_hasAssistant, 17:_hasRadio, 18:_hasDriver, 19:_hasPilot, 20:_hasJTAC, 21:_hasSpotter, 22:_hasAutoriflemen]
-    private _roles = [[_unit]] call DMORBAT_fnc_groupRoles;
+    private _roles = [[_unit]] call DAKKA_fnc_groupRoles;
     if (!_assigned && _roles select 0) then { if !(_roles select 13) then { _riflemenAT pushBackUnique _unit } else { _riflemenAT_SF pushBackUnique _unit }; _assigned = true; };
     if (!_assigned && _roles select 1) then { if !(_roles select 13) then { _riflemenAA pushBackUnique _unit } else { _riflemenAA_SF pushBackUnique _unit }; _assigned = true; };
     if (!_assigned && _roles select 2) then { if !(_roles select 13) then { _medics pushBackUnique _unit } else { _medics_SF pushBackUnique _unit }; _assigned = true; };
@@ -110,7 +110,7 @@ if !(_isRegular) then {
 
 // If there's no riflemen, everyone is a rifleman
 if (count _riflemen == 0) then {
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - No riflemen found. Everybody is now a %2 rifleman for faction %1", _faction, if (_isRegular) then { "regular" } else { "SF" }] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - No riflemen found. Everybody is now a %2 rifleman for faction %1", _faction, if (_isRegular) then { "regular" } else { "SF" }] };
     _riflemen append _squadLeaders; 
     _riflemen append _teamLeaders; 
     _riflemen append _riflemenAT; 
@@ -158,6 +158,7 @@ private _fnc_trimUnits = {
         "cwr3_o_soldier_light"
         ];
     private _excludedSubCats = [
+        "EdSubcat_Personnel_Story",
         "CUP_EdSubcat_Personel_Chedaki_ArmedCiv"
         ];
     _arr select { 
@@ -187,7 +188,7 @@ _heavyGunners = [_heavyGunners, _editorSubCat] call _fnc_trimUnits;
 
 // Separate Light AT units from Heavy AT ones
 if (count _riflemenAT > 0) then {
-    _riflemenATfiltered = [_riflemenAT] call DMORBAT_fnc_categorizeATunits;
+    _riflemenATfiltered = [_riflemenAT] call DAKKA_fnc_categorizeATunits;
     if (count _riflemenATfiltered > 0) then {
         _riflemenAT = _riflemenATfiltered select 0;
         _riflemenHAT = _riflemenATfiltered select 1;
@@ -195,28 +196,28 @@ if (count _riflemenAT > 0) then {
 };
 
 // Exit if no units where found
-if (count _riflemen == 0) exitWith { diag_log format ["DMORBAT: --- ERROR --- Couldn't create groups for faction %1. No infantry units found!", _faction]; [] };
+if (count _riflemen == 0) exitWith { diag_log format ["DAKKA: categorizeInf --- ERROR --- Couldn't create %2 infantry groups for faction %1. No valid units found!", _faction, if (_isRegular) then { "regular" } else { "SF" }]; [] };
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _squadLeaders: %1", _squadLeaders] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _teamLeaders: %1", _teamLeaders] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _riflemen: %1", _riflemen] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _riflemenAT: %1", _riflemenAT] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _riflemenHAT: %1", _riflemenHAT] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _riflemenAA: %1", _riflemenAA] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _grenadiers: %1", _grenadiers] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _autoriflemen: %1", _autoriflemen] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _medics: %1", _medics] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _marksmen: %1", _marksmen] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _officers: %1", _officers] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _drivers: %1", _drivers] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _crewmen: %1", _crewmen] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _snipers: %1", _snipers] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _spotters: %1", _spotters] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _JTACs: %1", _JTACs] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _engineers: %1", _engineers] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _explosiveSpecialists: %1", _explosiveSpecialists] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _heavyGunners: %1", _heavyGunners] };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: categorizeInf - _pilots: %1", _pilots] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _squadLeaders: %1", _squadLeaders] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _teamLeaders: %1", _teamLeaders] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _riflemen: %1", _riflemen] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _riflemenAT: %1", _riflemenAT] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _riflemenHAT: %1", _riflemenHAT] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _riflemenAA: %1", _riflemenAA] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _grenadiers: %1", _grenadiers] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _autoriflemen: %1", _autoriflemen] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _medics: %1", _medics] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _marksmen: %1", _marksmen] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _officers: %1", _officers] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _drivers: %1", _drivers] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _crewmen: %1", _crewmen] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _snipers: %1", _snipers] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _spotters: %1", _spotters] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _JTACs: %1", _JTACs] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _engineers: %1", _engineers] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _explosiveSpecialists: %1", _explosiveSpecialists] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _heavyGunners: %1", _heavyGunners] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - _pilots: %1", _pilots] };
 
 
 [_squadLeaders, _teamLeaders, _riflemen, _riflemenAT, _riflemenHAT, _riflemenAA, _grenadiers, _autoriflemen, _medics, _marksmen, _officers, _drivers, _crewmen, _snipers, _spotters, _JTACs, _engineers, _explosiveSpecialists, _heavyGunners, _pilots]

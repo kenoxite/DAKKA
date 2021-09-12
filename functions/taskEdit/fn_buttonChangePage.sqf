@@ -24,11 +24,11 @@ disableSerialization;
 cutText ["Preparing menus...", "BLACK IN", 999];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: --- buttonChangePage page:%1 changing to %2 page", _currentPage, if (_next) then { "NEXT" } else { "PREVIOUS" }] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: --- buttonChangePage page:%1 changing to %2 page", _currentPage, if (_next) then { "NEXT" } else { "PREVIOUS" }] };
 
 if (_currentPage > 1) then {
-  call DMORBAT_fnc_previewGroupDelete;
-  call DMORBAT_fnc_cameraPreviewTerminate;
+  call DAKKA_fnc_previewGroupDelete;
+  call DAKKA_fnc_cameraPreviewTerminate;
   // Remove EH to avoid carrying wrong data to next page
   _ctrl = _display displayCtrl IDC_TREE_FACTION_UNITS;
   _ctrl ctrlSetEventHandler ["TreeSelChanged", ''];
@@ -36,21 +36,21 @@ if (_currentPage > 1) then {
   _ctrl ctrlSetEventHandler ["LBSelChanged", ''];
 
     // Save task settings
-    call DMORBAT_fnc_settingsSave;
+    call DAKKA_fnc_settingsSave;
 
   if (_currentPage == 2 && !_next) then {
-    [] spawn DMORBAT_fnc_cameraIntro;
-    call DMORBAT_fnc_deleteTaskMarkers;
+    [] spawn DAKKA_fnc_cameraIntro;
+    call DAKKA_fnc_deleteTaskMarkers;
   };
 
   if (_currentPage == 7 && !_next) then {
     // Update date
-    setDate DMORBAT_missionStart;
+    setDate DAKKA_missionStart;
     0 fadeSound 0;
     2 fadeMusic 0.3;
     // Update weather
-    [DMORBAT_missionWeather, false] spawn DMORBAT_fnc_setWeather;
-    call DMORBAT_fnc_resetWeatherEffects;
+    [DAKKA_missionWeather, false] spawn DAKKA_fnc_setWeather;
+    call DAKKA_fnc_resetWeatherEffects;
   };
 
   if (_currentPage == 7 && _next) then {

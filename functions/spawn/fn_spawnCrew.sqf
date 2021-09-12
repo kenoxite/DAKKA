@@ -19,12 +19,12 @@ params ["_veh", ["_grp", grpNull], ["_faction", ""], ["_autoDelete", true]];
 
 
 private _vehClass = typeOf _veh;
-private _vehType = [_vehClass] call DMORBAT_fnc_vehicleType;
+private _vehType = [_vehClass] call DAKKA_fnc_vehicleType;
 private _vehLC = toLowerANSI _vehClass;
 private _crew = [];
 
 if (_faction == "" || "drone" in _vehLC) then {
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnCrew Spawning DEFAULT crew for %1: %2", _vehClass, _grp ] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: spawnCrew Spawning DEFAULT crew for %1: %2", _vehClass, _grp ] };
     createVehicleCrew _veh;
     _crew = crew _veh;
     {
@@ -32,13 +32,13 @@ if (_faction == "" || "drone" in _vehLC) then {
     } forEach _crew;
     _crew joinSilent _grp;
 } else {
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnCrew Spawning FACTION crew for %1: %2", _veh, _grp ] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: spawnCrew Spawning FACTION crew for %1: %2", _veh, _grp ] };
     // Choose crew unit classes
     // [_squadLeaders, _teamLeaders, _riflemen, _riflemenAT, _riflemenHAT, _riflemenAA, _grenadiers, _autoriflemen, _medics, _marksmen, _officers, _drivers, _crewmen, _snipers, _spotters, _JTACs, _engineers, _explosiveSpecialists, _heavyGunners, _pilots]
     private _catInf = [];
-    if (isNil (call compile format ["'DMORBAT_%1_%2'", "Infantry", _faction])) then {
+    if (isNil (call compile format ["'DAKKA_%1_%2'", "Infantry", _faction])) then {
         // Check faction for suitable infantry units
-        private _factionInfantry = [_faction, "Infantry"] call DMORBAT_fnc_categorizeUnits;
+        private _factionInfantry = [_faction, "Infantry"] call DAKKA_fnc_categorizeUnits;
         private _infGroups = [];
         {
             private _grps = _x select 1;
@@ -49,10 +49,10 @@ if (_faction == "" || "drone" in _vehLC) then {
 
         if (count _infGroups == 0) exitWith { [] };
 
-        _catInf = [_infGroups, _isRegular] call DMORBAT_fnc_categorizeInf;
-        missionNamespace setVariable [format ["DMORBAT_%1_%2", "Infantry", _faction], _catInf];
+        _catInf = [_infGroups, _isRegular] call DAKKA_fnc_categorizeInf;
+        missionNamespace setVariable [format ["DAKKA_%1_%2", "Infantry", _faction], _catInf];
     } else {
-        _catInf = call compile format ["DMORBAT_%1_%2", "Infantry", _faction];
+        _catInf = call compile format ["DAKKA_%1_%2", "Infantry", _faction];
     };
     private _riflemen = _catInf select 2;
     private _drivers = _catInf select 11;
@@ -60,7 +60,7 @@ if (_faction == "" || "drone" in _vehLC) then {
     private _pilots = _catInf select 19;
 
     private _crewClass = "";
-    private _isAir = [_veh] call DMORBAT_fnc_isAir;
+    private _isAir = [_veh] call DAKKA_fnc_isAir;
     if (_isAir) then {
         if (count _pilots > 0) then {
             _crewClass = (selectRandom _pilots);
@@ -94,7 +94,7 @@ if (_faction == "" || "drone" in _vehLC) then {
     // Spawn crew
     private _pos = getPos _veh;
     // Driver
-    private _crewUnit = ([_crewClass, _pos, _grp, [], 30, "NONE", _enableRandom] call DMORBAT_fnc_spawnMan);
+    private _crewUnit = ([_crewClass, _pos, _grp, [], 30, "NONE", _enableRandom] call DAKKA_fnc_spawnMan);
     _crew pushBack _crewUnit;
     _crewUnit moveInDriver _veh;
 
@@ -113,7 +113,7 @@ if (_faction == "" || "drone" in _vehLC) then {
         } forEach _turretsSubClass;
 
         {
-            private _crewUnit = ([_crewClass, _pos, _grp, [], 30, "NONE", _enableRandom] call DMORBAT_fnc_spawnMan);
+            private _crewUnit = ([_crewClass, _pos, _grp, [], 30, "NONE", _enableRandom] call DAKKA_fnc_spawnMan);
             _crew pushBack _crewUnit;
             _crewUnit moveInTurret [_veh, _x];
         } forEach _validTurrets;

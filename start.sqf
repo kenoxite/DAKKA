@@ -6,14 +6,14 @@
 #include "settings_terrain.hpp";
 
 // GLOBAL VARIABLES
-DMORBAT_debug = false;
+DAKKA_debug = true;
 
 // Weather and date settings
-DMORBAT_missionStart = date;
-DMORBAT_customDate = DMORBAT_missionStart;
-DMORBAT_missionWeather = [overcast, fog];
-DMORBAT_customWeather = DMORBAT_missionWeather;
-DMORBAT_weatherEffectsList = [
+DAKKA_missionStart = date;
+DAKKA_customDate = DAKKA_missionStart;
+DAKKA_missionWeather = [overcast, fog];
+DAKKA_customWeather = DAKKA_missionWeather;
+DAKKA_weatherEffectsList = [
                                 ["none", 
                                     [
                                     "None",
@@ -57,99 +57,99 @@ DMORBAT_weatherEffectsList = [
                                     ]
                                 ]
                             ];
-DMORBAT_weatherEffect = "None";
-DMORBAT_weatherEffectPreviews = ["snow_light", "snow", "earthquake", "postapocalyptic"]; // Weather effects that can be previewed
-DMORBAT_snow = false;
-DMORBAT_sandstorm = false;
-DMORBAT_earthquake = false;
-DMORBAT_duststorm = false;
-DMORBAT_monsoon = false;
-DMORBAT_postapocalyptic = false;
+DAKKA_weatherEffect = "None";
+DAKKA_weatherEffectPreviews = ["snow_light", "snow", "earthquake", "postapocalyptic"]; // Weather effects that can be previewed
+DAKKA_snow = false;
+DAKKA_sandstorm = false;
+DAKKA_earthquake = false;
+DAKKA_duststorm = false;
+DAKKA_monsoon = false;
+DAKKA_postapocalyptic = false;
 
-DMORBAT_environment = [true, true];
+DAKKA_environment = [true, true];
 
 // Factions
-DMORBAT_faction = "";
-DMORBAT_factionInd = 0;
-DMORBAT_PlayerFaction = "";
-DMORBAT_PlayerFactions = ["IND_F", "BLU_F"]; // [<friendly faction for task1>, <friendly faction for task 2>,...]
-DMORBAT_EnemyFactions = ["BLU_G_F", "OPF_F"]; // [<enemy faction for task1>, <enemy faction for task 2>,...]
+DAKKA_faction = "";
+DAKKA_factionInd = 0;
+DAKKA_PlayerFaction = "";
+DAKKA_PlayerFactions = ["IND_F", "BLU_F"]; // [<friendly faction for task1>, <friendly faction for task 2>,...]
+DAKKA_EnemyFactions = ["BLU_G_F", "OPF_F"]; // [<enemy faction for task1>, <enemy faction for task 2>,...]
 
 // Menus
-DMORBAT_editingTask = true;
-DMORBAT_mainDialogOpened = false;
-DMORBAT_lastPage = 0;
-DMORBAT_crewSlotRoles = ["Driver", "Commander", "Gunner"];
-DMORBAT_customGroupsSelection = [1, [0]];
+DAKKA_editingTask = true;
+DAKKA_mainDialogOpened = false;
+DAKKA_lastPage = 0;
+DAKKA_crewSlotRoles = ["Driver", "Commander", "Gunner"];
+DAKKA_customGroupsSelection = [1, [0]];
 
 // Preview area
-DMORBAT_wheelChock = [];
-DMORBAT_previewGroup = grpNull;
-DMORBAT_PreviewGroupName = "";
-DMORBAT_PreviewGroupID = "";
-DMORBAT_previewUnit = objNull;
-DMORBAT_SelectedPreviewUnit = objNull;
-DMORBAT_previewUnitisPlayer = false;
-DMORBAT_locationPreview = []; // Array of objects used as reference to preview locations
+DAKKA_wheelChock = [];
+DAKKA_previewGroup = grpNull;
+DAKKA_PreviewGroupName = "";
+DAKKA_PreviewGroupID = "";
+DAKKA_previewUnit = objNull;
+DAKKA_SelectedPreviewUnit = objNull;
+DAKKA_previewUnitisPlayer = false;
+DAKKA_locationPreview = []; // Array of objects used as reference to preview locations
 
 // Cameras
-DMORBAT_cameraIntro = objNull;
-DMORBAT_cameraIntroPlaying = false;
-DMORBAT_previewCamera = objNull;
-DMORBAT_previewCameraPlaying = false;
+DAKKA_cameraIntro = objNull;
+DAKKA_cameraIntroPlaying = false;
+DAKKA_previewCamera = objNull;
+DAKKA_previewCameraPlaying = false;
 
-DMORBAT_cameraZoom = 0.75;
-DMORBAT_cameraRelPos = [];
-DMORBAT_cameraTargetPos = [];
-DMORBAT_mouseButtonPressed = -1;
-DMORBAT_cameraX = 0;
-DMORBAT_cameraY = 0;
+DAKKA_cameraZoom = 0.75;
+DAKKA_cameraRelPos = [];
+DAKKA_cameraTargetPos = [];
+DAKKA_mouseButtonPressed = -1;
+DAKKA_cameraX = 0;
+DAKKA_cameraY = 0;
 
 // Locations
-DMORBAT_selectedLocMrkr = "";
-DMORBAT_mapCoords = [0, 0];
-DMORBAT_mapSatellite = false;
-DMORBAT_compositionsLoaded = 0;
+DAKKA_selectedLocMrkr = "";
+DAKKA_mapCoords = [0, 0];
+DAKKA_mapSatellite = false;
+DAKKA_compositionsLoaded = 0;
 
 // Compositions
-DMORBAT_spawnCompRefs = [];
+DAKKA_spawnCompRefs = [];
 
 // Unit editing
-DMORBAT_arsenalOpened = false;
-DMORBAT_editedUnit = objNull;
-DMORBAT_editAccepted = false;
-DMORBAT_skillLevels = ["Untrained", "Normal", "Elite"];
-DMORBAT_editReference = objNull;
+DAKKA_arsenalOpened = false;
+DAKKA_editedUnit = objNull;
+DAKKA_editAccepted = false;
+DAKKA_skillLevels = ["Untrained", "Normal", "Elite"];
+DAKKA_editReference = objNull;
 
 // Profile settings management
-DMORBAT_saveSlots = [0, 0];
-DMORBAT_saveSlotName = "Default";
-DMORBAT_knownMods = [""];
+DAKKA_saveSlots = [0, 0];
+DAKKA_saveSlotName = "Default";
+DAKKA_knownMods = [""];
 
 // Mission
-DMORBAT_automated = false;
-DMORBAT_PlayerNewGroup = group p1;
-DMORBAT_playerGroupReady = false;
-DMORBAT_loadedSavegame = false;
-DMORBAT_martaHide = [];
-DMORBAT_noNightAuto = false;
+DAKKA_automated = false;
+DAKKA_PlayerNewGroup = group p1;
+DAKKA_playerGroupReady = false;
+DAKKA_loadedSavegame = false;
+DAKKA_martaHide = [];
+DAKKA_noNightAuto = false;
 
 // TASK SETUP
-DMORBAT_TasksArr = [1, 2];
-DMORBAT_Task = 1; 
+DAKKA_TasksArr = [1, 2];
+DAKKA_Task = 1; 
 // Task 1
-DMORBAT_Task1_Title = "Neutralize Enemy Outpost";
-DMORBAT_Task1_Image = "images\task1.paa";
-DMORBAT_Task1_Desc_Short = "Find the enemy outpost and eliminate all resistance.";
-DMORBAT_Task1_Desc_Editor = "The objective is to locate the enemy outpost and then eliminate all resistance. Once completed, the player's group should proceed to extract.\nWhile this task was conceived for stealth and low unit count numbers, you can modify it to be as big and noisy as you want.";
+DAKKA_Task1_Title = "Neutralize Enemy Outpost";
+DAKKA_Task1_Image = "images\task1.paa";
+DAKKA_Task1_Desc_Short = "Find the enemy outpost and eliminate all resistance.";
+DAKKA_Task1_Desc_Editor = "The objective is to locate the enemy outpost and then eliminate all resistance. Once completed, the player's group should proceed to extract.\nWhile this task was conceived for stealth and low unit count numbers, you can modify it to be as big and noisy as you want.";
 // Task 2
-DMORBAT_Task2_Title = "Stop the Enemy Advance";
-DMORBAT_Task2_Image = "images\task2.paa";
-DMORBAT_Task2_Desc_Short = "Join the battle and help stop the enemy advance.";
-DMORBAT_Task2_Desc_Editor = "Your goal is to stop the enemy advancement towards a strategic position. Contact with the enemy will happen in the first minutes and it will last until no enemies are present in the contested area or they retreat.\nThis task gives you an opportunity to try your best in a combined arms battle, although all this will depend on the type and amount of units you use.";
+DAKKA_Task2_Title = "Stop the Enemy Advance";
+DAKKA_Task2_Image = "images\task2.paa";
+DAKKA_Task2_Desc_Short = "Join the battle and help stop the enemy advance.";
+DAKKA_Task2_Desc_Editor = "Your goal is to stop the enemy advancement towards a strategic position. Contact with the enemy will happen in the first minutes and it will last until no enemies are present in the contested area or they retreat.\nThis task gives you an opportunity to try your best in a combined arms battle, although all this will depend on the type and amount of units you use.";
 
 // Default tasks data
-DMORBAT_TaskData_default = [
+DAKKA_TaskData_default = [
 
 	[
 		// TASK 1
@@ -173,7 +173,7 @@ DMORBAT_TaskData_default = [
 		],
 		["Player data",
 			[0, 0, []]
-		],	// Player data [<index in group>, <index in DMORBAT_crewSlotRoles>, <loadout of playable unit>]
+		],	// Player data [<index in group>, <index in DAKKA_crewSlotRoles>, <loadout of playable unit>]
 		["Locations",
 			[
 				["Altis",
@@ -277,10 +277,10 @@ DMORBAT_TaskData_default = [
 ];	
 
 // Tasks data saved in profile
-DMORBAT_TaskData = +DMORBAT_TaskData_default;
+DAKKA_TaskData = +DAKKA_TaskData_default;
 
 // TIPS
-DMORBAT_tips = [
+DAKKA_tips = [
 	"You can mix units from different factions when you build your groups. You can also have squads from different factions working together.",
 
 	"All friendly groups will become BLUFOR and enemy groups will become OPFOR, overriding their original side.",
@@ -313,94 +313,94 @@ DMORBAT_tips = [
 
     "You can use a spectrum analyzer with an SD jammer antenna to be able to jam signal of enemy drones, stopping them on their tracks!"
 ];
-DMORBAT_tips call BIS_fnc_arrayShuffle;
+DAKKA_tips call BIS_fnc_arrayShuffle;
 
 // Toggleable features
-DMORBAT_randomTime = false;
-DMORBAT_randomWeather = false;
-DMORBAT_noNight = false;
-DMORBAT_forceFlashlights = false;
-DMORBAT_flares = false;
+DAKKA_randomTime = false;
+DAKKA_randomWeather = false;
+DAKKA_noNight = false;
+DAKKA_forceFlashlights = false;
+DAKKA_flares = false;
 
 // Global settings
-DMORBAT_settings = [
+DAKKA_settings = [
 	["Player Factions",
-		DMORBAT_PlayerFactions
+		DAKKA_PlayerFactions
 	],
 	["Enemy Factions",
-		DMORBAT_EnemyFactions
+		DAKKA_EnemyFactions
 	],
 	["Selected Profiles",
-		DMORBAT_saveSlots
+		DAKKA_saveSlots
 	],
 	["Selected Task",
-		[DMORBAT_Task]
+		[DAKKA_Task]
 	],
 	["Known mods",
 		[""]
 	],
 	["Date",
-		DMORBAT_customDate
+		DAKKA_customDate
 	],
 	["Random Time",
-		[DMORBAT_randomTime]
+		[DAKKA_randomTime]
 	],
 	["No night",
-		[DMORBAT_noNight]
+		[DAKKA_noNight]
 	],
 	["Weather",
-		DMORBAT_customWeather
+		DAKKA_customWeather
 	],
 	["Random Weather",
-		[DMORBAT_randomWeather]
+		[DAKKA_randomWeather]
 	],
 	["Weather Effect",
 		["None"]
 	],
 	["Forced Flashlights",
-		[DMORBAT_forceFlashlights]
+		[DAKKA_forceFlashlights]
 	],
 	["Flares",
-		[DMORBAT_flares]
+		[DAKKA_flares]
 	]
 ];
 
 // Load global settings
-call DMORBAT_fnc_globalSettingsLoad;
+call DAKKA_fnc_globalSettingsLoad;
 
 // Delete tasks settings
-// call DMORBAT_fnc_settingsDelete;
+// call DAKKA_fnc_settingsDelete;
 
 // Load tasks settings
-call DMORBAT_fnc_settingsLoad;
+call DAKKA_fnc_settingsLoad;
 
 waituntil { time > 0 };
 
 // Arsenal management
 [ missionNamespace, "arsenalClosed", {
-    DMORBAT_arsenalOpened = false;
+    DAKKA_arsenalOpened = false;
 }] call BIS_fnc_addScriptedEventHandler;
-DMORBAT_arsenalGroup = "playerGroup";
+DAKKA_arsenalGroup = "playerGroup";
 
 // MUSIC
-DMORBAT_EH_playIntroMusic = addMusicEventHandler ["MusicStop", { [DMORBAT_musicType] call DMORBAT_fnc_playMusic;}];
+DAKKA_EH_playIntroMusic = addMusicEventHandler ["MusicStop", { [DAKKA_musicType] call DAKKA_fnc_playMusic;}];
 2 fadeMusic 0.3;
 playMusic "LeadTrack04_F_Tacops";
-DMORBAT_musicType = "intro";
+DAKKA_musicType = "intro";
 
 // SOUND
 0 fadeSound 0;
 
 // Intro camera
-[] spawn DMORBAT_fnc_cameraIntro;
+[] spawn DAKKA_fnc_cameraIntro;
 
 // Start loading screen
-_loadingScreen = createDialog "DMORBAT_Loading_Screen";
+_loadingScreen = createDialog "DAKKA_Loading_Screen";
 if (!_loadingScreen) then { systemChat "Loading screen could not be opened!" };
 
 // EXTRACT FACTIONS DATA
 private _initTime = time;
-DMORBAT_availableFactionsData = call DMORBAT_fnc_extractFactionData;
+DAKKA_availableFactionsData = call DAKKA_fnc_extractFactionData;
 systemChat format ["Faction data extracted in %1s", time - _initTime];
 
 // PLAYER SETUP
@@ -415,9 +415,9 @@ removeHeadgear p1;
 removeGoggles p1; 
 
 // Spectate EH
-// p1 addEventHandler ["killed", { [_this] spawn DMORBAT_fnc_spectate; } ];
+// p1 addEventHandler ["killed", { [_this] spawn DAKKA_fnc_spectate; } ];
 
-DMORBAT_EH_OpenMenu = player addAction ["Open Menu", { call DMORBAT_fnc_openMainDialog;}];
+DAKKA_EH_OpenMenu = player addAction ["Open Menu", { call DAKKA_fnc_openMainDialog;}];
 
 
 // GLOBAL MISSION PARAMETERS
@@ -430,10 +430,10 @@ _display closeDisplay IDC_CANCEL;
 waitUntil {isNull _display};
 
 // MAIN MENU
-// call DMORBAT_fnc_createDialogs;
+// call DAKKA_fnc_createDialogs;
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
-// call DMORBAT_fnc_openMainDialog;
+// call DAKKA_fnc_openMainDialog;
 
 
 // ---------------------------------------------------------------------------------
@@ -465,20 +465,20 @@ publicvariable "al_mortar_flare_range";
 [] execVM "scripts\menuCheck.sqf";
 
 // Preview unit HUD
-DMORBAT_draw3D_EH_previewUnit = addMissionEventHandler [
+DAKKA_draw3D_EH_previewUnit = addMissionEventHandler [
 "Draw3D",
 {
-	if (!isNull DMORBAT_previewUnit) then {
+	if (!isNull DAKKA_previewUnit) then {
 		private ["_unitClass", "_rank", "_unit", "_observerPos", "_texture", "_color", "_pos", "_position", "_text", "_width", "_height", "_angle", "_shadow", "_text_size", "_font", "_text_align", "_arrows", "_zoom", "_adjIconSize", "_iconWidth", "_iconHeight", "_adjTextSize", "_textSize"];
-		_unitClass = typeOf DMORBAT_previewUnit;
-		_rank = rank DMORBAT_previewUnit;
-		_unit = vehicle DMORBAT_previewUnit;
-		_observerPos = getMarkerPos "DMORBAT_groupPreviewPos";
+		_unitClass = typeOf DAKKA_previewUnit;
+		_rank = rank DAKKA_previewUnit;
+		_unit = vehicle DAKKA_previewUnit;
+		_observerPos = getMarkerPos "DAKKA_groupPreviewPos";
 		// _observerPos = vehicle player;
 		_texture = [_rank, "texture"] call BIS_fnc_rankParams;
-		_color = if (DMORBAT_previewUnitisPlayer) then { [0.38, 0.6, 0.816, 1] } else { [1, 1, 1, 1] };
-		_pos = (DMORBAT_previewUnit selectionPosition "head");
-		_position = DMORBAT_previewUnit modelToWorldVisual [
+		_color = if (DAKKA_previewUnitisPlayer) then { [0.38, 0.6, 0.816, 1] } else { [1, 1, 1, 1] };
+		_pos = (DAKKA_previewUnit selectionPosition "head");
+		_position = DAKKA_previewUnit modelToWorldVisual [
 			(_pos select 0),
 			_pos select 1,
 			(((_pos select 2) + 0.5)) max 0
@@ -505,7 +505,7 @@ DMORBAT_draw3D_EH_previewUnit = addMissionEventHandler [
 		_textSize = 0;
 						
 		// Adjust sizes to distance
-		_zoom = call DMORBAT_fnc_trueZoom;
+		_zoom = call DAKKA_fnc_trueZoom;
 		_adjIconSize = (_observerPos distance _unit) / 1000;
 
 		_iconWidth = (1 - _adjIconSize) max 0.1 + (_zoom * 0.04) min 5;
@@ -513,7 +513,7 @@ DMORBAT_draw3D_EH_previewUnit = addMissionEventHandler [
 
 		_adjTextSize = (_observerPos distance _unit) / 10000;
 		_textSize = (_zoom / 1000) + ((0.03 - _adjTextSize) max 0);
-		// systemChat format ["DMORBAT: _text:%1 _texture:%2 _position: %3", _text, _texture, _position];
+		// systemChat format ["DAKKA: _text:%1 _texture:%2 _position: %3", _text, _texture, _position];
 		if (_text != "" || _texture !=  "") then {
 			drawIcon3D 
 			[
@@ -535,7 +535,7 @@ DMORBAT_draw3D_EH_previewUnit = addMissionEventHandler [
 }];
 
 // Preview location HUD
-DMORBAT_draw3D_EH_previewLocation = addMissionEventHandler [
+DAKKA_draw3D_EH_previewLocation = addMissionEventHandler [
 "Draw3D",
 {
 	{
@@ -567,7 +567,7 @@ DMORBAT_draw3D_EH_previewLocation = addMissionEventHandler [
 		_textSize = 0;
 						
 		// Adjust sizes to distance
-		_zoom = call DMORBAT_fnc_trueZoom;
+		_zoom = call DAKKA_fnc_trueZoom;
 		_adjIconSize = (_observerPos distance _unit) / 1000;
 
 		_iconWidth = (1 - _adjIconSize) max 0.1 + (_zoom * 0.04) min 5;
@@ -577,7 +577,7 @@ DMORBAT_draw3D_EH_previewLocation = addMissionEventHandler [
 		_textSize = (_zoom / 1000) + ((0.03 - _adjTextSize) max 0);
 
 		if (!isNull _x) then {
-			// systemChat format ["DMORBAT: _text:%1 _texture:%2 _position: %3", _text, _texture, _position];
+			// systemChat format ["DAKKA: _text:%1 _texture:%2 _position: %3", _text, _texture, _position];
 			drawIcon3D 
 			[
 				_texture,
@@ -594,6 +594,6 @@ DMORBAT_draw3D_EH_previewLocation = addMissionEventHandler [
 				_arrows // (optional)
 			];	
 		};
-	} forEach DMORBAT_locationPreview;
+	} forEach DAKKA_locationPreview;
 }];
 

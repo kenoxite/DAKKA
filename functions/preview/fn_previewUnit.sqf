@@ -18,5 +18,5 @@
 */
 
 params ["_index"];
-DMORBAT_previewUnit = [DMORBAT_previewGroup, _index] call DMORBAT_fnc_realUnitbyIndex;
-DMORBAT_previewUnit
+DAKKA_previewUnit = [DAKKA_previewGroup, _index] call DAKKA_fnc_realUnitbyIndex;
+DAKKA_previewUnit

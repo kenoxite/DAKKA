@@ -22,14 +22,14 @@ private ["_pos", "_display", "_ctrl", "_cameraPos", "_cameraDir", "_cameraFOV", 
 // systemChat format ["DMBORBAT: locationPreview _index: %1", _index];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
-call DMORBAT_fnc_cameraPreviewTerminate;
+call DAKKA_fnc_cameraPreviewTerminate;
 
 if (_end) then {
 
   // Update buttons
   _ctrl = (_display displayCtrl IDC_BT_AO_SEL_PREVIEW_COORDS);
   _ctrl ctrlSetText "PREVIEW COORDS";
-  _ctrl ctrlSetEventHandler ["ButtonClick", '[] call DMORBAT_fnc_locationPreview;'];
+  _ctrl ctrlSetEventHandler ["ButtonClick", '[] call DAKKA_fnc_locationPreview;'];
   _ctrl ctrlSetTooltip "Preview the area at the current coordinates";
 
   // Show things
@@ -49,7 +49,7 @@ if (_end) then {
     // Control the buttons display
     ctrlShow [IDC_BT_3_GRP1, false];
     ctrlShow [IDC_BT_4_GRP1, false];
-    if (DMORBAT_Task == 1) then {
+    if (DAKKA_Task == 1) then {
         ctrlShow [IDC_BT_AO_SEL_ROTATE_LEFT, false];
         ctrlShow [IDC_BT_AO_SEL_ROTATE_RIGHT, false];
     };
@@ -57,7 +57,7 @@ if (_end) then {
   ctrlShow [IDC_IMG_MAPCROSSHAIR, true];
   ctrlShow [IDC_GRP_AO_MAP_CONTROLS, true];
   ctrlShow [IDC_BT_AO_SEL_SWITCHMAP, true];
-  if (DMORBAT_mapSatellite) then {
+  if (DAKKA_mapSatellite) then {
     ctrlShow [IDC_MAP_AO_SEL_T, false];
     ctrlShow [IDC_MAP_AO_SEL_S, true];
   } else {
@@ -76,7 +76,7 @@ if (_end) then {
     _ctrl ctrlCommit 0;
 
   // Reset preview location reference
-  //(DMORBAT_locationPreview select (count DMORBAT_locationPreview) - 1) setPos [0 ,0 ,0];
+  //(DAKKA_locationPreview select (count DAKKA_locationPreview) - 1) setPos [0 ,0 ,0];
 
   // Set focus
   _ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
@@ -86,7 +86,7 @@ if (_end) then {
   
   // Update buttons
   if (_index >= 0) then {
-    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
     _worldLocationsData = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
     _locationsData = [_worldLocationsData, worldName] call BIS_fnc_getFromPairs;
     _indexCat = lbCurSel (_display displayCtrl IDC_COMBO_AO_SELECTION_CAT);
@@ -94,10 +94,10 @@ if (_end) then {
   } else {
     _ctrl = (_display displayCtrl IDC_BT_AO_SEL_PREVIEW_COORDS);
     _ctrl ctrlSetText "END PREVIEW";
-    _ctrl ctrlSetEventHandler ["ButtonClick", '[-1, true] call DMORBAT_fnc_locationPreview;'];
+    _ctrl ctrlSetEventHandler ["ButtonClick", '[-1, true] call DAKKA_fnc_locationPreview;'];
     _ctrl ctrlSetTooltip "End the current location preview";
     ctrlSetFocus _ctrl;
-    _pos = getMarkerPos "DMORBAT_mrkr_MapCenter";
+    _pos = getMarkerPos "DAKKA_mrkr_MapCenter";
   };
 
   // Hide things
@@ -126,7 +126,7 @@ if (_end) then {
     _ctrl ctrlCommit 0;
 
 
-  // systemChat format ["DMORBAT: locationPreview _pos: %1", _pos];
+  // systemChat format ["DAKKA: locationPreview _pos: %1", _pos];
   _cameraPos = [_pos, 100, 180] call BIS_fnc_relPos;
   _cameraDir = 180;
   _cameraFOV = 0.7;
@@ -142,13 +142,13 @@ if (_end) then {
 
     if (_index >= 0) then {
       // Preview at listed location
-      (DMORBAT_locationPreview select (_index + 1)) setPos _pos;
+      (DAKKA_locationPreview select (_index + 1)) setPos _pos;
     } else {
       // Preview at coordinates
-      (DMORBAT_locationPreview select 0) setPos _pos;
+      (DAKKA_locationPreview select 0) setPos _pos;
     };
-  // [_cameraPos, _cameraDir, _cameraFOV, _cameraRelX, _cameraRelY, _cameraRelZ, _cameraHeight] spawn DMORBAT_fnc_cameraPreviewStatic;
-  [_circlingPos, _cameraRadius, _cameraHeightCircle, 0.2] spawn DMORBAT_fnc_cameraPreviewCircle;
+  // [_cameraPos, _cameraDir, _cameraFOV, _cameraRelX, _cameraRelY, _cameraRelZ, _cameraHeight] spawn DAKKA_fnc_cameraPreviewStatic;
+  [_circlingPos, _cameraRadius, _cameraHeightCircle, 0.2] spawn DAKKA_fnc_cameraPreviewCircle;
 };
 
 true

@@ -25,12 +25,12 @@ tvSetCurSel [IDC_TREE_FACTION_GROUPS, [-1]];
 ctrlEnable [IDC_BT_ADD_GROUP, false];
 tvSetCurSel [IDC_TREE_FACTION_UNITS, [-1]];
 ctrlEnable [IDC_BT_ADD_UNIT, false];
-_unitsArr = (((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3) select 0) select 1;
+_unitsArr = (((DAKKA_TaskData select (DAKKA_Task - 1)) select 3) select 0) select 1;
 _index = _selectionPath select 1;
-_isPlayer = [_index] call DMORBAT_fnc_checkIfSelIsPlayer;
-_playerIndex = ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 6) select 0;
+_isPlayer = [_index] call DAKKA_fnc_checkIfSelIsPlayer;
+_playerIndex = ((DAKKA_TaskData select (DAKKA_Task - 1)) select 6) select 0;
 _unitClass = _unitsArr select _index;
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitClass: %1", _unitClass] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: _unitClass: %1", _unitClass] };
 _newIndex=-1;
 _newArray = _unitsArr;
 if (_up) then {
@@ -60,21 +60,21 @@ if (_newIndex >= 0) then {
       };
     };
   };
-  ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 6) set [0, _playerIndex];
+  ((DAKKA_TaskData select (DAKKA_Task - 1)) select 6) set [0, _playerIndex];
 
   _newArray deleteAt _index;
   _newIndex = if (_up) then { _index - 1 } else { _index + 1 };
   _newArray = [_newArray, [_unitClass], _newIndex] call BIS_fnc_arrayInsert;
-  // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _newArray: %1", _newArray] };
-  (((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3) select 0) set [1, _newArray];
-  // [_playerIndex] call DMORBAT_fnc_setPlayerUnit;
-  // if (DMORBAT_debug) then { diag_log format ["DMORBAT: player group: %1", ((DMORBAT_TaskData select (DMORBAT_Task - 1)) select 3)] };
+  // if (DAKKA_debug) then { diag_log format ["DAKKA: _newArray: %1", _newArray] };
+  (((DAKKA_TaskData select (DAKKA_Task - 1)) select 3) select 0) set [1, _newArray];
+  // [_playerIndex] call DAKKA_fnc_setPlayerUnit;
+  // if (DAKKA_debug) then { diag_log format ["DAKKA: player group: %1", ((DAKKA_TaskData select (DAKKA_Task - 1)) select 3)] };
 
   ctrlEnable [IDC_BT_1_GRP1, false];
   ctrlEnable [IDC_BT_2_GRP1, false];
   ctrlEnable [IDC_BT_3_GRP1, false];
   ctrlEnable [IDC_BT_4_GRP1, false];
-  [_idc] call DMORBAT_fnc_updatePlayerGroupTreeList;
-  call DMORBAT_fnc_previewPlayerGroup;
+  [_idc] call DAKKA_fnc_updatePlayerGroupTreeList;
+  call DAKKA_fnc_previewPlayerGroup;
   tvSetCurSel [_idc, [_selectionPath select 0, _newIndex]];
 };

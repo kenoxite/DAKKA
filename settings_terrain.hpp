@@ -3,14 +3,14 @@
 // - Weather -
 
 // Overcast settings - should be changed based on general climate of the terrain
-DMORBAT_overcast = 0.3; // average overcast
-DMORBAT_rain = [0.1, 4]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
-DMORBAT_rainMonths = [9, 4]; // months where precipitation is at its highest -- you can either start from the beginning of the rainy months or the end, it'll be sorted later
+DAKKA_overcast = 0.3; // average overcast
+DAKKA_rain = [0.1, 4]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
+DAKKA_rainMonths = [9, 4]; // months where precipitation is at its highest -- you can either start from the beginning of the rainy months or the end, it'll be sorted later
 
 // Fog settings - should be changed based on general climate of the terrain and their average elevation
-DMORBAT_fogValue = [0, 0.3]; // normal fog value that represents fog density at fogBase level. Range 0..1 - [min, max] -- min is used for dry season, max for wet
-DMORBAT_fogDecay = 0.03; // decay of fog density with altitude. Range -1..1 --- the lower the more hazy and spread, the higher the more condensed at lower altitudes and thick --- values closer to 0 are preferable for more realistic results
-DMORBAT_fogBase = 50;  // base altitude (ASL) of fog (in meters). Range -5000..5000 -- this value should be based on the lowest elevation of the terrain
+DAKKA_fogValue = [0, 0.3]; // normal fog value that represents fog density at fogBase level. Range 0..1 - [min, max] -- min is used for dry season, max for wet
+DAKKA_fogDecay = 0.03; // decay of fog density with altitude. Range -1..1 --- the lower the more hazy and spread, the higher the more condensed at lower altitudes and thick --- values closer to 0 are preferable for more realistic results
+DAKKA_fogBase = 50;  // base altitude (ASL) of fog (in meters). Range -5000..5000 -- this value should be based on the lowest elevation of the terrain
 
 
 // - Locations -
@@ -18,7 +18,7 @@ DMORBAT_fogBase = 50;  // base altitude (ASL) of fog (in meters). Range -5000..5
 // You can add as many locations as you want, but there must be at least one location for each location category for each task
 // To easily get coordinates you can add some locations in Editing Mode. Every time you add a location the coordinates are copied to the clipboard
 // Format is: [<coordinates>, <direction>]
-DMORBAT_locations_Task1 = [
+DAKKA_locations_Task1 = [
         ["Outposts",
             [
                 [[10697.8,17840.1,0],0],
@@ -49,7 +49,7 @@ DMORBAT_locations_Task1 = [
         ]
     ];
 
-DMORBAT_locations_Task2 = [
+DAKKA_locations_Task2 = [
         ["Contested Areas",
             [
                 [[20370.6,8865.04,0],325],

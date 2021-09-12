@@ -19,7 +19,7 @@
 
 
 	Examples:
-	[position player, getDir player, "Guerrilla", "Camps", "CampA"] call DMORBAT_fnc_compositionSpawn;
+	[position player, getDir player, "Guerrilla", "Camps", "CampA"] call DAKKA_fnc_compositionSpawn;
 */
 
 params ["_pos", "_dir", "_category", "_subcategory", "_className", ["_aligned", true], ["_simple", false]];
@@ -59,12 +59,12 @@ _composition = [[_ref, _pos, _dir]];
         _hiddenObjects pushBackUnique _x;
     } forEach _nearTerrObj;
 	if (_simple) then {
-		_obj= [_obj] call DMORBAT_fnc_convertToSimpleObject;
+		_obj= [_obj] call DAKKA_fnc_convertToSimpleObject;
 	} else {
 		// _obj allowDamage true;
 		// _obj enableSimulation true;
 	};
-	// if (_keepHorizontal == 1) then { systemChat format ["DMORBAT: _objClass: %1 _keepHorizontal: %2", _objClass, _keepHorizontal] };
+	// if (_keepHorizontal == 1) then { systemChat format ["DAKKA: _objClass: %1 _keepHorizontal: %2", _objClass, _keepHorizontal] };
     
     // Fix for CUP compositions
     if ((configSourceMod (configFile >> "CfgVehicles" >> _objClass)) == "@CUP Terrains - Core") then {
@@ -78,7 +78,7 @@ _composition = [[_ref, _pos, _dir]];
 	} else {
 		_obj setVectorUp (surfaceNormal (position _obj));
 	};
-	if (isNull _obj) exitWith { [format ["ERROR: Could not create object '%1'", _objClass]] spawn DMORBAT_fnc_displayMessage;};
+	if (isNull _obj) exitWith { [format ["ERROR: Could not create object '%1'", _objClass]] spawn DAKKA_fnc_displayMessage;};
 	_composition pushBack [_obj, _objClass, _relPos, _objDir, _keepHorizontal];
 } forEach ("true" configClasses (configfile >>  "CfgGroups" >> "Empty" >> _category >> _subcategory >> _className));
 // deleteVehicle _ref;

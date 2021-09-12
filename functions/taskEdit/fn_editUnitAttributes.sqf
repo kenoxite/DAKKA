@@ -20,32 +20,32 @@
 params ["_idc", "_selectionPath", ["_groupNumber", 1], ["_enemy", true]];
 private ["_display", "_ctrl", "_taskData", "_groupsData", "_groupsCategoryData", "_thisCategoryGroups", "_thisGroupData", "_unitsData", "_unit", "_unitIndex", "_thisUnitData", "_unitClass", "_unitRank", "_unitLoadout", "_unitPresence", "_unitSkill", "_displayName", "_presence", "_skill", "_units", "_groupMods", "_groupIndex"];
 
-if ((count _selectionPath) < 1 || (_groupNumber > 0 && (count _selectionPath) == 1 && (_selectionPath select 0) == 0)) exitWith { ["ERROR: No unit or group was selected!"] spawn DMORBAT_fnc_displayMessage; };
+if ((count _selectionPath) < 1 || (_groupNumber > 0 && (count _selectionPath) == 1 && (_selectionPath select 0) == 0)) exitWith { ["ERROR: No unit or group was selected!"] spawn DAKKA_fnc_displayMessage; };
 
 _groupIndex = (_selectionPath select 0) - 1;
 _unitIndex = _selectionPath select 1;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 if (_groupNumber > 0) then {
     // Custom group
     _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs;
     _groupsCategoryData = _groupsData select (_groupNumber - 1);
     _thisCategoryGroups = _groupsCategoryData select 1;
     _thisGroupData = _thisCategoryGroups select _groupIndex;
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes  _groupIndex: %2 _thisGroupData: %1", _thisGroupData, _groupIndex] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitAttributes  _groupIndex: %2 _thisGroupData: %1", _thisGroupData, _groupIndex] };
 } else {
     // Player group
     _groupsData = [_taskData, "Player group"] call BIS_fnc_getFromPairs;
     _thisGroupData = _groupsData select 0;
 };
 _unitsData = _thisGroupData select 1;
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _unitsData: %1", _unitsData] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitAttributes _unitsData: %1", _unitsData] };
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
 if ((count _selectionPath) > 1) then {
   // Edit single unit
-  _unit = (units DMORBAT_previewGroup) select _unitIndex;
+  _unit = (units DAKKA_previewGroup) select _unitIndex;
 
   _thisUnitData = _unitsData select _unitIndex;
   _unitPresence = _thisUnitData select 3;
@@ -64,7 +64,7 @@ if ((count _selectionPath) > 1) then {
   _ctrl ctrlSetText format ["Edit: %1", _displayName];
 } else {
   // Edit group
-  _unit = (units DMORBAT_previewGroup) select 0;
+  _unit = (units DAKKA_previewGroup) select 0;
   _thisUnitData = _unitsData select 0;
 
   // Reset combo selections
@@ -79,10 +79,10 @@ if ((count _selectionPath) > 1) then {
   _ctrl = (_display displayCtrl IDC_TITLE_UNITEDIT);
   _ctrl ctrlSetText format ["Edit: %1", _displayName];
 };
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _thisUnitData: %1", _thisUnitData] };
-DMORBAT_editedUnit = _unit;
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _unit: %1", _unit] };
-DMORBAT_editAccepted = false;
+// if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitAttributes _thisUnitData: %1", _thisUnitData] };
+DAKKA_editedUnit = _unit;
+if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitAttributes _unit: %1", _unit] };
+DAKKA_editAccepted = false;
 
 _groupMods = _thisGroupData select 2;
 
@@ -96,15 +96,15 @@ ctrlSetFocus _ctrl;
 
 // Wait for pop-up to close to apply changes
 _ctrl = (_display displayCtrl IDC_GRP_UNITEDIT);
-while { !isNull DMORBAT_editedUnit } do {
+while { !isNull DAKKA_editedUnit } do {
   waitUntil { !ctrlShown  _ctrl };
 
-  if (DMORBAT_editAccepted) then {
+  if (DAKKA_editAccepted) then {
 
     if ((count _selectionPath) > 1) then {
       _units = [_unit];
     } else {
-      _units = units DMORBAT_previewGroup;
+      _units = units DAKKA_previewGroup;
     };
 
     {
@@ -113,7 +113,7 @@ while { !isNull DMORBAT_editedUnit } do {
             _thisUnitData = _unitsData select _forEachIndex;
           };
           if (!isNil "_thisUnitData") then {
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes _thisUnitData: %1", _thisUnitData] };
+            if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitAttributes _thisUnitData: %1", _thisUnitData] };
             _unitClass = _thisUnitData select 0;
             _unitRank = _thisUnitData select 1;
             _unitLoadout = _thisUnitData select 2;
@@ -156,18 +156,18 @@ while { !isNull DMORBAT_editedUnit } do {
                                         _skill,
                                         _groupMods,
                                         if (_groupNumber == 0) then { true } else { false }
-                                    ] call DMORBAT_fnc_createUnitTooltip
+                                    ] call DAKKA_fnc_createUnitTooltip
                                 ];
 
-            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitAttributes new settings: %1", _thisUnitData select [3, 1]] };
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitAttributes new settings: %1", _thisUnitData select [3, 1]] };
           };
       };
     } forEach _units;
 
-    DMORBAT_editAccepted = false;
-    DMORBAT_editedUnit = objNull;
+    DAKKA_editAccepted = false;
+    DAKKA_editedUnit = objNull;
 
     // Save task settings
-    call DMORBAT_fnc_settingsSave;
+    call DAKKA_fnc_settingsSave;
   };
 };

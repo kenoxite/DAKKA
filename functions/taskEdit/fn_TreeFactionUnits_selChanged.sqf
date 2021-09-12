@@ -26,17 +26,17 @@ if (count _selectionPath > 0) then {
 };
 
 if ((count _selectionPath) > 1) then {
-	if (typeOf DMORBAT_SelectedPreviewUnit != tvData [_idcUnits, tvCurSel _idcUnits]) then {
-		call DMORBAT_fnc_previewGroupDelete;
-		DMORBAT_PreviewGroupName = "";	
-		DMORBAT_PreviewGroupID = "";	
-		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeFactionUnits_selChanged CALLING PREVIEWGROUP", ""] };
-		[[tvData [_idcUnits, _selectionPath]]] call DMORBAT_fnc_previewGroup;
-		DMORBAT_SelectedPreviewUnit = (units DMORBAT_previewGroup) select 0;
-        [true] call DMORBAT_fnc_displayVehicleInfo;
+	if (typeOf DAKKA_SelectedPreviewUnit != tvData [_idcUnits, tvCurSel _idcUnits]) then {
+		call DAKKA_fnc_previewGroupDelete;
+		DAKKA_PreviewGroupName = "";	
+		DAKKA_PreviewGroupID = "";	
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: TreeFactionUnits_selChanged CALLING PREVIEWGROUP", ""] };
+		[[tvData [_idcUnits, _selectionPath]]] call DAKKA_fnc_previewGroup;
+		DAKKA_SelectedPreviewUnit = (units DAKKA_previewGroup) select 0;
+        [true] call DAKKA_fnc_displayVehicleInfo;
 	};
 	ctrlEnable [IDC_BT_ADD_UNIT, true];	
 } else {		
 	ctrlEnable [IDC_BT_ADD_UNIT, false];	
-    [false] call DMORBAT_fnc_displayVehicleInfo;
+    [false] call DAKKA_fnc_displayVehicleInfo;
 };

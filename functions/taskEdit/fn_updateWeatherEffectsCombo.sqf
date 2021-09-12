@@ -23,7 +23,7 @@ private ["_display", "_ctrl", "_effectsData", "_thisEffect", "_effectType", "_ef
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl IDC_COMBO_ENVSETTINGS_WEATHEREFFECTS);
 lbClear _ctrl;
-_effectsData = DMORBAT_weatherEffectsList;
+_effectsData = DAKKA_weatherEffectsList;
 
 for [{private _i = 0}, {_i < count _effectsData}, {_i = _i + 1}] do 
 {

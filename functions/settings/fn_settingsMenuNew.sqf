@@ -18,7 +18,7 @@
 
 disableSerialization;
 private _display = findDisplay IDC_MENU_MISSION_EDIT;
-private _currentName = DMORBAT_saveSlotName;
+private _currentName = DAKKA_saveSlotName;
 
 // Display popup
 _ctrl = (_display displayCtrl IDC_GRP_DATARENAME);
@@ -31,8 +31,8 @@ _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_TXT_DATARENAME);
 private _suggestedName = "New Profile";
-// private _playerFaction = DMORBAT_PlayerFactions select (DMORBAT_Task - 1);
-// private _enemyFaction = DMORBAT_EnemyFactions select (DMORBAT_Task - 1);
+// private _playerFaction = DAKKA_PlayerFactions select (DAKKA_Task - 1);
+// private _enemyFaction = DAKKA_EnemyFactions select (DAKKA_Task - 1);
 // private _suggestedName = format ["%1 vs %2", _playerFaction, _enemyFaction];
 _ctrl ctrlSetText _suggestedName;
 ctrlSetFocus _ctrl;
@@ -44,7 +44,7 @@ _ctrl ctrlSetTooltip "";
 
 _ctrl = (_display displayCtrl IDC_BT_DATARENAME_OK);
 _ctrl ctrlSetText "Accept";
-_ctrl ctrlSetEventHandler ["ButtonClick", '[] call DMORBAT_fnc_settingsMenuNewSet;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", '[] call DAKKA_fnc_settingsMenuNewSet;'];
 _ctrl ctrlSetTooltip "";
 
 true

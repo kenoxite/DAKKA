@@ -29,7 +29,7 @@ if (ctrlShown _ctrl) then {
 	_ctrl = (_display displayCtrl _idcSatellite);
 	_ctrl ctrlShow true;
 	// _ctrl ctrlSetScale _scale;
-	DMORBAT_mapSatellite = true;
+	DAKKA_mapSatellite = true;
 } else {
 	_ctrl = (_display displayCtrl _idcSatellite);
 	_scale = ctrlMapScale _ctrl;
@@ -37,7 +37,7 @@ if (ctrlShown _ctrl) then {
 	_ctrl = (_display displayCtrl _idcTerrain);
 	_ctrl ctrlShow true;
 	// _ctrl ctrlSetScale _scale;
-	DMORBAT_mapSatellite = false;
+	DAKKA_mapSatellite = false;
 };
 
 true

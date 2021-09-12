@@ -21,92 +21,92 @@ private ["_display"];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
 // Delete task markers
-call DMORBAT_fnc_deleteTaskMarkers;
+call DAKKA_fnc_deleteTaskMarkers;
 
 // Delete composition markers
-call DMORBAT_fnc_deleteCompositionMarkers;
+call DAKKA_fnc_deleteCompositionMarkers;
 
 // Delete wheelchocks
 {
   deleteVehicle _x;
-} forEach DMORBAT_wheelChock;
-DMORBAT_wheelChock = []; 
+} forEach DAKKA_wheelChock;
+DAKKA_wheelChock = []; 
 
 // Delete map center marker
-deleteMarker "DMORBAT_mrkr_MapCenter";
+deleteMarker "DAKKA_mrkr_MapCenter";
 
 // Delete preview position marker
-deleteMarker "DMORBAT_groupPreviewPos";
+deleteMarker "DAKKA_groupPreviewPos";
 
 // Delete open menu action
-player removeAction DMORBAT_EH_OpenMenu;
+player removeAction DAKKA_EH_OpenMenu;
 
 // Delete mission EH
-removeMissionEventHandler ["Draw3D", DMORBAT_draw3D_EH_previewUnit];
-removeMissionEventHandler ["Draw3D", DMORBAT_draw3D_EH_previewLocation];
+removeMissionEventHandler ["Draw3D", DAKKA_draw3D_EH_previewUnit];
+removeMissionEventHandler ["Draw3D", DAKKA_draw3D_EH_previewLocation];
 
 // Delete music EH
-removeMusicEventHandler ["MusicStop", DMORBAT_EH_playIntroMusic];
+removeMusicEventHandler ["MusicStop", DAKKA_EH_playIntroMusic];
 
 // Destroy cameras
-call DMORBAT_fnc_cameraPreviewTerminate;
-call DMORBAT_fnc_cameraIntroTerminate;
-call DMORBAT_fnc_previewGroupDelete;
+call DAKKA_fnc_cameraPreviewTerminate;
+call DAKKA_fnc_cameraIntroTerminate;
+call DAKKA_fnc_previewGroupDelete;
 
 // Termiante scripts
-terminate DMORBAT_mainMenu_loop;
-DMORBAT_editingTask = false;
+terminate DAKKA_mainMenu_loop;
+DAKKA_editingTask = false;
 
 // Delete global variables
-DMORBAT_availableFactionsData = nil;
-DMORBAT_availableFactionsDataNoInf = nil;
-DMORBAT_availableFactionsDataGroups = nil;
+DAKKA_availableFactionsData = nil;
+DAKKA_availableFactionsDataNoInf = nil;
+DAKKA_availableFactionsDataGroups = nil;
 
-DMORBAT_mainMenu_loop = nil;
-DMORBAT_EH_OpenMenu = nil;
-DMORBAT_draw3D_EH_previewUnit = nil;
-DMORBAT_draw3D_EH_previewLocation = nil;
-DMORBAT_EH_playIntroMusic = nil;
+DAKKA_mainMenu_loop = nil;
+DAKKA_EH_OpenMenu = nil;
+DAKKA_draw3D_EH_previewUnit = nil;
+DAKKA_draw3D_EH_previewLocation = nil;
+DAKKA_EH_playIntroMusic = nil;
 
-// DMORBAT_faction = nil;
-// DMORBAT_factionInd = nil;
+// DAKKA_faction = nil;
+// DAKKA_factionInd = nil;
 
-// DMORBAT_PlayerFaction = nil;
-// DMORBAT_PlayerFactions = nil;
-// DMORBAT_EnemyFactions = nil;
+// DAKKA_PlayerFaction = nil;
+// DAKKA_PlayerFactions = nil;
+// DAKKA_EnemyFactions = nil;
 
-DMORBAT_previewGroup = nil;
-DMORBAT_PreviewGroupName = nil;
-DMORBAT_PreviewGroupID = nil;
-DMORBAT_previewUnit = nil;
-DMORBAT_SelectedPreviewUnit = nil;
-DMORBAT_previewUnitisPlayer = nil;
-DMORBAT_locationPreview = nil;
+DAKKA_previewGroup = nil;
+DAKKA_PreviewGroupName = nil;
+DAKKA_PreviewGroupID = nil;
+DAKKA_previewUnit = nil;
+DAKKA_SelectedPreviewUnit = nil;
+DAKKA_previewUnitisPlayer = nil;
+DAKKA_locationPreview = nil;
 
-// DMORBAT_cameraIntro = nil;
-// DMORBAT_cameraIntroPlaying = nil;
-// DMORBAT_previewCamera = nil;
-// DMORBAT_previewCameraPlaying = nil;
-DMORBAT_cameraZoom = nil;
-DMORBAT_cameraX = nil;
-DMORBAT_cameraY = nil;
-DMORBAT_editReference = nil;
+// DAKKA_cameraIntro = nil;
+// DAKKA_cameraIntroPlaying = nil;
+// DAKKA_previewCamera = nil;
+// DAKKA_previewCameraPlaying = nil;
+DAKKA_cameraZoom = nil;
+DAKKA_cameraX = nil;
+DAKKA_cameraY = nil;
+DAKKA_editReference = nil;
 
-DMORBAT_lastPage = nil;
-// DMORBAT_crewSlotRoles = nil; // Still needed when setting player group
-DMORBAT_customGroupsSelection = nil;
+DAKKA_lastPage = nil;
+// DAKKA_crewSlotRoles = nil; // Still needed when setting player group
+DAKKA_customGroupsSelection = nil;
 
-DMORBAT_wheelChock = nil;
-DMORBAT_mainDialogOpened = nil;
-DMORBAT_selectedLocMrkr = nil;
-DMORBAT_mapCoords = nil;
-DMORBAT_mapSatellite = nil;
+DAKKA_wheelChock = nil;
+DAKKA_mainDialogOpened = nil;
+DAKKA_selectedLocMrkr = nil;
+DAKKA_mapCoords = nil;
+DAKKA_mapSatellite = nil;
 
-DMORBAT_musicType = nil;
-DMORBAT_tips = nil;
+DAKKA_musicType = nil;
+DAKKA_tips = nil;
 
 // Save mission settings
-call DMORBAT_fnc_settingsSave;
+call DAKKA_fnc_settingsSave;
 
 // Close main menu
 // closeDialog IDC_OK;

@@ -59,24 +59,24 @@ lbClear _ctrl;
 	_ctrl lbSetPicture [_indexCtrl, _thisFactionIcon];
 	_ctrl lbSetPictureColor [_indexCtrl, [1, 1, 1, 1]];
 	_ctrl lbSetPictureColorSelected [_indexCtrl, [1, 1, 1, 1]];
-} forEach DMORBAT_availableFactionsData;
+} forEach DAKKA_availableFactionsData;
 
 lbSort _ctrl;
 
 _side = if (_isPlayerFaction) then { "Player" } else { "Enemy" };
 
-_faction = call compile format ["DMORBAT_%1Factions select (DMORBAT_Task - 1)", _side];
+_faction = call compile format ["DAKKA_%1Factions select (DAKKA_Task - 1)", _side];
 if (isNil "_faction") then { 
     private _error = format ["WARNING: Couldn't find the saved %1 faction!", _side];
-    [_error] spawn DMORBAT_fnc_displayMessage;
-    diag_log format ["DMORBAT: --- %1", _error];
+    [_error] spawn DAKKA_fnc_displayMessage;
+    diag_log format ["DAKKA: --- %1", _error];
 };
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionCombo _faction: %1", _faction] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: updateFactionCombo _faction: %1", _faction] };
 if (_faction == "") then {
     private _error = format ["WARNING: Couldn't find the saved %1 faction!", _side];
-    [_error] spawn DMORBAT_fnc_displayMessage;
-    diag_log format ["DMORBAT: --- %1", _error];
+    [_error] spawn DAKKA_fnc_displayMessage;
+    diag_log format ["DAKKA: --- %1", _error];
 };
 
 _fIndex = -1;
@@ -84,19 +84,19 @@ _fIndex = -1;
     if ((_ctrl lbData _forEachIndex) == _faction) exitWith {
         _fIndex = _forEachIndex;
     };
-} forEach DMORBAT_availableFactionsData;
+} forEach DAKKA_availableFactionsData;
 _ctrl lbSetCurSel (_fIndex max 0);
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionCombo _faction: %1", _faction] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: updateFactionCombo _faction: %1", _faction] };
 if (_fIndex < 0) then {
     private _error = format ["WARNING: Couldn't find the saved %1 faction!", _side];
-    [_error] spawn DMORBAT_fnc_displayMessage;
-    diag_log format ["DMORBAT: --- %1", _error];
+    [_error] spawn DAKKA_fnc_displayMessage;
+    diag_log format ["DAKKA: --- %1", _error];
 
-    call compile format ["DMORBAT_%1Factions set [(DMORBAT_Task - 1), _ctrl lbData %2]", _side, if (_isPlayerFaction) then { 0 } else { 2 }];
+    call compile format ["DAKKA_%1Factions set [(DAKKA_Task - 1), _ctrl lbData %2]", _side, if (_isPlayerFaction) then { 0 } else { 2 }];
 };
 
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionCombo _faction: %1 DMORBAT_PlayerFactions: %2 DMORBAT_EnemyFactions: %3", _faction, DMORBAT_PlayerFactions, DMORBAT_EnemyFactions] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: updateFactionCombo _faction: %1 DAKKA_PlayerFactions: %2 DAKKA_EnemyFactions: %3", _faction, DAKKA_PlayerFactions, DAKKA_EnemyFactions] };
 
 true

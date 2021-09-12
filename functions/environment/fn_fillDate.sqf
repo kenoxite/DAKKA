@@ -18,7 +18,7 @@
 */
 
 params [["_action", ["all"]]];
-private _currentDate = DMORBAT_customDate;
+private _currentDate = DAKKA_customDate;
 private _currentDay = _currentDate select 2;
 private _currentMonth = _currentDate select 1;
 private _currentYear = _currentDate select 0;

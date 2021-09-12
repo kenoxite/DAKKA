@@ -22,17 +22,17 @@
 params [["_enemy", true]];
 private ["_grp", "_grpName", "_idc", "_groupNumber", "_selectionPath", "_taskData", "_thisCategoryGroups", "_groupsData", "_groupsCategoryData", "_unitsData", "_unitClasses", "_unitClass", "_index", "_veh", "_thisCategoryName", "_grpType", "_groupMods", "_mod", "_knownMods", "_modIndex"];
 
-_grp = DMORBAT_previewGroup;
+_grp = DAKKA_previewGroup;
 _grpName = tvData [IDC_TREE_FACTION_GROUPS, (tvCurSel IDC_TREE_FACTION_GROUPS) select [0, 2]];
-if (isNull _grp || _grpName == "") exitWith { ["ERROR: No group was selected!"]spawn DMORBAT_fnc_displayMessage; };
+if (isNull _grp || _grpName == "") exitWith { ["ERROR: No group was selected!"]spawn DAKKA_fnc_displayMessage; };
 
 // Override current custom group selection with one based on the selected group units type
-_groupNumber = DMORBAT_customGroupsSelection select 0;
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup original _groupNumber: %1", _groupNumber] };
-_selectionPath = DMORBAT_customGroupsSelection select 1;
+_groupNumber = DAKKA_customGroupsSelection select 0;
+if (DAKKA_debug) then { diag_log format ["DAKKA: addGroupToGroup original _groupNumber: %1", _groupNumber] };
+_selectionPath = DAKKA_customGroupsSelection select 1;
 _grpType = "";
-if (DMORBAT_Task == 2) then {
-  _grpType = [_grp] call DMORBAT_fnc_groupType;
+if (DAKKA_Task == 2) then {
+  _grpType = [_grp] call DAKKA_fnc_groupType;
   switch (_grpType) do {
     case "Inf": {
       _groupNumber = 1;
@@ -48,9 +48,9 @@ if (DMORBAT_Task == 2) then {
     };
   };  
 };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup final _groupNumber: %1 _grpType: %2", _groupNumber, _grpType] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: addGroupToGroup final _groupNumber: %1 _grpType: %2", _groupNumber, _grpType] };
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs;
 _groupsCategoryData = _groupsData select (_groupNumber - 1);
 _thisCategoryName = _groupsCategoryData select 0;
@@ -63,7 +63,7 @@ _groupMods = [];
   if (_x == effectiveCommander _veh) then {
     _unitClasses pushBack [(typeOf _veh), rank _veh, [], 1, 1];
     // Check for the unit mod dependencies
-    _mod = [typeOf _veh] call DMORBAT_fnc_modsCheck;
+    _mod = [typeOf _veh] call DAKKA_fnc_modsCheck;
     _groupMods pushBackUnique _mod;
   };
 } forEach (units _grp);
@@ -73,13 +73,13 @@ if ((count units _grp) > 1) then {
 } else {
   _grpName = format ["%1", _thisCategoryName];
 };
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup _grpName: %1", _grpName] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: addGroupToGroup _grpName: %1", _grpName] };
 _thisCategoryGroups pushBack [_grpName, _unitClasses, _groupMods];
 _index = (count _thisCategoryGroups);
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: addGroupToGroup _thisCategoryGroups: %1", _thisCategoryGroups] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: addGroupToGroup _thisCategoryGroups: %1", _thisCategoryGroups] };
 
-[-1, _groupNumber, _enemy] call DMORBAT_fnc_updateCustomGroupsTreeList;
+[-1, _groupNumber, _enemy] call DAKKA_fnc_updateCustomGroupsTreeList;
 
 tvSetCurSel [IDC_TREE_FACTION_UNITS, [-1]];
 ctrlEnable [IDC_BT_ADD_UNIT, false];
@@ -98,4 +98,4 @@ switch (_groupNumber) do {
 ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc) tvSetCurSel [_index];
 
 // Save task settings
-call DMORBAT_fnc_settingsSave;
+call DAKKA_fnc_settingsSave;

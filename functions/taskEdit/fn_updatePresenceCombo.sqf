@@ -24,7 +24,7 @@ disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl =  _display displayCtrl _idcCombo;
 if (isNull _ctrl) exitWith { 
-  diag_log format ["DMORBAT: --- ERROR --- updatePresenceCombo CONTROL %1  could not be found!", _ctrl];
+  diag_log format ["DAKKA: --- ERROR --- updatePresenceCombo CONTROL %1  could not be found!", _ctrl];
 };
 lbClear _ctrl;
 

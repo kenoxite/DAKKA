@@ -97,7 +97,7 @@ private _factionUnits = [];
             
             if (_allowUnit) then {
                 private _catName = getText (configFile >> "CfgEditorSubcategories" >> _subcat >> "displayName"); 
-                private _catIndex = [_factionUnits, _catName] call DMORBAT_fnc_findFirstNested;
+                private _catIndex = [_factionUnits, _catName] call DAKKA_fnc_findFirstNested;
                 private _unitName = getText (_x >> "displayname");
                 if (_catIndex >= 0) then {
                     _catUnits = (_factionUnits select _catIndex) select 1;
@@ -113,7 +113,7 @@ private _factionUnits = [];
 _factionUnits sort true;
 
 // {
-//     if (DMORBAT_debug) then { diag_log format ["DMORBAT: _factionUnits %2: %1", _x, _forEachIndex] };
+//     if (DAKKA_debug) then { diag_log format ["DAKKA: _factionUnits %2: %1", _x, _forEachIndex] };
 // } forEach _factionUnits;
 
 _factionUnits

@@ -20,19 +20,19 @@
 params ["_selectionPath", "_faction"];
 private ["_factionGroups", "_groupTypeName", "_groupTypeIndex", "_groupType", "_groupsData", "_groupName", "_groupIndex", "_thisGroupData", "_unitsData", "_thisUnitData", "_unitClasses", "_ranks", "_unitClass", "_rank"];
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateFactionGroupUnitsList params:%1 %2", _selectionPath, _faction] };
-_factionGroups = [_faction] call DMORBAT_fnc_extractGroupsData;
+// if (DAKKA_debug) then { diag_log format ["DAKKA: updateFactionGroupUnitsList params:%1 %2", _selectionPath, _faction] };
+_factionGroups = [_faction] call DAKKA_fnc_extractFactionGroupsData;
 
-call DMORBAT_fnc_previewGroupDelete;
+call DAKKA_fnc_previewGroupDelete;
 
 _selectionPath resize 2;
 _groupTypeName = tvData [IDC_TREE_FACTION_GROUPS, [_selectionPath select 0]];
-_groupTypeIndex = [_factionGroups, _groupTypeName] call DMORBAT_fnc_findFirstNested;
+_groupTypeIndex = [_factionGroups, _groupTypeName] call DAKKA_fnc_findFirstNested;
 if (_groupTypeIndex >= 0) then {
 	_groupType = _factionGroups select _groupTypeIndex;
     _groupsData = _groupType select 1;
 	_groupName = tvData [IDC_TREE_FACTION_GROUPS, _selectionPath];
-	_groupIndex = [_groupsData, _groupName] call DMORBAT_fnc_findFirstNested;
+	_groupIndex = [_groupsData, _groupName] call DAKKA_fnc_findFirstNested;
 	if (_groupIndex >= 0) then {
 		_thisGroupData = _groupsData select _groupIndex;
         _unitsData = _thisGroupData select 1;
@@ -46,7 +46,7 @@ if (_groupTypeIndex >= 0) then {
 			_unitClasses pushBack _unitClass;
 			_ranks pushBack _rank;
 		};
-		[_unitClasses, _ranks] call DMORBAT_fnc_previewGroup;
+		[_unitClasses, _ranks] call DAKKA_fnc_previewGroup;
 	};
 };
 

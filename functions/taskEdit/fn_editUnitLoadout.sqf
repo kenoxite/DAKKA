@@ -20,12 +20,12 @@
 params ["_idc", "_selectionPath", ["_groupNumber", 1], ["_enemy", true]];
 private ["_display", "_ctrl", "_taskData", "_groupsData", "_groupsCategoryData", "_thisCategoryGroups", "_thisGroupData", "_unitsData", "_unit", "_unitIndex", "_unitClass", "_unitRank", "_unitLoadout", "_unitPresence", "_unitSkill", "_groupIndex", "_editedLoadout", "_inVeh", "_veh", "_isPlayer", "_crewSlot", "_crewRole", "_playerLoadout", "_crewUnit", "_groupUnits"];
 
-if ((count _selectionPath) < 2) exitWith { ["ERROR: No unit was selected!"] spawn DMORBAT_fnc_displayMessage; };
+if ((count _selectionPath) < 2) exitWith { ["ERROR: No unit was selected!"] spawn DAKKA_fnc_displayMessage; };
 
 _groupIndex = (_selectionPath select 0) - 1;
 _unitIndex = _selectionPath select 1;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 if (_groupNumber > 0) then {
     // Custom group
     _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs;
@@ -38,36 +38,36 @@ if (_groupNumber > 0) then {
     _thisGroupData = _groupsData select 0;
 };
 _unitsData = _thisGroupData select 1;
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitsData: %1", _unitsData] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _unitsData: %1", _unitsData] };
 _unitArr = _unitsData select _unitIndex;
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitArr: %1", _unitArr] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _unitArr: %1", _unitArr] };
 _unitClass = _unitArr select 0;
 _unitRank = _unitArr select 1;
 _unitLoadout = _unitArr select 2;
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitLoadout (before): %1", _unitLoadout] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _unitLoadout (before): %1", _unitLoadout] };
 _unitPresence = _unitArr select 3;
 _unitSkill = _unitArr select 4;
 
-_groupUnits = (units DMORBAT_previewGroup);
+_groupUnits = (units DAKKA_previewGroup);
 _unit = _groupUnits select _unitIndex;
 _veh = vehicle _unit;
-_inVeh = if ([_veh] call DMORBAT_fnc_isMan) then { false } else { true };
-// if (_inVeh) exitWith { ["ERROR: You can only modify loadouts of infantry units"] call DMORBAT_fnc_displayMessage; };
-_isPlayer = if (_groupNumber == 0 && [_unitIndex] call DMORBAT_fnc_checkIfSelIsPlayer) then { true } else { false };
+_inVeh = if ([_veh] call DAKKA_fnc_isMan) then { false } else { true };
+// if (_inVeh) exitWith { ["ERROR: You can only modify loadouts of infantry units"] call DAKKA_fnc_displayMessage; };
+_isPlayer = if (_groupNumber == 0 && [_unitIndex] call DAKKA_fnc_checkIfSelIsPlayer) then { true } else { false };
 _playerData = [];
 _crewSlot = 0;
-_crewRole = DMORBAT_crewSlotRoles select _crewSlot;
+_crewRole = DAKKA_crewSlotRoles select _crewSlot;
 _playerLoadout = [];
 if (_isPlayer) then {
     _playerData = [_taskData, "Player data"] call BIS_fnc_getFromPairs;
     if (_inVeh) then {
         _crewSlot = _playerData select 1;
-        _crewRole = DMORBAT_crewSlotRoles select _crewSlot;
+        _crewRole = DAKKA_crewSlotRoles select _crewSlot;
     };
     _playerLoadout = _playerData select 2;
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _playerLoadout: %1", _playerLoadout] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _playerLoadout: %1", _playerLoadout] };
 };
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unit: %1 (%2)", _unit, _unitClass] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _unit: %1 (%2)", _unit, _unitClass] };
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
@@ -99,9 +99,9 @@ _crewUnit = objNull;
 	if (_x != _unit) then {
 		(vehicle _x) hideObject true;
     } else {
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout %1 is the previewed unit", _x] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout %1 is the previewed unit", _x] };
         if (_inVeh) then {
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout %1 is in a vehicle", _x] };
+            if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout %1 is in a vehicle", _x] };
             if (_isPlayer) then {
                 _crewUnit = call compile format ["%1 _veh", _crewRole];
                 if (_x == _crewUnit) then {
@@ -111,19 +111,19 @@ _crewUnit = objNull;
                     [_crewUnit] allowGetIn false;
                 };
             } else {
-                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout %1 is in not the player. commander: %2", _x, effectiveCommander _veh] };
+                // if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout %1 is in not the player. commander: %2", _x, effectiveCommander _veh] };
                 //     // private _crewIndex = (crew _veh) find _x;
                 //     // private _crewUnit = (crew _veh) select _crewIndex;
                 //     _veh hideObject true;
                 //     private _crewUnit = effectiveCommander _veh;
-                //     if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _unitLoadout: %1", _unitLoadout] };
+                //     if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _unitLoadout: %1", _unitLoadout] };
                 //     _crewUnit setUnitLoadout _unitLoadout;
                 //     moveOut _crewUnit;
                 //     [_crewUnit] allowGetIn false;
                 //     _crewUnit hideObject false;
                 _veh hideObject true;
-                _crewUnit = [effectiveCommander _veh] call DMORBAT_fnc_cloneUnit;
-                if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _crewUnit: %1", _crewUnit] };
+                _crewUnit = [effectiveCommander _veh] call DAKKA_fnc_cloneUnit;
+                if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _crewUnit: %1", _crewUnit] };
                 _crewUnit setUnitLoadout _unitLoadout;
             };
         };
@@ -136,11 +136,11 @@ p1 hideObject true;
 
 // Open the arsenal
 ["Open", [true, objNull, if (isNull _crewUnit) then { _unit } else { _crewUnit }]] call BIS_fnc_arsenal;
-DMORBAT_arsenalOpened = true;
+DAKKA_arsenalOpened = true;
 
 // Wait for the arsenal to close
-while { DMORBAT_arsenalOpened } do {
-	waitUntil { !DMORBAT_arsenalOpened };
+while { DAKKA_arsenalOpened } do {
+	waitUntil { !DAKKA_arsenalOpened };
 
     // Things to do after arsenal is closed
     cutText ["", "BLACK IN", 999];
@@ -148,7 +148,7 @@ while { DMORBAT_arsenalOpened } do {
 	// Update unit's loadout
     _editedLoadout = getUnitLoadout (if (isNull _crewUnit) then { _unit } else { _crewUnit });
 	_unitArr set [2, _editedLoadout];
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: editUnitLoadout _editedLoadout: %1", _editedLoadout] };
+    if (DAKKA_debug) then { diag_log format ["DAKKA: editUnitLoadout _editedLoadout: %1", _editedLoadout] };
 
     // Add loadout to player data is unit is playable
     if (_isPlayer) then {
@@ -173,7 +173,7 @@ while { DMORBAT_arsenalOpened } do {
                 };
             };
             if (_x == _crewUnit) then {
-                [_crewUnit] call DMORBAT_fnc_deleteMan;
+                [_crewUnit] call DAKKA_fnc_deleteMan;
             };
         };
 	} forEach _groupUnits;
@@ -182,7 +182,7 @@ while { DMORBAT_arsenalOpened } do {
     p1 hideObject false;
 
 	// Reload page
-	[] execVM format ["menuPages\page%1.sqf", DMORBAT_lastPage];
+	[] execVM format ["menuPages\page%1.sqf", DAKKA_lastPage];
 
 	// Show menus
 	_ctrl = (_display displayCtrl IDC_GRP_NAV_BUTTONS);
@@ -225,7 +225,7 @@ while { DMORBAT_arsenalOpened } do {
 	_ctrl tvSetCurSel _selectionPath;
 
     // Save task settings
-    call DMORBAT_fnc_settingsSave;
+    call DAKKA_fnc_settingsSave;
 
 
     cutText ["", "BLACK IN"];

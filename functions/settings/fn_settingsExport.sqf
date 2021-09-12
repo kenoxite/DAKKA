@@ -18,8 +18,8 @@
 
 private _display = findDisplay IDC_MENU_MISSION_EDIT;
 
-private _savedData = profileNamespace getVariable (format ["DMORBAT_Task%1", DMORBAT_Task]);
-private _slotIndex = (DMORBAT_saveSlots select (DMORBAT_Task - 1));
+private _savedData = profileNamespace getVariable (format ["DAKKA_Task%1", DAKKA_Task]);
+private _slotIndex = (DAKKA_saveSlots select (DAKKA_Task - 1));
 private _exportedData = +_savedData select _slotIndex;
 private _profileName = _exportedData select 0;
 private _taskData = _exportedData select 1;
@@ -53,9 +53,9 @@ private _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFro
     } forEach _compositionsData;
 } forEach _worldCompositionsData;
 
-// private _exportedDataInfo = format ["/* Task data for '%1' by %2 */", call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task], profileName];
+// private _exportedDataInfo = format ["/* Task data for '%1' by %2 */", call compile format ["DAKKA_Task%1_Title", DAKKA_Task], profileName];
 copyToClipboard (str _exportedData);
 
-["Task data exported to clipboard."] spawn DMORBAT_fnc_displayMessage;
+["Task data exported to clipboard."] spawn DAKKA_fnc_displayMessage;
 
 true

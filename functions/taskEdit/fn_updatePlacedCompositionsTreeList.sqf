@@ -22,11 +22,11 @@ private ["_ctrl", "_indexCtrl", "_taskData", "_worldCompositionsData", "_composi
 disableSerialization;
 _ctrl = (findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc;
 if (isNull _ctrl) exitWith { 
-  diag_log format ["DMORBAT: --- ERROR --- updatePlacedCompositionsTreeList CONTROL %1  could not be found!", _ctrl];
+  diag_log format ["DAKKA: --- ERROR --- updatePlacedCompositionsTreeList CONTROL %1  could not be found!", _ctrl];
 };
 tvClear _ctrl;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 

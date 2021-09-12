@@ -1,5 +1,5 @@
 
-class DMORBAT_Background
+class DAKKA_Background
 {
 	idc = -1;
 	type = CT_STATIC;
@@ -16,7 +16,7 @@ class DMORBAT_Background
 	moving = 0;
 };
 
-class DMORBAT_Controls_Group
+class DAKKA_Controls_Group
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_CONTROLS_GROUP; // Control identification (without it, the control won't be displayed)
@@ -73,7 +73,7 @@ class DMORBAT_Controls_Group
 	onMouseHolding = "";
 };
 
-class DMORBAT_Combo
+class DAKKA_Combo
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_COMBO; // Control identification (without it, the control won't be displayed)
@@ -148,7 +148,7 @@ class DMORBAT_Combo
 	onLBSelChanged = "";	
 };
 
-class DMORBAT_StaticText
+class DAKKA_StaticText
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_STATIC; // Control identification (without it, the control won't be displayed)
@@ -205,7 +205,7 @@ class DMORBAT_StaticText
 	onVideoStopped = "";
 };
 
-class DMORBAT_Tree
+class DAKKA_Tree
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_TREE; // Control identification (without it, the control won't be displayed)
@@ -302,7 +302,7 @@ class DMORBAT_Tree
 	onTreeMouseExit = "";
 };
 
-class DMORBAT_Button
+class DAKKA_Button
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_BUTTON; // Control identification (without it, the control won't be displayed)
@@ -372,7 +372,7 @@ class DMORBAT_Button
 	onButtonUp = "";
 };
 
-class DMORBAT_InvisibleButton:DMORBAT_Button
+class DAKKA_InvisibleButton:DAKKA_Button
 {
 	access = 0;
     type = 1;
@@ -388,7 +388,7 @@ class DMORBAT_InvisibleButton:DMORBAT_Button
     colorBorder[] = {0, 0, 0, 0 };
 };
 
-class DMORBAT_NoBorderButton:DMORBAT_Button
+class DAKKA_NoBorderButton:DAKKA_Button
 {
     access = 0;
     type = 1;
@@ -404,7 +404,7 @@ class DMORBAT_NoBorderButton:DMORBAT_Button
     offsetPressedY = 0.01; // Vertical background offset when pressed
 };
 
-class DMORBAT_Listbox
+class DAKKA_Listbox
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_LISTBOX; // Control identification (without it, the control won't be displayed)
@@ -485,7 +485,7 @@ class DMORBAT_Listbox
 	onLBDrop = "";
 };
 
-class DMORBAT_XListBox
+class DAKKA_XListBox
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_XLISTBOX; // Control identification (without it, the control won't be displayed)
@@ -538,7 +538,7 @@ class DMORBAT_XListBox
 	onLBDblClick = "";
 };
 
-class DMORBAT_Checkbox
+class DAKKA_Checkbox
 {
 	access = 0; // Control access (0 - ReadAndWrite, 1 - ReadAndCreate, 2 - ReadOnly, 3 - ReadOnlyVerified)
 	idc = CT_CHECKBOX; // Control identification (without it, the control won't be displayed)
@@ -606,7 +606,7 @@ class DMORBAT_Checkbox
 	onMouseHolding = "";
 };
 
-class DMORBAT_Map
+class DAKKA_Map
 {
 	deletable = 0;
 	fade = 0;

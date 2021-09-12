@@ -25,7 +25,7 @@ private _eligiblePatrolCarsValid = [];
     private _units = _x select 0;
     private _vehCount = 0;
     {
-        if !([_x] call DMORBAT_fnc_isMan) then { _vehCount = _vehCount + 1 };
+        if !([_x] call DAKKA_fnc_isMan) then { _vehCount = _vehCount + 1 };
     } forEach _units;
     if (_vehCount <= _unitCount) then {
         _eligiblePatrolCarsValid pushBack _group;

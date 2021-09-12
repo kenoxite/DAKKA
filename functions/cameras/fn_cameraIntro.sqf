@@ -21,8 +21,8 @@ private ["_camera", "_pos", "_dir", "_landPos"];
 cutText ["Loading preview...", "BLACK IN", 999];
 // 0 fadeSound 0;
 enableRadio false;
-call DMORBAT_fnc_cameraIntroTerminate;
-waitUntil { isNull DMORBAT_previewCamera };
+call DAKKA_fnc_cameraIntroTerminate;
+waitUntil { isNull DAKKA_previewCamera };
 showCinemaBorder false; 
 
 if (count _target == 0) then {
@@ -48,9 +48,9 @@ if (count _target == 0) then {
 };
 _pos set [2, (getTerrainHeightASL _pos) + 40];
 _camera = "camera" camCreate _pos;
-DMORBAT_cameraIntro = _camera;
+DAKKA_cameraIntro = _camera;
 _target set [2, (getTerrainHeightASL _target) + 20];
-DMORBAT_cameraIntroPlaying = true;
+DAKKA_cameraIntroPlaying = true;
 
 _camera camsettarget _target;
 _camera camSetFov 0.3;
@@ -59,6 +59,6 @@ _camera camSetFocus [10, 1];
 _camera cameraeffect ["INTERNAL", "BACK"];
 _camera camCommit 0;
 
-if ([DMORBAT_customDate] call DMORBAT_fnc_isNight) then { camUseNVG true; } else { camUseNVG false; };
+if ([DAKKA_customDate] call DAKKA_fnc_isNight) then { camUseNVG true; } else { camUseNVG false; };
 
 cutText ["", "BLACK IN"];

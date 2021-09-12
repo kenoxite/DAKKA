@@ -15,22 +15,22 @@
 
 */
 
-DMORBAT_settings = profileNamespace getVariable ["DMORBAT_settings", DMORBAT_settings];
+DAKKA_settings = profileNamespace getVariable ["DAKKA_settings", DAKKA_settings];
 
-DMORBAT_Task = ([DMORBAT_settings, "Selected Task"] call BIS_fnc_getFromPairs) select 0;
-DMORBAT_saveSlots = [DMORBAT_settings, "Selected Profiles"] call BIS_fnc_getFromPairs;
-DMORBAT_PlayerFactions = [DMORBAT_settings, "Player Factions"] call BIS_fnc_getFromPairs;
-DMORBAT_EnemyFactions = [DMORBAT_settings, "Enemy Factions"] call BIS_fnc_getFromPairs;
-DMORBAT_customDate = [DMORBAT_settings, "Date"] call BIS_fnc_getFromPairs;
-DMORBAT_customWeather = [DMORBAT_settings, "Weather"] call BIS_fnc_getFromPairs;
-DMORBAT_weatherEffect = ([DMORBAT_settings, "Weather Effect"] call BIS_fnc_getFromPairs) select 0;
-DMORBAT_randomTime = ([DMORBAT_settings, "Random Time"] call BIS_fnc_getFromPairs) select 0;
-DMORBAT_randomWeather = ([DMORBAT_settings, "Random Weather"] call BIS_fnc_getFromPairs) select 0;
-DMORBAT_noNight = ([DMORBAT_settings, "No night"] call BIS_fnc_getFromPairs) select 0;
-DMORBAT_forceFlashlights = ([DMORBAT_settings, "Forced Flashlights"] call BIS_fnc_getFromPairs) select 0;
-DMORBAT_flares = ([DMORBAT_settings, "Flares"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_Task = ([DAKKA_settings, "Selected Task"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_saveSlots = [DAKKA_settings, "Selected Profiles"] call BIS_fnc_getFromPairs;
+DAKKA_PlayerFactions = [DAKKA_settings, "Player Factions"] call BIS_fnc_getFromPairs;
+DAKKA_EnemyFactions = [DAKKA_settings, "Enemy Factions"] call BIS_fnc_getFromPairs;
+DAKKA_customDate = [DAKKA_settings, "Date"] call BIS_fnc_getFromPairs;
+DAKKA_customWeather = [DAKKA_settings, "Weather"] call BIS_fnc_getFromPairs;
+DAKKA_weatherEffect = ([DAKKA_settings, "Weather Effect"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_randomTime = ([DAKKA_settings, "Random Time"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_randomWeather = ([DAKKA_settings, "Random Weather"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_noNight = ([DAKKA_settings, "No night"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_forceFlashlights = ([DAKKA_settings, "Forced Flashlights"] call BIS_fnc_getFromPairs) select 0;
+DAKKA_flares = ([DAKKA_settings, "Flares"] call BIS_fnc_getFromPairs) select 0;
 
 
-diag_log "DMORBAT: --- GLOBAL SETTINGS LOADED ---";
+diag_log "DAKKA: --- GLOBAL SETTINGS LOADED ---";
 
 true

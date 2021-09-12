@@ -66,7 +66,7 @@ switch (_unitSkill) do {
 };
 
 // Give super skill to drivers in the hope of making them suck less when driving (hey, it worked in OFP!)
-if !([vehicle _unit] call DMORBAT_fnc_isMan) then {
+if !([vehicle _unit] call DAKKA_fnc_isMan) then {
 	(driver vehicle _unit) setSkill 1;
 	(driver vehicle _unit) setUnitAbility 1; 
 };

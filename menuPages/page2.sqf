@@ -9,7 +9,7 @@ disableSerialization;
 cutText ["", "BLACK IN", 999];
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
-DMORBAT_lastPage = CURRENTPAGE;
+DAKKA_lastPage = CURRENTPAGE;
 
 // Fill current saved data menu
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
@@ -18,7 +18,7 @@ _ctrl = (_display displayCtrl IDC_GRP_SAVEDDATAPROFILES);
 _ctrl ctrlShow false;
 
 _ctrl = (_display displayCtrl IDC_TXT_CURRENTSAVEDDATA);
-_ctrl ctrlSetText format ["Profile: %1", DMORBAT_saveSlotName];
+_ctrl ctrlSetText format ["Profile: %1", DAKKA_saveSlotName];
 _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_BT_CURRENTSAVEDDATA_OPEN);
@@ -38,47 +38,47 @@ _ctrl ctrlSetText "Saved data profiles:";
 _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_COMBO_SAVEDDATAPROFILES);
-[IDC_COMBO_SAVEDDATAPROFILES] call DMORBAT_fnc_updateSavedDataCombo;
-_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_SAVEDDATAPROFILES, _this select 1] call DMORBAT_fnc_ComboSavedData_selChanged;'];
-_ctrl lbSetCurSel (DMORBAT_saveSlots select (DMORBAT_Task - 1));
+[IDC_COMBO_SAVEDDATAPROFILES] call DAKKA_fnc_updateSavedDataCombo;
+_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_SAVEDDATAPROFILES, _this select 1] call DAKKA_fnc_ComboSavedData_selChanged;'];
+_ctrl lbSetCurSel (DAKKA_saveSlots select (DAKKA_Task - 1));
 
 _ctrl = (_display displayCtrl IDC_BT_SAVEDDATAPROFILES_NEW);
 _ctrl ctrlSetText "New";
-_ctrl ctrlSetEventHandler ["ButtonClick", 'call DMORBAT_fnc_settingsMenuNew;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", 'call DAKKA_fnc_settingsMenuNew;'];
 _ctrl ctrlSetTooltip "";
 
 _ctrl = (_display displayCtrl IDC_BT_SAVEDDATAPROFILES_RENAME);
 _ctrl ctrlSetText "Rename";
-_ctrl ctrlSetEventHandler ["ButtonClick", 'call DMORBAT_fnc_settingsMenuRename;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", 'call DAKKA_fnc_settingsMenuRename;'];
 _ctrl ctrlSetTooltip "";
 
 _ctrl = (_display displayCtrl IDC_BT_SAVEDDATAPROFILES_DELETE);
 _ctrl ctrlSetText "Delete";
-_ctrl ctrlSetEventHandler ["ButtonClick", 'call DMORBAT_fnc_settingsMenuDelete;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", 'call DAKKA_fnc_settingsMenuDelete;'];
 _ctrl ctrlSetTooltip "";
 
 _ctrl = (_display displayCtrl IDC_BT_SAVEDDATAPROFILES_IMPORT);
 _ctrl ctrlSetText "Import";
-_ctrl ctrlSetEventHandler ["ButtonClick", 'call DMORBAT_fnc_settingsImport;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", 'call DAKKA_fnc_settingsImport;'];
 _ctrl ctrlSetTooltip "Create a new profile with any copied task settings";
 _ctrl ctrlEnable true;
 
 _ctrl = (_display displayCtrl IDC_BT_SAVEDDATAPROFILES_EXPORT);
 _ctrl ctrlSetText "Export";
-_ctrl ctrlSetEventHandler ["ButtonClick", 'call DMORBAT_fnc_settingsExport;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", 'call DAKKA_fnc_settingsExport;'];
 _ctrl ctrlSetTooltip "Copy the task settings of the selected profile so they can be shared and imported later";
 _ctrl ctrlEnable true;
 
 // Buttons - PAGE NAVIGATION
 _ctrl = (_display displayCtrl IDC_BT_NEXT);
 _ctrl ctrlSetText "NEXT";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, true] call DMORBAT_fnc_buttonChangePage; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, true] call DAKKA_fnc_buttonChangePage; '];
 _ctrl ctrlSetTooltip "";
 _ctrl ctrlShow true;
 
 _ctrl = (_display displayCtrl IDC_BT_BACK);
 _ctrl ctrlSetText "BACK";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, false] call DMORBAT_fnc_buttonChangePage; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, false] call DAKKA_fnc_buttonChangePage; '];
 _ctrl ctrlSetTooltip "";
 
 // UNIT EDIT CONTROLS
@@ -89,62 +89,62 @@ _ctrl = (_display displayCtrl IDC_TITLE_UNITEDIT_PRESENCE);
 _ctrl ctrlSetText "Probability of presence:";
 
 _ctrl = (_display displayCtrl IDC_COMBO_UNITEDIT_PRESENCE);
-[IDC_COMBO_UNITEDIT_PRESENCE] call DMORBAT_fnc_updatePresenceCombo;
+[IDC_COMBO_UNITEDIT_PRESENCE] call DAKKA_fnc_updatePresenceCombo;
 _ctrl ctrlSetEventHandler ["LBSelChanged", ''];
 
 _ctrl = (_display displayCtrl IDC_TITLE_UNITEDIT_SKILL);
 _ctrl ctrlSetText "Skill level:";
 
 _ctrl = (_display displayCtrl IDC_COMBO_UNITEDIT_SKILL);
-[IDC_COMBO_UNITEDIT_SKILL] call DMORBAT_fnc_updateSkillsCombo;
+[IDC_COMBO_UNITEDIT_SKILL] call DAKKA_fnc_updateSkillsCombo;
 _ctrl ctrlSetEventHandler ["LBSelChanged", ''];
 
 _ctrl = (_display displayCtrl IDC_BT_UNITEDIT_OK);
 _ctrl ctrlSetText "Accept";
-_ctrl ctrlSetEventHandler ["ButtonClick", '((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_GRP_UNITEDIT) ctrlShow false; DMORBAT_editAccepted = true;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", '((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_GRP_UNITEDIT) ctrlShow false; DAKKA_editAccepted = true;'];
 _ctrl ctrlSetTooltip "";
 
 _ctrl = (_display displayCtrl IDC_BT_UNITEDIT_CANCEL);
 _ctrl ctrlSetText "Cancel";
-_ctrl ctrlSetEventHandler ["ButtonClick", '((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_GRP_UNITEDIT) ctrlShow false; DMORBAT_editAccepted = false;'];
+_ctrl ctrlSetEventHandler ["ButtonClick", '((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_GRP_UNITEDIT) ctrlShow false; DAKKA_editAccepted = false;'];
 _ctrl ctrlSetTooltip "";
 
 // CAMERA CONTROLS
 _ctrl = (_display displayCtrl IDC_BT_CAM_CONTROLS_ZOOMOUT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["zoomout"] call DMORBAT_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["zoomout"] call DAKKA_fnc_cameraControls; '];
 _ctrl ctrlSetTooltip "Zoom Out";
 
 _ctrl = (_display displayCtrl IDC_BT_CAM_CONTROLS_UP);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["up"] call DMORBAT_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["up"] call DAKKA_fnc_cameraControls; '];
 _ctrl ctrlSetTooltip "Move Up";
 
 _ctrl = (_display displayCtrl IDC_BT_CAM_CONTROLS_ZOOMIN);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["zoomin"] call DMORBAT_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["zoomin"] call DAKKA_fnc_cameraControls; '];
 _ctrl ctrlSetTooltip "Zoom In";
 
 _ctrl = (_display displayCtrl IDC_BT_CAM_CONTROLS_LEFT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["left"] call DMORBAT_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["left"] call DAKKA_fnc_cameraControls; '];
 _ctrl ctrlSetTooltip "Move Left";
 
 _ctrl = (_display displayCtrl IDC_BT_CAM_CONTROLS_DOWN);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["down"] call DMORBAT_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["down"] call DAKKA_fnc_cameraControls; '];
 _ctrl ctrlSetTooltip "Move Down";
 
 _ctrl = (_display displayCtrl IDC_BT_CAM_CONTROLS_RIGHT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["right"] call DMORBAT_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["right"] call DAKKA_fnc_cameraControls; '];
 _ctrl ctrlSetTooltip "Move Right";
 
 // TASK DESCRIPTION
 _ctrl = (_display displayCtrl IDC_TITLE_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DMORBAT_Task,
-	toUpper (call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task]),
+_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DAKKA_Task,
+	toUpper (call compile format ["DAKKA_Task%1_Title", DAKKA_Task]),
 	"→      ",
 	"CREATE PLAYER GROUP"
 	];
 _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_TXT_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText call compile format ["DMORBAT_Task%1_Desc_Editor", DMORBAT_Task];
+_ctrl ctrlSetText call compile format ["DAKKA_Task%1_Desc_Editor", DAKKA_Task];
 _ctrl ctrlEnable false;
 
 
@@ -154,8 +154,8 @@ _ctrl ctrlSetText "Faction";
 _ctrl ctrlEnable false;
 // Player factions
 _ctrl = (_display displayCtrl IDC_COMBO_FACTIONS);
-[IDC_COMBO_FACTIONS, true] call DMORBAT_fnc_updateFactionCombo;
-_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS, _this select 1, true, true] call DMORBAT_fnc_ComboFactions_selChanged;'];
+[IDC_COMBO_FACTIONS, true] call DAKKA_fnc_updateFactionCombo;
+_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS, _this select 1, true, true] call DAKKA_fnc_ComboFactions_selChanged;'];
 
 // GROUPS LIST
 _ctrl = (_display displayCtrl IDC_TITLE_FACTION_GROUPS);
@@ -164,17 +164,17 @@ _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_TREE_FACTION_GROUPS);
 // _initTime = time;
-[IDC_TREE_FACTION_GROUPS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], true] call DMORBAT_fnc_updateGroupsTreeList;
+[IDC_TREE_FACTION_GROUPS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], true] call DAKKA_fnc_updateGroupsTreeList;
 // systemChat format ["Groups data extracted in %1s", time - _initTime];
 // _ctrl tvSetCurSel [0];
-DMORBAT_PreviewGroupName = _ctrl tvData (tvCurSel _ctrl);
-_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, false] call DMORBAT_fnc_TreeFactionGroups_selChanged; '];
+DAKKA_PreviewGroupName = _ctrl tvData (tvCurSel _ctrl);
+_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, false] call DAKKA_fnc_TreeFactionGroups_selChanged; '];
 ctrlSetFocus _ctrl;
 
 	// Buttons
 	_ctrl = (_display displayCtrl IDC_BT_ADD_GROUP);
 	_ctrl ctrlSetText "Set group as Player Group";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, DMORBAT_previewGroup, DMORBAT_PreviewGroupName] call DMORBAT_fnc_addGroupToPlayerGroup; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, DAKKA_previewGroup, DAKKA_PreviewGroupName] call DAKKA_fnc_addGroupToPlayerGroup; '];
 	_ctrl ctrlSetTooltip "Make the selected group the group the player will spawn in";
 	// ctrlEnable [IDC_BT_ADD_GROUP, false];
 
@@ -185,15 +185,15 @@ _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_TREE_FACTION_UNITS);
 // _initTime = time;
-[IDC_TREE_FACTION_UNITS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], "airland"] call DMORBAT_fnc_updateUnitsTreeList;
+[IDC_TREE_FACTION_UNITS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], "airland"] call DAKKA_fnc_updateUnitsTreeList;
 // systemChat format ["Units data extracted in %1s", time - _initTime];
 // tvSetCurSel [IDC_TREE_FACTION_UNITS, [0, 0]];
-_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, IDC_TREE_FACTION_GROUPS, IDC_TREE_FACTION_UNITS] call DMORBAT_fnc_TreeFactionUnits_selChanged; '];
+_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, IDC_TREE_FACTION_GROUPS, IDC_TREE_FACTION_UNITS] call DAKKA_fnc_TreeFactionUnits_selChanged; '];
 
 	// Buttons
 	_ctrl = (_display displayCtrl IDC_BT_ADD_UNIT);
 	_ctrl ctrlSetText "Add Unit to Player Group";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, DMORBAT_SelectedPreviewUnit] call DMORBAT_fnc_addUnitToPlayerGroup; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, DAKKA_SelectedPreviewUnit] call DAKKA_fnc_addUnitToPlayerGroup; '];
 	_ctrl ctrlSetTooltip "Add the selected unit to the group the player will spawn in";
 	_ctrl ctrlEnable false;
 
@@ -210,36 +210,36 @@ _ctrl = (_display displayCtrl IDC_TREE_GRP1);
 _ctrl ctrlShow false;
 
 _ctrl = (_display displayCtrl IDC_TREE_PLAYER_GRP1);
-[IDC_TREE_PLAYER_GRP1] call DMORBAT_fnc_updatePlayerGroupTreeList;
-_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, IDC_TREE_PLAYER_GRP1, IDC_TREE_FACTION_GROUPS, IDC_TREE_FACTION_UNITS] call DMORBAT_fnc_TreePlayerGroup_selChanged; '];
+[IDC_TREE_PLAYER_GRP1] call DAKKA_fnc_updatePlayerGroupTreeList;
+_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, IDC_TREE_PLAYER_GRP1, IDC_TREE_FACTION_GROUPS, IDC_TREE_FACTION_UNITS] call DAKKA_fnc_TreePlayerGroup_selChanged; '];
 _ctrl ctrlShow true;
 
 	// Buttons
 	// REMOVE
 	_ctrl = (_display displayCtrl IDC_BT_1_GRP1);
 	_ctrl ctrlSetText "Remove";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, tvCurSel IDC_TREE_PLAYER_GRP1] call DMORBAT_fnc_removeFromPlayerGroup; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, tvCurSel IDC_TREE_PLAYER_GRP1] call DAKKA_fnc_removeFromPlayerGroup; '];
 	_ctrl ctrlSetTooltip "Removes the selected unit from the player's group";
 	_ctrl ctrlEnable false;
 
 	// ATTRIBUTES
 	_ctrl = (_display displayCtrl IDC_BT_2_GRP1);
 	_ctrl ctrlSetText "Attributes";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, tvCurSel IDC_TREE_PLAYER_GRP1, 0, false] spawn DMORBAT_fnc_editUnitAttributes; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, tvCurSel IDC_TREE_PLAYER_GRP1, 0, false] spawn DAKKA_fnc_editUnitAttributes; '];
 	_ctrl ctrlSetTooltip "Modify the unit or group skill, probability of presence, etc.";
 	_ctrl ctrlEnable false;
 
 	// LOADOUT
 	_ctrl = (_display displayCtrl IDC_BT_3_GRP1);
 	_ctrl ctrlSetText "Loadout";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, tvCurSel IDC_TREE_PLAYER_GRP1, 0, false] spawn DMORBAT_fnc_editUnitLoadout; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_PLAYER_GRP1, tvCurSel IDC_TREE_PLAYER_GRP1, 0, false] spawn DAKKA_fnc_editUnitLoadout; '];
 	_ctrl ctrlSetTooltip "Edit the unit's loadout";
 	_ctrl ctrlEnable false;
 
 	// SET AS PLAYER
 	_ctrl = (_display displayCtrl IDC_BT_4_GRP1);
 	_ctrl ctrlSetText "Player";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [(tvCurSel IDC_TREE_PLAYER_GRP1) select 1] call DMORBAT_fnc_setPlayerUnit; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [(tvCurSel IDC_TREE_PLAYER_GRP1) select 1] call DAKKA_fnc_setPlayerUnit; '];
 	_ctrl ctrlSetTooltip "Set the selected unit as the one the player will play as";
 	_ctrl ctrlEnable false;
 	_ctrl ctrlShow true;
@@ -269,7 +269,7 @@ _ctrl lbSetCurSel 0;
 
 _ctrl = (_display displayCtrl IDC_BT_TASK_GROUPS_CREW);
 _ctrl ctrlSetText "Accept";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_COMBO_TASK_GROUPS_CREW] call DMORBAT_fnc_setCrewSlot; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_COMBO_TASK_GROUPS_CREW] call DAKKA_fnc_setCrewSlot; '];
 
 
 ///
@@ -284,17 +284,17 @@ if ((_ctrl tvCount []) > 0) then {
 
 _ctrl = (_display displayCtrl IDC_TREE_PLAYER_GRP1);
 if ((_ctrl tvCount []) > 0) then {
-    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
     _playerIndex = ([_taskData, "Player data"] call BIS_fnc_getFromPairs) select 0;
     _ctrl tvSetCurSel [0, _playerIndex];
 };
 
 // PREVIEW AREA
 _ctrl = (_display displayCtrl IDC_BT_PREVIEW);
-_ctrl ctrlSetEventHandler ["MouseZChanged", ' ["scrollwheel", _this] call DMORBAT_fnc_cameraControls; '];
-_ctrl ctrlSetEventHandler ["MouseButtonDown", ' DMORBAT_mouseButtonPressed = _this select 1; '];
-_ctrl ctrlSetEventHandler ["MouseButtonUp", ' DMORBAT_mouseButtonPressed = -1; '];
-_ctrl ctrlSetEventHandler ["MouseMoving", ' if (DMORBAT_mouseButtonPressed == 0) then { ["leftBtnMouse", _this] call DMORBAT_fnc_cameraControls; }; if (DMORBAT_mouseButtonPressed == 1) then { ["rightBtnMouse", _this] call DMORBAT_fnc_cameraControls; };'];
+_ctrl ctrlSetEventHandler ["MouseZChanged", ' ["scrollwheel", _this] call DAKKA_fnc_cameraControls; '];
+_ctrl ctrlSetEventHandler ["MouseButtonDown", ' DAKKA_mouseButtonPressed = _this select 1; '];
+_ctrl ctrlSetEventHandler ["MouseButtonUp", ' DAKKA_mouseButtonPressed = -1; '];
+_ctrl ctrlSetEventHandler ["MouseMoving", ' if (DAKKA_mouseButtonPressed == 0) then { ["leftBtnMouse", _this] call DAKKA_fnc_cameraControls; }; if (DAKKA_mouseButtonPressed == 1) then { ["rightBtnMouse", _this] call DAKKA_fnc_cameraControls; };'];
 
 
 // DIALOG POSITIONS

@@ -18,7 +18,7 @@
 */
 
 params ["_idc", ["_groupNumber", 1], ["_enemy", true]];
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCustomGroupsTreeList params:%1 %2 %3", _idc, _groupNumber, _enemy] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: updateCustomGroupsTreeList params:%1 %2 %3", _idc, _groupNumber, _enemy] };
 private ["_ctrl", "_indexCtrl", "_taskData", "_groupsData", "_thisCategoryData", "_thisCategoryName", "_thisCategoryGroups", "_thisGroupData", "_groupName", "_unitsData", "_unitClass", "_unitName", "_rank", "_rankImg", "_faction", "_factionName", "_unitNameFull", "_tooltip", "_txt", "_presence", "_skill", "_thisUnitData", "_lodaout", "_groupMods", "_ctrlGrpIndex", "_ctrlUnitIndex"];
 disableSerialization;
 if (_idc < 0) then {
@@ -37,16 +37,16 @@ if (_idc < 0) then {
 _ctrl = (findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc;
 tvClear _ctrl;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs; 
 _thisCategoryData = _groupsData select (_groupNumber - 1);
 _thisCategoryName = _thisCategoryData select 0;   
 _thisCategoryGroups = _thisCategoryData select 1;	
-// diag_log format ["DMORBAT: updateCustomGroupsTreeList _groupNumber: %2 _thisCategoryName: %3 _thisCategoryGroups:%1", _thisCategoryGroups, _groupNumber, _thisCategoryName];
+// diag_log format ["DAKKA: updateCustomGroupsTreeList _groupNumber: %2 _thisCategoryName: %3 _thisCategoryGroups:%1", _thisCategoryGroups, _groupNumber, _thisCategoryName];
 
 // Handle to add units and groups to the category
 _ctrlGrpIndex = _ctrl tvAdd [[], format ["<Add unit to %1>", _thisCategoryName]];
-if (DMORBAT_Task == 2) then {
+if (DAKKA_Task == 2) then {
     _tooltip = "Click to set this area as the target when adding faction units";
 } else {
     _tooltip = "Click to set this area as the target when adding faction groups and units";
@@ -60,7 +60,7 @@ if (count _thisCategoryGroups > 0) then {
     	_groupName = _thisGroupData select 0;
         _unitsData = _thisGroupData select 1;
     	_groupMods = _thisGroupData select 2;
-    	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCustomGroupsTreeList _groupName:%1", _groupName] };
+    	// if (DAKKA_debug) then { diag_log format ["DAKKA: updateCustomGroupsTreeList _groupName:%1", _groupName] };
     	_ctrlGrpIndex = _ctrl tvAdd [[], _groupName];
     		_txt = if (_i > 0) then {
 			format ["%1 (Group %2) ", _groupName, _i];
@@ -72,7 +72,7 @@ if (count _thisCategoryGroups > 0) then {
 		// _ctrl tvExpand [_i];
 		_tooltip = format ["%1\n\nClick to preview and set this group as the target when adding faction units", _groupName];
         // Mod dependencies
-        _knownMods = +[DMORBAT_settings, "Known mods"] call BIS_fnc_getFromPairs;
+        _knownMods = +[DAKKA_settings, "Known mods"] call BIS_fnc_getFromPairs;
         if (count _groupMods > 0) then {
             private _noMods = true;
           {
@@ -100,7 +100,7 @@ if (count _thisCategoryGroups > 0) then {
 			_unitName = getText (configFile >> "CfgVehicles" >> _unitClass >> "displayname");
 			_faction = getText (configFile >> "CfgVehicles" >> _unitClass >> "faction");
 			_factionName = getText (configFile >> "CfgFactionClasses" >> _faction >> "displayName");
-			_isMan = [_unitClass] call DMORBAT_fnc_isMan;
+			_isMan = [_unitClass] call DAKKA_fnc_isMan;
 			_unitNameFull = format ["%1. %2 [%3]", _j + 1, _unitName, _factionName];
 			// _rank = if (_j == 0) then { "SERGEANT" } else { "PRIVATE" };
 			_rank = (_unitsData select _j) select 1;
@@ -112,8 +112,8 @@ if (count _thisCategoryGroups > 0) then {
 			_ctrl tvSetPicture [[_ctrlGrpIndex, _ctrlUnitIndex], _rankImg];
 			// _tooltip = format ["Click to highlight in preview panel\n%1", _unitClass];
 			// if (_j == 0) then { _tooltip = format ["GROUP LEADER\n%1", _tooltip] };
-			_ctrl tvSetTooltip [[_ctrlGrpIndex, _ctrlUnitIndex], [format ["%1 [%2]", _unitName, _factionName], _unitClass, _j, count _lodaout, _presence, _skill, _groupMods] call DMORBAT_fnc_createUnitTooltip];
-			// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateCustomGroupsTreeList _unitName:%1", _unitName] };
+			_ctrl tvSetTooltip [[_ctrlGrpIndex, _ctrlUnitIndex], [format ["%1 [%2]", _unitName, _factionName], _unitClass, _j, count _lodaout, _presence, _skill, _groupMods] call DAKKA_fnc_createUnitTooltip];
+			// if (DAKKA_debug) then { diag_log format ["DAKKA: updateCustomGroupsTreeList _unitName:%1", _unitName] };
 		};
 	};
 };

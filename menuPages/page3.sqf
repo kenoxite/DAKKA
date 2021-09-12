@@ -7,14 +7,14 @@
 disableSerialization;
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _groupsData = [_taskData, "Friendly groups"] call BIS_fnc_getFromPairs;
 
 // Skip page if there's no groups to create
 if (((_groupsData select 0) select 0) == "NONE") exitWith {
-	[CURRENTPAGE, if (DMORBAT_lastPage < CURRENTPAGE) then { true } else { false }] call DMORBAT_fnc_buttonChangePage;
+	[CURRENTPAGE, if (DAKKA_lastPage < CURRENTPAGE) then { true } else { false }] call DAKKA_fnc_buttonChangePage;
 };
-DMORBAT_lastPage = CURRENTPAGE;
+DAKKA_lastPage = CURRENTPAGE;
 
 // Fill current saved data menu
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
@@ -25,25 +25,25 @@ _ctrl ctrlShow false;
 // Buttons - PAGE NAVIGATION
 _ctrl = (_display displayCtrl IDC_BT_NEXT);
 _ctrl ctrlSetText "NEXT";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, true] call DMORBAT_fnc_buttonChangePage; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, true] call DAKKA_fnc_buttonChangePage; '];
 _ctrl ctrlSetTooltip "";
 _ctrl ctrlShow true;
 
 _ctrl = (_display displayCtrl IDC_BT_BACK);
 _ctrl ctrlSetText "BACK";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, false] call DMORBAT_fnc_buttonChangePage; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, false] call DAKKA_fnc_buttonChangePage; '];
 _ctrl ctrlSetTooltip "";
 
 // TASK DESCRIPTION
 _ctrl = (_display displayCtrl IDC_TITLE_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DMORBAT_Task,
-	toUpper (call compile format ["DMORBAT_Task%1_Title", DMORBAT_Task]),
+_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DAKKA_Task,
+	toUpper (call compile format ["DAKKA_Task%1_Title", DAKKA_Task]),
 	"→      ",
 	"CREATE FRIENDLY GROUPS"
 	];
 
 _ctrl = (_display displayCtrl IDC_TXT_TASK_DESCRIPTION_GROUP);
-_ctrl ctrlSetText call compile format ["DMORBAT_Task%1_Desc_Editor", DMORBAT_Task];
+_ctrl ctrlSetText call compile format ["DAKKA_Task%1_Desc_Editor", DAKKA_Task];
 
 
 // FACTION LISTS
@@ -52,24 +52,24 @@ _ctrl ctrlSetText "Faction";
 _ctrl ctrlEnable false;
 // Friendly factions
 _ctrl = (_display displayCtrl IDC_COMBO_FACTIONS);
-[IDC_COMBO_FACTIONS, true] call DMORBAT_fnc_updateFactionCombo;
-_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS, _this select 1, true, true] call DMORBAT_fnc_ComboFactions_selChanged;'];
+[IDC_COMBO_FACTIONS, true] call DAKKA_fnc_updateFactionCombo;
+_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS, _this select 1, true, true] call DAKKA_fnc_ComboFactions_selChanged;'];
 
 // GROUPS LIST
 _ctrl = (_display displayCtrl IDC_TITLE_FACTION_GROUPS);
 _ctrl ctrlSetText "Faction Groups";
 
 _ctrl = (_display displayCtrl IDC_TREE_FACTION_GROUPS);
-[IDC_TREE_FACTION_GROUPS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], true] call DMORBAT_fnc_updateGroupsTreeList;
+[IDC_TREE_FACTION_GROUPS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], true] call DAKKA_fnc_updateGroupsTreeList;
 ctrlSetFocus _ctrl;
-DMORBAT_PreviewGroupName = _ctrl tvData (tvCurSel _ctrl);
-_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, false] call DMORBAT_fnc_TreeFactionGroups_selChanged; '];
+DAKKA_PreviewGroupName = _ctrl tvData (tvCurSel _ctrl);
+_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, false] call DAKKA_fnc_TreeFactionGroups_selChanged; '];
 
 	// Buttons
 	_ctrl = (_display displayCtrl IDC_BT_ADD_GROUP);
 	_ctrl ctrlSetText "Add group to Friendly Groups";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [false] call DMORBAT_fnc_addGroupToGroup; '];
-	if (DMORBAT_Task == 2) then {
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [false] call DAKKA_fnc_addGroupToGroup; '];
+	if (DAKKA_Task == 2) then {
 		_ctrl ctrlSetTooltip "Automatically adds the group to its corresponding friendly group area";
 	} else {
 		_ctrl ctrlSetTooltip "Adds the unit to the selected friendly group";
@@ -81,15 +81,15 @@ _ctrl = (_display displayCtrl IDC_TITLE_FACTION_UNITS);
 _ctrl ctrlSetText "Faction Units";
 
 _ctrl = (_display displayCtrl IDC_TREE_FACTION_UNITS);
-[IDC_TREE_FACTION_UNITS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], "airland"] call DMORBAT_fnc_updateUnitsTreeList;
+[IDC_TREE_FACTION_UNITS, lbData [IDC_COMBO_FACTIONS, lbCurSel IDC_COMBO_FACTIONS], "airland"] call DAKKA_fnc_updateUnitsTreeList;
 // tvSetCurSel [IDC_TREE_FACTION_UNITS, [0, 0]];
-_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, IDC_TREE_FACTION_GROUPS, IDC_TREE_FACTION_UNITS, false] call DMORBAT_fnc_TreeFactionUnits_selChanged; '];
+_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [_this select 1, IDC_TREE_FACTION_GROUPS, IDC_TREE_FACTION_UNITS, false] call DAKKA_fnc_TreeFactionUnits_selChanged; '];
 
 	// Buttons
 	_ctrl = (_display displayCtrl IDC_BT_ADD_UNIT);
 	_ctrl ctrlSetText "Add Unit to Friendly Groups";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [false] call DMORBAT_fnc_addUnitToGroup; '];
-	if (DMORBAT_Task == 2) then {
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [false] call DAKKA_fnc_addUnitToGroup; '];
+	if (DAKKA_Task == 2) then {
 		_ctrl ctrlSetTooltip "Adds the unit to the selected friendly group.\nIf the group isn't valid for this unit type, a new group will be created in the corresponding group area";
 	} else {
 		_ctrl ctrlSetTooltip "Adds the unit to the selected friendly group";
@@ -109,29 +109,29 @@ _ctrl ctrlShow false;
 	_ctrl ctrlSetText toUpper (_grp1Name);
 
 	_ctrl = (_display displayCtrl IDC_TREE_GRP1);
-	[IDC_TREE_GRP1, 1, false] call DMORBAT_fnc_updateCustomGroupsTreeList;
-	_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_GRP1, _this select 1, 1, false, [IDC_BT_1_GRP1, IDC_BT_2_GRP1, IDC_BT_3_GRP1]] call DMORBAT_fnc_TreeCustomGroup_selChanged; '];
+	[IDC_TREE_GRP1, 1, false] call DAKKA_fnc_updateCustomGroupsTreeList;
+	_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_GRP1, _this select 1, 1, false, [IDC_BT_1_GRP1, IDC_BT_2_GRP1, IDC_BT_3_GRP1]] call DAKKA_fnc_TreeCustomGroup_selChanged; '];
 	_ctrl ctrlShow true;
 
 		// Buttons
 		// REMOVE
 		_ctrl = (_display displayCtrl IDC_BT_1_GRP1);
 		_ctrl ctrlSetText "Remove";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP1, tvCurSel IDC_TREE_GRP1, 1, false, [IDC_BT_1_GRP1, IDC_BT_2_GRP1, IDC_BT_3_GRP1]] call DMORBAT_fnc_removeFromGroup; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP1, tvCurSel IDC_TREE_GRP1, 1, false, [IDC_BT_1_GRP1, IDC_BT_2_GRP1, IDC_BT_3_GRP1]] call DAKKA_fnc_removeFromGroup; '];
 		_ctrl ctrlSetTooltip "Removes the selected unit or group";
 		_ctrl ctrlEnable false;
 
 		// ATTRIBUTES
 		_ctrl = (_display displayCtrl IDC_BT_2_GRP1);
 		_ctrl ctrlSetText "Attributes";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP1, tvCurSel IDC_TREE_GRP1, 1, false] spawn DMORBAT_fnc_editUnitAttributes; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP1, tvCurSel IDC_TREE_GRP1, 1, false] spawn DAKKA_fnc_editUnitAttributes; '];
 		_ctrl ctrlSetTooltip "Modify the unit or group skill, probability of presence, etc.";
 		_ctrl ctrlEnable false;
 
 		// LOADOUT
 		_ctrl = (_display displayCtrl IDC_BT_3_GRP1);
 		_ctrl ctrlSetText "Loadout";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP1, tvCurSel IDC_TREE_GRP1, 1, false] spawn DMORBAT_fnc_editUnitLoadout; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP1, tvCurSel IDC_TREE_GRP1, 1, false] spawn DAKKA_fnc_editUnitLoadout; '];
 		_ctrl ctrlSetTooltip "Edit the unit's loadout";
 		_ctrl ctrlEnable false;
 
@@ -154,29 +154,29 @@ if (ctrlVisible IDC_GRP_TASK_GROUP2) then {
 	_ctrl ctrlSetText toUpper (_grp2Name);
 
 	_ctrl = (_display displayCtrl IDC_TREE_GRP2);
-	[IDC_TREE_GRP2, 2, false] call DMORBAT_fnc_updateCustomGroupsTreeList;
-	_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_GRP2, _this select 1, 2, false, [IDC_BT_1_GRP2, IDC_BT_2_GRP2, IDC_BT_3_GRP2]] call DMORBAT_fnc_TreeCustomGroup_selChanged; '];
+	[IDC_TREE_GRP2, 2, false] call DAKKA_fnc_updateCustomGroupsTreeList;
+	_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_GRP2, _this select 1, 2, false, [IDC_BT_1_GRP2, IDC_BT_2_GRP2, IDC_BT_3_GRP2]] call DAKKA_fnc_TreeCustomGroup_selChanged; '];
 	_ctrl ctrlShow true;
 
 		// Buttons
 		// REMOVE
 		_ctrl = (_display displayCtrl IDC_BT_1_GRP2);
 		_ctrl ctrlSetText "Remove";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP2, tvCurSel IDC_TREE_GRP2, 2, false, [IDC_BT_1_GRP2, IDC_BT_2_GRP2, IDC_BT_3_GRP2]] call DMORBAT_fnc_removeFromGroup; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP2, tvCurSel IDC_TREE_GRP2, 2, false, [IDC_BT_1_GRP2, IDC_BT_2_GRP2, IDC_BT_3_GRP2]] call DAKKA_fnc_removeFromGroup; '];
 		_ctrl ctrlSetTooltip "Removes the selected unit or group";
 		_ctrl ctrlEnable false;
 
 		// ATTRIBUTES
 		_ctrl = (_display displayCtrl IDC_BT_2_GRP2);
 		_ctrl ctrlSetText "Attributes";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP2, tvCurSel IDC_TREE_GRP2, 2, false] spawn DMORBAT_fnc_editUnitAttributes; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP2, tvCurSel IDC_TREE_GRP2, 2, false] spawn DAKKA_fnc_editUnitAttributes; '];
 		_ctrl ctrlSetTooltip "Modify the unit or group skill, probability of presence, etc.";
 		_ctrl ctrlEnable false;
 
 		// LOADOUT
 		_ctrl = (_display displayCtrl IDC_BT_3_GRP2);
 		_ctrl ctrlSetText "Loadout";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP2, tvCurSel IDC_TREE_GRP2, 2, false] spawn DMORBAT_fnc_editUnitLoadout; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP2, tvCurSel IDC_TREE_GRP2, 2, false] spawn DAKKA_fnc_editUnitLoadout; '];
 		_ctrl ctrlSetTooltip "Edit the unit's loadout";
 		_ctrl ctrlEnable false;
 
@@ -199,29 +199,29 @@ if (ctrlVisible IDC_GRP_TASK_GROUP3) then {
 	_ctrl ctrlSetText toUpper (_grp3Name);
 
 	_ctrl = (_display displayCtrl IDC_TREE_GRP3);
-	[IDC_TREE_GRP3, 3, false] call DMORBAT_fnc_updateCustomGroupsTreeList;
-	_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_GRP3, _this select 1, 3, false, [IDC_BT_1_GRP3, IDC_BT_2_GRP3, IDC_BT_3_GRP3]] call DMORBAT_fnc_TreeCustomGroup_selChanged; '];
+	[IDC_TREE_GRP3, 3, false] call DAKKA_fnc_updateCustomGroupsTreeList;
+	_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_GRP3, _this select 1, 3, false, [IDC_BT_1_GRP3, IDC_BT_2_GRP3, IDC_BT_3_GRP3]] call DAKKA_fnc_TreeCustomGroup_selChanged; '];
 	_ctrl ctrlShow true;
 
 		// Buttons
 		// REMOVE
 		_ctrl = (_display displayCtrl IDC_BT_1_GRP3);
 		_ctrl ctrlSetText "Remove";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP3, tvCurSel IDC_TREE_GRP3, 3, false, [IDC_BT_1_GRP3, IDC_BT_2_GRP3, IDC_BT_3_GRP3]] call DMORBAT_fnc_removeFromGroup; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP3, tvCurSel IDC_TREE_GRP3, 3, false, [IDC_BT_1_GRP3, IDC_BT_2_GRP3, IDC_BT_3_GRP3]] call DAKKA_fnc_removeFromGroup; '];
 		_ctrl ctrlSetTooltip "Removes the selected unit or group";
 		_ctrl ctrlEnable false;
 
 		// ATTRIBUTES
 		_ctrl = (_display displayCtrl IDC_BT_2_GRP3);
 		_ctrl ctrlSetText "Attributes";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP3, tvCurSel IDC_TREE_GRP3, 3, false] spawn DMORBAT_fnc_editUnitAttributes; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP3, tvCurSel IDC_TREE_GRP3, 3, false] spawn DAKKA_fnc_editUnitAttributes; '];
 		_ctrl ctrlSetTooltip "Modify the unit or group skill, probability of presence, etc.";
 		_ctrl ctrlEnable false;
 
 		// LOADOUT
 		_ctrl = (_display displayCtrl IDC_BT_3_GRP3);
 		_ctrl ctrlSetText "Loadout";
-		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP3, tvCurSel IDC_TREE_GRP3, 3, false] spawn DMORBAT_fnc_editUnitLoadout; '];
+		_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_GRP3, tvCurSel IDC_TREE_GRP3, 3, false] spawn DAKKA_fnc_editUnitLoadout; '];
 		_ctrl ctrlSetTooltip "Edit the unit's loadout";
 		_ctrl ctrlEnable false;
 

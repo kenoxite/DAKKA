@@ -26,9 +26,9 @@ if (typeName _grp == "GROUP") then {
 } else {
     _unitClasses = _grp;
 };
-if (count _unitClasses == 0) exitWith { diag_log format ["DMORBAT: groupType --- ERROR --- No unit classes or group has been passed"]; "" };
+if (count _unitClasses == 0) exitWith { diag_log format ["DAKKA: groupType --- ERROR --- No unit classes or group has been passed"]; "" };
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitClasses: %1 _specific: %2", _unitClasses, _specific] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: _unitClasses: %1 _specific: %2", _unitClasses, _specific] };
 
 private _return = "Inf";
 private _land = [];
@@ -47,13 +47,13 @@ private _infCount = 0;
 } forEach _unitClasses;
 
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _land: %1 _infCount: %2", str _land, _infCount] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: _land: %1 _infCount: %2", str _land, _infCount] };
 // Moto or mech
 if (_specific) then {
     if ((count _land) > 0) then {
         if (_infCount > 0) then {
-            private _vehType = [_land select 0] call DMORBAT_fnc_vehicleType;
-            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _vehType: %1", _vehType] };
+            private _vehType = [_land select 0] call DAKKA_fnc_vehicleType;
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: _vehType: %1", _vehType] };
             if (_vehType != "Turret" && _vehType != "Artillery") then {
                 if (_vehType == "Car" || _vehType == "Truck") then {
                     _return = "Motorized";
@@ -69,12 +69,12 @@ if (_specific) then {
 
 // Artillery
 if (_specific && {(count _land) > 0 && _infCount == 0}) then {
-    private _vehType = [_land select 0] call DMORBAT_fnc_vehicleType;
+    private _vehType = [_land select 0] call DAKKA_fnc_vehicleType;
     if (_vehType == "Artillery" || _vehType == "Drone Artillery") then {
         _return = "Artillery";
     };
 };
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _return: %1", _return] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: _return: %1", _return] };
 
 _return

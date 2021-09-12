@@ -15,7 +15,7 @@
 
 
 	Examples:
-	[position player, getDir player, "Guerrilla", "Camps", "CampA"] call DMORBAT_fnc_compositionSpawn;
+	[position player, getDir player, "Guerrilla", "Camps", "CampA"] call DAKKA_fnc_compositionSpawn;
 */
 
 params ["_obj"];

@@ -18,16 +18,16 @@
 */
 
 params ["_idc"];
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: updatePlayerGroupTreeList _idc:%1", _idc] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: updatePlayerGroupTreeList _idc:%1", _idc] };
 private ["_ctrl", "_indexCtrl", "_taskData", "_thisCategoryGroups", "_thisGroupData", "_groupName", "_unitsData", "_unitClass", "_unitName", "_rank", "_rankImg", "_faction", "_factionName", "_unitNameFull", "_tooltip", "_crewRole", "_isMan", "_isPlayer", "_presence", "_skill", "_thisUnitData", "_lodaout", "_groupMods", "_ctrlGrpIndex", "_ctrlUnitIndex"];
 disableSerialization;
 _ctrl = (findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _idc;
 tvClear _ctrl;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _thisCategoryGroups = [_taskData, "Player group"] call BIS_fnc_getFromPairs;
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: updatePlayerGroupTreeList _thisCategoryGroups:%1", _thisCategoryGroups] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: updatePlayerGroupTreeList _thisCategoryGroups:%1", _thisCategoryGroups] };
 if (count _thisCategoryGroups > 0) then {
 	for [{private _i = 0}, {_i < count _thisCategoryGroups}, {_i = _i + 1}] do
 	{
@@ -35,22 +35,22 @@ if (count _thisCategoryGroups > 0) then {
         _groupName = _thisGroupData select 0;
         _unitsData = _thisGroupData select 1;
         _groupMods = _thisGroupData select 2;
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: updatePlayerGroupTreeList _thisGroupData:%1", _thisGroupData] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: updatePlayerGroupTreeList _thisGroupData:%1", _thisGroupData] };
         _ctrlGrpIndex = _ctrl tvAdd [[], _groupName];
         _ctrl tvSetData [[_ctrlGrpIndex], _groupName];
         _ctrl tvExpand [_ctrlGrpIndex];
         // _ctrl tvExpand [_i];
         _tooltip = format ["%1\n\nClick to preview and set this group as the target when adding faction units", _groupName];
         // Mod dependencies
-        _knownMods = +[DMORBAT_settings, "Known mods"] call BIS_fnc_getFromPairs;
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: updatePlayerGroupTreeList _knownMods:%1", _knownMods] };
+        _knownMods = +[DAKKA_settings, "Known mods"] call BIS_fnc_getFromPairs;
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: updatePlayerGroupTreeList _knownMods:%1", _knownMods] };
         if (count _groupMods > 0) then {
             private _noMods = true;
             private _i = 0;
           {
             _mod = (modParams [_knownMods select _x, ["name"]]) select 0;
             if (isNil "_mod") then { _mod = _knownMods select _x };
-            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: updatePlayerGroupTreeList _mod:%1", _mod] };
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: updatePlayerGroupTreeList _mod:%1", _mod] };
             if (_mod != "") then {
                 if (_noMods) then{
                     _tooltip = format ["%1\nGroup dependencies:\n", _tooltip];
@@ -73,13 +73,13 @@ if (count _thisCategoryGroups > 0) then {
 			_unitName = getText (configFile >> "CfgVehicles" >> _unitClass >> "displayname");
 			_faction = getText (configFile >> "CfgVehicles" >> _unitClass >> "faction");
 			_factionName = getText (configFile >> "CfgFactionClasses" >> _faction >> "displayName");
-			_isMan = [_unitClass] call DMORBAT_fnc_isMan;
-			_isPlayer = [_j] call DMORBAT_fnc_checkIfSelIsPlayer;
+			_isMan = [_unitClass] call DAKKA_fnc_isMan;
+			_isPlayer = [_j] call DAKKA_fnc_checkIfSelIsPlayer;
 			_crewRole = "";
 			if (!_isMan && _isPlayer) then {
                 private _playerData = [_taskData, "Player data"] call BIS_fnc_getFromPairs;
                 private _playerCrewIndex = _playerData select 1;
-				_crewRole = format ["(%1) ", DMORBAT_crewSlotRoles select _playerCrewIndex];
+				_crewRole = format ["(%1) ", DAKKA_crewSlotRoles select _playerCrewIndex];
 			};
 			_unitNameFull = format ["%1. %2 [%3] %4", _j + 1, _unitName, _factionName, _crewRole select [1, 1]];
 			// _rank = if (_j == 0) then { "SERGEANT" } else { "PRIVATE" };
@@ -94,10 +94,10 @@ if (count _thisCategoryGroups > 0) then {
 				_ctrl tvSetColor [[_ctrlGrpIndex, _ctrlUnitIndex], [0.38, 0.6, 0.816, 1]];
 
 				// Set player faction as that of the playable unit
-				DMORBAT_PlayerFaction = _faction;
-				// systemChat format ["DMORBAT: updatePlayerGroupTreeList DMORBAT_PlayerFaction: %1", DMORBAT_PlayerFaction]; 
+				DAKKA_PlayerFaction = _faction;
+				// systemChat format ["DAKKA: updatePlayerGroupTreeList DAKKA_PlayerFaction: %1", DAKKA_PlayerFaction]; 
 			};
-			_ctrl tvSetTooltip [[_ctrlGrpIndex, _ctrlUnitIndex], [format ["%1 [%2] %3", _unitName, _factionName, _crewRole select [1, 1]], _unitClass, _j, count _lodaout, _presence, _skill, _groupMods, true] call DMORBAT_fnc_createUnitTooltip];
+			_ctrl tvSetTooltip [[_ctrlGrpIndex, _ctrlUnitIndex], [format ["%1 [%2] %3", _unitName, _factionName, _crewRole select [1, 1]], _unitClass, _j, count _lodaout, _presence, _skill, _groupMods, true] call DAKKA_fnc_createUnitTooltip];
 		};
 	};
 };

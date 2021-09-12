@@ -18,7 +18,7 @@
 */
 
 params ["_grp"];
-private _pos = getMarkerPos "DMORBAT_groupPreviewPos";
+private _pos = getMarkerPos "DAKKA_groupPreviewPos";
 private _dir = 180;
 private _men = [];
 private _vehicles = [];
@@ -31,15 +31,15 @@ private _veh = objNull;
 		_vehicles pushBack _x;
 	};
 } forEach (units _grp);
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroupPosition _men: %1", _men] };
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroupPosition _vehicles: %1", _vehicles] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroupPosition _men: %1", _men] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroupPosition _vehicles: %1", _vehicles] };
 
 // Delete wheelchocks
 private _wheelChock = objNull;
 {
   deleteVehicle _x;
-} forEach DMORBAT_wheelChock;
-DMORBAT_wheelChock = []; 
+} forEach DAKKA_wheelChock;
+DAKKA_wheelChock = []; 
   
 private _cameraPos = _pos;
 private _cameraDir = _dir;
@@ -89,11 +89,11 @@ private _j = 1;
 		_j = 1;
 		_unitPos = _rowCenterPos;
 	};
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _dist: %1 , _formDir: %2", _dist, _formDir * _lor] };
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitPos: %1", _unitPos] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: _dist: %1 , _formDir: %2", _dist, _formDir * _lor] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: _unitPos: %1", _unitPos] };
 	_x setPos _unitPos;
 	_x setDir _dir;
-	_bbr = [_x] call DMORBAT_fnc_boundingBoxReal;
+	_bbr = [_x] call DAKKA_fnc_boundingBoxReal;
 	_manWidth = _bbr select 0;
 	_watchPos = [[_unitPos select 0, _unitPos select 1, (_bbr select 2) + 3], 50, _dir] call BIS_fnc_relPos;
 	_x lookAt _watchPos;
@@ -159,8 +159,8 @@ _amountVeh = count _realVehicles;
 
 {
 	_veh = vehicle _x;
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _x is 1st crew of: %1", _veh] };
-	_bbr = [_veh] call DMORBAT_fnc_boundingBoxReal;
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: _x is 1st crew of: %1", _veh] };
+	_bbr = [_veh] call DAKKA_fnc_boundingBoxReal;
 	_dist = ((_lastUnitWidth + 2) * _i);
 	if (_k > 0) then {
 		if (_forEachIndex %2 == 0) then {
@@ -189,7 +189,7 @@ _amountVeh = count _realVehicles;
 					_pos1 = getPos (_men select (_rowMaxMen - 2));
 					_pos2 = getPos (_men select (_rowMaxMen - 1));
 				};
-				_middlePoint = [_pos1, _pos2] call DMORBAT_fnc_middlePoint;
+				_middlePoint = [_pos1, _pos2] call DAKKA_fnc_middlePoint;
 			};
 			_vehCount = if (_amountVeh > _rowMaxVeh) then { _rowMaxVeh } else { _amountVeh };
 			_rowCenterPos set [0, (_middlePoint select 0) + (_dist * (_vehCount/2))];
@@ -210,15 +210,15 @@ _amountVeh = count _realVehicles;
     _veh setPos _unitPos;
 	_veh setDir _dir + 30;
     _veh setVectorUp (surfaceNormal (position _veh));
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: %4[%3] _dist: %1 , _formDir: %2", _dist, _formDir * _lor, typeof _veh, _veh] };
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _unitPos: %1", _unitPos] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: %4[%3] _dist: %1 , _formDir: %2", _dist, _formDir * _lor, typeof _veh, _veh] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: _unitPos: %1", _unitPos] };
 	_veh enableSimulation true;
     _veh setVelocity [0, 0, 0];
 	// Stop air units from taking off
 	if (_veh isKindOf "Plane") then {
 		_wheelChock = createVehicle ["Land_WheelChock_01_F", [getPos _veh, 3, getDir _veh] call BIS_fnc_relPos, [], 0, "CAN_COLLIDE"];
 		_wheelChock setDir (getDir _veh) + 90;
-		DMORBAT_wheelChock pushBack _wheelChock;
+		DAKKA_wheelChock pushBack _wheelChock;
 	};
 	if (_veh isKindOf "Helicopter") then {
 		_veh setFuel 0;
@@ -227,11 +227,11 @@ _amountVeh = count _realVehicles;
 	_veh doWatch _watchPos;
 	// _unitPos = _rowCenterPos;
 	_lastUnitWidth = _bbr select 0;
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _lastUnitWidth: %1", _lastUnitWidth] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: _lastUnitWidth: %1", _lastUnitWidth] };
 	_j = _j + 1;
 	_k = _k + 1;
 } forEach _realVehicles;
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _amountVeh: %1", _amountVeh] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: _amountVeh: %1", _amountVeh] };
 
 // Camera parameters
 
@@ -242,7 +242,7 @@ private _wideScreen = if (_aspectRatio > 1.4) then { true } else { false };
 private _rowCenterPos = [];
 private _previewAreaAdj = 1.7;
 private _vehCheck = objNull;
-DMORBAT_cameraTarget = objNull;
+DAKKA_cameraTarget = objNull;
 _cameraRelX = if (_wideScreen) then { -0.3 } else { 0.2 };
 _cameraRelY = 13;
 _cameraRelZ = 2;
@@ -250,7 +250,7 @@ _cameraHeight = 0.5;
 _cameraFOV = if (_wideScreen) then { 0.35 } else { 0.48 };
 if (_amountMen > 0) then {
 	_vehCheck = vehicle (_men select 0);
-	_bbr = [_vehCheck] call DMORBAT_fnc_boundingBoxReal;
+	_bbr = [_vehCheck] call DAKKA_fnc_boundingBoxReal;
 	_cameraRelZ = ((_bbr select 2)/2) + 0.2;
 	_cameraHeight = (_bbr select 2) * 0.2;
 	_cameraFOV = if (_wideScreen) then { 0.3 } else { 0.43 };
@@ -270,12 +270,12 @@ if (_amountMen > 0) then {
 			_pos1 = getPos (_men select (_rowMaxMen - 2));
 			_pos2 = getPos (_men select (_rowMaxMen - 1));
 		};
-		_middlePoint = [_pos1, _pos2] call DMORBAT_fnc_middlePoint;
+		_middlePoint = [_pos1, _pos2] call DAKKA_fnc_middlePoint;
 	};
 };
 if (_amountVeh > 0) then {
 	_vehCheck = vehicle (_realVehicles select 0);
-	_bbr = [_vehCheck] call DMORBAT_fnc_boundingBoxReal;
+	_bbr = [_vehCheck] call DAKKA_fnc_boundingBoxReal;
 	if (_amountVeh == 1) then {
 		_cameraRelY = ((_bbr select 2) * 6) max 12;
 		_cameraFOV = if (_wideScreen) then { 0.25 } else { 0.38 };
@@ -314,7 +314,7 @@ if (_amountVeh > 0) then {
 			_cameraRelZ = ((_bbr select 2) / 2) + 2;
 			_cameraHeight = (_bbr select 2) * 0.5;
 		};
-		_middlePoint = [_pos1, _pos2] call DMORBAT_fnc_middlePoint;
+		_middlePoint = [_pos1, _pos2] call DAKKA_fnc_middlePoint;
 	};
 };
 if (_amountMen > 0 || _amountVeh > 0) then {
@@ -323,15 +323,15 @@ if (_amountMen > 0 || _amountVeh > 0) then {
 		(getPos _cameraTarget) select 1,
 		0.5
 		];
-	DMORBAT_cameraTarget= createVehicle ["RoadCone_F", _rowCenterPos, [], 0, "CAN_COLLIDE"];
-	DMORBAT_cameraTarget setPos _rowCenterPos;
-	DMORBAT_cameraTarget hideObject true;
+	DAKKA_cameraTarget= createVehicle ["RoadCone_F", _rowCenterPos, [], 0, "CAN_COLLIDE"];
+	DAKKA_cameraTarget setPos _rowCenterPos;
+	DAKKA_cameraTarget hideObject true;
 	_cameraPos = [
 		((getPos _cameraTarget) select 0) - _previewAreaAdj,
 		_pos select 1,
 		0
 	];
-	_cameraTarget = DMORBAT_cameraTarget;
-	[_cameraPos, _cameraDir, _cameraFOV, _cameraRelX, _cameraRelY, _cameraRelZ, _cameraHeight, _cameraTarget] spawn DMORBAT_fnc_cameraPreviewStatic;
-	// [_cameraPos, _cameraRadius, _cameraHeightCircle] spawn DMORBAT_fnc_cameraPreviewCircle;
+	_cameraTarget = DAKKA_cameraTarget;
+	[_cameraPos, _cameraDir, _cameraFOV, _cameraRelX, _cameraRelY, _cameraRelZ, _cameraHeight, _cameraTarget] spawn DAKKA_fnc_cameraPreviewStatic;
+	// [_cameraPos, _cameraRadius, _cameraHeightCircle] spawn DAKKA_fnc_cameraPreviewCircle;
 };

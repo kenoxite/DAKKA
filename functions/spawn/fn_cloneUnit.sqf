@@ -32,8 +32,8 @@ if (typeName _cloneChild == "STRING") then {
 };
 // Spawn new clone if only class name or null object has been passed
 if (_spawnClone) then {
-   _cloneChild = [_cloneChild, position _cloneParent, side _cloneParent] call DMORBAT_fnc_spawnMan;
-    if (isNull _cloneChild) exitWith { diag_log format ["DMORBAT: --- ERROR --- cloneUnit UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _cloneChild]; objNull };
+   _cloneChild = [_cloneChild, position _cloneParent, side _cloneParent] call DAKKA_fnc_spawnMan;
+    if (isNull _cloneChild) exitWith { diag_log format ["DAKKA: --- ERROR --- cloneUnit UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _cloneChild]; objNull };
 };
 
 // Start cloning

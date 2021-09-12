@@ -18,14 +18,14 @@
 
 params ["_unit", ["_unitLoadout", []], ["_unitSkill", 0]]; 
 
-private _applyFlareFix = [DMORBAT_customDate] call DMORBAT_fnc_isNight;
+private _applyFlareFix = [DAKKA_customDate] call DAKKA_fnc_isNight;
 private _veh = vehicle _unit;
 if (_unit == effectiveCommander _veh) then {
     {
         // Set skill
-        [_x, _unitSkill] call DMORBAT_fnc_setUnitSkill;
+        [_x, _unitSkill] call DAKKA_fnc_setUnitSkill;
         // Add EH that makes stop the being treated by the player when no healing order has been issued
-        [_x] call DMORBAT_fnc_stopAndHeal;
+        [_x] call DAKKA_fnc_stopAndHeal;
         // Apply flare fix
         if (_applyFlareFix) then {
             _x addEventHandler ["Fired",{private ["_al_flare"]; _al_flare = _this select 6;[[_al_flare],"AL_flare_fix\al_flare_enhance.sqf"] remoteExec ["execVM",0,true]}];
@@ -71,17 +71,17 @@ _null = [_unit, _unitLoadout] spawn {
                 _x setUnitLoadout [_unitLoadout, true];
             };
             // Give weapons if the unit still doesn't have any
-            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit] };
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit] };
             if (primaryWeapon _unit == "" && handgunWeapon _unit == "") then {
                 _unit addWeapon "hgun_P07_F";
                 _unit addHandgunItem "16Rnd_9x21_Mag";
                 for "_i" from 1 to 3 do {_unit addItemToUniform "16Rnd_9x21_Mag";};
             };
-            // if (DMORBAT_debug) then { diag_log format ["DMORBAT: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit] };
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: %1 primary weapons: %2 handgun: %3", _unit, primaryWeapon _unit, handgunWeapon _unit] };
             // Replace UAV terminals with proper ones for this unit's side
             /*private _side = side _unit;
             private _assignedItems = assignedItems _unit;
-            if (DMORBAT_debug) then { diag_log format ["DMORBAT: prepareUnit - %1 _assignedItems: %2", _unit, _assignedItems] };
+            if (DAKKA_debug) then { diag_log format ["DAKKA: prepareUnit - %1 _assignedItems: %2", _unit, _assignedItems] };
             if (_side == west) then {
                 {
                     if (_x == "O_UavTerminal" || _x == "I_UavTerminal" || _x == "C_UavTerminal" || _x == "I_E_UavTerminal") then {
@@ -103,7 +103,7 @@ _null = [_unit, _unitLoadout] spawn {
                 } forEach _assignedItems;
             };*/
             // Check for NVGs and flashlights
-            [_x, DMORBAT_forceFlashlights] call DMORBAT_fnc_useNVGflashlight;
+            [_x, DAKKA_forceFlashlights] call DAKKA_fnc_useNVGflashlight;
             // RHS single-shot launchers for AI fix
             [_x] call _AIDisposableLauncherFix;
         } forEach (crew _veh);

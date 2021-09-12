@@ -18,44 +18,44 @@
 */
 
 params ["_unitsArr", ["_ranksArr", []], ["_loadoutArr", []], ["_groupMods", []]];
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroup:[%1] [%2] ", _unitsArr, _ranksArr] };
+// if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroup:[%1] [%2] ", _unitsArr, _ranksArr] };
 private ["_pos", "_unit", "_grp", "_isMan", "_rank"];
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup DMORBAT_previewGroup:%1", DMORBAT_previewGroup] };
-// waitUntil { isNull DMORBAT_previewGroup };
-if (isNull DMORBAT_previewGroup) then {	
+if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup DAKKA_previewGroup:%1", DAKKA_previewGroup] };
+// waitUntil { isNull DAKKA_previewGroup };
+if (isNull DAKKA_previewGroup) then {	
 	cutText ["Loading Preview...", "BLACK IN", 999];
     ctrlShow [IDC_GRP_SAVEDDATAPROFILES, false];
 
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup _unitsArr:%1", _unitsArr] };
-	// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup _ranksArr:%1", _ranksArr] };
-	_pos = getMarkerPos "DMORBAT_groupPreviewPos";
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup _unitsArr:%1", _unitsArr] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup _ranksArr:%1", _ranksArr] };
+	_pos = getMarkerPos "DAKKA_groupPreviewPos";
 	_unit = objNull;
 	_grp = grpNull;
 	_isMan = true;
     private _changeLoadouts = [];
 	{	
-		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 2 previewGroup DMORBAT_previewGroup:%1", DMORBAT_previewGroup] };
-		if(!isNull DMORBAT_previewGroup) exitWith {
-			diag_log format ["DMORBAT: --- ERROR --- Another instance is already creating preview group (%1) ", DMORBAT_previewGroup];
-			diag_log format ["DMORBAT: --- ERROR --- Units from group that was created: %1", units _grp];
-			[_grp] call DMORBAT_fnc_deleteGroup;
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: 2 previewGroup DAKKA_previewGroup:%1", DAKKA_previewGroup] };
+		if(!isNull DAKKA_previewGroup) exitWith {
+			diag_log format ["DAKKA: --- ERROR --- Another instance is already creating preview group (%1) ", DAKKA_previewGroup];
+			diag_log format ["DAKKA: --- ERROR --- Units from group that was created: %1", units _grp];
+			[_grp] call DAKKA_fnc_deleteGroup;
 		};
-		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroup _x:%1", _x] };
-		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _isMan: %1", "Man" in ([configFile >> "CfgVehicles" >> _x, true ] call BIS_fnc_returnParents)] };
-		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: 1 previewGroup _x:%1", _x] };
-		_isMan = [_x] call DMORBAT_fnc_isMan;
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroup _x:%1", _x] };
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: _isMan: %1", "Man" in ([configFile >> "CfgVehicles" >> _x, true ] call BIS_fnc_returnParents)] };
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup _x:%1", _x] };
+		_isMan = [_x] call DAKKA_fnc_isMan;
 		_unit = if (_isMan) then {
-				([_x, _pos] call DMORBAT_fnc_spawnMan);
+				([_x, _pos] call DAKKA_fnc_spawnMan);
 			} else {
-				([_x, _pos] call DMORBAT_fnc_spawnVehicle);
+				([_x, _pos] call DAKKA_fnc_spawnVehicle);
 			};
 
 		if (isNull _unit) exitWith {
-			diag_log format ["DMORBAT: --- ERROR --- Class ""%1"" not found and could not be spawned! ", _x];
+			diag_log format ["DAKKA: --- ERROR --- Class ""%1"" not found and could not be spawned! ", _x];
 
 			private _error = "ERROR: Unit class not found. ";
-            private _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
-            private _knownMods = [DMORBAT_settings, "Known mods"] call BIS_fnc_getFromPairs;
+            private _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
+            private _knownMods = [DAKKA_settings, "Known mods"] call BIS_fnc_getFromPairs;
 			_groupMods = _groupMods - [""];
 			if (count _knownMods > 0) then {
 				private _mods = "";
@@ -66,14 +66,14 @@ if (isNull DMORBAT_previewGroup) then {
 				} forEach _groupMods;
 				_error = format ["%1It needs the following addons: %2", _error, _mods];
 			};
-            [_error] spawn DMORBAT_fnc_displayMessage;
+            [_error] spawn DAKKA_fnc_displayMessage;
             // Preview empty
-            call DMORBAT_fnc_previewGroupDelete;
-            call DMORBAT_fnc_cameraPreviewTerminate;
-            [getMarkerPos "DMORBAT_groupPreviewPos"] spawn DMORBAT_fnc_cameraPreviewStatic;
+            call DAKKA_fnc_previewGroupDelete;
+            call DAKKA_fnc_cameraPreviewTerminate;
+            [getMarkerPos "DAKKA_groupPreviewPos"] spawn DAKKA_fnc_cameraPreviewStatic;
 		};
 		// waitUntil {!isNull _unit };
-		// if (DMORBAT_debug) then { diag_log format ["DMORBAT: previewGroup _unit:%1", _unit] };
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroup _unit:%1", _unit] };
 
 		if (_forEachIndex == 0) then {
 			_grp = group _unit;
@@ -106,8 +106,8 @@ if (isNull DMORBAT_previewGroup) then {
 		} forEach crew vehicle _unit;
 		if(!_isMan) then { _unit enableSimulation false;};
 	} forEach _unitsArr;
-	DMORBAT_previewGroup = _grp;
-	[_grp] spawn DMORBAT_fnc_previewGroupPosition;
+	DAKKA_previewGroup = _grp;
+	[_grp] spawn DAKKA_fnc_previewGroupPosition;
     cutText ["", "BLACK IN", 2];
 
     // Apply loadouts a bit delayed to wait for units that change loadout at init EH to do their thing
@@ -117,7 +117,7 @@ if (isNull DMORBAT_previewGroup) then {
             {
                 private _unit = _x select 0;
                 private _unitLoadout = _x select 1;
-                private _isMan = [_unit] call DMORBAT_fnc_isMan;
+                private _isMan = [_unit] call DAKKA_fnc_isMan;
                 if (_isMan) then {
                     _unit setUnitLoadout [_unitLoadout, true];
                 } else {
@@ -132,6 +132,6 @@ if (isNull DMORBAT_previewGroup) then {
 
 
 } else {
-	// call DMORBAT_fnc_previewGroupDelete;
-	// ["_unitsArr", "_ranksArr"] call DMORBAT_fnc_previewGroup;
+	// call DAKKA_fnc_previewGroupDelete;
+	// ["_unitsArr", "_ranksArr"] call DAKKA_fnc_previewGroup;
 };

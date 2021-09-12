@@ -21,17 +21,17 @@
 params ["_idc", "_faction", ["_filterType", "all"]];
 private ["_display", "_ctrl", "_indexCtrl", "_factionInd", "_unitName", "_factionUnits", "_subcat", "_catIndex", "_catUnits", "_unitClass", "_bannedVehicles", "_filter", "_unitIcon", "_unitData"];
 
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: updateUnitsTreeList _filterType: %1", _filterType] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: updateUnitsTreeList _filterType: %1", _filterType] };
 
 disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = _display displayCtrl _idc;
 tvClear _ctrl;
 
-// if (DMORBAT_debug) then { diag_log format ["DMORBAT: _faction:%1", _faction] };
-_factionInd = [DMORBAT_availableFactionsData, _faction] call DMORBAT_fnc_findFirstNested;
+// if (DAKKA_debug) then { diag_log format ["DAKKA: _faction:%1", _faction] };
+_factionInd = [DAKKA_availableFactionsData, _faction] call DAKKA_fnc_findFirstNested;
 if (_factionInd >= 0) then {
-    _factionUnits = [_faction, _filterType] call DMORBAT_fnc_categorizeUnits;
+    _factionUnits = [_faction, _filterType] call DAKKA_fnc_categorizeUnits;
 
 	// Populate tree list
 	for [{private _i = 0}, {_i < count _factionUnits}, {_i = _i + 1}] do

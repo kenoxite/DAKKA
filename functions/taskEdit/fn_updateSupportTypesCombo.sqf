@@ -25,11 +25,11 @@ disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = _display displayCtrl _idcCombo;
 if (isNull _ctrl) exitWith { 
-  diag_log format ["DMORBAT: --- ERROR --- updateSupportTypesCombo CONTROL %1  could not be found!", _ctrl];
+  diag_log format ["DAKKA: --- ERROR --- updateSupportTypesCombo CONTROL %1  could not be found!", _ctrl];
 };
 lbClear _ctrl;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _supportTypesData = [_taskData, "Support groups"] call BIS_fnc_getFromPairs;
 
 for [{private _i = 0}, {_i < count _supportTypesData}, {_i = _i + 1}] do 

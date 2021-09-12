@@ -20,8 +20,8 @@
 params ["_grp", "_pos", "_maxDist", ["_statements", ["true", ""]], ["_blacklist", []], ["_teleportToNode", false], ["_changeBehaviour", true]];
 
 private ["_angle", "_isMan", "_isAir", "_nodesAmount", "_dir", "_firstWpPos"];
-_isMan = [vehicle leader _grp] call DMORBAT_fnc_isMan;
-_isAir = [vehicle leader _grp] call DMORBAT_fnc_isAir;
+_isMan = [vehicle leader _grp] call DAKKA_fnc_isMan;
+_isAir = [vehicle leader _grp] call DAKKA_fnc_isAir;
 _nodesAmount = 4 + (floor (random 3));
 _angle = round (360 / _nodesAmount);
 _dir = round (random 360);
@@ -38,7 +38,7 @@ for [{private _i = 0}, {_i < _nodesAmount}, {_i = _i + 1}] do
     if (_teleportToNode && _i == 0) then {
         // Only teleport if the node is far away from the player's spawning position
         if ((_newPos distance (vehicle p1)) > 200) then {
-            diag_log format ["DMORBAT: Teleporting patrolling group %1 to first node", _grp];
+            diag_log format ["DAKKA: Teleporting patrolling group %1 to first node", _grp];
             {
                 private _veh = vehicle _x;
                 if (_x == effectiveCommander _veh) then {
@@ -51,7 +51,7 @@ for [{private _i = 0}, {_i < _nodesAmount}, {_i = _i + 1}] do
                 };
             } forEach (units _grp);
         } else {
-            diag_log format ["DMORBAT: Patrolling group %1 not teleported to node. Too close to player spawn", _grp];
+            diag_log format ["DAKKA: Patrolling group %1 not teleported to node. Too close to player spawn", _grp];
         };
     };
 
@@ -71,7 +71,7 @@ for [{private _i = 0}, {_i < _nodesAmount}, {_i = _i + 1}] do
             if (_isMan) then {
                 _grp setBehaviour "SAFE";
             } else {
-                if ([DMORBAT_customDate] call DMORBAT_fnc_isNight) then { 
+                if ([DAKKA_customDate] call DAKKA_fnc_isNight) then { 
                     _grp setBehaviour "AWARE";
                 } else {
                     _grp setBehaviour "COMBAT";

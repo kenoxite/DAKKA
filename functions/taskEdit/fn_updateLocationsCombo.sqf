@@ -24,11 +24,11 @@ disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl =  _display displayCtrl _idcCombo;
 if (isNull _ctrl) exitWith { 
-  diag_log format ["DMORBAT: --- ERROR --- updateLocationsCombo CONTROL %1  could not be found!", _ctrl];
+  diag_log format ["DAKKA: --- ERROR --- updateLocationsCombo CONTROL %1  could not be found!", _ctrl];
 };
 lbClear _ctrl;
 
-_taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+_taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldLocationsData = [_taskData, "Locations"] call BIS_fnc_getFromPairs;
 _locationsData = [_worldLocationsData, worldName] call BIS_fnc_getFromPairs;
 _indexCat = lbCurSel (_display displayCtrl IDC_COMBO_AO_SELECTION_CAT);
@@ -44,7 +44,7 @@ for [{private _i = 0}, {_i < count _locations}, {_i = _i + 1}] do
 // Update preview locations array
 {
   deleteVehicle _x;
-} forEach DMORBAT_locationPreview;
+} forEach DAKKA_locationPreview;
 
 if ((count _locations) > 0) then {
   ctrlEnable [IDC_BT_AO_SEL_SET, true];
@@ -54,12 +54,12 @@ if ((count _locations) > 0) then {
 // First location reserved for previews on user coordinates
 _locPrevObj = createVehicle ["Flag_Red_F", [0,0,0], [], 0, "CAN_COLLIDE"];
 _locPrevObj hideObject true;
-DMORBAT_locationPreview = [_locPrevObj];
+DAKKA_locationPreview = [_locPrevObj];
 // Then create reference objects for the actual locations
 {
     _locPrevObj = createVehicle ["Flag_Red_F", (_x select 0), [], 0, "CAN_COLLIDE"];
     _locPrevObj hideObject true;
-    DMORBAT_locationPreview pushBack _locPrevObj;
+    DAKKA_locationPreview pushBack _locPrevObj;
 } forEach _locations;
 
 true

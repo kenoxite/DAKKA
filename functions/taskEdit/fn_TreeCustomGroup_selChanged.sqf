@@ -21,7 +21,7 @@ params ["_idc", "_selectionPath", ["_groupNumber", 1], ["_enemy", true], "_idcBu
 private ["_taskData", "_groupsData", "_thisCategoryData", "_thisCategoryGroups", "_thisGroupData", "_unitData", "_thisCategoryName", "_display", "_buttonText", "_unitClassArr", "_ranksArr", "_loadoutsArr", "_groupMods"];
 disableSerialization;
 _display = findDisplay IDC_MENU_MISSION_EDIT;
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged _selectionPath:%1", _selectionPath] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: TreeCustomGroup_selChanged _selectionPath:%1", _selectionPath] };
 
 if (count _selectionPath > 0) then {
     if ((tvCount [IDC_TREE_GRP1, []]) > 1) then {
@@ -33,10 +33,10 @@ if (count _selectionPath > 0) then {
 	if (_groupNumber != 2) then { tvSetCurSel [IDC_TREE_GRP2, [-1]] };
 	if (_groupNumber != 3) then { tvSetCurSel [IDC_TREE_GRP3, [-1]] };
 
-    DMORBAT_customGroupsSelection = [_groupNumber, _selectionPath];
-    if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged DMORBAT_customGroupsSelection:%1", DMORBAT_customGroupsSelection] };
+    DAKKA_customGroupsSelection = [_groupNumber, _selectionPath];
+    if (DAKKA_debug) then { diag_log format ["DAKKA: TreeCustomGroup_selChanged DAKKA_customGroupsSelection:%1", DAKKA_customGroupsSelection] };
 
-    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
     if (!_isSupport) then{
         _groupsData = [_taskData, format ["%1 groups", if (_enemy) then { "Enemy" } else { "Friendly" }]] call BIS_fnc_getFromPairs; 
         _thisCategoryData = _groupsData select (_groupNumber - 1);
@@ -52,7 +52,7 @@ if (count _selectionPath > 0) then {
     if ((_selectionPath select 0) > 0) then {
         _thisCategoryGroups = _thisCategoryData select 1;  
         _thisGroupData = _thisCategoryGroups select ((_selectionPath select 0) - 1);
-        // if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged _thisGroupData:%1", _thisGroupData] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: TreeCustomGroup_selChanged _thisGroupData:%1", _thisGroupData] };
         _unitData = _thisGroupData select 1;
         _groupMods = _thisGroupData select 2;
 
@@ -70,16 +70,16 @@ if (count _selectionPath > 0) then {
 
 if ((count _selectionPath) <= 1) then {
 	// Group was selected
-	if (DMORBAT_PreviewGroupID != format ["%1%2%3%4", _groupNumber, DMORBAT_PreviewGroupName, _selectionPath select 0] && (_selectionPath select 0) > 0) then {
-		call DMORBAT_fnc_previewGroupDelete;
-		[_unitClassArr, _ranksArr, _loadoutsArr, _groupMods] call DMORBAT_fnc_previewGroup;
-		DMORBAT_SelectedPreviewUnit = (units DMORBAT_previewGroup) select 0;
-        [false] call DMORBAT_fnc_displayVehicleInfo;
-		DMORBAT_PreviewGroupName = tvData [_idc, tvCurSel _idc];
-		DMORBAT_PreviewGroupID = format ["%1%2%3%4", _groupNumber, DMORBAT_PreviewGroupName, _selectionPath select 0];
+	if (DAKKA_PreviewGroupID != format ["%1%2%3%4", _groupNumber, DAKKA_PreviewGroupName, _selectionPath select 0] && (_selectionPath select 0) > 0) then {
+		call DAKKA_fnc_previewGroupDelete;
+		[_unitClassArr, _ranksArr, _loadoutsArr, _groupMods] call DAKKA_fnc_previewGroup;
+		DAKKA_SelectedPreviewUnit = (units DAKKA_previewGroup) select 0;
+        [false] call DAKKA_fnc_displayVehicleInfo;
+		DAKKA_PreviewGroupName = tvData [_idc, tvCurSel _idc];
+		DAKKA_PreviewGroupID = format ["%1%2%3%4", _groupNumber, DAKKA_PreviewGroupName, _selectionPath select 0];
 	};
-	// DMORBAT_previewUnit = objNull;
-	// DMORBAT_SelectedPreviewUnit = objNull;
+	// DAKKA_previewUnit = objNull;
+	// DAKKA_SelectedPreviewUnit = objNull;
 	if ((_selectionPath select 0) > 0) then {
 		{
 			ctrlEnable [_x, true];
@@ -94,7 +94,7 @@ if ((count _selectionPath) <= 1) then {
         ctrlEnable [IDC_BT_ADD_GROUP, true];
 	};
 
-    if (DMORBAT_Task != 2) then {
+    if (DAKKA_Task != 2) then {
     	_buttonText = if ((count _selectionPath) == 1 && (_selectionPath select 0) == 0) then {
     			format ["%1", _thisCategoryName];
     		} else {
@@ -109,18 +109,18 @@ if ((count _selectionPath) <= 1) then {
     	
 } else {
 	// Unit was selected
-	if ((count _selectionPath) > 1 && DMORBAT_PreviewGroupName != (tvData [_idc, _selectionPath select [0, 1]])) then {
-		call DMORBAT_fnc_previewGroupDelete;
-		DMORBAT_PreviewGroupName = "";	
-		DMORBAT_PreviewGroupID = "";	
-		[_unitClassArr, _ranksArr, _loadoutsArr, _groupMods] call DMORBAT_fnc_previewGroup;
-		DMORBAT_PreviewGroupName = tvData [_idc, _selectionPath select [0, 1]];
-		DMORBAT_PreviewGroupID = format ["%1%2%3%4", _groupNumber, DMORBAT_PreviewGroupName, _selectionPath select 0, _selectionPath select 1];
+	if ((count _selectionPath) > 1 && DAKKA_PreviewGroupName != (tvData [_idc, _selectionPath select [0, 1]])) then {
+		call DAKKA_fnc_previewGroupDelete;
+		DAKKA_PreviewGroupName = "";	
+		DAKKA_PreviewGroupID = "";	
+		[_unitClassArr, _ranksArr, _loadoutsArr, _groupMods] call DAKKA_fnc_previewGroup;
+		DAKKA_PreviewGroupName = tvData [_idc, _selectionPath select [0, 1]];
+		DAKKA_PreviewGroupID = format ["%1%2%3%4", _groupNumber, DAKKA_PreviewGroupName, _selectionPath select 0, _selectionPath select 1];
 	};
-	[_selectionPath select 1] call DMORBAT_fnc_previewUnit;
-	if (DMORBAT_debug) then { diag_log format ["DMORBAT: TreeCustomGroup_selChanged DMORBAT_SelectedPreviewUnit:%1", DMORBAT_SelectedPreviewUnit] };
+	[_selectionPath select 1] call DAKKA_fnc_previewUnit;
+	if (DAKKA_debug) then { diag_log format ["DAKKA: TreeCustomGroup_selChanged DAKKA_SelectedPreviewUnit:%1", DAKKA_SelectedPreviewUnit] };
 	{
 		ctrlEnable [_x, true];
 	} forEach _idcButtons;
-    [true] call DMORBAT_fnc_displayVehicleInfo;
+    [true] call DAKKA_fnc_displayVehicleInfo;
 };

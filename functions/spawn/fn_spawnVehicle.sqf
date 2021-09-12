@@ -32,7 +32,7 @@ if ((surfaceIsWater _pos || _canFloat == 1) && (count _pos) > 2) then {
 
 // Create vehicle
 _veh = createVehicle [_unitClass, _pos, _markers, _radius, _special];
-if (isNull _veh) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnVehicle UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
+if (isNull _veh) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnVehicle UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
 if (!_enableRandom) then {
   _veh setVariable ["BIS_enableRandomization", false];
 };
@@ -57,11 +57,11 @@ if (_spawnCrew) then {
     };
     
     // Check for global group limit reached
-    if (isNull _grp) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnVehicle GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
+    if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnVehicle GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
 
-    _veh = [_veh, _grp, _faction] call DMORBAT_fnc_spawnCrew;
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: spawnVehicle %1 side: %2", _veh, side _grp ] };
-    if (isNull _veh) exitWith { diag_log format ["DMORBAT: --- ERROR --- spawnVehicle VEHICLE %1 COULDN'T BE SPAWNED!", _unitClass]; objNull };
+    _veh = [_veh, _grp, _faction] call DAKKA_fnc_spawnCrew;
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: spawnVehicle %1 side: %2", _veh, side _grp ] };
+    if (isNull _veh) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnVehicle VEHICLE %1 COULDN'T BE SPAWNED!", _unitClass]; objNull };
 };
 
 _veh

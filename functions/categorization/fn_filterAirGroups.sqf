@@ -36,27 +36,27 @@ private _eligibleAirFiltered = [];
     {
         _airClass = _x;
         if (typeName _airClass == "ARRAY") then { _airClass = (_x select 0) select 0 };
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - Looking for missiles and rockets in %1", _airClass] };
-        if ([_airClass] call DMORBAT_fnc_isAir) then {
-            private _testUnit = [_airClass, [0,random 500,0]] call DMORBAT_fnc_spawnVehicle;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleAirAll - Looking for missiles and rockets in %1", _airClass] };
+        if ([_airClass] call DAKKA_fnc_isAir) then {
+            private _testUnit = [_airClass, [0,random 500,0]] call DAKKA_fnc_spawnVehicle;
             private _pylonLoadout = getPylonMagazines _testUnit;
-            private _nul = [_testUnit] spawn { [_this select 0] call DMORBAT_fnc_deleteVehicle };
+            private _nul = [_testUnit] spawn { [_this select 0] call DAKKA_fnc_deleteVehicle };
             _isMissile = false;
             _isRocket = false;
             {
                 private _ammo = getText (configfile >> "CfgMagazines" >> _x >> "ammo");
                 private _ammoParents = [configFile >> "CfgAmmo" >> _ammo, true] call BIS_fnc_returnParents;
-                // if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - _ammo: %1, _ammoParents: %2", _ammo, _ammoParents] };
+                // if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleAirAll - _ammo: %1, _ammoParents: %2", _ammo, _ammoParents] };
                 _isMissile = "MissileCore" in _ammoParents;
                 _isRocket = "RocketCore" in _ammoParents;
-                if (_isMissile || _isRocket) exitWith { if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - %1 HAS MISSILES OR ROCKETS: %2", _airClass, _x] }; };
+                if (_isMissile || _isRocket) exitWith { if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleAirAll - %1 HAS MISSILES OR ROCKETS: %2", _airClass, _x] }; };
             } forEach _pylonLoadout;
         };
     } forEach _units;
     if (_isMissile) then {
         _eligibleAirFiltered pushBackUnique _group;
     } else {
-        if (DMORBAT_debug) then { diag_log format ["DMORBAT: _eligibleAirAll - %1 DOESN'T HAVE MISSILES OR ROCKETS", _airClass] };
+        if (DAKKA_debug) then { diag_log format ["DAKKA: _eligibleAirAll - %1 DOESN'T HAVE MISSILES OR ROCKETS", _airClass] };
     };
 } forEach _eligibleAirAll;
 

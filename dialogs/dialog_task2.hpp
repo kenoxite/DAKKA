@@ -2,14 +2,14 @@
 
 class RscTitles
 {
-    class DMORBAT_GUI_Dialog_Task
+    class DAKKA_GUI_Dialog_Task
     {
         idd = IDC_TASK2;
         name = "Timer";
         movingEnable = false;
         enableSimulation = true;
-        onLoad = "uiNamespace setVariable ['DMORBAT_Dialog_Task', _this select 0];";
-        onUnLoad = "uiNamespace setVariable ['DMORBAT_Dialog_Task', nil]";
+        onLoad = "uiNamespace setVariable ['DAKKA_Dialog_Task', _this select 0];";
+        onUnLoad = "uiNamespace setVariable ['DAKKA_Dialog_Task', nil]";
         duration = 9999999;
         fadeIn = 0;
         fadeOut = 0;
@@ -17,7 +17,7 @@ class RscTitles
         class controls
         {
 
-            class DMORBAT_Txt_Task2_areaHolder: RscText
+            class DAKKA_Txt_Task2_areaHolder: RscText
             {
                 idc = IDC_TXT_TASK2_COUNTER_AREAHOLDER;
 
@@ -36,7 +36,7 @@ class RscTitles
 
             };
 
-            class DMORBAT_Img_Task2_Counter_areaHolder:RscPicture
+            class DAKKA_Img_Task2_Counter_areaHolder:RscPicture
             {
                 idc = IDC_IMG_TASK2_COUNTER_AREAHOLDER;
 
@@ -49,7 +49,7 @@ class RscTitles
                 text = "#(rgb,8,8,3)color(1,0,0,0.5)";
             };
 
-            class DMORBAT_Txt_Task2_Counter: RscText
+            class DAKKA_Txt_Task2_Counter: RscText
             {
                 idc = IDC_TXT_TASK2_COUNTER_TIMER;
 

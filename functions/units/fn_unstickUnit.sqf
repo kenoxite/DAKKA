@@ -18,16 +18,16 @@
 
 params ["_target", "_caller", "_actionId", ["_arguments", ""]];
 private _veh = vehicle _target;
-private _isMan = [_veh] call DMORBAT_fnc_isMan;
+private _isMan = [_veh] call DAKKA_fnc_isMan;
 if (!_isMan) then {
     // Try to find a nearby safe position if it's a vehicle
     _veh setPos ([getPos _veh, 0, 50, 5, 1] call BIS_fnc_findSafePos);
     _veh setVectorUp (surfaceNormal (position _veh));
 } else {
     // Clone if it's infantry
-    private _clone = [_target, "", true, true, false] call DMORBAT_fnc_cloneUnit;
+    private _clone = [_target, "", true, true, false] call DAKKA_fnc_cloneUnit;
     if (isNull _clone) exitWith {
-        diag_log format ["DMORBAT: --- ERROR --- unstickUnit The clone for %1 could not be created. Repositioning unit instead...", _target];
+        diag_log format ["DAKKA: --- ERROR --- unstickUnit The clone for %1 could not be created. Repositioning unit instead...", _target];
         _target setPos ([getPos _target, 0, 50, 5, 1] call BIS_fnc_findSafePos);
         false
     };
@@ -39,8 +39,8 @@ if (!_isMan) then {
     private _team = assignedTeam _target;
 
     private _grp = group _target;
-    private _groupIndex = (_target call DMORBAT_fnc_getUnitPositionId) - 1;
-    // if (DMORBAT_debug) then { diag_log format ["DMORBAT: untstickUnit _groupIndex %1", _groupIndex] }; 
+    private _groupIndex = (_target call DAKKA_fnc_getUnitPositionId) - 1;
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: untstickUnit _groupIndex %1", _groupIndex] }; 
     private _isLeader = false;
     if ((leader _grp) == _target) then {
         _isLeader = true;
@@ -67,7 +67,7 @@ if (!_isMan) then {
     [ 
         "Unstick Unit", 
         { 
-            _this spawn DMORBAT_fnc_unstickUnit;  
+            _this spawn DAKKA_fnc_unstickUnit;  
         }, 
         nil, 
         20, 
@@ -82,9 +82,9 @@ if (!_isMan) then {
     ]; 
     _clone addEventHandler ["killed", format ["(_this select 0) removeAction %1;", _actionID]];
     
-    [_clone, [], 2] call DMORBAT_fnc_prepareUnit;
+    [_clone, [], 2] call DAKKA_fnc_prepareUnit;
 };
 
-diag_log format ["DMORBAT: %1 is now unstuck", _target]; 
+diag_log format ["DAKKA: %1 is now unstuck", _target]; 
 
 true

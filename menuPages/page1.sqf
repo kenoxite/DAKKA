@@ -5,16 +5,16 @@
 #define CURRENTPAGE 1
 
 // Intro camera
-[] spawn DMORBAT_fnc_cameraIntro;
+[] spawn DAKKA_fnc_cameraIntro;
 
 disableSerialization;
 
 cutText ["", "BLACK IN", 999];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
-DMORBAT_lastPage = CURRENTPAGE;
+DAKKA_lastPage = CURRENTPAGE;
 
-DMORBAT_automated = false;
+DAKKA_automated = false;
 
 // Hide saved data menus
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
@@ -38,7 +38,7 @@ _ctrl ctrlEnable false;
 
 // Main Title
 _ctrl = (_display displayCtrl IDC_MM_TITLE);
-_ctrl ctrlSetText "DYNAMIC\nORBAT\nMISSION";
+_ctrl ctrlSetText "DAKKA\nDownright\nAwesome Kit\nfor Arma";
 // _ctrl = (_display displayCtrl IDC_MM_TITLE_1);
 // _ctrl ctrlSetStructuredText parseText "<t size='2.8' align='center' valign='middle'>DYNAMIC</t>";
 // _ctrl = (_display displayCtrl IDC_MM_TITLE_2);
@@ -49,32 +49,32 @@ _ctrl ctrlSetText "DYNAMIC\nORBAT\nMISSION";
 // Task Title xlistbox
 _ctrl = (_display displayCtrl IDC_XLISTBOX_TITLE);
 lbClear _ctrl;
-for [{private _i = 0}, {_i < count DMORBAT_TasksArr}, {_i = _i + 1}] do
+for [{private _i = 0}, {_i < count DAKKA_TasksArr}, {_i = _i + 1}] do
 {
-	_ctrl lbAdd toUpper (call compile format ["DMORBAT_Task%1_Title", _i + 1]);
+	_ctrl lbAdd toUpper (call compile format ["DAKKA_Task%1_Title", _i + 1]);
 };
-_ctrl lbSetCurSel (DMORBAT_Task - 1);
-_ctrl ctrlSetEventHandler ["LBSelChanged", ' [IDC_XLISTBOX_TITLE, _this select 1] call DMORBAT_fnc_TaskSelectionCombo_selChanged; '];
+_ctrl lbSetCurSel (DAKKA_Task - 1);
+_ctrl ctrlSetEventHandler ["LBSelChanged", ' [IDC_XLISTBOX_TITLE, _this select 1] call DAKKA_fnc_TaskSelectionCombo_selChanged; '];
 ctrlSetFocus _ctrl;
 
 // Task info
-call DMORBAT_fnc_displayTaskInfo;
+call DAKKA_fnc_displayTaskInfo;
 
 
 // FACTION LISTS
 // Player factions
 _ctrl = (_display displayCtrl IDC_COMBO_FACTIONS_PLAYER);
-[IDC_COMBO_FACTIONS_PLAYER, true] call DMORBAT_fnc_updateFactionCombo;
-_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS_PLAYER, _this select 1, true, false] call DMORBAT_fnc_ComboFactions_selChanged;'];
+[IDC_COMBO_FACTIONS_PLAYER, true] call DAKKA_fnc_updateFactionCombo;
+_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS_PLAYER, _this select 1, true, false] call DAKKA_fnc_ComboFactions_selChanged;'];
 // Enemy factions
 _ctrl = (_display displayCtrl IDC_COMBO_FACTIONS_ENEMY);
-[IDC_COMBO_FACTIONS_ENEMY, false] call DMORBAT_fnc_updateFactionCombo;
-_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS_ENEMY, _this select 1, false, false] call DMORBAT_fnc_ComboFactions_selChanged;'];
+[IDC_COMBO_FACTIONS_ENEMY, false] call DAKKA_fnc_updateFactionCombo;
+_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_FACTIONS_ENEMY, _this select 1, false, false] call DAKKA_fnc_ComboFactions_selChanged;'];
 
 // Buttons
 _ctrl = (_display displayCtrl IDC_BT_GROUP_SEL);
 _ctrl ctrlSetText "CUSTOMIZE >>";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, true] call DMORBAT_fnc_buttonChangePage; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, true] call DAKKA_fnc_buttonChangePage; '];
 _ctrl ctrlSetTooltip "Choose the groups, locations, support available and time and weather settings to be used for the selected task";
 
 _ctrl = (_display displayCtrl IDC_BT_PLAYNOW);
@@ -130,7 +130,7 @@ _ctrl ctrlShow true;
 // 	],
 // 	[],
 // 	[]
-// ] call DMORBAT_fnc_showMainMenu;
+// ] call DAKKA_fnc_showMainMenu;
 
 
 // // DIALOG POSITIONS

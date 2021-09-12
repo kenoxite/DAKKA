@@ -27,17 +27,17 @@ if (_index == 0) then { _tooltip = format ["GROUP LEADER\n%1", _tooltip] };
 
 // Player and crew slot check
 if (_checkPlayer) then {
-  _isPlayer = [_index] call DMORBAT_fnc_checkIfSelIsPlayer;
+  _isPlayer = [_index] call DAKKA_fnc_checkIfSelIsPlayer;
 } else {
   _isPlayer = false;
 };
-_isMan = [_unitClass] call DMORBAT_fnc_isMan;
+_isMan = [_unitClass] call DAKKA_fnc_isMan;
 _crewRole = "";
 if (!_isMan && _isPlayer) then {
-    _taskData = DMORBAT_TaskData select (DMORBAT_Task - 1);
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
     _playerData = [_taskData, "Player data"] call BIS_fnc_getFromPairs;
     _playerCrewIndex = _playerData select 1;
-    _crewRole = format ["(%1) ", DMORBAT_crewSlotRoles select _playerCrewIndex];
+    _crewRole = format ["(%1) ", DAKKA_crewSlotRoles select _playerCrewIndex];
 };
 if (_isPlayer) then {
   _tooltip = format ["PLAYER %1\n%2", _crewRole, _tooltip];
@@ -67,7 +67,7 @@ if (_i > 0) then {
 };
 
 // Skill and presence
-_skillTxt = toUpper (DMORBAT_skillLevels select _skill);
+_skillTxt = toUpper (DAKKA_skillLevels select _skill);
 _tooltip = format ["%1%2%3 presence\nSkill %4", _tooltip, _presence * 100, "%", _skillTxt];
 
 // Loadout

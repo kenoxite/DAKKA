@@ -16,7 +16,7 @@
 */
 
 params [["_groupsType", []], ["_faction", ""]];
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - _groupsType: %1", _groupsType] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - _groupsType: %1", _groupsType] };
 
 if (count _groupsType == 0) exitWith { [] };
 
@@ -25,8 +25,8 @@ private _isRegular = if !(_groupsType == "SF") then { true } else { false };
 
 // [_squadLeaders, _teamLeaders, _riflemen, _riflemenAT, _riflemenHAT, _riflemenAA, _grenadiers, _autoriflemen, _medics, _marksmen, _officers, _drivers, _crewmen, _snipers, _spotters, _JTACs, _engineers, _explosiveSpecialists, _heavyGunners, _pilots]
 private _catInf = [];
-if (isNil (call compile format ["'DMORBAT_%1_%2'", _groupsType, _faction])) then {
-    private _factionInfantry = [_faction, "Infantry"] call DMORBAT_fnc_categorizeUnits;
+if (isNil (call compile format ["'DAKKA_%1_%2'", _groupsType, _faction])) then {
+    private _factionInfantry = [_faction, "Infantry"] call DAKKA_fnc_categorizeUnits;
     private _infGroups = [];
     {
         private _grps = _x select 1;
@@ -37,10 +37,10 @@ if (isNil (call compile format ["'DMORBAT_%1_%2'", _groupsType, _faction])) then
 
     if (count _infGroups == 0) exitWith { [] };
 
-    _catInf = [_infGroups, _isRegular] call DMORBAT_fnc_categorizeInf;
-    missionNamespace setVariable [format ["DMORBAT_%1_%2", _groupsType, _faction], _catInf];
+    _catInf = [_infGroups, _isRegular] call DAKKA_fnc_categorizeInf;
+    missionNamespace setVariable [format ["DAKKA_%1_%2", _groupsType, _faction], _catInf];
 } else {
-    _catInf = call compile format ["DMORBAT_%1_%2", _groupsType, _faction];
+    _catInf = call compile format ["DAKKA_%1_%2", _groupsType, _faction];
 };
 
 if (count _catInf == 0) exitWith { [] };
@@ -200,8 +200,8 @@ if (_isRegular) then {
 };
 
 // Add to infantry groups array
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - %2 squad: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - %2 squad: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 // -------------------------------------------------------------------------------------
@@ -299,8 +299,8 @@ if (_isRegular) then {
 };
 
 // Add to infantry groups array
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - %2 fire team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - %2 fire team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 // -------------------------------------------------------------------------------------
@@ -333,8 +333,8 @@ if (_isRegular) then {
 };
 
 // Add to infantry groups array
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - %2 sentry: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - %2 sentry: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 // -------------------------------------------------------------------------------------
@@ -371,8 +371,8 @@ if (count _medics > 0) then {
 _group pushBack (selectRandom _riflemen);
 
 // Add to infantry groups array
-if (DMORBAT_debug) then {  format ["DMORBAT: createCustomInfGroups - %2 patrol team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then {  format ["DAKKA: createCustomInfGroups - %2 patrol team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 // -------------------------------------------------------------------------------------
@@ -418,8 +418,8 @@ if (count _riflemenHAT > 0) then {
 _group pushBack (selectRandom _riflemen);
 
 // Add to infantry groups array
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - %2 team AT: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - %2 team AT: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 // -------------------------------------------------------------------------------------
@@ -457,8 +457,8 @@ if (count _riflemenAA > 0) then {
 _group pushBack (selectRandom _riflemen);
 
 // Add to infantry groups array
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - %2 team AA: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - %2 team AA: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 // -------------------------------------------------------------------------------------
@@ -487,8 +487,8 @@ if (count _spotters > 0) then {
 };
 
 // Add to infantry groups array
-if (DMORBAT_debug) then { diag_log format ["DMORBAT: createCustomInfGroups - %2 sniper team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
-private _roles = [_group] call DMORBAT_fnc_groupRoles;
+if (DAKKA_debug) then { diag_log format ["DAKKA: createCustomInfGroups - %2 sniper team: %1", _group, if (_isRegular) then { "" } else { "SF" }] };
+private _roles = [_group] call DAKKA_fnc_groupRoles;
 _customGroups pushBack [_group, _roles];
 
 _customGroups

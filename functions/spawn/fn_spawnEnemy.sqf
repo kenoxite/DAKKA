@@ -57,7 +57,7 @@ while {true} do {
     // _unit setskill (random 0.5);
     // _unit allowfleeing 0;
     _unit setvehicleammo (0.5 + random 0.5);
-    [_unit, _unitLoadout, _unitSkill] call DMORBAT_fnc_prepareUnit;
+    [_unit, _unitLoadout, _unitSkill] call DAKKA_fnc_prepareUnit;
     if (random 1 > 0.5) then {_unit setunitpos "up"} else {_unit setunitpos "middle"};
     [_player,"BIS_spawnedEnemies",[_unit]] call bis_fnc_variablespaceadd;
     _wp setwaypointposition [position _player,0];

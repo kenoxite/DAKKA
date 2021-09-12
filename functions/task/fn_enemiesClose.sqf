@@ -22,7 +22,7 @@ private _enemy = (leader _grp) findNearestEnemy (getPos leader _grp);
 if (!isNull _enemy) then { 
   if (((vehicle leader _grp) distance (vehicle _enemy)) <= _dist) then { 
     _return = true; 
-    diag_log format ["DMORBAT: Enemies too close to %1!", _grp];  
+    diag_log format ["DAKKA: Enemies too close to %1!", _grp];  
   }; 
 }; 
 
