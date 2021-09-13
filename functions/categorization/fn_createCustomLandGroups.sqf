@@ -72,27 +72,48 @@ if (isNil (call compile format ["'DAKKA_%1_%2'", "Infantry", _faction])) then {
 if (isNil "_catInf") exitWith { diag_log format ["DAKKA: createCustomLandGroups --- ERROR --- No custom infantry groups found. Custom land groups won't be created for faction %1", _faction]; [] };
 // if (count _catInf == 0) exitWith { diag_log format ["DAKKA: createCustomLandGroups --- ERROR --- No custom infantry groups found. Custom land groups won't be created for faction %1", _faction]; [] };
 
+private _squadLeaders = [];
+private _teamLeaders = [];
+private _riflemen = [];
+private _riflemenAT = [];
+private _riflemenHAT = [];
+private _riflemenAA = [];
+private _grenadiers = [];
+private _autoriflemen = [];
+private _medics = [];
+private _marksmen = [];
+private _officers = [];
+private _drivers = [];
+private _crewmen = [];
+private _snipers = [];
+private _spotters = [];
+private _JTACs = [];
+private _engineers = [];
+private _explosiveSpecialists = [];
+private _heavyGunners = [];
+private _pilots = [];
+
 if (count _catInf > 0) then {
-    private _squadLeaders = _catInf select 0;
-    private _teamLeaders = _catInf select 1;
-    private _riflemen = _catInf select 2;
-    private _riflemenAT = _catInf select 3;
-    private _riflemenHAT = _catInf select 4;
-    private _riflemenAA = _catInf select 5;
-    private _grenadiers = _catInf select 6;
-    private _autoriflemen = _catInf select 7;
-    private _medics = _catInf select 8;
-    private _marksmen = _catInf select 9;
-    private _officers = _catInf select 10;
-    private _drivers = _catInf select 11;
-    private _crewmen = _catInf select 12;
-    private _snipers = _catInf select 13;
-    private _spotters = _catInf select 14;
-    private _JTACs = _catInf select 15;
-    private _engineers = _catInf select 16;
-    private _explosiveSpecialists = _catInf select 17;
-    private _heavyGunners = _catInf select 18;
-    private _pilots = _catInf select 19;
+    _squadLeaders = _catInf select 0;
+    _teamLeaders = _catInf select 1;
+    _riflemen = _catInf select 2;
+    _riflemenAT = _catInf select 3;
+    _riflemenHAT = _catInf select 4;
+    _riflemenAA = _catInf select 5;
+    _grenadiers = _catInf select 6;
+    _autoriflemen = _catInf select 7;
+    _medics = _catInf select 8;
+    _marksmen = _catInf select 9;
+    _officers = _catInf select 10;
+    _drivers = _catInf select 11;
+    _crewmen = _catInf select 12;
+    _snipers = _catInf select 13;
+    _spotters = _catInf select 14;
+    _JTACs = _catInf select 15;
+    _engineers = _catInf select 16;
+    _explosiveSpecialists = _catInf select 17;
+    _heavyGunners = _catInf select 18;
+    _pilots = _catInf select 19;
 };
 
 // Categorize all the land vehicles

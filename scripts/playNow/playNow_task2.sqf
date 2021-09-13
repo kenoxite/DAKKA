@@ -129,12 +129,12 @@ if (DAKKA_debug) then { diag_log format ["DAKKA: player group leader: %1, editor
 
 // -------------------------------------------------------------------------------------
 // SUPPORT
+_selectedArtyGroup = [];
 if (_playerGroupType == "Infantry") then {
     _txt = "Generating support options...";
     _ctrl ctrlSetText _txt; 
     diag_log format ["DAKKA: Play Now - %1", _txt];
     // Artillery
-    _selectedArtyGroup = [];
     if (count _artilleryGroups > 0) then {
         // If there's artillery groups select one randomly
         _selectedArtyGroup = selectRandom (_artilleryGroups select 0);
@@ -200,8 +200,8 @@ if (_playerGroupType == "Infantry" && count _infGroups > 0) then {
 
 // LAND
 // Armor
+_eligibleArmor = [];
 if (count _armorGroups > 0) then {
-    _eligibleArmor = [];
     if (DAKKA_debug) then { diag_log format ["DAKKA: _armorGroups friendly: %1", _armorGroups] };
     _eligibleArmor = [_armorGroups] call DAKKA_fnc_filterArmorGroups;
     if (count _eligibleArmor > 0) then {
@@ -353,8 +353,8 @@ if (count _infGroups > 0 && _playerGroupType == "Infantry") then {
 
 // LAND
 // Armor
+_eligibleArmor = [];
 if (count _armorGroups > 0) then {
-    _eligibleArmor = [];
     _eligibleArmor = [_armorGroups] call DAKKA_fnc_filterArmorGroups;
     if (count _eligibleArmor > 0) then {
         _amount = if (_playerGroupType == "Armor") then { 5 } else { 1 };
