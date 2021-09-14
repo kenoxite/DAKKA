@@ -142,6 +142,9 @@ DAKKA_playerGroupReady = false;
 DAKKA_loadedSavegame = false;
 DAKKA_martaHide = [];
 DAKKA_noNightAuto = false;
+    
+// 3rd party global vars
+if (isNil "Vile_HUD_HIDDEN") then { Vile_HUD_HIDDEN = false };
 
 // TASK SETUP
 DAKKA_TasksArr = [1, 2];

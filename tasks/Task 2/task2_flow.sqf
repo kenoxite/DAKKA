@@ -25,7 +25,7 @@ _task_2_checks = [] spawn {
 
     // Functions
     _fnc_showTimer = {
-        if (DAKKA_cinematics) exitWith { false };
+        if (DAKKA_cinematics || Vile_HUD_HIDDEN) exitWith { false };
         _ctrl = _display displayCtrl IDC_TXT_TASK2_COUNTER_AREAHOLDER;
         _ctrl ctrlSetText "Area holder:";
         _ctrl ctrlSetBackgroundColor [0,0,0,0.5];
