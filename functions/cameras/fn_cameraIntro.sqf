@@ -34,7 +34,8 @@ if (count _target == 0) then {
         };
     };
     // _pos = [(random 500) + (random (worldSize)), (random 500) + (random (worldsize)), 30];
-    _pos = [_target, 100 + (random 5000), random 360] call BIS_fnc_relPos;
+    // _pos = [_target, 100 + (random 5000), random 360] call BIS_fnc_relPos;
+    _pos = _target getPos [100 + (random 5000), random 360];
     if (surfaceIsWater _pos) then {
         _landPos = [_pos, 0, 2000,  0, 0] call BIS_fnc_findSafePos;
         if (count _landPos == 2) then {
@@ -42,7 +43,8 @@ if (count _target == 0) then {
         };
     };
 } else {
-    _pos = [_target, 800, random 360] call BIS_fnc_relPos;
+    // _pos = [_target, 800, random 360] call BIS_fnc_relPos;
+    _pos = _target getPos [800, random 360];
     // Make a copy so modifying the passed position doesn't modify the original (which in this case is the global variable for the task location)
     _target = +_target;
 };

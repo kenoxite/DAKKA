@@ -27,7 +27,7 @@ if (count _savedData > 1) then {
 
     // Update profiles combo
     _ctrl = (_display displayCtrl IDC_COMBO_SAVEDDATAPROFILES);
-    [IDC_COMBO_SAVEDDATAPROFILES] call DAKKA_fnc_updateSavedDataCombo;
+    [IDC_COMBO_SAVEDDATAPROFILES] call DAKKA_fnc_updateProfilesCombo;
     _ctrl lbSetCurSel ((count _savedData) - 1);
 
     // Close profiles menu

@@ -20,9 +20,13 @@
 params [["_index", -1], ["_end", false]];
 private ["_pos", "_display", "_ctrl", "_cameraPos", "_cameraDir", "_cameraFOV", "_cameraRelX", "_cameraRelY", "_cameraRelZ", "_cameraHeight", "_cameraTarget" , "_circlingPos", "_circlingDistance", "_cameraRadius", "_cameraHeightCircle", "_indexCat", "_locPrevObj", "_taskData", "_worldLocationsData", "_locationsData"];
 // systemChat format ["DMBORBAT: locationPreview _index: %1", _index];
+
+if (typeName _index != "NUMBER") exitWith { false };
+
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
 call DAKKA_fnc_cameraPreviewTerminate;
+waitUntil {DAKKA_cameraPreviewTerminateDone};
 
 if (_end) then {
 
@@ -127,7 +131,7 @@ if (_end) then {
 
 
   // systemChat format ["DAKKA: locationPreview _pos: %1", _pos];
-  _cameraPos = [_pos, 100, 180] call BIS_fnc_relPos;
+  _cameraPos = _pos getPos [100, 180];
   _cameraDir = 180;
   _cameraFOV = 0.7;
   _cameraRelX = 0;
@@ -150,5 +154,3 @@ if (_end) then {
   // [_cameraPos, _cameraDir, _cameraFOV, _cameraRelX, _cameraRelY, _cameraRelZ, _cameraHeight] spawn DAKKA_fnc_cameraPreviewStatic;
   [_circlingPos, _cameraRadius, _cameraHeightCircle, 0.2] spawn DAKKA_fnc_cameraPreviewCircle;
 };
-
-true

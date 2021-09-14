@@ -30,7 +30,7 @@ for [{private _i = 0}, {_i < _nodesAmount}, {_i = _i + 1}] do
   private ["_wp", "_newPos"]; 
     private _nodeDist = _maxDist + ((random _maxDist) max (_maxDist / 2));
     private _newDir = _dir + (_angle * _i);
-    _newPos = [_pos, _nodeDist, _newDir] call BIS_fnc_relPos;
+    _newPos = _pos getPos [_nodeDist, _newDir];
     if ((!_isMan && !_isAir) || (!_isAir && surfaceIsWater _newPos)) then {
         _newPos = [_newPos, 50, _maxDist, 5, 0, 0.5, 0, _blacklist] call BIS_fnc_findSafePos;
     };

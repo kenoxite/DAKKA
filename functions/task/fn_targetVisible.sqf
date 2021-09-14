@@ -28,7 +28,7 @@ if (_targetArea > 0) then {
     private _dir = 0;
     for [{private _i = 0}, {_i < 8}, {_i = _i + 1}] do
     {
-        _newTargetElement = [_centralPos, _targetArea / 2, _dir] call BIS_fnc_relPos;
+        _newTargetElement = _centralPos getPos [_targetArea / 2, _dir];
         _newTargetElement vectorAdd [0, 0, 1.7];
         _targetAreaElements pushBack _newTargetElement;
         // _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", format ["_newTargetElement_%1", _i], _newTargetElement, "mil_dot", "ICON", [1, 1], 0, "Solid", "ColorWEST", 1, ""] call BIS_fnc_stringToMarker;

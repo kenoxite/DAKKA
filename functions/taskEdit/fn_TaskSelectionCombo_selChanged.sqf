@@ -26,20 +26,18 @@ _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = _display displayCtrl _idc;
 
 // Destroy cameras when closing menu
+if (DAKKA_debug) then { diag_log format ["DAKKA: TaskSelectionCombo_selChanged - Terminating preview camera..."] };
 call DAKKA_fnc_cameraPreviewTerminate;
+waitUntil {DAKKA_cameraPreviewTerminateDone};
 call DAKKA_fnc_previewGroupDelete;
 // Delete location markers and things
 _ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
 _ctrl lbSetCurSel -1;
 DAKKA_locationPreview = [];
 [true] call DAKKA_fnc_compositionRemove;
+waitUntil {DAKKA_compositionsRemoved};
 call DAKKA_fnc_deleteTaskMarkers;
-call DAKKA_fnc_deleteCompositionMarkers;
-// Delete wheelchocks
-{
-  deleteVehicle _x;
-} forEach DAKKA_wheelChock;
-DAKKA_wheelChock = []; 
+call DAKKA_fnc_deleteCompositionMarkers; 
 
 // Update task var
 DAKKA_Task = (_this select 1) + 1;

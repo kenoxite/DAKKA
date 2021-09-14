@@ -326,7 +326,7 @@ _task_1_checks = [] spawn {
 			DAKKA_officer sideRadio "SentGenComplete"; 
 			DAKKA_officer sideRadio "SentGenCmdRTB";   
 			_exfilDistance = 500;
-			_exfilPos = [position vehicle leader DAKKA_PlayerNewGroup, _exfilDistance + 200, random 360] call BIS_fnc_relPos;
+			_exfilPos = (position vehicle leader DAKKA_PlayerNewGroup) getPos [_exfilDistance + 200, random 360];
 			["DAKKA_Task1_End", _exfilPos] call BIS_fnc_taskSetDestination;          
 			[DAKKA_task1_locPos, [_exfilDistance, _exfilDistance], "ColorRed", "empty", "Border", "RECTANGLE", 1, ["DAKKA_taskBoundaries"]] call BIS_fnc_markerCreate;          
 			deleteMarker "DAKKA_mrkr_Task1_searchArea";    

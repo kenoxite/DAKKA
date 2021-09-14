@@ -21,9 +21,21 @@ DAKKA_mainMenu_loop = [] spawn {
         if (!dialog) then {
             if (DAKKA_mainDialogOpened) then {
                 // Destroy cameras when closing menu
+                if (DAKKA_debug) then { diag_log format ["DAKKA: menuCheck - Terminating preview camera..."] };
                 call DAKKA_fnc_cameraPreviewTerminate;
+                waitUntil {DAKKA_cameraPreviewTerminateDone};
                 call DAKKA_fnc_cameraIntroTerminate;
                 call DAKKA_fnc_previewGroupDelete;
+    
+                // Delete wheelchocks
+                private _wheelChocks = +DAKKA_wheelChockArr;
+                private _wheelChocksDel = [];
+                {
+                    deleteVehicle _x;
+                    _wheelChocksDel pushBackUnique _x;
+                } forEach _wheelChocks;
+                DAKKA_wheelChockArr = DAKKA_wheelChockArr - _wheelChocksDel;
+
                 DAKKA_mainDialogOpened = false;
                 DAKKA_selectedLocMrkr = "";
                 _ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
@@ -33,11 +45,8 @@ DAKKA_mainMenu_loop = [] spawn {
                 call DAKKA_fnc_deleteTaskMarkers;
                 call DAKKA_fnc_deleteCompositionMarkers;
                 [true] call DAKKA_fnc_compositionRemove;
-                // Delete wheelchocks
-                {
-                  deleteVehicle _x;
-                } forEach DAKKA_wheelChock;
-                DAKKA_wheelChock = []; 
+                waitUntil {DAKKA_compositionsRemoved};
+
                 // Restore visuals and sound
                 setDate DAKKA_missionStart;
                [DAKKA_missionWeather, false] spawn DAKKA_fnc_setWeather;
@@ -49,7 +58,7 @@ DAKKA_mainMenu_loop = [] spawn {
         } else {
             if (DAKKA_mainDialogOpened) then {
                 // Tip displaying control
-                if ((_timer % 30) == 0) then {
+                if ((_timer % 15) == 0) then {
                     // Show tips
                     if(!_tipShown) then {
                         _ctrl = _display displayCtrl IDC_TXT_TIPS;

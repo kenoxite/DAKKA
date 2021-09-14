@@ -11,6 +11,12 @@ cutText ["", "BLACK IN", 999];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 DAKKA_lastPage = CURRENTPAGE;
 
+// TIPS
+_ctrl = (_display displayCtrl IDC_TXT_TIPS);
+_ctrl ctrlShow true;
+_ctrl = (_display displayCtrl IDC_TXT_MESSAGEBOX);
+_ctrl ctrlShow true;
+
 // Fill current saved data menu
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
 _ctrl ctrlShow true;
@@ -38,8 +44,8 @@ _ctrl ctrlSetText "Saved data profiles:";
 _ctrl ctrlEnable false;
 
 _ctrl = (_display displayCtrl IDC_COMBO_SAVEDDATAPROFILES);
-[IDC_COMBO_SAVEDDATAPROFILES] call DAKKA_fnc_updateSavedDataCombo;
-_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_SAVEDDATAPROFILES, _this select 1] call DAKKA_fnc_ComboSavedData_selChanged;'];
+[IDC_COMBO_SAVEDDATAPROFILES] call DAKKA_fnc_updateProfilesCombo;
+_ctrl ctrlSetEventHandler ["LBSelChanged", '[IDC_COMBO_SAVEDDATAPROFILES, _this select 1] call DAKKA_fnc_ComboProfiles_selChanged;'];
 _ctrl lbSetCurSel (DAKKA_saveSlots select (DAKKA_Task - 1));
 
 _ctrl = (_display displayCtrl IDC_BT_SAVEDDATAPROFILES_NEW);

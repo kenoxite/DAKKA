@@ -28,7 +28,9 @@ if (DAKKA_debug) then { diag_log format ["DAKKA: --- buttonChangePage page:%1 ch
 
 if (_currentPage > 1) then {
   call DAKKA_fnc_previewGroupDelete;
-  call DAKKA_fnc_cameraPreviewTerminate;
+    if (DAKKA_debug) then { diag_log format ["DAKKA: buttonChangePage - Terminating preview camera..."] };
+    call DAKKA_fnc_cameraPreviewTerminate;
+    waitUntil {DAKKA_cameraPreviewTerminateDone};
   // Remove EH to avoid carrying wrong data to next page
   _ctrl = _display displayCtrl IDC_TREE_FACTION_UNITS;
   _ctrl ctrlSetEventHandler ["TreeSelChanged", ''];
@@ -64,12 +66,12 @@ _arr = [
     [ // Page 1 - Main menu
       [], //move
       [IDC_GRP_MAINMENU, IDC_BACKG_TASK, IDC_GRP_BACKG_MAIN], // hide (next)/ show (back)
-      [IDC_BT_PREVIEW, IDC_GRP_LEFTBAR_BCKG, IDC_GRP_BOTTOMBAR_BCKG, IDC_GRP_FACTION_GROUPS, IDC_GRP_TASK_GROUPS, IDC_GRP_TASK_DESCRIPTION, IDC_GRP_NAV_BUTTONS, IDC_GRP_CAMERA_PREVIEW] // show (next) / hide (back)
+      [IDC_BT_PREVIEW, IDC_GRP_LEFTBAR_BCKG, IDC_GRP_BOTTOMBAR_BCKG, IDC_GRP_FACTION_GROUPS, IDC_GRP_TASK_GROUPS, IDC_GRP_TASK_DESCRIPTION, IDC_GRP_NAV_BUTTONS, IDC_GRP_CAMERA_PREVIEW, IDC_TXT_TIPS] // show (next) / hide (back)
     ],
 
     [ // Page 2 - Player group
       [],
-      [IDC_BT_PREVIEW, IDC_GRP_LEFTBAR_BCKG, IDC_GRP_BOTTOMBAR_BCKG, IDC_GRP_FACTION_GROUPS, IDC_GRP_TASK_GROUPS, IDC_GRP_TASK_DESCRIPTION, IDC_GRP_NAV_BUTTONS, IDC_GRP_CAMERA_PREVIEW],
+      [IDC_BT_PREVIEW, IDC_GRP_LEFTBAR_BCKG, IDC_GRP_BOTTOMBAR_BCKG, IDC_GRP_FACTION_GROUPS, IDC_GRP_TASK_GROUPS, IDC_GRP_TASK_DESCRIPTION, IDC_GRP_NAV_BUTTONS, IDC_GRP_CAMERA_PREVIEW, IDC_TXT_TIPS],
       [IDC_GRP_MAINMENU, IDC_BACKG_TASK, IDC_GRP_BACKG_MAIN]
     ],
 

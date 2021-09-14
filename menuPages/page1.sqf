@@ -15,6 +15,7 @@ _display = findDisplay IDC_MENU_MISSION_EDIT;
 DAKKA_lastPage = CURRENTPAGE;
 
 DAKKA_automated = false;
+DAKKA_loadCompositions = true;
 
 // Hide saved data menus
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
@@ -31,8 +32,10 @@ _ctrl ctrlShow false;
 // TIPS
 _ctrl = (_display displayCtrl IDC_TXT_TIPS);
 _ctrl ctrlEnable false;
+_ctrl ctrlShow false;
 _ctrl = (_display displayCtrl IDC_TXT_MESSAGEBOX);
 _ctrl ctrlEnable false;
+_ctrl ctrlShow false;
 
 // SET TASKS
 
@@ -90,11 +93,11 @@ _ctrl = (_display displayCtrl IDC_MM_PROCESS_DESC);
 _ctrl ctrlSetText format ["Welcome, %1!
 
 1. Choose a TASK from the available ones
-    above.
+    above by clicking the side arrows.
 2. Choose the FACTIONS for you and the enemy.
 3. Click one of these buttons:
-    • EDIT to choose GROUPS and LOCATIONS to
-      use in the mission.
+    • CUSTOMIZE to choose groups, locations
+      and more to use in the selected task.
     • PLAY NOW to use randomized groups and
       locations.
 ", profileName];

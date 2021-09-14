@@ -21,8 +21,10 @@ params ["_baseTarget", ["_cameraAngle", "top"], ["_camDist", 20]];
 private ["_camera", "_display", "_ctrl", "_targetPos", "_targetDir", "_target", "_angle", "_coords"];
 _angle = 180;
 showcinemaborder false; 
+if (DAKKA_debug) then { diag_log format ["DAKKA: cameraEdit - Terminating preview camera..."] };
 call DAKKA_fnc_cameraPreviewTerminate;
-waitUntil { isNull DAKKA_previewCamera };
+// waitUntil { isNull DAKKA_previewCamera };
+waitUntil { DAKKA_cameraPreviewTerminateDone };
 // Disable ambient fauna
 enableEnvironment [false, true];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
@@ -41,7 +43,8 @@ _camera cameraEffect ["INTERNAL", "BACK"];
 switch (_cameraAngle) do {
 	case "high": {
 		// _camera camPrepareRelPos [0, 20, 20];
-		_coords = [_target, _camDist * 2, _angle] call BIS_fnc_relPos;
+		// _coords = [_target, _camDist * 2, _angle] call BIS_fnc_relPos;
+        _coords = _target getPos [_camDist * 2, _angle];
 		_coords set [2, _camDist];
 		_camera camPreparePos _coords;
 	};
@@ -73,7 +76,8 @@ while { DAKKA_previewCameraPlaying && !isNull _camera } do {
 				// _camera camPrepareRelPos [0 - ((DAKKA_cameraX * 10)), 20, 20 - (DAKKA_cameraY * 10)];
 				_target setDir _targetDir;
 				_target setPos _targetPos;
-				_coords = [_target, _camDist * 2, _angle] call BIS_fnc_relPos;
+				// _coords = [_target, _camDist * 2, _angle] call BIS_fnc_relPos;
+                _coords = _target getPos [_camDist * 2, _angle];
 				_coords set [2, _camDist - (DAKKA_cameraY * 30)];
 				_camera camPreparePos _coords;
 				_camera camPrepareFOV DAKKA_cameraZoom;

@@ -99,11 +99,11 @@ _nul = _this spawn {
             // _pos = [_supportLocation, _minRange, _maxRange, 50, 0, 0.2, 0, _blacklist] call BIS_fnc_findSafePos;
             // Spawn support unit leader
             // _grp = [_x select 1, _pos, west, _spawnRadius, _fly] call DAKKA_fnc_spawnGroup;
-            _pos = [_supportLocation, _maxRange, random 360] call BIS_fnc_relPos;
+            _pos = _supportLocation getPos [_maxRange, random 360];
             private _i = 0;
             while { (surfaceIsWater _pos || (getTerrainHeightASL _pos) < 0.5)  && _i < 30} do {
                 diag_log format ["DAKKA: --- WARNING --- %1: Position for support group ""%2"" is over water. Trying again.", _i, _supportType];
-                _pos = [_supportLocation, (_maxRange / 2) + (random (_maxRange / 2)), random 360] call BIS_fnc_relPos;
+                _pos = _supportLocation getPos [(_maxRange / 2) + (random (_maxRange / 2)), random 360];
                 _i = _i + 1;
             };
             _grp = [_x select 1, _pos, west, _spawnRadius, _fly] call DAKKA_fnc_spawnGroup;

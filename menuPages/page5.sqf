@@ -20,7 +20,7 @@ _ctrl ctrlShow false;
 
 // Hide maps for the time being (will be shown later)
 cutText ["Preparing AO preview...", "BLACK IN", 999];
-["Please, wait while the placed compositions are being created..."] spawn DAKKA_fnc_displayMessage;
+if (DAKKA_loadCompositions) then { ["Please, wait while the placed compositions are being created..."] spawn DAKKA_fnc_displayMessage };
 _ctrl = (_display displayCtrl IDC_MAP_AO_SEL_T);
 _ctrl ctrlShow false;
 _ctrl = (_display displayCtrl IDC_MAP_AO_SEL_S);
@@ -278,21 +278,27 @@ _ctrl ctrlEnable true;
 	_ctrl ctrlSetTooltip "Places the selected turret at the current map coordinates";
 	_ctrl ctrlEnable false;*/
 
+// Delete compositions
+// [true] call DAKKA_fnc_compositionRemove;
+// waitUntil {DAKKA_compositionsRemoved};
 
 // Load compositions
-call DAKKA_fnc_compositionLoad;
-_nul = [] spawn {
-    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
-    _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
-    _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
-    if (!isNil "_compositionsData") then {
-        waitUntil { DAKKA_compositionsLoaded == count _compositionsData };
-        if (DAKKA_compositionsLoaded > 0) then {
-            ["Placed compositions have been created"] spawn DAKKA_fnc_displayMessage;
-        } else {
-            [""] spawn DAKKA_fnc_displayMessage;
+if (DAKKA_loadCompositions) then {
+    call DAKKA_fnc_compositionLoad;
+    _nul = [] spawn {
+        _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
+        _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+        _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
+        if (!isNil "_compositionsData") then {
+            waitUntil { DAKKA_compositionsLoaded == count _compositionsData };
+            if (DAKKA_compositionsLoaded > 0) then {
+                ["Placed compositions have been created"] spawn DAKKA_fnc_displayMessage;
+            } else {
+                [""] spawn DAKKA_fnc_displayMessage;
+            };
         };
     };
+    DAKKA_loadCompositions = false;
 };
 
 cutText ["", "BLACK IN", 2];

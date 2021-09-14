@@ -20,6 +20,9 @@
 params [["_all", false]];
 private ["_display", "_ctrl", "_selectionPath", "_taskData", "_worldCompositionsData", "_compositionsData", "_index", "_thisCompositionData", "_compObjects", "_obj", "_itemPos", "_hiddenObjects", "_hideDist", "_mrkr", "_txt", "_ref", "_pos", "_dir", "_compsToDelete"];
 
+DAKKA_compositionsRemoved = false;
+diag_log format ["DAKKA: compositionRemove - Deleting %1 compositions...", if (_all) then {"all"} else {"some"}];
+
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl IDC_TREE_GRP1);
 _selectionPath = tvCurSel _ctrl;
@@ -64,20 +67,26 @@ if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove _compsToDelet
 
     // Now delete the rest
     {
+        if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove deleting object: %1", _x select 0] };
     	deleteVehicle (_x select 0);
-    	if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove deleting object: %1", _x select 0] };
     } forEach _compObjects;
 
     // Show hidden terrain objects
-    {
-      _x hideObject false;
-    } forEach _hiddenObjects;
+    if (!isNil "_hiddenObjects") then {
+        {
+          _x hideObject false;
+        } forEach _hiddenObjects;
+    };
 } forEach _compsToDelete;
 
-// Delete composition array
-if (!_all) then {
-    _compositionsData deleteAt _index;
+// Allow loading compositions next time
+if (_all) then {
+    DAKKA_loadCompositions = true;
 };
+
+{
+    _compositionsData deleteAt _x;
+} forEach _compsToDelete;
 
 [IDC_TREE_GRP1] call DAKKA_fnc_updatePlacedCompositionsTreeList;
 
@@ -89,6 +98,8 @@ if (!DAKKA_automated) then {
     call DAKKA_fnc_settingsSave;
 };
 
-diag_log format ["DAKKA: compositionRemove - Compositions deleted!"];
+diag_log format ["DAKKA: compositionRemove - %1 compositions deleted!", if (_all) then {"All"} else {"Some"}];
+
+DAKKA_compositionsRemoved = true;
 
 true

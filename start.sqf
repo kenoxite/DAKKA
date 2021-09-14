@@ -6,7 +6,7 @@
 #include "settings_terrain.hpp";
 
 // GLOBAL VARIABLES
-DAKKA_debug = if (is3DEN) then { true } else { false };
+DAKKA_debug = if (is3DENPreview) then { true } else { false };
 
 DAKKA_cinematics = false;
 if (DAKKA_cinematics) then {
@@ -88,7 +88,7 @@ DAKKA_crewSlotRoles = ["Driver", "Commander", "Gunner"];
 DAKKA_customGroupsSelection = [1, [0]];
 
 // Preview area
-DAKKA_wheelChock = [];
+DAKKA_wheelChockArr = [];
 DAKKA_previewGroup = grpNull;
 DAKKA_PreviewGroupName = "";
 DAKKA_PreviewGroupID = "";
@@ -110,6 +110,8 @@ DAKKA_mouseButtonPressed = -1;
 DAKKA_cameraX = 0;
 DAKKA_cameraY = 0;
 
+DAKKA_cameraPreviewTerminateDone = false;
+
 // Locations
 DAKKA_selectedLocMrkr = "";
 DAKKA_mapCoords = [0, 0];
@@ -117,7 +119,9 @@ DAKKA_mapSatellite = false;
 DAKKA_compositionsLoaded = 0;
 
 // Compositions
+DAKKA_loadCompositions = true;
 DAKKA_spawnCompRefs = [];
+DAKKA_compositionsRemoved = false;
 
 // Unit editing
 DAKKA_arsenalOpened = false;
@@ -304,6 +308,8 @@ DAKKA_tips = [
 
 	"A random AO location will be chosen if there's more than one defined.",
 
+    "If you don't define any locations a random one from the default pool will be chosen when you start the task.",
+
 	"You can set attributes for all the group units by selecting them and clicking ATTRIBUTES.",
 
 	"Adding a unit will create a new group unless an existing group is selected, then the unit will be added to that group.",
@@ -314,9 +320,17 @@ DAKKA_tips = [
 
 	"You can rename, delete and create new profiles for each task.",
 
-	"Rename your profiles with appropriate descriptions (such as the name of the factions you are using) so it's easier for you to identify them next time you play the mission.",
+	"Rename your profiles with appropriate descriptions (such as the name of the factions you are using) so it's easier to identify them next time you play the mission.",
 
-    "You can use a spectrum analyzer with an SD jammer antenna to be able to jam signal of enemy drones, stopping them on their tracks!"
+    "You can use a spectrum analyzer with an SD jammer antenna to be able to jam signal of enemy drones, stopping them on their tracks!",
+
+    "Setting a unit or group with the skill ELITE will give them high skills and also will prevent them from fleeing.",
+
+    "You can change the loadout of any unit (even the crew of vehicles!) by clicking the LOADOUT button.",
+
+    "You can zoom in and out the preview area by using the scroll wheel of your mouse.",
+
+    "To START the task you need to create the player group and at least one enemy group."
 ];
 DAKKA_tips call BIS_fnc_arrayShuffle;
 
@@ -495,7 +509,8 @@ DAKKA_draw3D_EH_previewLocation = addMissionEventHandler [
 {
 	{
 		private ["_unitClass", "_rank", "_unit", "_observerPos", "_texture", "_color", "_pos", "_position", "_text", "_width", "_height", "_angle", "_shadow", "_text_size", "_font", "_text_align", "_arrows", "_zoom", "_adjIconSize", "_iconWidth", "_iconHeight", "_adjTextSize", "_textSize"];
-		_observerPos = [getPos _x, 50, 180] call BIS_fnc_relPos;
+		// _observerPos = [getPos _x, 50, 180] call BIS_fnc_relPos;
+        _observerPos = (getPos _x) getPos [50, 180];
 		_texture = "\a3\ui_f\data\igui\cfg\simpletasks\types\default_ca.paa";
 		_color = [1, 1, 1, 1];
 		_position = getPos _x;

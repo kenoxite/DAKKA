@@ -326,7 +326,7 @@ _task_2_checks = [] spawn {
                         _grp setCombatMode "WHITE";
                         _grp setSpeedMode "FULL";
 
-                        private _destination = [DAKKA_task2_locPos, 1000, DAKKA_task2_locDir] call BIS_fnc_relPos;
+                        private _destination = DAKKA_task2_locPos getPos [1000, DAKKA_task2_locDir];
 
                         {
                             private _veh = vehicle _x;

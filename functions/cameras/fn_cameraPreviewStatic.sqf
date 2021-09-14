@@ -21,9 +21,11 @@
 params ["_pos", ["_dir", 180], ["_FOV", 0.7], ["_relX", 0], ["_relY", 0], ["_relZ", 0], ["_height", 0], ["_target", objNull]];
 private ["_camera", "_display", "_ctrl", "_targetPos", "_relDir", "_relPos"];
 showcinemaborder false; 
+if (DAKKA_debug) then { diag_log format ["DAKKA: cameraPreviewStatic - Terminating preview camera..."] };
 call DAKKA_fnc_cameraPreviewTerminate;
-if (DAKKA_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic _FOV: %1", _FOV] };
-waitUntil { isNull DAKKA_previewCamera };
+// waitUntil { isNull DAKKA_previewCamera };
+waitUntil {DAKKA_cameraPreviewTerminateDone};
+if (DAKKA_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic - _FOV: %1", _FOV] };
 // Disable ambient fauna
 enableEnvironment [false, true];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
@@ -33,7 +35,7 @@ DAKKA_cameraZoom = _FOV;
 DAKKA_previewCamera = "camera" camCreate [0, 0, 0];
 _camera = DAKKA_previewCamera;
 DAKKA_previewCameraPlaying = true;
-if (DAKKA_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic _pos: %1", _pos] };
+if (DAKKA_debug) then { diag_log format ["DMBORBAT: camerapreviewstatic - _pos: %1", _pos] };
 
 // private _relX = 0.5;
 // private _relY = 12;

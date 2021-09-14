@@ -24,15 +24,17 @@ _angle = 180; // starting angle
 // _altitude = _altitude; // camera altitude
 _dir = 0; //Direction of camera movement 0: anti - clockwise, 1: clockwise
 // _speed = 0.1; //lower is faster
+if (DAKKA_debug) then { diag_log format ["DAKKA: cameraPreviewCircle - Terminating preview camera..."] };
 call DAKKA_fnc_cameraPreviewTerminate;
 // if (DAKKA_debug) then { diag_log format ["DAKKA: DAKKA_previewCamera:%1", DAKKA_previewCamera] };
-waitUntil { isNull DAKKA_previewCamera };
+// waitUntil { isNull DAKKA_previewCamera };
+waitUntil {DAKKA_cameraPreviewTerminateDone};
 // Disable ambient fauna
 enableEnvironment [false, true];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl IDC_GRP_CAM_CONTROLS);
 _ctrl ctrlShow true;
-_coords = [_target, _radius, _angle] call BIS_fnc_relPos;
+_coords = _target getPos [_radius, _angle];
 _coords set [2, _altitude];
 DAKKA_previewCamera = "camera" camCreate _coords;
 _camera = DAKKA_previewCamera;
@@ -48,7 +50,7 @@ cameraEffectEnableHUD true;
 cutText ["", "BLACK IN", 2];
 
 while { DAKKA_previewCameraPlaying && !isNull _camera } do {
-	_coords = [_target, _radius, _angle] call BIS_fnc_relPos;
+	_coords = _target getPos [_radius, _angle];
 	_coords set [2, _altitude];
 
 	_camera camPreparePos _coords;

@@ -396,7 +396,7 @@ class CfgFunctions
             class updateSkillsCombo {};
             class updateSupportTypesCombo {};
             class updateSelectedSupportGroupsTreeList {};
-            class updateSavedDataCombo {};
+            class updateProfilesCombo {};
             class updateWeatherEffectsCombo {};
 
 			// Controls EH
@@ -412,7 +412,7 @@ class CfgFunctions
 			class TreePlacedCompositions_selChanged {};
             class SupportTypesCombo_selChanged {};
             class TreeSupportUnits_selChanged {};
-            class ComboSavedData_selChanged {};
+            class ComboProfiles_selChanged {};
 
             // Groups
             class addGroupToPlayerGroup {};

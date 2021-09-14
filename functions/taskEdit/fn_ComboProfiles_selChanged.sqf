@@ -18,7 +18,7 @@
 */
 
 params ["_idc", "_selectionPath"];
-if (DAKKA_debug) then { diag_log format ["DAKKA: ComboSavedData_selChanged _selectionPath:%1", _selectionPath] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: ComboProfiles_selChanged _selectionPath:%1", _selectionPath] };
 private _slotIndex = (DAKKA_saveSlots select (DAKKA_Task - 1));
 if (_selectionPath < 0 || _slotIndex == _selectionPath) exitWith { false };
 
@@ -31,6 +31,7 @@ private _display = findDisplay IDC_MENU_MISSION_EDIT;
 // Update all controls - part 1
 if (DAKKA_lastPage == 5) then {
     [true] call DAKKA_fnc_compositionRemove;
+    waitUntil {DAKKA_compositionsRemoved};
 };
 
 if (count DAKKA_saveSlots >= DAKKA_Task) then {

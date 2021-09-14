@@ -64,22 +64,22 @@ if (count _locations == 0) exitWith { false };
     _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "empty", "RECTANGLE", [500, 250], _dir, "FDiagonal", "ColorEAST", 0.8, _txt] call BIS_fnc_stringToMarker;
     // Friendly spawn
     _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = [_pos, -500, _dir] call BIS_fnc_relPos;
+    _pos1 = _pos getPos [-500, _dir];
     _txt = "Friendly Spawn Area";
     _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "empty", "RECTANGLE", [500, 500], _dir, "Border", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
     // Friendly spawn Text
     _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly_txt", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = [_pos, -500, _dir] call BIS_fnc_relPos;
+    _pos1 = _pos getPos [-500, _dir];
     _txt = "Friendly Spawn Area";
     _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "hd_dot", "ICON", [1, 1], _dir, "Solid", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
     // Enemy spawn
     _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = [_pos, 500, _dir] call BIS_fnc_relPos;
+    _pos1 = _pos getPos [500, _dir];
     _txt = "Enemy Spawn Area";
     _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "empty", "RECTANGLE", [500, 500], _dir, "Border", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
     // Enemy spawn Text
     _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy_txt", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = [_pos, 500, _dir] call BIS_fnc_relPos;
+    _pos1 = _pos getPos [500, _dir];
     _txt = "Enemy Spawn Area";
     _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "hd_dot", "ICON", [1, 1], _dir, "Solid", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
   };

@@ -50,7 +50,7 @@ while {true} do {
         _targetTemp = _target select isMultiplayer;
         ([_player,_targetTemp] call bis_fnc_dirTo) + 180
     };
-    _pos = [position _player, 180 + random 40, _dirToTarget + 90 + random 180] call BIS_fnc_relPos;
+    _pos = (position _player) getPos [180 + random 40, _dirToTarget + 90 + random 180];
     _unit = _grp createunit [_class,_pos,[],1,""];
     [_unit] joinSilent _grp;  // Fix for wrong side when using createUnit
     (crew vehicle _unit) joinSilent _grp;  // Fix for wrong side when using createUnit

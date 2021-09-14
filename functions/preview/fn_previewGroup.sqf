@@ -20,25 +20,47 @@
 params ["_unitsArr", ["_ranksArr", []], ["_loadoutArr", []], ["_groupMods", []]];
 // if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroup:[%1] [%2] ", _unitsArr, _ranksArr] };
 private ["_pos", "_unit", "_grp", "_isMan", "_rank"];
-if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup DAKKA_previewGroup:%1", DAKKA_previewGroup] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup - DAKKA_previewGroup:%1", DAKKA_previewGroup] };
 // waitUntil { isNull DAKKA_previewGroup };
 if (isNull DAKKA_previewGroup) then {	
 	cutText ["Loading Preview...", "BLACK IN", 999];
     ctrlShow [IDC_GRP_SAVEDDATAPROFILES, false];
 
-	// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup _unitsArr:%1", _unitsArr] };
-	// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup _ranksArr:%1", _ranksArr] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup - _unitsArr:%1", _unitsArr] };
+	// if (DAKKA_debug) then { diag_log format ["DAKKA: 1 previewGroup - _ranksArr:%1", _ranksArr] };
 	_pos = getMarkerPos "DAKKA_groupPreviewPos";
 	_unit = objNull;
 	_grp = grpNull;
 	_isMan = true;
     private _changeLoadouts = [];
+    
+    // Delete wheelchocks
+    private _wheelChocks = +DAKKA_wheelChockArr;
+    private _wheelChocksDel = [];
+    {
+        deleteVehicle _x;
+        _wheelChocksDel pushBackUnique _x;
+    } forEach _wheelChocks;
+    DAKKA_wheelChockArr = DAKKA_wheelChockArr - _wheelChocksDel;
+
+    // Clean the stage
+    private _pos = getMarkerPos "DAKKA_groupPreviewPos";
+    private _stageNearObjects = nearestObjects [_pos, [], 50];
+    {
+        deleteVehicle _x;
+    } forEach _stageNearObjects;
+
+    if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroup - Terminating preview camera..."] };
+    call DAKKA_fnc_cameraPreviewTerminate;
+    waitUntil {DAKKA_cameraPreviewTerminateDone};
 	{	
-		// if (DAKKA_debug) then { diag_log format ["DAKKA: 2 previewGroup DAKKA_previewGroup:%1", DAKKA_previewGroup] };
+		// if (DAKKA_debug) then { diag_log format ["DAKKA: 2 previewGroup - DAKKA_previewGroup:%1", DAKKA_previewGroup] };
 		if(!isNull DAKKA_previewGroup) exitWith {
-			diag_log format ["DAKKA: --- ERROR --- Another instance is already creating preview group (%1) ", DAKKA_previewGroup];
-			diag_log format ["DAKKA: --- ERROR --- Units from group that was created: %1", units _grp];
-			[_grp] call DAKKA_fnc_deleteGroup;
+			diag_log format ["DAKKA: previewGroup --- ERROR --- Another instance is already creating preview group (%1) ", DAKKA_previewGroup];
+			diag_log format ["DAKKA: previewGroup --- ERROR --- Units from group that was created: %1", units _grp];
+			// [_grp] call DAKKA_fnc_deleteGroup;
+            call DAKKA_fnc_previewGroupDelete;
+            [_unitsArr, _ranksArr, _loadoutArr, _groupMods] call DAKKA_fnc_previewGroup;
 		};
 		// if (DAKKA_debug) then { diag_log format ["DAKKA: previewGroup _x:%1", _x] };
 		// if (DAKKA_debug) then { diag_log format ["DAKKA: _isMan: %1", "Man" in ([configFile >> "CfgVehicles" >> _x, true ] call BIS_fnc_returnParents)] };
@@ -69,7 +91,7 @@ if (isNull DAKKA_previewGroup) then {
             [_error] spawn DAKKA_fnc_displayMessage;
             // Preview empty
             call DAKKA_fnc_previewGroupDelete;
-            call DAKKA_fnc_cameraPreviewTerminate;
+            // call DAKKA_fnc_cameraPreviewTerminate;
             [getMarkerPos "DAKKA_groupPreviewPos"] spawn DAKKA_fnc_cameraPreviewStatic;
 		};
 		// waitUntil {!isNull _unit };

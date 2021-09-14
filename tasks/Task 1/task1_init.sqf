@@ -47,6 +47,7 @@ if (DAKKA_automated || (!DAKKA_automated && isNil "_thisWorldCompositions")) the
     diag_log format ["DAKKA: Task 1 - %1", _txt];
     // Delete existing ones first
     [true] call DAKKA_fnc_compositionRemove;
+    waitUntil {DAKKA_compositionsRemoved};
     // Load default compositions
     #include "..\..\compositions_default.hpp";
     #include "..\..\compositions_CUP.hpp";
@@ -476,7 +477,7 @@ sleep 2;
 DAKKA_officer sideRadio "SentGenCmdSeize";
 
 sleep 3;
-saveGame;
+if (!is3DENPreview) then { saveGame };
 
 sleep 2;
 // Show mission info text

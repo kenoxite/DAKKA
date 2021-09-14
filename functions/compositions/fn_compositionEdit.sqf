@@ -20,7 +20,9 @@
 params ["_idc", ["_cameraAngle", "top"], ["_end", false]];
 private ["_display", "_ctrl", "_selectionPath", "_taskData", "_worldCompositionsData", "_compositionsData", "_index", "_thisCompositionData", "_compObjects", "_target", "_cameraRadius", "_cameraHeightCircle", "_circlingPos", "_dist", "_camDist", "_mrkr", "_ref"];
 
+if (DAKKA_debug) then { diag_log format ["DAKKA: compositionEdit - Terminating preview camera..."] };
 call DAKKA_fnc_cameraPreviewTerminate;
+waitUntil {DAKKA_cameraPreviewTerminateDone};
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 _ctrl = (_display displayCtrl _idc);

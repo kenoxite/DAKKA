@@ -62,7 +62,7 @@ if (count _action > 0) then {
     [_action] call DAKKA_fnc_fillDate;
 };
 
-if (DAKKA_debug) then { diag_log format ["time: %1", time - _initTime] };
+if (DAKKA_debug) then { diag_log format ["DAKKA: setDate - time: %1", time - _initTime] };
 // Don't update time and weather when just loading the page to avoid spamming the change X functions
 if (((time - _initTime) > 1) || _dateType == "minutes") then {
     // Update weather (only when changing month)

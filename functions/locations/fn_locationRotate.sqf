@@ -63,19 +63,19 @@ if (DAKKA_Task == 2) then {
   // Friendly spawn
   _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly", DAKKA_Task, _index + 1];
   _mrkr setMarkerDir _dir;
-  _mrkr setMarkerPos ([_pos, -500, _dir] call BIS_fnc_relPos);
+  _mrkr setMarkerPos (_pos getPos [-500, _dir]);
   // Friendly spawn Text
   _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly_txt", DAKKA_Task, _index + 1];
   _mrkr setMarkerDir _dir;
-  _mrkr setMarkerPos ([_pos, -500, _dir] call BIS_fnc_relPos);
+  _mrkr setMarkerPos (_pos getPos [-500, _dir]);
   // Enemy spawn
   _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy", DAKKA_Task, _index + 1];
   _mrkr setMarkerDir _dir;
-  _mrkr setMarkerPos ([_pos, 500, _dir] call BIS_fnc_relPos);
+  _mrkr setMarkerPos (_pos getPos [500, _dir]);
   // Enemy spawn Text
   _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy_txt", DAKKA_Task, _index + 1];
   _mrkr setMarkerDir _dir;
-  _mrkr setMarkerPos ([_pos, 500, _dir] call BIS_fnc_relPos);
+  _mrkr setMarkerPos (_pos getPos [500, _dir]);
 };
 
 

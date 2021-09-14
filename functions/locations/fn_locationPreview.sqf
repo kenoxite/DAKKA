@@ -22,7 +22,9 @@ private ["_pos", "_display", "_ctrl", "_cameraPos", "_cameraDir", "_cameraFOV", 
 // systemChat format ["DMBORBAT: locationPreview _index: %1", _index];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
+if (DAKKA_debug) then { diag_log format ["DAKKA: locationPreview - Terminating preview camera..."] };
 call DAKKA_fnc_cameraPreviewTerminate;
+waitUntil {DAKKA_cameraPreviewTerminateDone};
 
 if (_end) then {
 
@@ -128,7 +130,7 @@ if (_end) then {
 
 
   // systemChat format ["DAKKA: locationPreview _pos: %1", _pos];
-  _cameraPos = [_pos, 100, 180] call BIS_fnc_relPos;
+  _cameraPos = _pos getPos [100, 180];
   _cameraDir = 180;
   _cameraFOV = 0.7;
   _cameraRelX = 0;

@@ -21,6 +21,8 @@ params [["_amount", -1], ["_location", []], ["_distance", 100]];
 
 if (_amount == 0) exitWith { false };
 
+diag_log format ["DAKKA: compositionLoad - Loading %1 compositions...", if (_amount < 0) then {"all"} else { _amount }];
+
 DAKKA_compositionsLoaded = 0;
 
 _nul = _this spawn {
@@ -77,19 +79,21 @@ _nul = _this spawn {
     		// Load composition objects
     		_refArr = _compObjectsCopy select 0;
             _refPos = _refArr select 1;
-            // Place the next compositions around the first one if the amount of compositions to spawn isn't all nor just one
-            if (_amount > 1 && _i > 0) then {
-                private _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
-                if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 200]],[], {}] call BIS_fnc_randomPos; };
-                if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 250), (_rePosOriginal select 1) + floor(random 250), _refPos select 2]; };
-                if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _newRefPos: %1", _newRefPos ] };
-                _refPos = +_newRefPos;
-            } else {
-                _rePosOriginal = +_refPos;
-                private _newRefPos = [[[_rePosOriginal, 100]],["water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
-                if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 100]],[], {}] call BIS_fnc_randomPos; };
-                if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 50), (_rePosOriginal select 1) + floor(random 50), _refPos select 2]; };
-                _refPos = +_newRefPos;
+            if (_amount > 0) then {
+                // Place the next compositions around the first one if the amount of compositions to spawn isn't all nor just one
+                if (_i > 0) then {
+                    private _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+                    if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 200]],[], {}] call BIS_fnc_randomPos; };
+                    if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 250), (_rePosOriginal select 1) + floor(random 250), _refPos select 2]; };
+                    if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _newRefPos: %1", _newRefPos ] };
+                    _refPos = +_newRefPos;
+                } else {
+                    _rePosOriginal = +_refPos;
+                    private _newRefPos = [[[_rePosOriginal, 100]],["water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+                    if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 100]],[], {}] call BIS_fnc_randomPos; };
+                    if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 50), (_rePosOriginal select 1) + floor(random 50), _refPos select 2]; };
+                    _refPos = +_newRefPos;
+                };
             };
 
             _mrkr = format ["DAKKA_mrkr_Task%1_comp_%2", DAKKA_Task, _i + 1];
@@ -123,6 +127,7 @@ _nul = _this spawn {
     		  // Create the new object
     		  // _obj = _objClass createVehicle _itemPos;
               _obj = createVehicle [_objClass, _itemPos, [], 0, "CAN_COLLIDE"];
+            if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad - Spawned object: %1", _obj] };
               // Move object to position
               _obj enableSimulation false;
               _obj setVelocity [0, 0, 0];
@@ -183,6 +188,8 @@ _nul = _this spawn {
     if (count _compositionsData == 0) then {
         _return = false;
     };
+
+    diag_log format ["DAKKA: compositionLoad - %1 compositions were loaded...", DAKKA_compositionsLoaded];
 
     _return
 };

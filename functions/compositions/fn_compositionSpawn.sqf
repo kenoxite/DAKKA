@@ -24,6 +24,9 @@
 
 params ["_pos", "_dir", "_category", "_subcategory", "_className", ["_aligned", true], ["_simple", false]];
 private ["_composition", "_objClass", "_relPos", "_objDir", "_itemPos", "_obj", "_ref", "_finalDir", "_nearTerrObj", "_hiddenObjects", "_hideDist", "_keepHorizontal"];
+
+diag_log format ["DAKKA: compositionSpawn - Spawning compositions...", ""];
+
 _ref = "Flag_BI_F" createVehicle _pos;
 _ref setDir _dir;
 _ref setPos _pos;
@@ -41,7 +44,8 @@ _composition = [[_ref, _pos, _dir]];
     _finalDir = _objDir + _dir;
 	// Spawn object
 	_obj = _objClass createVehicle _itemPos;
-	// _obj = createVehicle [_objClass, _itemPos, [], 0 , "CAN_COLLIDE"];
+    // _obj = createVehicle [_objClass, _itemPos, [], 0 , "CAN_COLLIDE"];
+    if (DAKKA_debug) then { diag_log format ["DAKKA: compositionSpawn - Spawned object: %1", _obj] };
     _obj enableSimulation false;
     _obj setVelocity [0, 0, 0];
     _obj allowDamage false;
@@ -61,8 +65,8 @@ _composition = [[_ref, _pos, _dir]];
 	if (_simple) then {
 		_obj= [_obj] call DAKKA_fnc_convertToSimpleObject;
 	} else {
-		// _obj allowDamage true;
-		// _obj enableSimulation true;
+		_obj allowDamage true;
+		_obj enableSimulation true;
 	};
 	// if (_keepHorizontal == 1) then { systemChat format ["DAKKA: _objClass: %1 _keepHorizontal: %2", _objClass, _keepHorizontal] };
     
@@ -83,5 +87,6 @@ _composition = [[_ref, _pos, _dir]];
 } forEach ("true" configClasses (configfile >>  "CfgGroups" >> "Empty" >> _category >> _subcategory >> _className));
 // deleteVehicle _ref;
 
+diag_log format ["DAKKA: compositionSpawn - Compositions spawned...", ""];
 
 [_composition, _hiddenObjects]

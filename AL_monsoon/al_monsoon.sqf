@@ -125,7 +125,8 @@ if(_thunder_steroids) then {
 		//_delayth2 = linearConversion [0.3,1,overcast,30+(random 120),0.1 + (random _delay2),true];
 		_delayth2 = delay_thunder + random 10;
 		waitUntil {!isNil "hunt_alias"};
-		poz_f_1 = [hunt_alias,700+random 1300, random 360] call BIS_fnc_relPos;
+		// poz_f_1 = [hunt_alias,700+random 1300, random 360] call BIS_fnc_relPos;
+        poz_f_1 = hunt_alias getPos [700+random 1300, random 360];
 		publicVariable "poz_f_1";
 		_tip_tunet = ["lumina","sunet","lumina","sunet_lumina","lumina","lumina"] call BIS_fnc_selectRandom;
 		_numar_sclipiri = floor (1+random 3);
