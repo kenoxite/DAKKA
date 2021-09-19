@@ -8,5 +8,6 @@
 Simple and flexible _**Dynamic Mission Framework**_ with _**Instant Action**_ capabilities for Arma 3.
 
 ### License
+![APL-SA](https://i.imgur.com/VgZW2Qa.png)
 
 This project is licensed under the **Arma Public License Share Alike** ([APL-SA](../master/LICENSE)).
