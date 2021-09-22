@@ -272,12 +272,9 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
 ] call BIS_fnc_jukebox;
 
 _startingMusic = selectRandom [
-    // "LeadTrack06_F_EPC",
-    // "EventTrack03_F_EPB",
-    // "EventTrack03a_F_EPB",
-    "Music_Roaming_Night",
-    "Music_Roaming_Night_02",
-    "Music_Roaming_Night_Fragment_01_20s"
+    "LeadTrack06_F_EPC",
+    "EventTrack03_F_EPB",
+    "EventTrack03a_F_EPB"
     ];
 // ["playMusic", [_startingMusic]] call BIS_fnc_jukebox;
 playMusic _startingMusic;

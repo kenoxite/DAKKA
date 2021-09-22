@@ -358,7 +358,7 @@ _task_1_checks = [] spawn {
 				};
 			// } forEach (units DAKKA_PlayerNewGroup);
             } forEach [p1];
-            ["terminate"] call BIS_fnc_jukebox;
+            ["terminate"] call BIS_fnc_jukeBox;
 			if (_exfiled) then {
 				DAKKA_Task1_End_done = true;
 				["DAKKA_Task1_End", "SUCCEEDED"] call BIS_fnc_taskSetState;
