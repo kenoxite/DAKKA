@@ -122,6 +122,7 @@ DAKKA_compositionsLoaded = 0;
 DAKKA_loadCompositions = true;
 DAKKA_spawnCompRefs = [];
 DAKKA_compositionsRemoved = false;
+DAKKA_compLoadedLocs = [];
 
 // Unit editing
 DAKKA_arsenalOpened = false;

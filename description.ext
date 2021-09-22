@@ -333,6 +333,7 @@ class CfgFunctions
 			class boundingBoxReal {};
 			class convertToSimpleObject {};
             class countPassengerSeats {};
+            class isFlatEmpty {};
 
             // 3rd party
             class loadedFromSave { preInit = 1; };

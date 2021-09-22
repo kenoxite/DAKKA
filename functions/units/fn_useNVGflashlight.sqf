@@ -60,4 +60,10 @@ if (!_hasNVG && _giveFlashlight) then {
     };
 };
 
+// Force IR lasers, regardless
+_unit spawn {
+    sleep 5;
+    _this enableIRLasers true;
+};
+
 true

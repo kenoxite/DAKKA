@@ -24,6 +24,7 @@ if (_amount == 0) exitWith { false };
 diag_log format ["DAKKA: compositionLoad - Loading %1 compositions...", if (_amount < 0) then {"all"} else { _amount }];
 
 DAKKA_compositionsLoaded = 0;
+DAKKA_compLoadedLocs = [];
 
 _nul = _this spawn {
     params [["_amount", -1], ["_location", []], ["_distance", 100]];
@@ -82,20 +83,23 @@ _nul = _this spawn {
             if (_amount > 0) then {
                 // Place the next compositions around the first one if the amount of compositions to spawn isn't all nor just one
                 if (_i > 0) then {
-                    private _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+                    private _newRefPos = [[[[_rePosOriginal, 250]],[[_rePosOriginal, 100, ""]], {}] call BIS_fnc_randomPos, [ 1, -1, 0.25, 100, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
+                    if (count _newRefPos == 0) then { _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this && (aCos ([0,0,1] vectorCos (surfaceNormal _this)) <= 0.25) }] call BIS_fnc_randomPos };
                     if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 200]],[], {}] call BIS_fnc_randomPos; };
                     if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 250), (_rePosOriginal select 1) + floor(random 250), _refPos select 2]; };
                     if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _newRefPos: %1", _newRefPos ] };
                     _refPos = +_newRefPos;
                 } else {
                     _rePosOriginal = +_refPos;
-                    private _newRefPos = [[[_rePosOriginal, 100]],["water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
+                    private _newRefPos = [_rePosOriginal, [ 1, -1, 0.25, 100, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
+                    if (count _newRefPos == 0) then { _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this && (aCos ([0,0,1] vectorCos (surfaceNormal _this)) <= 0.25) }] call BIS_fnc_randomPos };
                     if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 100]],[], {}] call BIS_fnc_randomPos; };
                     if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 50), (_rePosOriginal select 1) + floor(random 50), _refPos select 2]; };
                     _refPos = +_newRefPos;
                 };
             };
-
+            DAKKA_compLoadedLocs pushBack _refPos;
+            
             _mrkr = format ["DAKKA_mrkr_Task%1_comp_%2", DAKKA_Task, _i + 1];
             _mrkr setMarkerPos _refPos;
 

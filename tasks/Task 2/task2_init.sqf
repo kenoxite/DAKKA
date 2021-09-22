@@ -172,6 +172,7 @@ if (DAKKA_automated || (!DAKKA_automated && isNil "_thisWorldCompositions")) the
     _compPos = [[[DAKKA_task2_locPos, 50]],["water"], {!isOnRoad _this}] call BIS_fnc_randomPos;
     if (count _compPos < 3) then { _compPos = DAKKA_task2_locPos };
     [_compAmount, _compPos] call DAKKA_fnc_compositionLoad;
+    waitUntil {DAKKA_compositionsLoaded == _compAmount};
 
     // Enable simulation for all composition objects
 /*        _nul = [_compAmount] spawn {
@@ -419,7 +420,9 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
             "LeadTrack06_F_EPC",
             "EventTrack03_F_EPB",
             "AmbientTrack04_F",
-            "EventTrack03a_F_EPB"
+            "EventTrack03a_F_EPB",
+            "Music_Probe_Discovered",
+            "Music_Suspended_Loop_01"
         ],
         [ // combat
             "AmbientTrack01a_F_Tacops",
@@ -428,9 +431,16 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
             "EventTrack02a_F_Tacops",
             "EventTrack02b_F_Tacops",
             "EventTrack03a_F_Tacops",
-            "EventTrack03b_F_Tacops"
+            "EventTrack03b_F_Tacops",
+            "LeadTrack03a_F_EPA",
+            "Music_Battle_Human",
+            "Music_Freeroam_Battle_Human",
+            "Music_Tension_Loop_01"
         ],
         [ // safe
+            "AmbientTrack01a_F",
+            "Music_Freeroam_01_MissionStart",
+            "Music_Roaming_Day"
         ],
         0.5, // volume
         5, // transition

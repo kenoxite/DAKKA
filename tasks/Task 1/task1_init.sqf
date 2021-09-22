@@ -100,6 +100,8 @@ if (DAKKA_automated || (!DAKKA_automated && isNil "_thisWorldCompositions")) the
 
     // Load compositions
     [1, DAKKA_task1_locPos] call DAKKA_fnc_compositionLoad;
+    waitUntil {DAKKA_compositionsLoaded == 1};
+    DAKKA_task1_locPos = DAKKA_compLoadedLocs select 0;
 
     // Enable simulation for all composition objects
 /*    _nul = [] spawn {
@@ -244,54 +246,38 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
 
 // Music
 0 fadeMusic 0.5;
-// playMusic selectRandom [
-//     "LeadTrack06_F_EPC",
-//     "EventTrack03_F_EPB",
-//     "EventTrack03a_F_EPB"
-//     ];
 
-/*["initialize",
+["initialize",
     [
         [ // stealth
-            "LeadTrack06_F_EPC",
-            "EventTrack03_F_EPB",
-            "AmbientTrack04_F",
-            "EventTrack03a_F_EPB"
+            "Music_Probe_Discovered",
+            "Music_Suspended_Loop_01"
         ],
         [ // combat
-            "AmbientTrack01a_F_Tacops",
-            "EventTrack01a_F_Tacops",
-            "EventTrack01b_F_Tacops",
-            "EventTrack02a_F_Tacops",
-            "EventTrack02b_F_Tacops",
-            "EventTrack03a_F_Tacops",
-            "EventTrack03b_F_Tacops"
+            "Music_Battle_Human",
+            "Music_Freeroam_Battle_Human",
+            "Music_Tension_Loop_01"
         ],
         [ // safe
-
+            "Music_Roaming_Night",
+            "Music_Roaming_Night_02",
+            "Music_Roaming_Night_Fragment_01_20s"
         ],
-        0.5, // volume
+        0.3, // volume
         5, // transition
         500, // radius
         5, // execution rate
         true // no repeat
     ]
-] call BIS_fnc_jukebox;*/
-            // "AmbientTrack01_F",
-            // "AmbientTrack01_F_EPB",
-            // "Fallout",
-            // "Wasteland",
-            // "SkyNet",
-            // "MAD",
-            // "AmbientTrack01a_F_Tacops",
-            // "AmbientTrack02a_F_Tacops",
-            // "AmbientTrack03a_F_Tacops",
-            // "AmbientTrack04a_F_Tacops"
+] call BIS_fnc_jukebox;
 
 _startingMusic = selectRandom [
-    "LeadTrack06_F_EPC",
-    "EventTrack03_F_EPB",
-    "EventTrack03a_F_EPB"
+    // "LeadTrack06_F_EPC",
+    // "EventTrack03_F_EPB",
+    // "EventTrack03a_F_EPB",
+    "Music_Roaming_Night",
+    "Music_Roaming_Night_02",
+    "Music_Roaming_Night_Fragment_01_20s"
     ];
 // ["playMusic", [_startingMusic]] call BIS_fnc_jukebox;
 playMusic _startingMusic;
@@ -305,6 +291,8 @@ playMusic _startingMusic;
 	diag_log "DAKKA: Task 1 - Spawning enemies";
 	_ctrl ctrlSetText format ["Spawning enemy groups...", ""];
 	_enemyGroups = [_taskData, "Enemy groups"] call BIS_fnc_getFromPairs;
+
+    // PATROLS
 	_patrolGroups = +(_enemyGroups select 0) select 1;
 	for [{private _i = 0}, {_i < count _patrolGroups}, {_i = _i + 1}] do {
 		_grp = [(_patrolGroups select _i) select 1, DAKKA_task1_locPos, east, 100] call DAKKA_fnc_spawnGroup;
@@ -335,6 +323,7 @@ playMusic _startingMusic;
 		sleep 0.001;
 	}; 
 
+    // DEFENDERS
     _garrisonRadius = 50;
 	_defendGroups = +(_enemyGroups select 1) select 1;
 	for [{private _i = 0}, {_i < count _defendGroups}, {_i = _i + 1}] do {
@@ -460,7 +449,7 @@ cutText ["", "BLACK IN", 2];
 enableRadio true;
 
 // End music
-20 fadeMusic 0;
+// 20 fadeMusic 0;
 
 // Start time
 DAKKA_missionStartTime = time;

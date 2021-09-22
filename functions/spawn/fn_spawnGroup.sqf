@@ -73,6 +73,8 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
     _unit disableAI "AUTOTARGET";
     _unit disableAI "AUTOCOMBAT";
     _unit disableAI "CHECKVISIBLE";
+    _unit disableAI "MOVE";
+    _unit stop true;
     if (_forEachIndex == 0) then {
         _grp = group _unit;
     };
@@ -85,6 +87,8 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
             _x disableAI "AUTOTARGET";
             _x disableAI "AUTOCOMBAT";
             _x disableAI "CHECKVISIBLE";
+            _x disableAI "MOVE";
+             _x stop true;
         } forEach (crew vehicle _unit);
         _groupVehicles pushBack _unit;
         _grp addVehicle _unit;
@@ -102,7 +106,7 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
                 _safeRadius = 20 + (sizeOf _unitClass);
                 _safeSpotFound = false;
                 _alowedDamage = isDamageAllowed _unit;
-                _unit hideObject true;
+                // _unit hideObject true;
                 _unit enableSimulation false;
                 _unit allowDamage false;
                 _unit setVelocity [0, 0, 0];
@@ -128,7 +132,7 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
                             // if (count _emptyPos > 0) then {
                             diag_log format ["DAKKA: spawnGroup - FOUND safe position for %1 - %2 (%3): %4", group _unit, _unit, _unitClass, _emptyPos];
                             // _unit setPos _emptyPos;
-                            _unit hideObject false;
+                            // _unit hideObject false;
                             // _unit setVehiclePosition [_emptyPos, [], 2, "NONE"];
                             _unit setPos [_emptyPos select 0, _emptyPos select 1, 0];
                             // _unit setVectorUp (surfaceNormal (position _unit));
@@ -142,17 +146,17 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
                         };
                         if (!_safeSpotFound && _i == (_tries - 1)) then {
                             diag_log format ["DAKKA: spawnGroup --- WARNING --- COULDN'T FIND A SAFE POSITION for %1 - %2 (%3)!",  group _unit, _unit, _unitClass];
-                            _unit hideObject false;
+                            // _unit hideObject false;
                             _unit setVehiclePosition [_unitPos, [], _safeRadius + _distMod, "NONE"];
                         };
                     } else {
-                        _unit hideObject false;
+                        // _unit hideObject false;
                         _unitPos = getPosASL _unit;
                         _unit setVehiclePosition [_unitPos, [], _safeRadius + _distMod, "NONE"];
                     };
                     // _distMod = _distMod * (_i + 1);
                     _distMod = if (_i < count _distCheckArr) then { _distCheckArr select _i } else { _distMod };
-                    _unit hideObject false;
+                    // _unit hideObject false;
                     _unit enableSimulation true;
                     _unit setVectorUp (surfaceNormal (position _unit));
                     _unit allowDamage _alowedDamage;
@@ -203,13 +207,17 @@ if (isNull _oldGrp) then {
     _x enableAI "AUTOTARGET";
     _x enableAI "AUTOCOMBAT";
     _x enableAI "CHECKVISIBLE";
+    _x enableAI "MOVE";
     _x setCaptive false;
+    _x stop false;
     {
         _x enableAI "TARGET";
         _x enableAI "AUTOTARGET";
         _x enableAI "AUTOCOMBAT";
         _x enableAI "CHECKVISIBLE";
+        _x enableAI "MOVE";
         _x setCaptive false;
+        _x stop false;
     } forEach (crew vehicle _x);
 } forEach (units _grp);
 

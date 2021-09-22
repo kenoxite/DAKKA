@@ -274,6 +274,7 @@ _task_2_checks = [] spawn {
             // Hide timer
             call _fnc_hideTimer;
             DAKKA_Task2_done = true;
+            ["terminate"] call BIS_fnc_jukebox;
             if (!_defeated) then {
                 // Friendlies won
                 DAKKA_officer sideRadio "SentGenComplete"; 
