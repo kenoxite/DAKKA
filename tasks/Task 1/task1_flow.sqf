@@ -335,6 +335,7 @@ _task_1_checks = [] spawn {
 			_exfilWp setWaypointVisible false; 
 			_exfilWp showWaypoint "EASY"; 
 			DAKKA_Task1_done = true;  
+            ["terminate"] call BIS_fnc_jukeBox;
 			["DAKKA_Task1_2", "SUCCEEDED", false] call BIS_fnc_taskSetState;
 			{ _x addRating 500; } forEach (units DAKKA_PlayerNewGroup);
 			// Task 1 End
@@ -358,7 +359,6 @@ _task_1_checks = [] spawn {
 				};
 			// } forEach (units DAKKA_PlayerNewGroup);
             } forEach [p1];
-            ["terminate"] call BIS_fnc_jukeBox;
 			if (_exfiled) then {
 				DAKKA_Task1_End_done = true;
 				["DAKKA_Task1_End", "SUCCEEDED"] call BIS_fnc_taskSetState;
