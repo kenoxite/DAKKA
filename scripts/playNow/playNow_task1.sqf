@@ -55,7 +55,7 @@ _eligiblePlayerGroups = [];
 if (count _SFGroups > 0) then {
     // Select SF group
     // Pick a group with 6 or more members
-    _eligiblePlayerGroups = _SFGroups select { (count (_x select 0)) >= 6 };
+    _eligiblePlayerGroups = _SFGroups select { (count (_x select 0)) >= 6 && (count (_x select 0)) <= 9 };
     if (count _eligiblePlayerGroups > 0) then {
         _playerGroup = selectRandom _eligiblePlayerGroups;
     } else {
@@ -66,7 +66,7 @@ if (count _SFGroups > 0) then {
     // Select regular infantry if not SF group
     if (count _infGroups > 0) then {
         // Pick a group with 6 or more members
-        _eligiblePlayerGroups = _infGroups select { (count (_x select 0)) >= 6 };
+        _eligiblePlayerGroups = _infGroups select { (count (_x select 0)) >= 6 && (count (_x select 0)) <= 9 };
         if (count _eligiblePlayerGroups > 0) then {
             _playerGroup = selectRandom _eligiblePlayerGroups;
         } else {
@@ -107,6 +107,37 @@ DAKKA_noNightAuto = if (!_hasNVG) then { true } else { false };
 DAKKA_friendlyInfEdCat = getText (configFile >> "CfgVehicles" >> _playerUnitClass >> "editorSubcategory");
 if (DAKKA_debug) then { diag_log format ["DAKKA: player group leader: %1, editor subcat: %2", _playerUnitClass, DAKKA_friendlyInfEdCat] };
 
+// Pick a getaway car
+    _fnc_filterGetawayCarGroups = {
+    params ["_unitCount", "_motGroups"];
+    private _eligibleGetawayCars = [];
+    // Select motorized groups with _unitCount vehicle
+    private _eligibleGetawayCarsAll = +_motGroups;
+    private _eligibleGetawayCarsValid = [];
+    {
+        private _group = _x;
+        private _units = _x select 0;
+        private _vehCount = 0;
+        {
+            if !([_x] call DAKKA_fnc_isMan) then { _vehCount = _vehCount + 1 };
+        } forEach _units;
+        if (_vehCount <= _unitCount) then {
+            _eligibleGetawayCarsValid pushBack _group;
+        };
+    } forEach _eligibleGetawayCarsAll;
+    _eligibleGetawayCarsAll = +_eligibleGetawayCarsValid;
+    if (count _eligibleGetawayCarsAll > 0) then {
+         _eligibleGetawayCars = +_eligibleGetawayCarsAll;
+    } else {
+        _eligibleGetawayCars = +_motGroups;
+    };
+
+    _eligibleGetawayCars
+    };
+_eligibleGetawayCars = [1, _motGroups] call _fnc_filterGetawayCarGroups;
+if (count _eligibleGetawayCars > 0) then {
+    // [/*_sideType*/ "Friendly groups",/*_groupType*/ "Patrols",/*_groupsPool*/ _eligiblePatrolCars,/*_groupsAmount*/ 0.5 + floor (random (1.5)),/*_maxUnits*/ 2,/*_limitPresence*/ true,/*_minUnits*/ 1,/*_skill*/ 0,/*_sameEdCat*/ false] call DAKKA_fnc_addGroupsToTaskData;
+};
 
 // -------------------------------------------------------------------------------------
 // SUPPORT

@@ -204,7 +204,7 @@ _ctrl ctrlEnable true;
     // Remove
 	_ctrl = (_display displayCtrl IDC_BT_1_GRP1);
 	_ctrl ctrlSetText "Remove";
-	_ctrl ctrlSetEventHandler ["ButtonClick", '[false] call DAKKA_fnc_compositionRemove;'];
+	_ctrl ctrlSetEventHandler ["ButtonClick", '[false, true] call DAKKA_fnc_compositionRemove;'];
 	_ctrl ctrlSetTooltip "Remove the selected composition";
 	_ctrl ctrlEnable false;
 
@@ -284,7 +284,7 @@ _ctrl ctrlEnable true;
 
 // Load compositions
 if (DAKKA_loadCompositions) then {
-    call DAKKA_fnc_compositionLoad;
+    [-1, [], 100, true] call DAKKA_fnc_compositionLoad;
     _nul = [] spawn {
         _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
         _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;

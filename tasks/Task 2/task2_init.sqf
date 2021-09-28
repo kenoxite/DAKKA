@@ -438,9 +438,6 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
             "Music_Tension_Loop_01"
         ],
         [ // safe
-            "AmbientTrack01a_F",
-            "Music_Freeroam_01_MissionStart",
-            "Music_Roaming_Day"
         ],
         0.5, // volume
         5, // transition
@@ -571,7 +568,7 @@ playMusic _startingMusic;
             [_grp, _destination, 0, -1, "", "UNLOAD", "AWARE", "FULL", "LINE", "RED", 50, "", true, true, [0,0,0], ["true", ""]] call DAKKA_fnc_GroupWp;
 
             // Push and search for enemies
-            [_grp, _spawnPos getPos [-300, DAKKA_task2_locDir], 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DAKKA_O_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 75, "", false, false, [0,0,0], ["true", ""]] call DAKKA_fnc_GroupWp;
+            [_grp, _spawnPos getPos [-300, DAKKA_task2_locDir], 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DAKKA_O_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 75, "", false, false, [0,0,0], ["true", "{ if ('unarmed' in ([typeOf (vehicle _x)] call DAKKA_fnc_vehicleType)) then { unassignVehicle (driver (vehicle _x)) } }forEach units this;"]] call DAKKA_fnc_GroupWp;
         };
         sleep 0.001;
     }; 
@@ -722,7 +719,7 @@ playMusic _startingMusic;
             [_grp, _destination, 0, -1, "", "UNLOAD", "AWARE", "FULL", "LINE", "RED", 50, "", true, true, [0,0,0], ["true", ""]] call DAKKA_fnc_GroupWp;
 
             // Push and search for enemies
-            [_grp, _spawnPos getPos [_spawnDist -_wpDist, DAKKA_task2_locDir], 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DAKKA_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 75, "", false, false, [0,0,0], ["true", "if (behaviour this != ""COMBAT"") then { if (random 1 > 0.9) then { this globalRadio ""SentClear""; }; };"]] call DAKKA_fnc_GroupWp;
+            [_grp, _spawnPos getPos [_spawnDist -_wpDist, DAKKA_task2_locDir], 0, -1, "", "MOVE", "COMBAT", "NORMAL", if (_inTown && (count DAKKA_B_InfGrps > 0)) then { "COLUMN" } else { "LINE" }, "RED", 75, "", false, false, [0,0,0], ["true", "{ if ('unarmed' in ([typeOf (vehicle _x)] call DAKKA_fnc_vehicleType)) then { unassignVehicle (driver (vehicle _x)) } }forEach units this;"]] call DAKKA_fnc_GroupWp;
         };
         sleep 0.001;
     }; 

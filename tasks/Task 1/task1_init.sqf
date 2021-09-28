@@ -40,8 +40,12 @@ diag_log format ["DAKKA: Task 1 - Initializing Location %1", _locationIndex + 1]
 // COMPOSITIONS
 _compositions = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _thisWorldCompositions = [_compositions, worldName] call BIS_fnc_getFromPairs;
-
-if (DAKKA_automated || (!DAKKA_automated && isNil "_thisWorldCompositions")) then {
+if (isNil "_thisWorldCompositions") then { _thisWorldCompositions = [] };
+_noCompData = [
+                [false, true] select (count _thisWorldCompositions == 0),
+                true
+                ] select (isNil "_thisWorldCompositions");
+if (DAKKA_automated || (!DAKKA_automated && _noCompData)) then {
     _txt = "Generating compositions...";
     _ctrl ctrlSetText _txt; 
     diag_log format ["DAKKA: Task 1 - %1", _txt];
@@ -250,15 +254,20 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
 ["initialize",
     [
         [ // stealth
+            "EventTrack03a_F_EPB",
             "Music_Probe_Discovered",
             "Music_Suspended_Loop_01"
         ],
         [ // combat
+            "LeadTrack03a_F_EPA",
             "Music_Battle_Human",
             "Music_Freeroam_Battle_Human",
             "Music_Tension_Loop_01"
         ],
         [ // safe
+            "AmbientTrack01a_F",
+            "Music_Freeroam_01_MissionStart",
+            "Music_Roaming_Day",
             "Music_Roaming_Night",
             "Music_Roaming_Night_02",
             "Music_Roaming_Night_Fragment_01_20s"
@@ -312,6 +321,7 @@ playMusic _startingMusic;
                         sleep (random 5);
                         if (alive _leader) then {
                             _leader globalRadio "SentUnitKilled";
+                            playSound "radioStatic1";
                         };
                     };
                 }];
@@ -355,6 +365,7 @@ playMusic _startingMusic;
                         sleep (random 5);
                         if (alive _leader) then {
                             _leader globalRadio "SentUnitKilled";
+                            playSound "radioStatic1";
                         };
                     };
                 }];
@@ -401,6 +412,7 @@ playMusic _startingMusic;
                     //                 "SentCheering"
                     //                 ]);
                     _killer globalRadio "SentCheering";
+                    playSound "radioStatic1";
                 };
             };
         }];

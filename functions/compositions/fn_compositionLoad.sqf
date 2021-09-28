@@ -17,7 +17,7 @@
 
 */
 
-params [["_amount", -1], ["_location", []], ["_distance", 100]];
+params [["_amount", -1], ["_location", []], ["_distance", 100], ["_save", false]];
 
 if (_amount == 0) exitWith { false };
 
@@ -27,7 +27,7 @@ DAKKA_compositionsLoaded = 0;
 DAKKA_compLoadedLocs = [];
 
 _nul = _this spawn {
-    params [["_amount", -1], ["_location", []], ["_distance", 100]];
+    params [["_amount", -1], ["_location", []], ["_distance", 100], ["_save", false]];
     if (DAKKA_debug) then { diag_log format ["DAKKA: _amount: %1, _location: %2, _distance: %3", _amount, _location, _distance] };
     private ["_taskData", "_worldCompositionsData", "_compositionsData", "_thisCompositionData", "_hiddenObjects", "_compObjects", "_compObjectsCopy", "_ref", "_obj", "_objClass", "_relPos", "_objDir", "_keepHorizontal", "_itemPos", "_finalDir", "_aligned", "_refPos", "_refDir", "_nearTerrObj", "_hideDist", "_return", "_rePosOriginal"];
 
@@ -83,7 +83,7 @@ _nul = _this spawn {
             if (_amount > 0) then {
                 // Place the next compositions around the first one if the amount of compositions to spawn isn't all nor just one
                 if (_i > 0) then {
-                    private _newRefPos = [[[[_rePosOriginal, 250]],[[_rePosOriginal, 100, ""]], {}] call BIS_fnc_randomPos, [ 1, -1, 0.25, 100, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
+                    private _newRefPos = [[[[_rePosOriginal, 500]],[[_rePosOriginal, 200, ""]], {}] call BIS_fnc_randomPos, [ 1, -1, 0.25, 100, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
                     if (count _newRefPos == 0) then { _newRefPos = [[[_rePosOriginal, 250]],[[_rePosOriginal, 100], "water"], {!isOnRoad _this && (aCos ([0,0,1] vectorCos (surfaceNormal _this)) <= 0.25) }] call BIS_fnc_randomPos };
                     if (count _newRefPos < 3) then { _newRefPos = [[[_rePosOriginal, 200]],[], {}] call BIS_fnc_randomPos; };
                     if (count _newRefPos < 3) then { _newRefPos = [(_rePosOriginal select 0) + floor(random 250), (_rePosOriginal select 1) + floor(random 250), _refPos select 2]; };
@@ -185,7 +185,7 @@ _nul = _this spawn {
     };
 
     // Save task settings
-    if (!DAKKA_automated) then {
+    if (_save) then {
         call DAKKA_fnc_settingsSave;
     };
 

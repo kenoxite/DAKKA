@@ -58,7 +58,7 @@ for [{private _i = 0}, {_i < _groupsAmount}, {_i = _i + 1}] do
 
     private _groupEdCat = getText (configFile >> "CfgVehicles" >> ((_selectedGroup select 0) select 0) >> "editorSubcategory");
     private _friendly = if (_sideType == "Friendly groups") then { true } else { false };
-    if (("snow" in toLowerAnsi(_groupEdCat) || "winter" in toLowerAnsi(_groupEdCat)) && isNil format ["DAKKA_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }]) exitWith {
+    if (("sno" in toLowerAnsi(_groupEdCat) || "winter" in toLowerAnsi(_groupEdCat)) && isNil format ["DAKKA_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }]) exitWith {
         diag_log format ["DAKKA: --- WARNING --- Unit camo is 'Snow' and it usually looks silly in most terrains. Trying again...", _sideType];
         missionNamespace setVariable [format ["DAKKA_snowCamo_checked_%1", if (_friendly) then { "friendly" } else { "enemy" }], true];
         [_sideType, _groupType, _groupsPool, _groupsAmount, _maxUnits, _limitPresence, _minUnits, _skill] call DAKKA_fnc_addGroupsToTaskData

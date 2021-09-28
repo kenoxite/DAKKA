@@ -141,6 +141,7 @@ _task_1_checks = [] spawn {
                                 _reporter = leader (selectRandom _enemyGroups);
                             };
                             _reporter globalRadio "SentContact";
+                            playSound "radioStatic1";
                         };
                         _detectedPlayerPos = position vehicle leader DAKKA_PlayerNewGroup;
                     };
@@ -157,16 +158,20 @@ _task_1_checks = [] spawn {
                             diag_log format ["DAKKA: %1 is alerting to patrols", _reporter];
                             if (!isNull _reporter) then {
                                 _reporter globalRadio "SentGenCmdTargetNeutralize";
+                                playSound "radioStatic1";
                                 _alerted = DAKKA_patrolGrps_task1 - [group _reporter];
                                 {
                                     (leader _x) globalRadio "SentNotifyAttack";
+                                    playSound "radioStatic1";
                                 } forEach _alerted;
 
                                 diag_log format ["DAKKA: %1 is alerting to defenders", _reporter];
                                 _reporter globalRadio "SentGenCmdDefend";
+                                playSound "radioStatic1";
                                 _alerted = DAKKA_defendGrps_task1 - [group _reporter];
                                 {
                                     (leader _x) globalRadio "SentConfirmMove";
+                                    playSound "radioStatic1";
                                 } forEach _alerted;
                             };
                         };
@@ -368,7 +373,7 @@ _task_1_checks = [] spawn {
 				call DAKKA_fnc_endMission;
 
 				sleep 3;
-				"end1" call BIS_fnc_endMission;
+                ["end1", true, true, true, true] call BIS_fnc_endMission;
 
 				diag_log "DAKKA: Task 1 --- END --- ";
             } else {
@@ -473,6 +478,7 @@ _task_1_checks = [] spawn {
                         if (behaviour (leader _grp) != "COMBAT") then {
                             if (random 1 > 0.9) then {
                                 (leader _grp) globalRadio "SentClear";
+                                playSound "radioStatic1";
                             };  
                         };         
 					};    

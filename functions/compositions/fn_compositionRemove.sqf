@@ -17,7 +17,7 @@
 
 */
 
-params [["_all", false]];
+params [["_all", false], ["_save", false]];
 private ["_display", "_ctrl", "_selectionPath", "_taskData", "_worldCompositionsData", "_compositionsData", "_index", "_thisCompositionData", "_compObjects", "_obj", "_itemPos", "_hiddenObjects", "_hideDist", "_mrkr", "_txt", "_ref", "_pos", "_dir", "_compsToDelete"];
 
 DAKKA_compositionsRemoved = false;
@@ -94,7 +94,7 @@ if (_all) then {
 call DAKKA_fnc_mapDisplayCompositions;
 
 // Save task settings
-if (!DAKKA_automated) then {
+if (_save) then {
     call DAKKA_fnc_settingsSave;
 };
 

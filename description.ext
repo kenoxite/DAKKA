@@ -12,6 +12,13 @@ class CfgSounds
 {
     sounds[] = {};
 
+    class radioStatic1
+    {
+        name = "radio static 1";
+        sound[] = { "\sound\radiostatic1.ogg", 1, 1 };
+        titles[] = { 0, "" };
+    };
+
     // SPECTRUM DEVICE
     class silent1
     {
@@ -558,6 +565,7 @@ class CfgFunctions
             class deleteMan {};
             class deleteVehicle {};
             class cloneUnit {};
+            class placeUnit {};
         };
 
 		class Support

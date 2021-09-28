@@ -285,7 +285,7 @@ _task_2_checks = [] spawn {
                 call DAKKA_fnc_endMission;
 
                 sleep 3;
-                ["end1"] call BIS_fnc_endMission;
+                ["end1", true, true, true, true] call BIS_fnc_endMission;
             } else {
                 // Enemies won
                 DAKKA_officer sideRadio "SentGenLost"; 
@@ -296,7 +296,7 @@ _task_2_checks = [] spawn {
                 call DAKKA_fnc_endMission;
 
                 sleep 3;
-                ["end1", false] call BIS_fnc_endMission;
+                ["end1", false, true, true, true] call BIS_fnc_endMission;
             };
 
             diag_log "DAKKA: Task 2 --- END --- ";
