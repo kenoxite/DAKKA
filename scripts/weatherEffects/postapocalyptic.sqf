@@ -42,6 +42,8 @@ _PPeffect_grain ppEffectAdjust [0.210428,0.5,0,0.2,0.1];
 _PPeffect_grain ppEffectEnable true;
 _PPeffect_grain ppEffectCommit 0;
 
+            if (DAKKA_debug) then {diag_log format ["DAKKA: Post-apocalyptic - _damageBuildings: %1", _damageBuildings]};
+
 // Destroy and wreck
 if (_damageBuildings) then {
     diag_log "DAKKA: Post-apocalyptic: Destroying everything";
@@ -53,16 +55,22 @@ if (_damageBuildings) then {
     {
         _thisCompositionData = _x;
         _compObjects = _thisCompositionData select 1;
-        _ref = (_compObjects select 0) select 0;
-        _compositions pushBack _ref;
+        // _ref = (_compObjects select 0) select 0;
+        _refPos = (_compObjects select 0) select 1;
+        _compositions pushBack _refPos;
     } forEach _compositionsData;
+
+            if (DAKKA_debug) then {diag_log format ["DAKKA: Post-apocalyptic - _compositions: %1", _compositions]};
 
     // Destroy buildings
     { 
         private _building = _x;
         private _allowDestroy = false;
         {
-            if (((position _building) distance _x) > 100) then {
+            if (DAKKA_debug) then {diag_log format ["DAKKA: Post-apocalyptic - building: %1", _building]};
+            private _dist = (position _building) distance2D _x;
+            if (typeName _dist == "STRING") then { _dist = 110 };
+            if (_dist > 100) then {
                 _allowDestroy = true;
             };
         } forEach _compositions;
@@ -76,7 +84,9 @@ if (_damageBuildings) then {
         private _obj = _x;
         private _allowDestroy = false;
         {
-            if (((position _obj) distance _x) > 100) then {
+            private _dist = (position _obj) distance2D _x;
+            if (typeName _dist == "STRING") then { _dist = 110 };
+            if (_dist > 100) then {
                 _allowDestroy = true;
             };
         } forEach _compositions;

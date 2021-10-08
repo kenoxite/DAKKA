@@ -23,7 +23,7 @@ if !([DAKKA_customDate] call DAKKA_fnc_isNight) exitWith { false };
 
 // Check for equipped NVG
 private _hasNVG = [_unit] call DAKKA_fnc_checkNVG;
-if (_hasNVG) exitWith { true };
+// if (_hasNVG) exitWith { true };
 
 // Check for stored NVG
 {
@@ -61,9 +61,11 @@ if (!_hasNVG && _giveFlashlight) then {
 };
 
 // Force IR lasers, regardless
-_unit spawn {
-    sleep 5;
-    _this enableIRLasers true;
+if (DAKKA_Task == 1) then {
+    _unit spawn {
+        sleep 5;
+        _this enableIRLasers true;
+    };
 };
 
 true

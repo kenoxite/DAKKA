@@ -18,6 +18,7 @@
 params [["_unit", objNull, [objNull]], ["_location", []], ["_fly", false]];
 
 if (isNull _unit) exitWith { getPos player };
+if (!alive _unit) exitWith { getPos _unit };
 
 private _unitClass = typeOf _unit;
 private _isMan = [_unitClass] call DAKKA_fnc_isMan;
@@ -53,8 +54,13 @@ if (_isMan) then {
         private _locationASL = AGLToASL _location;
         private _safeRadius = 1;
 
+        _unit enableSimulation false;
+        _unit allowDamage false;
+        {
+            _x allowDamage false;
+        } forEach (crew vehicle _unit);
+        
         private _safePos = [_location, [ _safeRadius, -1, -1, 1, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
-
         if (count _safePos > 0) then {
             _unit setPosASL _safePos;
             _unit setVectorUp (surfaceNormal _safePos);
@@ -62,7 +68,17 @@ if (_isMan) then {
             _unit setVehiclePosition [_locationASL, [], 5, ["NONE", "FLY"] select _fly];
             _unit setVectorUp (surfaceNormal _locationASL);
         };
-        _unit setVelocity [0, 0, 0];
+        private _nul = _unit spawn {
+                            _this enableSimulation true;
+                            _this setVelocity [0, 0, 0];
+                            _this setVectorUp (surfaceNormal (position _this));
+                            _this allowDamage true;
+                            {
+                                _x allowDamage true;
+                            } forEach (crew _this);
+                        };
+        private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20], _unit]) > 0);
+        if (_inBuilding) exitWith { _unit setPos _location; [_unit] call DAKKA_fnc_placeUnit };
 
         /*
         // Reposition if objects are too close

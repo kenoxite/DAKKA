@@ -50,6 +50,7 @@ if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT
 // Create unit
 _unit = _grp createUnit [_unitClass, _pos, _markers, _radius, _special];
 if (isNull _unit) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
+[_unit] joinSilent grpNull;
 [_unit] joinSilent _grp;  // Fix for wrong side when using createUnit
 if (!_enableRandom) then {
   _unit setVariable ["BIS_enableRandomization", false];

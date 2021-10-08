@@ -19,7 +19,7 @@ if (typeName _class == "OBJECT") then {
 	_class = typeOf _class;
 };
 private _isAir = false;
-if (_class isKindOF "Air") then {
+if (_class isKindOf "Air") then {
 	_isAir = true;
 };
 _isAir

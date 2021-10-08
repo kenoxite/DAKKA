@@ -30,7 +30,9 @@ _checkMags = {
 
     private _ignoredAmmo = [
             "FakeAmmo",
-            "Laserbeam"
+            "Laserbeam",
+            "ProbingBeam_01_F",
+            "ProbingBeam_02_F"
         ];
     private _armed = false;
     private _checkAmmoParent = true;

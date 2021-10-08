@@ -23,6 +23,19 @@ _task_1_checks = [] spawn {
     private _keepSearchingWarned = false;
     private _timeOfDetection = 0;
 
+    private _fnc_enemyRadio = {
+        params ["_reporter","_msg", ["_isRadio", true]];
+        if (_isRadio) then {
+            _reporter globalRadio _msg;
+        } else {
+            _reporter globalChat _msg;
+            _reporter setRandomLip true;
+            sleep 1 + random 2;
+            _reporter setRandomLip false;
+        };
+        playSound "radioStatic1";
+    };
+
 
     {
         {
@@ -32,7 +45,7 @@ _task_1_checks = [] spawn {
     } forEach _enemyGroups;
     private _reincorcementsArrived = false;
 
-    // Immunity
+    // Immunity On
     {
         _x setCaptive false;
     } forEach (units DAKKA_PlayerNewGroup);
@@ -133,15 +146,13 @@ _task_1_checks = [] spawn {
                         // hintSilent "Your group has been spotted!\nThey will alert the rest in a few seconds!";
                         // Delay alert a bit to make it feel more natural
                         _reporter = leader (_detectors select 0);
-                        [_reporter, _enemyGroups] spawn {
-                            private _reporter = _this select 0;
-                            private _enemyGroups = _this select 1;
+                        [_reporter, _enemyGroups, _fnc_enemyRadio] spawn {
+                            params ["_reporter", "_enemyGroups", "_fnc_enemyRadio"];
                             sleep (2 + (random 2));
                             if (!alive _reporter || !([_reporter] call DAKKA_fnc_isMan)) then {
                                 _reporter = leader (selectRandom _enemyGroups);
                             };
-                            _reporter globalRadio "SentContact";
-                            playSound "radioStatic1";
+                            [_reporter, "SentContact"] spawn _fnc_enemyRadio;
                         };
                         _detectedPlayerPos = position vehicle leader DAKKA_PlayerNewGroup;
                     };
@@ -157,21 +168,19 @@ _task_1_checks = [] spawn {
                             _reporter = leader (selectRandom _enemyGroups);
                             diag_log format ["DAKKA: %1 is alerting to patrols", _reporter];
                             if (!isNull _reporter) then {
-                                _reporter globalRadio "SentGenCmdTargetNeutralize";
-                                playSound "radioStatic1";
+                                [_reporter, "SentGenCmdTargetNeutralize"] spawn _fnc_enemyRadio;
                                 _alerted = DAKKA_patrolGrps_task1 - [group _reporter];
                                 {
-                                    (leader _x) globalRadio "SentNotifyAttack";
-                                    playSound "radioStatic1";
+                                    sleep (0.5 + random 1);
+                                    [leader _x, "SentNotifyAttack"] spawn _fnc_enemyRadio;
                                 } forEach _alerted;
 
                                 diag_log format ["DAKKA: %1 is alerting to defenders", _reporter];
-                                _reporter globalRadio "SentGenCmdDefend";
-                                playSound "radioStatic1";
+                                [_reporter, "SentGenCmdDefend"] spawn _fnc_enemyRadio;
                                 _alerted = DAKKA_defendGrps_task1 - [group _reporter];
                                 {
-                                    (leader _x) globalRadio "SentConfirmMove";
-                                    playSound "radioStatic1";
+                                    sleep (0.5 + random 1);
+                                    [leader _x, "SentConfirmMove"] spawn _fnc_enemyRadio;
                                 } forEach _alerted;
                             };
                         };
@@ -198,11 +207,10 @@ _task_1_checks = [] spawn {
                         "<Keep searching! They must be somewhere!>"
                         ];
                     if (!isNull _reporter) then {
-                        [_reporter, _report] spawn {
-                            private _reporter = _this select 0;
-                            private _report = _this select 1;
+                        [_reporter, _report, _fnc_enemyRadio] spawn {
+                            params ["_reporter", "_report", "_fnc_enemyRadio"];
                             sleep (10 + (random 30));
-                            _reporter globalChat _report;
+                            [_reporter, _report, false] spawn _fnc_enemyRadio;
                         };
                     };
                     _keepSearchingWarned = true;
@@ -222,11 +230,10 @@ _task_1_checks = [] spawn {
                         "<They must have moved position. Resume your patrols and watch out for threats!>"
                         ];
                     if (!isNull _reporter) then {
-                        [_reporter, _report] spawn {
-                            private _reporter = _this select 0;
-                            private _report = _this select 1;
+                        [_reporter, _report, _fnc_enemyRadio] spawn {
+                            params ["_reporter", "_report", "_fnc_enemyRadio"];
                             sleep (10 + (random 30));
-                            _reporter globalChat _report;
+                            [_reporter, _report, false] spawn _fnc_enemyRadio;
                         };
                     };
                     _keepSearchingWarned = false;
@@ -250,11 +257,10 @@ _task_1_checks = [] spawn {
                         "<Please, update the last contact report... Do you copy?>"
                         ];
                     if (!isNull _reporter) then {
-                        [_reporter, _report] spawn {
-                            private _reporter = _this select 0;
-                            private _report = _this select 1;
+                        [_reporter, _report, _fnc_enemyRadio] spawn {
+                            params ["_reporter", "_report", "_fnc_enemyRadio"];;
                             sleep (10 + (random 30));
-                            _reporter globalChat _report;
+                            [_reporter, _report, false] spawn _fnc_enemyRadio;
                         };
                     };
                     _keepSearchingWarned = false;
@@ -477,8 +483,7 @@ _task_1_checks = [] spawn {
                     } else {
                         if (behaviour (leader _grp) != "COMBAT") then {
                             if (random 1 > 0.9) then {
-                                (leader _grp) globalRadio "SentClear";
-                                playSound "radioStatic1";
+                                [leader _grp, "SentClear"] spawn _fnc_enemyRadio;
                             };  
                         };         
 					};    

@@ -33,6 +33,183 @@ if (_unit == effectiveCommander _veh) then {
     } forEach (crew _veh);
 };
 
+// Fatal Wound
+FW_fnc_fatalWound = {
+    params ["_unit", "_selection", "_damage", "_instigator", "_EHindex"];
+    // [_unit,false]remoteExec["allowDamage",_unit];
+    _unit removeEventHandler ["HandleDamage", _EHindex];
+
+    if (!alive _unit) exitWith {false};
+    if(vehicle _unit != _unit || _unit distance player > 500 || isPlayer _unit) exitWith {
+        _unit setVariable ["FW_Killed",true]; 
+        [_unit,true]remoteExec["allowDamage",_unit];
+        _unit setHit [_selection,1, true, _instigator];
+        _unit setHit ["body",1, true, _instigator];
+    };
+    _unit setCaptive true;
+
+    // Drop weapon, by johnnyboy
+    private _weapon = currentWeapon _unit;
+    if (_weapon != "") then {    
+        _magazine = currentMagazine _unit;
+        _unit removeWeapon (currentWeapon _unit);
+        sleep .1;
+        private _weaponHolder = "WeaponHolderSimulated" createVehicle [0,0,0];
+        _weaponHolder addWeaponCargoGlobal [_weapon, 1];
+        _weaponHolder addMagazineCargoGlobal [_magazine, 1];
+        _weaponHolder setPos (_unit modelToWorld [0,.2,1.2]);
+        _weaponHolder disableCollisionWith _unit;
+        // private _wpnDir = random(360);
+        private _wpnDir = getDir _unit;
+        private _speed = 1 + (random 2);
+        _weaponHolder setVelocity [_speed * sin(_wpnDir), _speed * cos(_wpnDir), 1.5]; 
+    };
+    
+    _nul = [_unit, _selection, _damage, _instigator] spawn {
+        params ["_unit", "_selection", "_damage", "_instigator"];
+            // systemchat format ["_selection: %1", _selection];
+            private _pos = getPos _unit;
+            private _dir = getDir _unit;
+        
+            // Ragdoll
+            // systemchat "Ragdoll";
+            _unit setUnconscious true;
+            // Play fatal wound anim
+            sleep (1 + random 2);
+            if (!alive _unit) exitWith {false};
+            _unit disableAI "all";
+            _unit setUnconscious false;
+            sleep 0.1;
+            _unit setPos _pos;
+            _unit setDir _dir;
+
+        if ((_selection == "head" || _selection == "neck" || _selection == "face_hub") && random 1 <= 0.25) then {
+            [selectRandom SSD_RattleHead, _unit, 0, 2] call SSD_fnc_playSound;
+            private _anim = selectRandom [
+                                            "Acts_CivilInjuredHead_1"
+                                            ];
+            systemchat format ["Head injury anim: %1", _anim];
+            _unit switchMove _anim;
+            sleep (10 + random 10);
+        };
+
+        if (_selection == "spine3") then {
+            [selectRandom SSD_RattleHeart, _unit, 1, 2] call SSD_fnc_playSound;
+            private _anim = selectRandom [
+                                            "Acts_InjuredLyingRifle01",
+                                            "Acts_InjuredLyingRifle02",
+                                            "Acts_InjuredLookingRifle01",
+                                            "Acts_InjuredLookingRifle02",
+                                            "Acts_InjuredLookingRifle03",
+                                            "Acts_InjuredLookingRifle04",
+                                            "Acts_InjuredLookingRifle05",
+                                            "Acts_InjuredAngryRifle01",
+                                            "Acts_InjuredSpeakingRifle01",
+                                            "Acts_InjuredCoughRifle02",
+                                            "Acts_CivilInjuredChest_1"
+                                            ];
+            systemchat format ["Chest injury anim: %1", _anim];
+            _unit switchMove _anim;
+            sleep (3 + random 5);
+        };
+
+
+        if (_selection == "spine1" || _selection == "spine2" || _selection == "pelvis") then {
+            [selectRandom SSD_RattleStomach, _unit, 2, 2] call SSD_fnc_playSound;
+            private _anim = selectRandom [
+                                            "Acts_InjuredLyingRifle01",
+                                            "Acts_InjuredLyingRifle02",
+                                            "Acts_InjuredLookingRifle01",
+                                            "Acts_InjuredLookingRifle02",
+                                            "Acts_InjuredLookingRifle03",
+                                            "Acts_InjuredLookingRifle04",
+                                            "Acts_InjuredLookingRifle05",
+                                            "Acts_InjuredAngryRifle01",
+                                            "Acts_InjuredSpeakingRifle01",
+                                            "Acts_InjuredCoughRifle02",
+                                            "passenger_flatground_leanleft"
+                                            ];
+            systemchat format ["Stomach injury anim: %1", _anim];
+            _unit switchMove _anim;
+            sleep (10 + random 10);
+        };
+
+        if (_selection == "legs") then {
+            [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound;
+            private _anim = selectRandom [
+                                            "Acts_CivilInjuredLegs_1"
+                                            ];
+            systemchat format ["Leg injury anim: %1", _anim];
+            _unit switchMove _anim;
+            sleep (10 + random 10);
+        };
+
+        if (_selection == "hands") then {
+            [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound;
+            private _anim = selectRandom [
+                                            "Acts_CivilInjuredArms_1"
+                                            ];
+            systemchat format ["Arm injury anim: %1", _anim];
+            _unit switchMove _anim;
+            sleep (10 + random 10);
+        };
+
+        if (_selection == "" || _selection == "body") then {
+            [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound;
+            private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20]]) > 0);
+            private _type = [ selectRandom ["still", "move"], "still"] select _inBuilding;
+            // _type = "move";
+            if (_type == "still") then {
+                private _anim = selectRandom [
+                                                "Acts_InjuredLyingRifle01",
+                                                "Acts_InjuredLyingRifle02",
+                                                "Acts_InjuredLookingRifle01",
+                                                "Acts_InjuredLookingRifle02",
+                                                "Acts_InjuredLookingRifle03",
+                                                "Acts_InjuredLookingRifle04",
+                                                "Acts_InjuredLookingRifle05",
+                                                "Acts_InjuredAngryRifle01",
+                                                "Acts_InjuredSpeakingRifle01",
+                                                "Acts_InjuredCoughRifle02",
+                                                "Acts_CivilInjuredGeneral_1",
+                                                "passenger_flatground_leanleft"
+                                                ];
+                systemchat format ["Fatal injury anim: %1", _anim];
+                _unit switchMove _anim;
+                sleep (10 + random 10);
+            };
+
+            if (_type == "move") then {
+                private _anim = selectRandom [
+                                                ["AmovPpneMsprSlowWrflDf_injured", 10],
+                                                ["AmovPpneMsprSnonWnonDf_injured", 12],
+                                                // "ApanPpneMrunSnonWnonDfl",   // weapon proxies are wrong
+                                                // "ApanPpneMsprSnonWnonDf",   // weapon proxies are wrong
+                                                ["ApanPercMsprSnonWnonDf", 8],    // running scared - looks silly
+                                                ["ApanPknlMsprSnonWnonDf", 8],    // running scared - looks silly
+                                                ["AmovPercMstpSnonWnonDnon_Scared", 4],
+                                                ["AmovPercMstpSnonWnonDnon_Scared2", 4],
+                                                ["passenger_flatground_leanleft", 4]
+                                                ];
+                systemchat format ["crawl anim: %1", _anim select 0];
+                _unit playMove (_anim select 0);
+                sleep (_anim select 1)-0.1;
+            };
+        }; 
+
+        if (!alive _unit) exitWith {false};
+        // Kill unit
+        systemchat "Death";
+        _unit setUnconscious true;
+        sleep 0.1;
+        _unit setVariable ["FW_Killed",true]; 
+        [_unit,true]remoteExec["allowDamage",_unit];
+        _unit setHit [_selection,1, true, _instigator];
+        _unit setHit ["body",1, true, _instigator];
+        _unit setVelocity [0,0,0];
+    };
+};
+
 // Apply unscheduled loadout changes so units that change loadout at init EH have time to do their thing
 _null = [_unit, _unitLoadout] spawn {
     private _unit = _this select 0;
@@ -103,9 +280,63 @@ _null = [_unit, _unitLoadout] spawn {
                 } forEach _assignedItems;
             };*/
             // Check for NVGs and flashlights
-            [_x, DAKKA_forceFlashlights] call DAKKA_fnc_useNVGflashlight;
+            [_x, DAKKA_forceFlashlights] spawn DAKKA_fnc_useNVGflashlight;
             // RHS single-shot launchers for AI fix
-            [_x] call _AIDisposableLauncherFix;
+            [_x] spawn _AIDisposableLauncherFix;
+
+
+            // Fatal wounds EH
+            _x addEventHandler ["HandleDamage",{
+                params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint"];
+                private _totalDmg = damage _unit + _damage;
+                    // systemchat format ["part dmg: %1",_unit getHit _selection];
+                if (_selection == "hands" || _selection == "legs") then {
+                    _totalDmg = damage _unit;
+                };
+                if (vehicle _unit == _unit && _unit distance player < 500 && !isPlayer _unit) then {
+                    if !(_unit getVariable ["FW_Killed",false]) then {
+                        // systemchat format ["_totalDmg: %1",_totalDmg];
+                        if(_totalDmg >= 1)then{
+                                _damage = 0.99;
+                                if!(_unit getVariable ["FW_fatallyWounded",false])then{
+                                    [_unit, _selection, _damage, _instigator, _thisEventHandler] spawn FW_fnc_fatalWound;
+                                    _unit setVariable ["FW_fatallyWounded",true];  
+                                    _unit setVariable ["FW_Killed",false]; 
+                                }; 
+                            };
+                    };  
+                };
+                _damage
+            }]; 
+
+            // Deploy drones
+                private _backpack = unitBackpack _x;
+                if (!isNull _backpack) then {
+                    private _backpackClass = typeOf _backpack;
+                    private _parents = [ configFile >> "CfgVehicles" >> _backpackClass, true ] call BIS_fnc_returnParents;
+                    private _UVtype = [
+                                ["B_UAV_01_backpack_F", "B_UAV_01_F"],
+                                ["UAV_06_backpack_base_F", "B_UAV_06_F"],
+                                ["UAV_06_medical_backpack_base_F", "B_UAV_06_medical_F"],
+                                ["UGV_02_Demining_backpack_base_F", "B_UGV_02_Demining_F"],
+                                ["UGV_02_Science_backpack_base_F", "B_UGV_02_Science_F"]
+                            ];
+                    private _index = _UVtype findIf { (_x select 0) in _parents };
+                    if (_index >= 0) then {                
+                        removeBackpack _x;
+                        private _UVclass = (_UVtype select _index) select 1;
+                        private _nul = [_UVclass, _x] spawn {
+                            params ["_UVclass", "_unit"];
+                            private _UV = createVehicle [_UVclass, getPos _unit, [], 5, ["NONE", "FLY"] select (_UVclass isKindOf "Air")];
+                            createVehicleCrew _UV;
+                            private _crew = crew _UV;
+                            {
+                                [_x] joinSilent grpNull;
+                            } forEach _crew;
+                            _crew joinSilent (group _unit);
+                        };
+                    };
+                };
         } forEach (crew _veh);
     };
 };

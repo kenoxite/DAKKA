@@ -335,4 +335,32 @@ if (isNil "_thisWorldLocations") then {
 
 // -------------------------------------------------------------------------------------
 // Initiate task
-call DAKKA_fnc_missionEditTerminate;
+// call DAKKA_fnc_missionEditTerminate;
+
+// _ctrl ctrlShow false;
+// Close main menu
+_display closeDisplay IDC_CANCEL;
+waitUntil {isNull _display};
+call DAKKA_fnc_cameraIntroTerminate;
+waitUntil {!DAKKA_cameraIntroPlaying};
+_display = findDisplay IDC_MENU_MISSION_EDIT;
+
+{ (_display displayCtrl _x) ctrlShow false } forEach [IDC_GRP_MAINMENU, IDC_BACKG_TASK, IDC_GRP_BACKG_MAIN, IDC_GRP_AO_SELECTION, IDC_GRP_AO_MAP_CONTROLS, IDC_MAP_AO_SEL_T, IDC_MAP_AO_SEL_S, IDC_IMG_MAPCROSSHAIR, IDC_BT_PREVIEW, IDC_GRP_BOTTOMBAR_BCKG, IDC_GRP_SUPPORT, IDC_GRP_FACTION_GROUPS, IDC_GRP_CAMERA_PREVIEW, IDC_TXT_TIPS, IDC_GRP_TASK_GROUPS, IDC_TITLE_SAVEDDATAPROFILES];
+{ (_display displayCtrl _x) ctrlShow true } forEach [IDC_GRP_TASK_DESCRIPTION, IDC_GRP_LEFTBAR_BCKG, IDC_TITLE_TASK_DESCRIPTION_GROUP, IDC_TXT_TASK_DESCRIPTION_GROUP, IDC_GRP_NAV_BUTTONS];
+
+// TASK DESCRIPTION
+_ctrl = (_display displayCtrl IDC_TITLE_TASK_DESCRIPTION_GROUP);
+_ctrl ctrlSetText format ["TASK %1: %2\n%3%4", DAKKA_Task,
+    toUpper (call compile format ["DAKKA_Task%1_Title", DAKKA_Task]),
+    "→      ",
+    "CREATE PLAYER GROUP"
+    ];
+_ctrl ctrlEnable false;
+
+_ctrl = (_display displayCtrl IDC_TXT_TASK_DESCRIPTION_GROUP);
+_ctrl ctrlSetText call compile format ["DAKKA_Task%1_Desc_Editor", DAKKA_Task];
+_ctrl ctrlEnable false;
+
+// [] execVM "menuPages\page7.sqf";
+
+[6, true] call DAKKA_fnc_buttonChangePage;

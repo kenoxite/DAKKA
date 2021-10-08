@@ -8,6 +8,7 @@ cutText ["", "BLACK IN"];
 call DAKKA_fnc_resetWeatherEffects;
 _null = [] spawn {
         if (DAKKA_automated) then {
+/*
             // Random date
             _newDate = DAKKA_customDate;
             _newDate set [0, 1985];
@@ -17,8 +18,22 @@ _null = [] spawn {
             DAKKA_noNight = DAKKA_noNightAuto;
             [] spawn DAKKA_fnc_randomTime;
             DAKKA_customDate = date;
-            DAKKA_weatherEffect = "None";
-            [] spawn DAKKA_fnc_randomWeather;
+            // DAKKA_weatherEffect = "None";
+            // [] spawn DAKKA_fnc_randomWeather;
+            */
+            sleep 1;
+            // Weather effect
+            if (DAKKA_weatherEffect != "None") then {
+                call compile format ["DAKKA_%1 = true", DAKKA_weatherEffect];
+                call DAKKA_fnc_startWeatherEffect;
+            };
+            // Random time and weather
+            if (DAKKA_randomTime) then {
+               [] spawn DAKKA_fnc_randomTime;
+            };
+            if (DAKKA_randomWeather && (DAKKA_weatherEffect == "None" || DAKKA_weatherEffect == "earthquake")) then {
+               [] spawn DAKKA_fnc_randomWeather;
+            };
         } else {
             sleep 1;
             // Weather effect

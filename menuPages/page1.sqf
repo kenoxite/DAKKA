@@ -9,6 +9,8 @@
 
 disableSerialization;
 
+[false] call DAKKA_fnc_displayVehicleInfo;
+
 cutText ["", "BLACK IN", 999];
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 

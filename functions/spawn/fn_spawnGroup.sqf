@@ -114,20 +114,19 @@ if (!isNull _oldGrp) then {
 // Vcom AI
 _grp setVariable ["VCM_Skilldisable",true]; //This command will disable an AI group from being impacted by Vcom AI skill changes.
 
-// Move passengers to vehicles - only if vehicle is still alive
-if (isNull _oldGrp) then {
-    {
-        _passengerSeats = [typeOf _x] call DAKKA_fnc_countPassengerSeats;
-        for [{private _i = 0}, {_i < _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
-            // if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - _groupPassengers; %1", _groupPassengers] };
-            (_groupPassengers select 0) moveInAny _x;
-            if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
-            _groupPassengers deleteAt 0;
-        };
-        _x setUnloadInCombat [true, true];
-        if ((count _groupPassengers) == 0) exitWith { false };
-    } forEach _groupVehicles;
-};
+// Move passengers to vehicles
+{
+    _passengerSeats = [typeOf _x] call DAKKA_fnc_countPassengerSeats;
+    for [{private _i = 0}, {_i < _passengerSeats && (count _groupPassengers) > 0}, {_i = _i + 1}] do {
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - _groupPassengers; %1", _groupPassengers] };
+        (_groupPassengers select 0) moveInAny _x;
+        if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - %1 is moving into %2", _groupPassengers select 0, typeOf _x] };
+        _groupPassengers deleteAt 0;
+    };
+    _x setUnloadInCombat [true, true];
+    if ((count _groupPassengers) == 0) exitWith { false };
+} forEach _groupVehicles;
+
 
 // Reenable the group units
 {

@@ -13,11 +13,12 @@ DAKKA_lastPage = CURRENTPAGE;
 [false] call DAKKA_fnc_displayVehicleInfo;
 
 // Fill current saved data menu
+if (!DAKKA_automated) then { 
 _ctrl = (_display displayCtrl IDC_GRP_CURRENTSAVEDDATA);
 _ctrl ctrlShow true;
 _ctrl = (_display displayCtrl IDC_GRP_SAVEDDATAPROFILES);
 _ctrl ctrlShow false;
-
+ };
 
 // Buttons - PAGE NAVIGATION
 _ctrl = (_display displayCtrl IDC_BT_NEXT);
@@ -34,11 +35,8 @@ _ctrl ctrlShow true;
 
 _ctrl = (_display displayCtrl IDC_BT_BACK);
 _ctrl ctrlSetText "BACK";
-_ctrl ctrlSetEventHandler ["ButtonClick", ' [CURRENTPAGE, false] call DAKKA_fnc_buttonChangePage; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' if (!DAKKA_automated) then { [CURRENTPAGE, false] call DAKKA_fnc_buttonChangePage; } else { { ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _x) ctrlShow false } forEach [IDC_GRP_TASK_DESCRIPTION, IDC_GRP_LEFTBAR_BCKG, IDC_TITLE_TASK_DESCRIPTION_GROUP, IDC_TXT_TASK_DESCRIPTION_GROUP, IDC_GRP_NAV_BUTTONS, IDC_GRP_ENVSETTINGS]; { ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl _x) ctrlShow true } forEach [IDC_GRP_MAINMENU, IDC_BACKG_TASK, IDC_GRP_BACKG_MAIN];[] execVM "menuPages\page7.sqf"; } '];
 _ctrl ctrlSetTooltip "";
-if (DAKKA_automated) then {
-    _ctrl ctrlShow false;
-};
 
 
 // TASK DESCRIPTION
@@ -321,7 +319,7 @@ _ctrl ctrlSetEventHandler ["CheckedChanged", '
     ["Flares"] call DAKKA_fnc_globalSettingsSave;
     '];
 _ctrl cbSetChecked  DAKKA_flares;
-_ctrl ctrlSetTooltip "Enable to improve the range and intensity of the lighting provided by flares,\nonly when the task happens near night-time.\nDisable this if you are already using mods that enhance the flares.\n\nThis feature makes use of the ""Flare Fix"" script by Alias";
+_ctrl ctrlSetTooltip "Enable to improve the range and intensity of the lighting provided by flares,\nonly when the task happens near night-time.\nDisable this if you are already using mods that enhance the flares.\n\nThis feature makes use of the ""Flare Fix"" script by Alias\n\nTHIS FEATURE DOES NOT MAKE AI UNITS FIRE FLARES ON THEIR OWN";
 
 _ctrl = (_display displayCtrl IDC_TXT_ENVSETTINGS_FLARES);
 _ctrl ctrlSetText "Enhanced flares";
