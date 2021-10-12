@@ -38,7 +38,7 @@ FW_fnc_fatalWound = {
     params ["_unit", "_selection", "_damage", "_instigator", "_EHindex"];
     // [_unit,false]remoteExec["allowDamage",_unit];
     _unit removeEventHandler ["HandleDamage", _EHindex];
-
+    private _scream = !isNil "SSD_fnc_playSound";
     if (!alive _unit) exitWith {false};
     if(vehicle _unit != _unit || _unit distance player > 500 || isPlayer _unit) exitWith {
         _unit setVariable ["FW_Killed",true]; 
@@ -84,7 +84,7 @@ FW_fnc_fatalWound = {
             _unit setDir _dir;
 
         if ((_selection == "head" || _selection == "neck" || _selection == "face_hub") && random 1 <= 0.25) then {
-            [selectRandom SSD_RattleHead, _unit, 0, 2] call SSD_fnc_playSound;
+            if (_scream) then { [selectRandom SSD_RattleHead, _unit, 0, 2] call SSD_fnc_playSound };
             private _anim = selectRandom [
                                             "Acts_CivilInjuredHead_1"
                                             ];
@@ -94,7 +94,7 @@ FW_fnc_fatalWound = {
         };
 
         if (_selection == "spine3") then {
-            [selectRandom SSD_RattleHeart, _unit, 1, 2] call SSD_fnc_playSound;
+            if (_scream) then { [selectRandom SSD_RattleHeart, _unit, 1, 2] call SSD_fnc_playSound };
             private _anim = selectRandom [
                                             "Acts_InjuredLyingRifle01",
                                             "Acts_InjuredLyingRifle02",
@@ -115,7 +115,7 @@ FW_fnc_fatalWound = {
 
 
         if (_selection == "spine1" || _selection == "spine2" || _selection == "pelvis") then {
-            [selectRandom SSD_RattleStomach, _unit, 2, 2] call SSD_fnc_playSound;
+            if (_scream) then { [selectRandom SSD_RattleStomach, _unit, 2, 2] call SSD_fnc_playSound };
             private _anim = selectRandom [
                                             "Acts_InjuredLyingRifle01",
                                             "Acts_InjuredLyingRifle02",
@@ -135,7 +135,7 @@ FW_fnc_fatalWound = {
         };
 
         if (_selection == "legs") then {
-            [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound;
+            if (_scream) then { [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound };
             private _anim = selectRandom [
                                             "Acts_CivilInjuredLegs_1"
                                             ];
@@ -145,7 +145,7 @@ FW_fnc_fatalWound = {
         };
 
         if (_selection == "hands") then {
-            [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound;
+            if (_scream) then { [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound };
             private _anim = selectRandom [
                                             "Acts_CivilInjuredArms_1"
                                             ];
@@ -155,7 +155,7 @@ FW_fnc_fatalWound = {
         };
 
         if (_selection == "" || _selection == "body") then {
-            [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound;
+            if (_scream) then { [selectRandom SSD_RattleOther, _unit, 3, 2] call SSD_fnc_playSound };
             private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20]]) > 0);
             private _type = [ selectRandom ["still", "move"], "still"] select _inBuilding;
             // _type = "move";

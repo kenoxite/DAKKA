@@ -129,7 +129,7 @@ if (DAKKA_automated || (!DAKKA_automated && isNil "_thisWorldCompositions")) the
     _locationsPredefined = DAKKA_locations_Task2;
     // Amount of compositions should match amount of predefined locations
     _taskLocations = [_locationsPredefined, "Contested Areas"] call BIS_fnc_getFromPairs;
-    _compAmount = if (_inTown) then { 3 } else { 5 };
+    _compAmount = if (_inTown) then { 1 } else { 3 };
     _selectedCompositions = [];
     {
         for [{private _i = 0}, {_i < _compAmount}, {_i = _i + 1}] do
