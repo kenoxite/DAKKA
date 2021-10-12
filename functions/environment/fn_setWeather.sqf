@@ -56,15 +56,19 @@ if (!_rain) then {
 //     0 setGusts _gusts;
 //     0 setWaves _waves;
 
+    ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_SLIDER_ENVSETTINGS_OVERCAST) sliderSetPosition _overcast;
+    ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_SLIDER_ENVSETTINGS_FOG) sliderSetPosition _fog;
 
 if (_updateSettings) then {
     // DAKKA_customWeather = [_overcast, _fog, _rain, _lightnings, _wind, _windStr, _gusts, _waves];
     DAKKA_customWeather = [_overcast, _fog];
+
     // Save settings
     if (!DAKKA_automated) then { ["Weather"] call DAKKA_fnc_globalSettingsSave };
 
     diag_log "DAKKA: --- WEATHER SET ---";
 };
+
 
 sleep 1;
 cutText ["", "PLAIN", 1];

@@ -44,27 +44,27 @@ _ctrl ctrlShow false;
 
 // COMPOSITION EDIT CONTROLS
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_ROTLEFT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["rotleft", IDC_TREE_GRP1] call DAKKA_fnc_compositionEditControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["rotleft", IDC_TREE_GRP1] spawn DAKKA_fnc_compositionEditControls; '];
 _ctrl ctrlSetTooltip "Rotate Left";
 
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_UP);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["up", IDC_TREE_GRP1] call DAKKA_fnc_compositionEditControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["up", IDC_TREE_GRP1] spawn DAKKA_fnc_compositionEditControls; '];
 _ctrl ctrlSetTooltip "Move Up";
 
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_ROTRIGHT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["rotright", IDC_TREE_GRP1] call DAKKA_fnc_compositionEditControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["rotright", IDC_TREE_GRP1] spawn DAKKA_fnc_compositionEditControls; '];
 _ctrl ctrlSetTooltip "Rotate Right";
 
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_LEFT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["left", IDC_TREE_GRP1] call DAKKA_fnc_compositionEditControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["left", IDC_TREE_GRP1] spawn DAKKA_fnc_compositionEditControls; '];
 _ctrl ctrlSetTooltip "Move Left";
 
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_DOWN);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["down", IDC_TREE_GRP1] call DAKKA_fnc_compositionEditControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["down", IDC_TREE_GRP1] spawn DAKKA_fnc_compositionEditControls; '];
 _ctrl ctrlSetTooltip "Move Down";
 
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_RIGHT);
-_ctrl ctrlSetEventHandler ["ButtonClick", ' ["right", IDC_TREE_GRP1] call DAKKA_fnc_compositionEditControls; '];
+_ctrl ctrlSetEventHandler ["ButtonClick", ' ["right", IDC_TREE_GRP1] spawn DAKKA_fnc_compositionEditControls; '];
 _ctrl ctrlSetTooltip "Move Right";
 
 _ctrl = (_display displayCtrl IDC_BT_COMPEDIT_CONTROLS_CLOSE);
@@ -178,7 +178,7 @@ _ctrl ctrlEnable true;
 	// Buttons - Compositions (Left)
 	_ctrl = (_display displayCtrl IDC_BT_AO_SEL_COMP_ADD);
 	_ctrl ctrlSetText "Place composition";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_AO_SELECTION_COMP] call DAKKA_fnc_compositionPlace; '];
+	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_AO_SELECTION_COMP] spawn DAKKA_fnc_compositionPlace; '];
 	_ctrl ctrlSetTooltip "Places the selected composition at the current map coordinates";
 	_ctrl ctrlEnable false;
 
@@ -248,57 +248,45 @@ _ctrl = (_display displayCtrl IDC_TITLE_GROUP3);
 _ctrl ctrlSetText "";
 _ctrl ctrlEnable false;
 
-/*// TURRETS
-// Text
-_ctrl = (_display displayCtrl IDC_TITLE_AO_SEL_TURRETS);
-_ctrl ctrlSetText "(Optional)\nPlace static weapons:";
-
-// Combo
-_ctrl = (_display displayCtrl IDC_COMBO_AO_SEL_TURRETS_FACTION);
-[IDC_COMBO_AO_SEL_TURRETS_FACTION, false] call DAKKA_fnc_updateFactionCombo;
-if ((lbCurSel _ctrl) < 0) then { 
-	_ctrl lbSetCurSel 0; 
-};
-_ctrl ctrlSetEventHandler ["LBSelChanged", ' [IDC_COMBO_AO_SEL_TURRETS_FACTION, _this select 1] call DAKKA_fnc_turretFactionsCombo_selChanged; '];
-_ctrl ctrlEnable true;
-
-// Tree list
-_ctrl = (_display displayCtrl IDC_TREE_AO_SEL_TURRETS);
-[lbData [IDC_COMBO_AO_SEL_TURRETS_FACTION, lbCurSel IDC_COMBO_AO_SEL_TURRETS_FACTION], "turret"] call DAKKA_fnc_updateUnitsTreeList;
-if (((tvCurSel _ctrl) select 0) < 0) then { 
-	_ctrl tvSetCurSel [0]; 
-};
-_ctrl ctrlSetEventHandler ["TreeSelChanged", ' [IDC_TREE_AO_SEL_TURRETS, _this select 1] call DAKKA_fnc_TreeTurrets_selChanged; '];
-_ctrl ctrlEnable true;
-
-	// Buttons - Turrets
-	_ctrl = (_display displayCtrl IDC_BT_AO_SEL_TURRETS_ADD);
-	_ctrl ctrlSetText "Place turret";
-	_ctrl ctrlSetEventHandler ["ButtonClick", ' [IDC_TREE_AO_SEL_TURRETS] call DAKKA_fnc_turretPlace; '];
-	_ctrl ctrlSetTooltip "Places the selected turret at the current map coordinates";
-	_ctrl ctrlEnable false;*/
-
-// Delete compositions
-// [true] call DAKKA_fnc_compositionRemove;
-// waitUntil {DAKKA_compositionsRemoved};
-
 // Load compositions
 if (DAKKA_loadCompositions) then {
+    // Disable all buttons
+    _ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
+    _ctrl ctrlEnable false;
+    _ctrl = (_display displayCtrl IDC_BT_AO_SEL_ADD);
+    _ctrl ctrlEnable false;
+
+    _ctrl = (_display displayCtrl IDC_TREE_AO_SELECTION_COMP);
+    _ctrl ctrlEnable false;
+
+    _ctrl = (_display displayCtrl IDC_TREE_GRP1);
+    _ctrl ctrlEnable false;
+
     [-1, [], 100, true] call DAKKA_fnc_compositionLoad;
-    _nul = [] spawn {
-        _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
-        _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
-        _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
-        if (!isNil "_compositionsData") then {
-            waitUntil { DAKKA_compositionsLoaded == count _compositionsData };
-            if (DAKKA_compositionsLoaded > 0) then {
-                ["Placed compositions have been created"] spawn DAKKA_fnc_displayMessage;
-            } else {
-                [""] spawn DAKKA_fnc_displayMessage;
-            };
+    _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
+    _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
+    _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
+    if (!isNil "_compositionsData") then {
+        waitUntil { DAKKA_compositionsLoaded == count _compositionsData };
+        if (DAKKA_compositionsLoaded > 0) then {
+            ["Placed compositions have been created"] spawn DAKKA_fnc_displayMessage;
+        } else {
+            [""] spawn DAKKA_fnc_displayMessage;
         };
     };
     DAKKA_loadCompositions = false;
+
+    // Enable all buttons
+    _ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
+    _ctrl ctrlEnable true;
+    _ctrl = (_display displayCtrl IDC_BT_AO_SEL_ADD);
+    _ctrl ctrlEnable true;
+    
+    _ctrl = (_display displayCtrl IDC_TREE_AO_SELECTION_COMP);
+    _ctrl ctrlEnable true;
+
+    _ctrl = (_display displayCtrl IDC_TREE_GRP1);
+    _ctrl ctrlEnable true;
 };
 
 cutText ["", "BLACK IN", 2];

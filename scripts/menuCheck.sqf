@@ -51,6 +51,8 @@ DAKKA_mainMenu_loop = [] spawn {
                 setDate DAKKA_missionStart;
                [DAKKA_missionWeather, false] spawn DAKKA_fnc_setWeather;
                call DAKKA_fnc_resetWeatherEffects;
+                setAperture 0; 
+                setApertureNew [0, 0, 0, 0];
                 0 fadeSound 1;
                 enableRadio true;
                 cutText ["", "BLACK IN"];

@@ -2440,9 +2440,9 @@ class DAKKA_Menu_Mission_Edit
                         {
                             idc = IDC_COMBO_ENVSETTINGS_DAY;
 
-                            x = 1.9 * pixelGridNoUIScale * pixelW;
+                            x = 1 * pixelGridNoUIScale * pixelW;
                             y = 1.7 * pixelGridNoUIScale * pixelH;
-                            w = 3.5 * pixelGridNoUIScale * pixelW;
+                            w = 5 * pixelGridNoUIScale * pixelW;
                             h = 1.5 * pixelGridNoUIScale * pixelH;
 
                             sizeEx = ((pixelH * (pixelGridNoUIScale) * 2) * 1.25) * 0.5;    
@@ -2455,7 +2455,7 @@ class DAKKA_Menu_Mission_Edit
                         {
                             idc = IDC_COMBO_ENVSETTINGS_MONTH;
 
-                            x = 5.8 * pixelGridNoUIScale * pixelW;
+                            x = 6.4 * pixelGridNoUIScale * pixelW;
                             y = 1.7 * pixelGridNoUIScale * pixelH;
                             w = 4 * pixelGridNoUIScale * pixelW;
                             h = 1.5 * pixelGridNoUIScale * pixelH;
@@ -2470,7 +2470,7 @@ class DAKKA_Menu_Mission_Edit
                         {
                             idc = IDC_COMBO_ENVSETTINGS_YEAR;
 
-                            x = 10.2 * pixelGridNoUIScale * pixelW;
+                            x = 10.8 * pixelGridNoUIScale * pixelW;
                             y = 1.7 * pixelGridNoUIScale * pixelH;
                             w = 4.5 * pixelGridNoUIScale * pixelW;
                             h = 1.5 * pixelGridNoUIScale * pixelH;

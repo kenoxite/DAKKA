@@ -159,79 +159,83 @@ for [{_j = 0}, {(_unitIndex < count _units) && {(count _buildingPosArray > 0)}},
         _posArray deleteAt 0;
         _housePos = [(_housePos select 0), (_housePos select 1), (_housePos select 2) + (getTerrainHeightASL _housePos) + EYE_HEIGHT];
 
-        _startAngle = (round random 10) * (round random 36);
-        for "_i" from _startAngle to (_startAngle + 350) step 10 do {
-            _checkPos = [_housePos, CHECK_DISTANCE, (90 - _i), (_housePos select 2)] call _Zen_ExtendPosition;
-            if !(lineIntersects [_checkPos, [_checkPos select 0, _checkPos select 1, (_checkPos select 2) + 25], objNull, objNull]) then {
-                if !(lineIntersects [_housePos, _checkPos, objNull, objNull]) then {
-                    _checkPos = [_housePos, CHECK_DISTANCE, (90 - _i), (_housePos select 2) + (CHECK_DISTANCE * tan FOV_ANGLE)] call _Zen_ExtendPosition;
+        // Only one person per spot and free of obstacles
+        private _freeSpot = count (nearestObjects [_housePos, [], 1, true]) == 0;
+        if (_freeSpot) then {
+            _startAngle = (round random 10) * (round random 36);
+            for "_i" from _startAngle to (_startAngle + 350) step 10 do {
+                _checkPos = [_housePos, CHECK_DISTANCE, (90 - _i), (_housePos select 2)] call _Zen_ExtendPosition;
+                if !(lineIntersects [_checkPos, [_checkPos select 0, _checkPos select 1, (_checkPos select 2) + 25], objNull, objNull]) then {
                     if !(lineIntersects [_housePos, _checkPos, objNull, objNull]) then {
-                        _hitCount = 0;
-                        for "_k" from 30 to 360 step 30 do {
-                            _checkPos = [_housePos, 20, (90 - _k), (_housePos select 2)] call _Zen_ExtendPosition;
-                            if (lineIntersects [_housePos, _checkPos, objNull, objNull]) then {
-                                I(_hitCount)
-                            };
-
-                            if (_hitCount >= ROOF_CHECK) exitWith {};
-                        };
-
-                        _isRoof = (_hitCount < ROOF_CHECK) && {!(lineIntersects [_housePos, [_housePos select 0, _housePos select 1, (_housePos select 2) + 25], objNull, objNull])};
-                        if (!(_isRoof) || {((_isRoof) && {(_putOnRoof)})}) then {
-                            if (_isRoof) then {
-                                _edge = false;
-                                for "_k" from 30 to 360 step 30 do {
-                                    _checkPos = [_housePos, ROOF_EDGE, (90 - _k), (_housePos select 2)] call _Zen_ExtendPosition;
-                                    _edge = !(lineIntersects [_checkPos, [(_checkPos select 0), (_checkPos select 1), (_checkPos select 2) - EYE_HEIGHT - 1], objNull, objNull]);
-
-                                    if (_edge) exitWith {
-                                        _i = _k;
-                                    };
-                                };
-                            };
-
-                            if (!(_isRoof) || {_edge}) then {
-                                (_units select _unitIndex) doWatch ([_housePos, CHECK_DISTANCE, (90 - _i), (_housePos select 2) - (getTerrainHeightASL _housePos)] call _Zen_ExtendPosition);
-
-                                (_units select _unitIndex) disableAI "TARGET";
-                                if (_doMove) then {
-                                    (_units select _unitIndex) doMove ASLToATL ([(_housePos select 0), (_housePos select 1), (_housePos select 2) - EYE_HEIGHT]);
-                                } else {
-                                    (_units select _unitIndex) setPosASL [(_housePos select 0), (_housePos select 1), (_housePos select 2) - EYE_HEIGHT];
-                                    (_units select _unitIndex) setDir _i;
-
-                                    doStop (_units select _unitIndex);
-                                    (_units select _unitIndex) forceSpeed 0;
+                        _checkPos = [_housePos, CHECK_DISTANCE, (90 - _i), (_housePos select 2) + (CHECK_DISTANCE * tan FOV_ANGLE)] call _Zen_ExtendPosition;
+                        if !(lineIntersects [_housePos, _checkPos, objNull, objNull]) then {
+                            _hitCount = 0;
+                            for "_k" from 30 to 360 step 30 do {
+                                _checkPos = [_housePos, 20, (90 - _k), (_housePos select 2)] call _Zen_ExtendPosition;
+                                if (lineIntersects [_housePos, _checkPos, objNull, objNull]) then {
+                                    I(_hitCount)
                                 };
 
-                               //** JBOY_UpDown by JohnnyBoy //*/
-                                #define JBOY_UpDown \
-                                    if (!isServer)  exitWith {}; \
-                                    _dude = _this select 0; \
-                                    _stances = _this select 1; \
-                                    _dude removeAllEventHandlers "FiredNear"; \
-                                    while {alive _dude} do { \
-                                        if ((unitPos _dude) == (_stances select 0)) then { \
-                                            _dude setUnitPos (_stances select 1); \
-                                        } else { \
-                                            _dude setUnitPos (_stances select 0); \
-                                        }; \
-                                        sleep (1 + (random 7)); \
-                                    };
+                                if (_hitCount >= ROOF_CHECK) exitWith {};
+                            };
 
+                            _isRoof = (_hitCount < ROOF_CHECK) && {!(lineIntersects [_housePos, [_housePos select 0, _housePos select 1, (_housePos select 2) + 25], objNull, objNull])};
+                            if (!(_isRoof) || {((_isRoof) && {(_putOnRoof)})}) then {
                                 if (_isRoof) then {
-                                    (_units select _unitIndex) setUnitPos "MIDDLE";
-                                   (_units select _unitIndex) addEventHandler ["FiredNear",{[(_this select 0),["DOWN","MIDDLE"]] spawn {JBOY_UpDown};}];
-                                } else {
-                                    (_units select _unitIndex) setUnitPos "UP";
-                                   (_units select _unitIndex) addEventHandler ["FiredNear",{[(_this select 0),["UP","MIDDLE"]] spawn {JBOY_UpDown};}];
+                                    _edge = false;
+                                    for "_k" from 30 to 360 step 30 do {
+                                        _checkPos = [_housePos, ROOF_EDGE, (90 - _k), (_housePos select 2)] call _Zen_ExtendPosition;
+                                        _edge = !(lineIntersects [_checkPos, [(_checkPos select 0), (_checkPos select 1), (_checkPos select 2) - EYE_HEIGHT - 1], objNull, objNull]);
+
+                                        if (_edge) exitWith {
+                                            _i = _k;
+                                        };
+                                    };
                                 };
 
-                                I(_unitIndex)
-                                if (_fillEvenly) then {
-                                    breakTo "for";
-                                } else {
-                                    breakTo "while";
+                                if (!(_isRoof) || {_edge}) then {
+                                    (_units select _unitIndex) doWatch ([_housePos, CHECK_DISTANCE, (90 - _i), (_housePos select 2) - (getTerrainHeightASL _housePos)] call _Zen_ExtendPosition);
+
+                                    (_units select _unitIndex) disableAI "TARGET";
+                                    if (_doMove) then {
+                                        (_units select _unitIndex) doMove ASLToATL ([(_housePos select 0), (_housePos select 1), (_housePos select 2) - EYE_HEIGHT]);
+                                    } else {
+                                        (_units select _unitIndex) setPosASL [(_housePos select 0), (_housePos select 1), (_housePos select 2) - EYE_HEIGHT];
+                                        (_units select _unitIndex) setDir _i;
+
+                                        doStop (_units select _unitIndex);
+                                        (_units select _unitIndex) forceSpeed 0;
+                                    };
+
+                                   //** JBOY_UpDown by JohnnyBoy //*/
+                                    #define JBOY_UpDown \
+                                        if (!isServer)  exitWith {}; \
+                                        _dude = _this select 0; \
+                                        _stances = _this select 1; \
+                                        _dude removeAllEventHandlers "FiredNear"; \
+                                        while {alive _dude} do { \
+                                            if ((unitPos _dude) == (_stances select 0)) then { \
+                                                _dude setUnitPos (_stances select 1); \
+                                            } else { \
+                                                _dude setUnitPos (_stances select 0); \
+                                            }; \
+                                            sleep (1 + (random 7)); \
+                                        };
+
+                                    if (_isRoof) then {
+                                        (_units select _unitIndex) setUnitPos "MIDDLE";
+                                       (_units select _unitIndex) addEventHandler ["FiredNear",{[(_this select 0),["DOWN","MIDDLE"]] spawn {JBOY_UpDown};}];
+                                    } else {
+                                        (_units select _unitIndex) setUnitPos "UP";
+                                       (_units select _unitIndex) addEventHandler ["FiredNear",{[(_this select 0),["UP","MIDDLE"]] spawn {JBOY_UpDown};}];
+                                    };
+
+                                    I(_unitIndex)
+                                    if (_fillEvenly) then {
+                                        breakTo "for";
+                                    } else {
+                                        breakTo "while";
+                                    };
                                 };
                             };
                         };

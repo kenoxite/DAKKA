@@ -35,6 +35,10 @@ _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPair
 _index = _selectionPath select 0;
 _thisCompositionData = _compositionsData select _index;
 
+{
+    diag_log format ["DAKKA: compositionEdit - %1: %2", _forEachIndex , _x];
+} forEach _thisCompositionData;
+
 if (_end) then {
 	// Show things
 	ctrlShow [IDC_GRP_AO_MAP_CONTROLS, true];
@@ -94,6 +98,17 @@ if (_end) then {
 
 	// Update markers
 	call DAKKA_fnc_mapDisplayCompositions;
+
+    sleep 0.0001;
+    _compObjects = _thisCompositionData select 1;
+    for "_i" from 1 to (count _compObjects)-1 do
+    { 
+        private _objData = _compObjects select _i;
+        private _obj = _objData select 0;
+        _obj enableSimulation true;
+        _obj allowDamage true;
+        _obj setDamage 0;
+    };
 
 } else {
 	_compObjects = +_thisCompositionData select 1;

@@ -14,8 +14,9 @@ if (DAKKA_cinematics) then {
  };
 
 // Weather and date settings
+// DAKKA_missionStart = date;
 DAKKA_missionStart = date;
-DAKKA_customDate = DAKKA_missionStart;
+DAKKA_customDate = call DAKKA_fnc_randomDate;
 DAKKA_missionWeather = [overcast, fog];
 DAKKA_customWeather = DAKKA_missionWeather;
 DAKKA_weatherEffectsList = [
@@ -86,6 +87,7 @@ DAKKA_mainDialogOpened = false;
 DAKKA_lastPage = 0;
 DAKKA_crewSlotRoles = ["Driver", "Commander", "Gunner"];
 DAKKA_customGroupsSelection = [1, [0]];
+DAKKA_comboNoValueUpdate = false;
 
 // Preview area
 DAKKA_wheelChockArr = [];
@@ -123,6 +125,8 @@ DAKKA_loadCompositions = true;
 DAKKA_spawnCompRefs = [];
 DAKKA_compositionsRemoved = false;
 DAKKA_compLoadedLocs = [];
+DAKKA_compositionsSpawned = false;
+DAKKA_compSpawned = [];
 
 // Unit editing
 DAKKA_arsenalOpened = false;

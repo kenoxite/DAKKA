@@ -1,5 +1,5 @@
 /*
-  Author: kenoxite
+  Author: BIki
 
   Description:
   Returns array of dates for given year when moon is at its fullest

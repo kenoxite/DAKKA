@@ -96,10 +96,13 @@ class DAKKA_Combo
 	colorText[] = {1,1,1,1}; // Text and frame color
 	colorDisabled[] = {1,1,1,0.5}; // Disabled text color
 	colorSelect[] = {1,1,1,1}; // Text selection color
-
-	pictureColor[] = {1,0.5,0,1}; // Picture color
-	pictureColorSelect[] = {1,1,1,1}; // Selected picture color
-	pictureColorDisabled[] = {1,1,1,0.5}; // Disabled picture color
+                            
+    colorPicture[] = { 1, 1, 1, 1 };
+    colorPictureSelected[] = { 1, 1, 1, 1 };
+    colorPictureDisabled[] = { 1, 1, 1, 0.25 };
+    colorPictureRight[] = { 1, 1, 1, 1 };
+    colorPictureRightSelected[] = { 1, 1, 1, 1 };
+    colorPictureRightDisabled[] = { 1, 1, 1, 0.25 };
 
 	tooltip = "CT_COMBO"; // Tooltip text
 	tooltipColorShade[] = {0,0,0,1}; // Tooltip background color

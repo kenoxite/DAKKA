@@ -30,8 +30,44 @@ _category = _ctrl tvData (_selectionPath select [0, 1]);
 _subCategory = _ctrl tvData (_selectionPath select [0, 2]);
 _composition = _ctrl tvData _selectionPath;
 // systemChat format ["DAKKA: compositionPlace _pos: %5, _selectionPath: %1, _category: %2, subcategory: %3, composition: %4", _selectionPath, _category, _subCategory, _composition, _pos];
-_compArr = [_pos, 0, _category, _subCategory, _composition, true, false] call DAKKA_fnc_compositionSpawn;
 
+
+// Disable all buttons
+_ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
+_ctrl ctrlEnable false;
+_ctrl = (_display displayCtrl IDC_BT_AO_SEL_ADD);
+_ctrl ctrlEnable false;
+
+_ctrl = (_display displayCtrl IDC_TREE_AO_SELECTION_COMP);
+_ctrl ctrlEnable false;
+
+_ctrl = (_display displayCtrl IDC_TREE_GRP1);
+_ctrl ctrlEnable false;
+_ctrl = (_display displayCtrl IDC_BT_AO_SEL_COMP_ADD);
+_ctrl ctrlEnable false;
+
+diag_log format ["DAKKA: compositionPlace - PLACING COMPOSITION...", ""];
+[_pos, 0, _category, _subCategory, _composition, true, false] spawn DAKKA_fnc_compositionSpawn;
+waitUntil {sleep 0.5; DAKKA_compositionsSpawned};
+_compArr = DAKKA_compSpawned;
+diag_log format ["DAKKA: compositionPlace - COMPOSITION PLACED!", ""];
+
+// Enable all buttons
+_ctrl = (_display displayCtrl IDC_COMBO_AO_SELECTION_LOC);
+_ctrl ctrlEnable true;
+_ctrl = (_display displayCtrl IDC_BT_AO_SEL_ADD);
+_ctrl ctrlEnable true;
+
+_ctrl = (_display displayCtrl IDC_TREE_AO_SELECTION_COMP);
+_ctrl ctrlEnable true;
+
+_ctrl = (_display displayCtrl IDC_TREE_GRP1);
+_ctrl ctrlEnable true;
+_ctrl = (_display displayCtrl IDC_BT_AO_SEL_COMP_ADD);
+_ctrl ctrlEnable true;
+
+
+_ctrl = (_display displayCtrl _idc);
 // Update task array
 _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;

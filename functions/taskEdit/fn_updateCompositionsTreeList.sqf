@@ -50,12 +50,40 @@ _compositions = [];
     } forEach ("true" configClasses _x);
   } forEach ("true" configClasses _x);
 } forEach ("true" configClasses (configfile >> "CfgGroups" >> "Empty")); 
+
+#include "..\..\compositions_steam.hpp";
+_compSteam_guerrilla = [];
+_compSteam_military = [];
+_compSteam_civilian = [];
+_compSteam_other = [];
+{
+    private _arr = switch ((_x select 0) select 1) do 
+                    {
+                        case "Guerrilla":
+                        {_compSteam_guerrilla};
+                        case "Military":
+                        {_compSteam_military};
+                        case "Civilian":
+                        {_compSteam_civilian};
+                        default
+                        {_compSteam_other};
+                    };
+    _arr pushback [(_x select 0) select 0, (_x select 0) select 0];
+} forEach _compositions_steam;
+_steamArr = [[["Steam", "steam"], []]];
+_steamArrData = ((_steamArr select 0) select 1);
+_steamArrData pushback [["Civilian", "civilianSteam"], _compSteam_civilian];
+_steamArrData pushback [["Guerrilla", "guerrillaSteam"], _compSteam_guerrilla];
+_steamArrData pushback [["Military", "militarySteam"], _compSteam_military];
+_steamArrData pushback [["Other", "otherSteam"], _compSteam_other];
+// _compositions append [[["Steam", "steam"], [[["All", "allsteam"], _compSteam_filtered]]]];
+_compositions append _steamArr;
+
 _compositions sort true;
 
 // {
 //     if (DAKKA_debug) then { diag_log format ["DAKKA: updateCompositionsTreelist _compositions %2: %1", _x, _forEachIndex] };
 // } forEach _compositions;
-// if (DAKKA_debug) then { diag_log format ["DAKKA: updateCompositionsTreelist _compositions (full): %1", _compositions] };
 
 // Populate tree list
 private _i1 = 0;
@@ -87,6 +115,7 @@ for [{private _i = 0}, {_i < count _compositions}, {_i = _i + 1}] do
         _compClass = _comp select 1;
         _indexComp = _ctrl tvAdd [[_indexCat, _indexSubCat], _compName];
         _ctrl tvSetData [[_indexCat, _indexSubCat, _indexComp], _compClass];
+        _ctrl tvSetTooltip [[_indexCat, _indexSubCat, _indexComp], _compName];
       };
       _ctrl tvExpand [_indexCat];
       // _ctrl tvExpand [_indexCat, _indexSubCat];
@@ -102,4 +131,5 @@ for [{private _i = 0}, {_i < count _compositions}, {_i = _i + 1}] do
   };
   _i1 = _i1 + 1;
 };
+
 // tvExpandAll _ctrl;

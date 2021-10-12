@@ -462,6 +462,7 @@ class CfgFunctions
             file = "functions\environment";
 
             class randomTime {};
+            class randomDate {};
             class setDate {};
             class fillDate {};
             class randomWeather {};
@@ -471,6 +472,7 @@ class CfgFunctions
             class startWeatherEffect {};
             class resetWeatherEffects {};
             class isNight {};
+            class brighterNights {};
 
             // Unused
             class fullMoonDates {};

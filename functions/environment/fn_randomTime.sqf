@@ -46,8 +46,12 @@ _newDate set [4, _minutes];
 setDate _newDate;
 DAKKA_customDate = _newDate;
 
-// skipTime _randomTime;
+// Brighter nights
+call DAKKA_fnc_brighterNights;
+
+DAKKA_comboNoValueUpdate = true;
  ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_HOUR) lbSetCurSel (_hour);
+DAKKA_comboNoValueUpdate = true;
  ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_MINUTES) lbSetCurSel (_minutes);
 
 if (DAKKA_cameraIntroPlaying) then {

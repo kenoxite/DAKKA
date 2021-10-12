@@ -23,6 +23,8 @@ _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
 
+// diag_log format ["DAKKA: mapDisplayCompositions - _compositionsData: %1", _compositionsData];
+
 // Reset markers
 call DAKKA_fnc_deleteCompositionMarkers;
 

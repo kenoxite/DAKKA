@@ -61,6 +61,6 @@ _camera camSetFocus [10, 1];
 _camera cameraeffect ["INTERNAL", "BACK"];
 _camera camCommit 0;
 
-if ([DAKKA_customDate] call DAKKA_fnc_isNight) then { camUseNVG true; } else { camUseNVG false; };
+// if ([DAKKA_customDate] call DAKKA_fnc_isNight) then { camUseNVG true; } else { camUseNVG false; };
 
 cutText ["", "BLACK IN"];

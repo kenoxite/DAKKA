@@ -67,7 +67,7 @@ if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove _compsToDelet
 
     // Now delete the rest
     {
-        if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove deleting object: %1", _x select 0] };
+        // if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove deleting object: %1", _x select 0] };
     	deleteVehicle (_x select 0);
     } forEach _compObjects;
 

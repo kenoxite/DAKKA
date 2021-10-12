@@ -64,7 +64,7 @@ if (count _action > 0) then {
 
 if (DAKKA_debug) then { diag_log format ["DAKKA: setDate - time: %1", time - _initTime] };
 // Don't update time and weather when just loading the page to avoid spamming the change X functions
-if (((time - _initTime) > 1) || _dateType == "minutes") then {
+if (((time - _initTime) > 1) || _dateType == "minutes" || DAKKA_comboNoValueUpdate) then {
     // Update weather (only when changing month)
     if (_dateType == "month") then {
         if (DAKKA_randomWeather) then {
@@ -84,4 +84,9 @@ if (((time - _initTime) > 1) || _dateType == "minutes") then {
     if (DAKKA_cameraIntroPlaying) then {
         [] spawn DAKKA_fnc_cameraIntro;
     };
+
+    DAKKA_comboNoValueUpdate = false;
 };
+
+// Brighter nights
+call DAKKA_fnc_brighterNights;

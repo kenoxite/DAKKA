@@ -55,6 +55,7 @@ if (DAKKA_automated || (!DAKKA_automated && _noCompData)) then {
     // Load default compositions
     #include "..\..\compositions_default.hpp";
     #include "..\..\compositions_CUP.hpp";
+    #include "..\..\compositions_steam.hpp";
     // Use CUP compositions if that mod is loaded
     _fnc_CUPcheck = {
         private _CUPtest = "FlagCarrierTakistanKingdom_EP1" createVehicle [0,0,0];
@@ -63,8 +64,14 @@ if (DAKKA_automated || (!DAKKA_automated && _noCompData)) then {
         _CUP
     };
     _compositionsPredefined = [];
-    if (call _fnc_CUPcheck) then { _compositionsPredefined = +_compositions_CUP } else { 
-    _compositionsPredefined = +_compositions_default };
+    // _compositionsPredefined = [ +_compositions_default, +_compositions_CUP] select (call _fnc_CUPcheck);
+    if (call _fnc_CUPcheck) then { _compositionsPredefined = +_compositions_CUP };
+    _compositionsPredefined append _compositions_steam;
+
+    // _compositionsPredefined = +_compositions_default;
+
+    // #include "..\..\compositions_test.hpp";
+    // _compositionsPredefined = +_compositions_test;
 
     _locationsPredefined = DAKKA_locations_Task1;
     // Amount of compositions should match amount of predefined locations
@@ -74,7 +81,8 @@ if (DAKKA_automated || (!DAKKA_automated && _noCompData)) then {
         private _coords = _x select 0;
         // if (DAKKA_debug) then { diag_log format ["_coords: %1", _coords] };
         private _dir = _x select 1;
-        private _comp = +selectRandom _compositionsPredefined;
+        private _filteredComps = _compositionsPredefined select {(_x select 0) select 1 == "Guerrilla"};
+        private _comp = +selectRandom _filteredComps;
         private _compName = _comp select 0;
         private _newName = format ["%1 %2", _compName, _forEachIndex + 1];
         _comp set [0, _newName];
