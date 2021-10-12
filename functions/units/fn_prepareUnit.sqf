@@ -38,7 +38,6 @@ FW_fnc_fatalWound = {
     params ["_unit", "_selection", "_damage", "_instigator", "_EHindex"];
     // [_unit,false]remoteExec["allowDamage",_unit];
     _unit removeEventHandler ["HandleDamage", _EHindex];
-    private _scream = !isNil "SSD_fnc_playSound";
     if (!alive _unit) exitWith {false};
     if(vehicle _unit != _unit || _unit distance player > 500 || isPlayer _unit) exitWith {
         _unit setVariable ["FW_Killed",true]; 
@@ -70,6 +69,8 @@ FW_fnc_fatalWound = {
             // systemchat format ["_selection: %1", _selection];
             private _pos = getPos _unit;
             private _dir = getDir _unit;
+
+            private _scream = !(isNil "SSD_fnc_playSound");
         
             // Ragdoll
             // systemchat "Ragdoll";
