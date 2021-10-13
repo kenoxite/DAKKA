@@ -473,6 +473,7 @@ class CfgFunctions
             class resetWeatherEffects {};
             class isNight {};
             class brighterNights {};
+            class sunElev {};
 
             // Unused
             class fullMoonDates {};
