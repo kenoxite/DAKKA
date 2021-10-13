@@ -43,7 +43,7 @@ if (count _locations == 0) exitWith { false };
   _mrkr = format ["DAKKA_mrkr_Task%1_location_%2", DAKKA_Task, _forEachIndex + 1];
   _pos = _x select 0;
   _dir = _x select 1;
-  if (isNil _mrkr) then {
+  if (isNil "_mrkr") then {
     _txt = format ["Location %1", _forEachIndex + 1];
     // [_x select 0, [1, 1], "ColorEAST", "b_hq", _txt, 1, [_mrkr]] call BIS_fnc_markerCreate;
     // _mrkr setMarkerDir (_x select 1); 

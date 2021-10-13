@@ -36,7 +36,9 @@ if (_faction == "" || "drone" in _vehLC) then {
     // Choose crew unit classes
     // [_squadLeaders, _teamLeaders, _riflemen, _riflemenAT, _riflemenHAT, _riflemenAA, _grenadiers, _autoriflemen, _medics, _marksmen, _officers, _drivers, _crewmen, _snipers, _spotters, _JTACs, _engineers, _explosiveSpecialists, _heavyGunners, _pilots]
     private _catInf = [];
-    if (isNil (call compile format ["'DAKKA_%1_%2'", "Infantry", _faction])) then {
+    private _factionInfantryGrpsStr = format ["DAKKA_%1_%2", "Infantry", _faction];
+    private _factionInfantryGrps = missionNamespace getVariable _factionInfantryGrpsStr;
+    if (isNil "_factionInfantryGrps") then {
         // Check faction for suitable infantry units
         private _factionInfantry = [_faction, "Infantry"] call DAKKA_fnc_categorizeUnits;
         private _infGroups = [];
@@ -50,9 +52,9 @@ if (_faction == "" || "drone" in _vehLC) then {
         if (count _infGroups == 0) exitWith { [] };
 
         _catInf = [_infGroups, _isRegular] call DAKKA_fnc_categorizeInf;
-        missionNamespace setVariable [format ["DAKKA_%1_%2", "Infantry", _faction], _catInf];
+        missionNamespace setVariable [_factionInfantryGrpsStr, _catInf];
     } else {
-        _catInf = call compile format ["DAKKA_%1_%2", "Infantry", _faction];
+        _catInf = _factionInfantryGrps;
     };
     private _riflemen = _catInf select 2;
     private _drivers = _catInf select 11;

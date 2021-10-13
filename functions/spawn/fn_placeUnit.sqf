@@ -23,6 +23,9 @@ if (!alive _unit) exitWith { getPos _unit };
 private _unitClass = typeOf _unit;
 private _isMan = [_unitClass] call DAKKA_fnc_isMan;
 
+// Move unit to a safe location
+// _unit setPos [random 100, random 100, 10000];
+
 if (_isMan) then {
     private _nul = [_unit, _location, _unitClass] spawn {
         params ["_unit", "_location", "_unitClass"];
@@ -43,6 +46,7 @@ if (_isMan) then {
             private _safePos = [_location, 0, 50, _dist, 0, 0.5, 0] call BIS_fnc_findSafePos;
             _unit setPos _safePos;
         };
+        _unit setVariable ["DAKKA_UnitReady", true];
     };
 } else {
     // Vehicles
@@ -51,34 +55,46 @@ if (_isMan) then {
         private _unitType = [_unitClass] call DAKKA_fnc_vehicleType;
         private _isAir = [_unitClass] call DAKKA_fnc_isAir;
         if (count _location == 0) then { _location = ASLToAGL (getPosWorld _unit) };
+        private _location2D = [_location select 0, _location select 1];
         private _locationASL = AGLToASL _location;
         private _safeRadius = 1;
 
         _unit enableSimulation false;
         _unit allowDamage false;
+        _unit setDamage 0;
+        (vehicle _unit) setVelocity [0, 0, 0];
         {
             _x allowDamage false;
+            _x setDamage 0;
         } forEach (crew vehicle _unit);
         
-        private _safePos = [_location, [ _safeRadius, -1, -1, 1, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
+        private _safePos = [_location2D, [ _safeRadius, -1, -1, 1, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
         if (count _safePos > 0) then {
             _unit setPosASL _safePos;
-            _unit setVectorUp (surfaceNormal _safePos);
+            (vehicle _unit) setVectorUp (surfaceNormal _safePos);
+            (vehicle _unit) setVelocity [0, 0, 0];
         } else {
-            _unit setVehiclePosition [_locationASL, [], 5, ["NONE", "FLY"] select _fly];
-            _unit setVectorUp (surfaceNormal _locationASL);
+            _unit setVehiclePosition [_location, [], 5, ["NONE", "FLY"] select _fly];
+            (vehicle _unit) setVectorUp (surfaceNormal _location);
+            (vehicle _unit) setVelocity [0, 0, 0];
         };
+        private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20], _unit]) > 0);
+        if (_inBuilding && (_unit getVariable ["DAKKA_placingRetries", 0]) < 3) exitWith { [_unit, _location] spawn { params ["_unit", "_location"]; _unit setPos _location; sleep 0.01; _unit setVariable ["DAKKA_placingRetries", (_unit getVariable ["DAKKA_placingRetries", 0]) + 1]; [_unit] call DAKKA_fnc_placeUnit; } };
         private _nul = _unit spawn {
                             _this enableSimulation true;
-                            _this setVelocity [0, 0, 0];
                             _this setVectorUp (surfaceNormal (position _this));
+                            _this setVelocity [0, 0, 0];
                             _this allowDamage true;
+                            _this setDamage 0;
                             {
                                 _x allowDamage true;
+                                _x setDamage 0;
                             } forEach (crew _this);
                         };
-        private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20], _unit]) > 0);
-        if (_inBuilding) exitWith { _unit setPos _location; [_unit] call DAKKA_fnc_placeUnit };
+        _unit setVariable ["DAKKA_UnitReady", true];
+        {
+            _x setVariable ["DAKKA_UnitReady", true];
+        } forEach (crew vehicle _unit);
 
         /*
         // Reposition if objects are too close

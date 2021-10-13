@@ -24,7 +24,6 @@ private _oldGrp = grpNull;
 private _unit = objNull;
 private _isMan = true;
 private _isAir = false;
-private _emptyPos = [];
 private _unitClass = "";
 private _unitRank = "";
 private _unitLoadout = [];
@@ -68,13 +67,16 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
         _isAir = [_unitClass] call DAKKA_fnc_isAir;
         _unit = ([_unitClass, _pos, if (isNull _grp) then { _side } else { _grp }, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, if (_isDefaultVeh) then { _faction } else { "" }] call DAKKA_fnc_spawnVehicle);
     };
+    _unit allowDamage false;
+    _unit setDamage 0;
+    _unit enableSimulation false;
+    if (!_isAir) then { _unit setVelocity [0, 0, 0] };
     _unit setCaptive true;
     _unit disableAI "TARGET";
     _unit disableAI "AUTOTARGET";
     _unit disableAI "AUTOCOMBAT";
     _unit disableAI "CHECKVISIBLE";
     _unit disableAI "MOVE";
-    _unit stop true;
     if (_forEachIndex == 0) then {
         _grp = group _unit;
     };
@@ -82,19 +84,21 @@ if (count _presentUnits == 0) exitWith { diag_log format ["DAKKA: spawnGroup GRO
         _groupPassengers pushBack _unit;
     } else {
         {
+            _x allowDamage false;
+            _x setDamage 0;
+            _x enableSimulation false;
             _x setCaptive true;
             _x disableAI "TARGET";
             _x disableAI "AUTOTARGET";
             _x disableAI "AUTOCOMBAT";
             _x disableAI "CHECKVISIBLE";
             _x disableAI "MOVE";
-             _x stop true;
         } forEach (crew vehicle _unit);
         _groupVehicles pushBack _unit;
         _grp addVehicle _unit;
         if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - Vehicle group %1 is side %2", _grp, side _grp ] };
         if (!_isAir || (_isAir && !_fly)) then {
-            [_unit, [], _fly] call DAKKA_fnc_placeUnit;
+            [_unit, _pos, _fly] call DAKKA_fnc_placeUnit;
         };
     };
     _unit setUnitRank _unitRank;
@@ -129,23 +133,54 @@ _grp setVariable ["VCM_Skilldisable",true]; //This command will disable an AI gr
 
 
 // Reenable the group units
-{
-    _x enableAI "TARGET";
-    _x enableAI "AUTOTARGET";
-    _x enableAI "AUTOCOMBAT";
-    _x enableAI "CHECKVISIBLE";
-    _x enableAI "MOVE";
-    _x setCaptive false;
-    _x stop false;
+
+    private _units = units _grp;
+    for "_i" from 0 to (count _units)-1 do
     {
-        _x enableAI "TARGET";
-        _x enableAI "AUTOTARGET";
-        _x enableAI "AUTOCOMBAT";
-        _x enableAI "CHECKVISIBLE";
-        _x enableAI "MOVE";
-        _x setCaptive false;
-        _x stop false;
-    } forEach (crew vehicle _x);
-} forEach (units _grp);
+        private _unit = _units select _i;
+        // waitUntil {sleep 0.001; (_unit getVariable ["DAKKA_UnitReady", false])};
+        private _veh = vehicle _unit;
+        _unit enableSimulation true;
+        _isAir = [_unit] call DAKKA_fnc_isAir;
+        if (!_isAir) then {
+            _unit setVelocity [0, 0, 0];
+        };
+        _unit allowDamage true;
+        _unit setDamage 0;
+        _unit enableAI "TARGET";
+        _unit enableAI "AUTOTARGET";
+        _unit enableAI "AUTOCOMBAT";
+        _unit enableAI "CHECKVISIBLE";
+        _unit enableAI "MOVE";
+        _unit setCaptive false;
+        {
+            _x enableSimulation true;
+            _x setVelocity [0, 0, 0];
+            _x allowDamage true;
+            _x setDamage 0;
+            _x enableAI "TARGET";
+            _x enableAI "AUTOTARGET";
+            _x enableAI "AUTOCOMBAT";
+            _x enableAI "CHECKVISIBLE";
+            _x enableAI "MOVE";
+            _x setCaptive false;
+        } forEach (crew _veh);
+
+        _veh enableSimulation true;
+        _isAir = [_veh] call DAKKA_fnc_isAir;
+        if (!_isAir) then {
+            _veh setVectorUp (surfaceNormal (position _veh));
+            _veh setVelocity [0, 0, 0];
+        };
+        _veh allowDamage true;
+        _veh setDamage 0;
+        _veh enableAI "TARGET";
+        _veh enableAI "AUTOTARGET";
+        _veh enableAI "AUTOCOMBAT";
+        _veh enableAI "CHECKVISIBLE";
+        _veh enableAI "MOVE";
+        _veh setCaptive false;
+    };
+
 
 _grp

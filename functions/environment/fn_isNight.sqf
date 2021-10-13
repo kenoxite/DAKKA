@@ -24,4 +24,8 @@ params ["_date"];
 // private _isNight = (daytime < (_dawn) || daytime > (_dusk));
 // _isNight
 
-[false, true] select (call DAKKA_fnc_sunElev < -12)
+// private _sunElev = call DAKKA_fnc_sunElev;
+// private _darkAngle = [-12,-1.5] select ((_date select 3) > 12);
+// [false, true] select (_sunElev < _darkAngle)
+
+(apertureParams select 0) <= 5.1

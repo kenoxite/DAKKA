@@ -423,7 +423,20 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
             "AmbientTrack04_F",
             "EventTrack03a_F_EPB",
             "Music_Probe_Discovered",
-            "Music_Suspended_Loop_01"
+            "Music_Suspended_Loop_01",
+            "LeadTrack03_F_Mark",
+            "OM_Music02",
+            "OM_Music03",
+            "AmbientTrack03_F",
+            "AmbientTrack01_F_EPB",
+            "BackgroundTrack01_F_EPB",
+            "EventTrack04_F_EPB",
+            "BackgroundTrack01_F_EPC",
+            "BackgroundTrack04_F_EPC",
+            "EventTrack03_F_EPC",
+            "LeadTrack03_F_EPC",
+            "LeadTrack04_F_Tank",
+            "BackgroundTrack01_F_Tank"
         ],
         [ // combat
             "AmbientTrack01a_F_Tacops",
@@ -436,7 +449,17 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
             "LeadTrack03a_F_EPA",
             "Music_Battle_Human",
             "Music_Freeroam_Battle_Human",
-            "Music_Tension_Loop_01"
+            "Music_Tension_Loop_01",
+            "LeadTrack04a_F",
+            "LeadTrack03_F",
+            "LeadTrack06_F",
+            "LeadTrack03_F_EXP",
+            "BackgroundTrack02_F",
+            "LeadTrack03_F_EPA",
+            "LeadTrack02_F_EPB",
+            "LeadTrack04_F_EPB",
+            "LeadTrack02_F_EPC",
+            "LeadTrack01_F_Tank"
         ],
         [ // safe
         ],
@@ -785,6 +808,18 @@ playMusic _startingMusic;
                     _compGrpsTrimmed resize (2 + floor (random 2));
                     { _x set [4, 0] } forEach _compGrpsTrimmed;
                     _grp = [_compGrpsTrimmed, _refPos, west, 10, true, "", false] call DAKKA_fnc_spawnGroup;
+                    {
+                        _x enableSimulation true;
+                        _x setVelocity [0, 0, 0];
+                        _x allowDamage true;
+                        _x setDamage 0;
+                        _x enableAI "TARGET";
+                        _x enableAI "AUTOTARGET";
+                        _x enableAI "AUTOCOMBAT";
+                        _x enableAI "CHECKVISIBLE";
+                        _x enableAI "MOVE";
+                        _x setCaptive false;
+                    } forEach units _grp;
                     if (!isNull _grp) then {
                         { _x allowFleeing 0 } forEach (units _grp);
                         _grp setBehaviour "COMBAT";
@@ -848,6 +883,7 @@ playMusic _startingMusic;
         (leader _x) reveal _unit;
     } forEach DAKKA_O_AirGrps;
 } forEach (allUnits select { side _x == east });
+
 
 // Hide marta markers
 p1 setVariable ["MARTA_hide", DAKKA_martaHide];

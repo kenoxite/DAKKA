@@ -21,26 +21,25 @@
   Examples:
 
 */
-params ["_unitClass", ["_pos", position player], ["_grp", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_checkPos", true], ["_autoDelete", true]];  
-private ["_unit", "_side"];
+params ["_unitClass", ["_pos", position player], ["_grpOrSide", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_checkPos", true], ["_autoDelete", true]];  
 
 // Create group if needed
-_side = sideUnknown;
-if (typeName _grp == "SIDE") then {
-  if (_grp == sideUnknown) then {
-    // _side = side player;
+private _grp = grpNull;
+private _side = sideUnknown;
+if (typeName _grpOrSide == "SIDE") then {
+  if (_grpOrSide == sideUnknown) then {
     _side = west;
   } else {
-    _side = _grp;
+    _side = _grpOrSide;
   };
   _grp = createGroup [_side, _autoDelete];
 } else {
-  if (isNull _grp) then {
-    // _side = side player;
+  if (isNull _grpOrSide) then {
     _side = west;
     _grp = createGroup [_side, _autoDelete];
   } else {
-    _side = side _grp;
+    _side = side _grpOrSide;
+    _grp = _grpOrSide;
   };
 };
 
@@ -48,9 +47,10 @@ if (typeName _grp == "SIDE") then {
 if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
 
 // Create unit
-_unit = _grp createUnit [_unitClass, _pos, _markers, _radius, _special];
+private _unit = (group player) createUnit [_unitClass, _pos, _markers, _radius, _special];
 if (isNull _unit) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
-[_unit] joinSilent grpNull;
+// _unit setPos [random 100, random 100, 10000];
+[_unit] join grpNull;
 [_unit] joinSilent _grp;  // Fix for wrong side when using createUnit
 
 _unit setVariable ["BIS_enableRandomization", [false, true] select _enableRandom];
@@ -58,7 +58,9 @@ _unit setVariable ["BIS_enableRandomization", [false, true] select _enableRandom
 
 // Temptative fix to avoid units spawning inside things
 if (_checkPos) then {
-    [_unit] call DAKKA_fnc_placeUnit;
+    [_unit, _pos] call DAKKA_fnc_placeUnit;
+} else {
+    _unit setVariable ["DAKKA_UnitReady", true];
 };
 
 // if (DAKKA_debug) then { diag_log format ["DAKKA: spawnMan %1 side: %2", _unit, side _unit ] };

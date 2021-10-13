@@ -141,7 +141,7 @@ _nul = _this spawn {
                 _supportLeader engineOn false;
                 // Check range
                 _magType = (getArtilleryAmmo [_supportLeader]) select 0;
-                if (!isNil _magType) then {
+                if (!isNil "_magType") then {
                     _isInRange = _supportLocation inRangeOfArtillery [[_supportLeader], _magType];
                     private _i = 0;
                     private _maxTries = 10;

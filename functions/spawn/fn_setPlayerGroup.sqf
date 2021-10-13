@@ -83,21 +83,25 @@ private _presentUnits = [];
         _applyLoadout = false;
     };
   };
-  _unit setVelocity [0, 0, 0];
-  _unit disableAI "TARGET";
-  _unit disableAI "AUTOTARGET";
-  _unit disableAI "AUTOCOMBAT";
-  _unit disableAI "CHECKVISIBLE";
-  _unit setCaptive true;
-  _unit allowDamage false;
-  {
-    _x setCaptive true;
-    _x disableAI "TARGET";
-    _x disableAI "AUTOTARGET";
-    _x disableAI "AUTOCOMBAT";
-    _x disableAI "CHECKVISIBLE";
-    _x allowDamage false;
-  } forEach crew vehicle _unit;
+    _unit allowDamage false;
+    _unit setDamage 0;
+    _unit enableSimulation false;
+    if (!_isAir) then { _unit setVelocity [0, 0, 0] };
+    _unit setCaptive true;
+    _unit disableAI "TARGET";
+    _unit disableAI "AUTOTARGET";
+    _unit disableAI "AUTOCOMBAT";
+    _unit disableAI "CHECKVISIBLE";
+    {
+        _x allowDamage false;
+        _x setDamage 0;
+        _x enableSimulation false;
+        _x setCaptive true;
+        _x disableAI "TARGET";
+        _x disableAI "AUTOTARGET";
+        _x disableAI "AUTOCOMBAT";
+        _x disableAI "CHECKVISIBLE";
+    } forEach crew vehicle _unit;
   if (!_isMan) then {
     _unit enableSimulation false;
     if (!_isAir) then {
@@ -193,7 +197,7 @@ if (_ldrIsPlayer) then {
  (units _grp) joinSilent group p1; 
 } else { 
  [p1] joinSilent _grp; 
-};  
+}; 
 
 // Initialize the rest of the team
 _units = (units group p1); 
@@ -224,22 +228,22 @@ _units = (units group p1);
         // _x addEventHandler ["killed", { [_this] call DAKKA_fnc_spectate; }];                   
         // _x addEventHandler ["respawn", {  }]; 
     };
-    _x enableAI "TARGET";
-    _x enableAI "AUTOTARGET";
-    _x enableAI "AUTOCOMBAT";
-    _x enableAI "CHECKVISIBLE";
-    _x setCaptive false;
-    _x allowDamage true;
+    // _x enableAI "TARGET";
+    // _x enableAI "AUTOTARGET";
+    // _x enableAI "AUTOCOMBAT";
+    // _x enableAI "CHECKVISIBLE";
+    // _x setCaptive false;
+    // _x allowDamage true;
     if (_veh != _x && _x == effectiveCommander _veh) then {
-        {
-            _x enableAI "TARGET";
-            _x enableAI "AUTOTARGET";
-            _x enableAI "AUTOCOMBAT";
-            _x enableAI "CHECKVISIBLE";
-            _x setCaptive false;
-            _x allowDamage true;
-            _x enableSimulation true;
-        } forEach crew _veh;
+        // {
+        //     _x enableAI "TARGET";
+        //     _x enableAI "AUTOTARGET";
+        //     _x enableAI "AUTOCOMBAT";
+        //     _x enableAI "CHECKVISIBLE";
+        //     _x setCaptive false;
+        //     _x allowDamage true;
+        //     _x enableSimulation true;
+        // } forEach crew _veh;
         private _isAir = [_veh] call DAKKA_fnc_isAir;
         if (!_isAir) then {
             private _actionID = _veh addAction 
@@ -294,5 +298,57 @@ if !(isNil "_voice") then {
         player setVariable ["UVO_allowDeathShouts",missionNamespace getVariable ["uvo_main_UVO" + _voice,true],true];
     };
 };
+
+
+// Reenable the group units
+
+    private _units = units _grp;
+    for "_i" from 0 to (count _units)-1 do
+    {
+        private _unit = _units select _i;
+        // waitUntil {sleep 0.001; (_unit getVariable ["DAKKA_UnitReady", false])};
+        private _veh = vehicle _unit;
+        _unit enableSimulation true;
+        _isAir = [_unit] call DAKKA_fnc_isAir;
+        if (!_isAir) then {
+            _unit setVelocity [0, 0, 0];
+        };
+        _unit allowDamage true;
+        _unit setDamage 0;
+        _unit enableAI "TARGET";
+        _unit enableAI "AUTOTARGET";
+        _unit enableAI "AUTOCOMBAT";
+        _unit enableAI "CHECKVISIBLE";
+        _unit enableAI "MOVE";
+        _unit setCaptive false;
+        {
+            _x enableSimulation true;
+            _x setVelocity [0, 0, 0];
+            _x allowDamage true;
+            _x setDamage 0;
+            _x enableAI "TARGET";
+            _x enableAI "AUTOTARGET";
+            _x enableAI "AUTOCOMBAT";
+            _x enableAI "CHECKVISIBLE";
+            _x enableAI "MOVE";
+            _x setCaptive false;
+        } forEach (crew _veh);
+        
+        _veh enableSimulation true;
+        _isAir = [_veh] call DAKKA_fnc_isAir;
+        if (!_isAir) then {
+            _veh setVectorUp (surfaceNormal (position _veh));
+            _veh setVelocity [0, 0, 0];
+        };
+        _veh allowDamage true;
+        _veh setDamage 0;
+        _veh enableAI "TARGET";
+        _veh enableAI "AUTOTARGET";
+        _veh enableAI "AUTOCOMBAT";
+        _veh enableAI "CHECKVISIBLE";
+        _veh enableAI "MOVE";
+        _veh setCaptive false;
+    };
+
 
 group p1 

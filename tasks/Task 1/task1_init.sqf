@@ -264,13 +264,28 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
         [ // stealth
             "EventTrack03a_F_EPB",
             "Music_Probe_Discovered",
-            "Music_Suspended_Loop_01"
+            "Music_Suspended_Loop_01",
+            "LeadTrack03_F_Mark",
+            "OM_Music02",
+            "OM_Music03",
+            "AmbientTrack03_F",
+            "AmbientTrack01_F_EPB",
+            "BackgroundTrack01_F_EPB",
+            "EventTrack04_F_EPB",
+            "BackgroundTrack01_F_EPC",
+            "BackgroundTrack04_F_EPC",
+            "EventTrack03_F_EPC",
+            "LeadTrack03_F_EPC",
+            "LeadTrack04_F_Tank",
+            "BackgroundTrack01_F_Tank"
         ],
         [ // combat
             "LeadTrack03a_F_EPA",
             "Music_Battle_Human",
             "Music_Freeroam_Battle_Human",
-            "Music_Tension_Loop_01"
+            "Music_Tension_Loop_01",
+            "LeadTrack02_F_EPC",
+            "LeadTrack02_F_EPB"
         ],
         [ // safe
             "AmbientTrack01a_F",
@@ -278,7 +293,8 @@ p1 setVariable ["MARTA_hide", DAKKA_martaHide];
             "Music_Roaming_Day",
             "Music_Roaming_Night",
             "Music_Roaming_Night_02",
-            "Music_Roaming_Night_Fragment_01_20s"
+            "Music_Roaming_Night_Fragment_01_20s",
+            "AmbientTrack02_F_EXP"
         ],
         0.3, // volume
         5, // transition
