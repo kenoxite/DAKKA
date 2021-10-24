@@ -107,6 +107,7 @@ _nul = _this spawn {
                 _i = _i + 1;
             };
             _grp = [_x select 1, _pos, west, _spawnRadius, _fly] call DAKKA_fnc_spawnGroup;
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
             if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- %1 group could not be spawned!", _supportType]; grpNull };
                 
             _supportLeader =  vehicle leader _grp;

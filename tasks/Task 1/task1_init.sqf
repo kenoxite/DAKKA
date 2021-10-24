@@ -160,7 +160,8 @@ diag_log "DAKKA: Task 1 - Spawning player group";
 _ctrl ctrlSetText format ["Spawning player group...", ""];
 _dir = [_startPos_B, _searchPos] call BIS_fnc_dirTo;
 p1 setPos _startPos_B;
-DAKKA_PlayerNewGroup = [_startPos_B] call DAKKA_fnc_setPlayerGroup; 
+DAKKA_PlayerNewGroup = [_startPos_B] call DAKKA_fnc_spawnPlayerGroup; 
+waitUntil {sleep 0.01; DAKKA_PlayerNewGroup getVariable ["DAKKA_playerGroupReady", false]};
 if (isNull DAKKA_PlayerNewGroup) then { diag_log ["DAKKA: Task 1 --- ERROR --- Could not create DAKKA_PlayerNewGroup!", ""]; terminate _thisScript};
 { (vehicle _x) setDir _dir; } forEach (units DAKKA_PlayerNewGroup);
 deleteWaypoint [DAKKA_PlayerNewGroup, 0];
@@ -326,6 +327,7 @@ playMusic _startingMusic;
 	_patrolGroups = +(_enemyGroups select 0) select 1;
 	for [{private _i = 0}, {_i < count _patrolGroups}, {_i = _i + 1}] do {
 		_grp = [(_patrolGroups select _i) select 1, DAKKA_task1_locPos, east, 100] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         diag_log format ["DAKKA: Task 1 - Spawning enemy patrol #%1 group %2", _i + 1, _grp];
 		if (!isNull _grp) then {
 			deleteWaypoint [_grp, 0];
@@ -359,6 +361,7 @@ playMusic _startingMusic;
 	_defendGroups = +(_enemyGroups select 1) select 1;
 	for [{private _i = 0}, {_i < count _defendGroups}, {_i = _i + 1}] do {
 		_grp = [(_defendGroups select _i) select 1, DAKKA_task1_locPos, east, 10, true, "", false] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         diag_log format ["DAKKA: Task 1 - Spawning enemy defenders #%1 group %2", _i + 1, _grp];
 		if (!isNull _grp) then {
 			deleteWaypoint [_grp, 0];
@@ -442,22 +445,6 @@ playMusic _startingMusic;
         }];
     } forEach (units DAKKA_PlayerNewGroup);
 
-// Reveal units
-// - BLUFOR
-{
-    private _unit = _x;
-    p1 reveal _unit;
-} forEach (allUnits select { side _x == west });
-// - OPFOR
-{
-    private _unit = _x;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_defendGrps_task1;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_patrolGrps_task1;
-} forEach (allUnits select { side _x == east });
 
 // Hide marta markers
 p1 setVariable ["MARTA_hide", DAKKA_martaHide];
@@ -481,6 +468,9 @@ cutText ["", "BLACK IN", 2];
 2 fadeSound 1;
 enableRadio true;
 
+// Fog blur
+[] execVM "scripts\weatherEffects\fogBlur.sqf";
+
 // End music
 // 20 fadeMusic 0;
 
@@ -489,7 +479,7 @@ DAKKA_missionStartTime = time;
 diag_log "DAKKA: Task 1 - Initialized";
 
 // Equip NVG to player if night
-if ([DAKKA_customDate] call DAKKA_fnc_isNight) then { player action ["nvGoggles", player]; };
+if ([DAKKA_customDate] call DAKKA_fnc_isNight && hmd p1 != "") then { player action ["nvGoggles", player]; };
 
 // Control the flow of the task
 [] execVM "tasks\Task 1\task1_flow.sqf";

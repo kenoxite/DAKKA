@@ -215,7 +215,8 @@ _ctrl ctrlSetText _txt;
 diag_log format ["DAKKA: Task 2 - %1", _txt];
 _dir = [_startPos_B, DAKKA_task2_locPos] call BIS_fnc_dirTo;
 p1 setPos _startPos_B;
-DAKKA_PlayerNewGroup = [_startPos_B] call DAKKA_fnc_setPlayerGroup; 
+DAKKA_PlayerNewGroup = [_startPos_B] call DAKKA_fnc_spawnPlayerGroup;
+waitUntil {sleep 0.01; DAKKA_PlayerNewGroup getVariable ["DAKKA_playerGroupReady", false]};
 if (isNull DAKKA_PlayerNewGroup) then { diag_log ["DAKKA: Task 2 --- ERROR --- Could not create DAKKA_PlayerNewGroup!", ""]; terminate _thisScript};
 // Reposition land vehicles in player group to friendly land vehicles spawn area
 _playerIsInf = true;
@@ -522,6 +523,7 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
 		_grp = [(_O_InfGrps select _i) select 1, _spawnPos, east, 30] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         _txt = format ["Spawning enemy infantry #%1 group %2", _i + 1, _grp];
         if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
         diag_log format ["DAKKA: Task 2 - %1", _txt];
@@ -571,6 +573,7 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_LandGrps select _i) select 1, _spawnPos, east, 50, true, _enemyFaction] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         _txt = format ["Spawning enemy land vehicles #%1 group %2", _i + 1, _grp];
         if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
         diag_log format ["DAKKA: Task 2 - %1", _txt];
@@ -620,6 +623,7 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [[(DAKKA_task2_locPos select 0), (DAKKA_task2_locPos select 1), 2000], _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_AirGrps select _i) select 1, _spawnPos, east, 200, true, _enemyFaction] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         _txt = format ["Spawning enemy air vehicles #%1 group %2", _i + 1, _grp];
         if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
         diag_log format ["DAKKA: Task 2 - %1", _txt];
@@ -668,6 +672,7 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;  
         _grp = [(_B_InfGrps select _i) select 1, _spawnPos, west, 30] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         _txt = format ["Spawning friendly infantry #%1 group %2", _i + 1, _grp];
         if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
         diag_log format ["DAKKA: Task 2 - %1", _txt];
@@ -723,6 +728,7 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_LandGrps select _i) select 1, _spawnPos, west, 50, true, _playerFaction] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         _txt = format ["Spawning friendly land vehicles #%1 group %2", _i + 1, _grp];
         if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
         diag_log format ["DAKKA: Task 2 - %1", _txt];
@@ -771,6 +777,7 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [[(DAKKA_task2_locPos select 0), (DAKKA_task2_locPos select 1), 2000], _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_AirGrps select _i) select 1, _spawnPos, west, 200, true, _playerFaction] call DAKKA_fnc_spawnGroup;
+        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
         _txt = format ["Spawning friendly air vehicles #%1 group %2", _i + 1, _grp];
         if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
         diag_log format ["DAKKA: Task 2 - %1", _txt];
@@ -808,6 +815,7 @@ playMusic _startingMusic;
                     _compGrpsTrimmed resize (2 + floor (random 2));
                     { _x set [4, 0] } forEach _compGrpsTrimmed;
                     _grp = [_compGrpsTrimmed, _refPos, west, 10, true, "", false] call DAKKA_fnc_spawnGroup;
+                    waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
                     {
                         _x enableSimulation true;
                         _x setVelocity [0, 0, 0];
@@ -855,35 +863,6 @@ playMusic _startingMusic;
     _battleWp2 setWaypointVisible false;
     _battleWp2 showWaypoint "EASY";
 
-// Reveal units
-// - BLUFOR
-{
-    private _unit = _x;
-    p1 reveal _unit;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_B_InfGrps;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_B_LandGrps;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_B_AirGrps;
-} forEach (allUnits select { side _x == west });
-// - OPFOR
-{
-    private _unit = _x;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_O_InfGrps;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_O_LandGrps;
-    {
-        (leader _x) reveal _unit;
-    } forEach DAKKA_O_AirGrps;
-} forEach (allUnits select { side _x == east });
-
 
 // Hide marta markers
 p1 setVariable ["MARTA_hide", DAKKA_martaHide];
@@ -911,12 +890,15 @@ if (DAKKA_cinematics) then {
     enableRadio true;
 };
 
+// Fog blur
+[] execVM "scripts\weatherEffects\fogBlur.sqf";
+
 // Start time
 DAKKA_missionStartTime = time;
 diag_log "DAKKA: Task 2 - Initialized";
 
 // Equip NVG to player if night
-if ([DAKKA_customDate] call DAKKA_fnc_isNight) then { p1 action ["nvGoggles", p1]; };
+if ([DAKKA_customDate] call DAKKA_fnc_isNight && hmd p1 != "") then { p1 action ["nvGoggles", p1]; };
 
 // Control the flow of the task
 [] execVM "tasks\Task 2\task2_flow.sqf";

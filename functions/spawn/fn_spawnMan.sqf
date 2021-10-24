@@ -21,37 +21,47 @@
   Examples:
 
 */
-params ["_unitClass", ["_pos", position player], ["_grpOrSide", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_checkPos", true], ["_autoDelete", true]];  
+params ["_unitClass", ["_pos", position player], ["_grp", grpNull], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_checkPos", true], ["_autoDelete", true]];  
 
 // Create group if needed
-private _grp = grpNull;
-private _side = sideUnknown;
-if (typeName _grpOrSide == "SIDE") then {
-  if (_grpOrSide == sideUnknown) then {
-    _side = west;
-  } else {
-    _side = _grpOrSide;
-  };
-  _grp = createGroup [_side, _autoDelete];
-} else {
-  if (isNull _grpOrSide) then {
-    _side = west;
-    _grp = createGroup [_side, _autoDelete];
-  } else {
-    _side = side _grpOrSide;
-    _grp = _grpOrSide;
-  };
-};
+// private _grp = grpNull;
+// private _side = sideUnknown;
+// if (typeName _grpOrSide == "SIDE") then {
+//   if (_grpOrSide == sideUnknown) then {
+//     _side = west;
+//   } else {
+//     _side = _grpOrSide;
+//   };
+//   _grp = createGroup [_side, _autoDelete];
+//   // _grp = call compile format ["DAKKA_spawnGrp_%1", _side];
+//   // _spawner = call compile format ["DAKKA_dummy_%1", _side];
+//   // _grp = group _spawner;
+// } else {
+//   if (isNull _grpOrSide) then {
+//     _side = west;
+//     _grp = createGroup [_side, _autoDelete];
+//   } else {
+//     _side = side _grpOrSide;
+//     _grp = _grpOrSide;
+//   };
+// };
+
+private _side = side _grp;
 
 // Check for global group limit reached
 if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
 
 // Create unit
-private _unit = (group player) createUnit [_unitClass, _pos, _markers, _radius, _special];
+private _unit = _grp createUnit [_unitClass, _pos, _markers, _radius, _special];
 if (isNull _unit) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. Class name not recognized!", _unitClass]; objNull };
 // _unit setPos [random 100, random 100, 10000];
-[_unit] join grpNull;
+// [_unit] join grpNull;
 [_unit] joinSilent _grp;  // Fix for wrong side when using createUnit
+
+// Make sure the unit has the correct side
+if (side _unit != _side) then {
+    // diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 ISN'T THE CORRECT SIDE. Expected side: %2. Current side: %3", _unitClass, _side, side _unit];
+};
 
 _unit setVariable ["BIS_enableRandomization", [false, true] select _enableRandom];
 

@@ -569,7 +569,7 @@ class CfgFunctions
             class deleteVehicle {};
             class cloneUnit {};
             class placeUnit {};
-            class setPlayerGroup {};
+            class spawnPlayerGroup {};
         };
 
 		class Support

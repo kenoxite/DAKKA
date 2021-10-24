@@ -27,9 +27,9 @@ if (_faction == "" || "drone" in _vehLC) then {
     if (DAKKA_debug) then { diag_log format ["DAKKA: spawnCrew Spawning DEFAULT crew for %1: %2", _vehClass, _grp ] };
     createVehicleCrew _veh;
     _crew = crew _veh;
-    {
-        [_x] joinSilent grpNull;
-    } forEach _crew;
+    // {
+    //     [_x] joinSilent grpNull;
+    // } forEach _crew;
     _crew joinSilent _grp;
 } else {
     if (DAKKA_debug) then { diag_log format ["DAKKA: spawnCrew Spawning FACTION crew for %1: %2", _veh, _grp ] };

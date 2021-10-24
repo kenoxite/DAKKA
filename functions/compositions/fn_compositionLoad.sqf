@@ -105,7 +105,7 @@ _nul = _this spawn {
 
     		_ref = "Flag_BI_F" createVehicle _refPos;
             DAKKA_spawnCompRefs pushBack _ref;
-            if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _ref 2: %1", _ref ] };
+            // if (DAKKA_debug) then { diag_log format ["DAKKA: compositionLoad _ref 2: %1", _ref ] };
     		// Update the composition objects array with the new object
     		(_compObjects select 0) set [0, _ref];
             _refDir = _refArr select 2;
@@ -157,7 +157,7 @@ _nul = _this spawn {
 
                 // Update the composition objects array with the new object
                 _objData set [0, _obj];
-                diag_log format ["DAKKA: compositionLoad: %1: %2", _i, _objdata];
+                // diag_log format ["DAKKA: compositionLoad: %1: %2", _i, _objdata];
                 // sleep 0.0001;
                 if ((_obj distance2D _ref) > _compRadius) then { _compRadius = _obj distance2D _ref };
             };
@@ -245,9 +245,9 @@ _nul = _this spawn {
                 _obj setVelocity [0, 0, 0];
             };
 
-            {
-                diag_log format ["DAKKA: compositionLoad - %1: %2", _forEachIndex , _x];
-            } forEach (_thisCompositionData select 1);
+            // {
+            //     diag_log format ["DAKKA: compositionLoad - %1: %2", _forEachIndex , _x];
+            // } forEach (_thisCompositionData select 1);
 
     		  // Update the composition objects array with the new hidden objects
     		_thisCompositionData set [2, _hiddenObjects];
