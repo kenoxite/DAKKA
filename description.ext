@@ -341,6 +341,7 @@ class CfgFunctions
 			class convertToSimpleObject {};
             class countPassengerSeats {};
             class isFlatEmpty {};
+            class inBuilding {};
 
             // 3rd party
             class loadedFromSave { preInit = 1; };

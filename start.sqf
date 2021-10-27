@@ -5,6 +5,30 @@
 // Load weather settings for this terrain
 #include "settings_terrain.hpp";
 
+// Disable mods
+// - TPW
+// tpw_animal_active = false;
+tpw_boat_active = false;
+tpw_car_active = false;
+tpw_civ_active = false;
+// tpw_compress_active = false;
+tpw_crowd_active = false;
+// tpw_duck_active = false;
+// tpw_fire_active = false;
+// tpw_firefly_active = false;
+// tpw_fog_active = false;
+tpw_furniture_active = false;
+// tpw_houselights_active = false;
+// tpw_park_active = false;
+// tpw_radio_active = false;
+tpw_repair_active = false;
+// tpw_sanity_active = false;
+tpw_skirmish_active = false;
+// tpw_soap_active = false;
+// tpw_streetlights_active = false;
+tpw_zombies_active = false;
+
+
 // GLOBAL VARIABLES
 DAKKA_debug = if (is3DENPreview) then { true } else { false };
 

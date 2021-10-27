@@ -78,7 +78,8 @@ if (_isMan) then {
             (vehicle _unit) setVectorUp (surfaceNormal _location);
             (vehicle _unit) setVelocity [0, 0, 0];
         };
-        private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20], _unit]) > 0);
+        // private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20], _unit]) > 0);
+        private _inBuilding = [_unit] call DAKKA_fnc_inBuilding;
         if (_inBuilding && (_unit getVariable ["DAKKA_placingRetries", 0]) < 3) exitWith { [_unit, _location] spawn { params ["_unit", "_location"]; _unit setPos _location; sleep 0.01; _unit setVariable ["DAKKA_placingRetries", (_unit getVariable ["DAKKA_placingRetries", 0]) + 1]; [_unit] call DAKKA_fnc_placeUnit; } };
         private _nul = _unit spawn {
                             _this enableSimulation true;

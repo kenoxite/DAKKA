@@ -890,9 +890,6 @@ if (DAKKA_cinematics) then {
     enableRadio true;
 };
 
-// Fog blur
-[] execVM "scripts\weatherEffects\fogBlur.sqf";
-
 // Start time
 DAKKA_missionStartTime = time;
 diag_log "DAKKA: Task 2 - Initialized";

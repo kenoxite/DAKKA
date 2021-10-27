@@ -468,9 +468,6 @@ cutText ["", "BLACK IN", 2];
 2 fadeSound 1;
 enableRadio true;
 
-// Fog blur
-[] execVM "scripts\weatherEffects\fogBlur.sqf";
-
 // End music
 // 20 fadeMusic 0;
 
