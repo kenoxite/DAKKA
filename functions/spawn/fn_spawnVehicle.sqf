@@ -21,8 +21,8 @@
   Examples:
 
 */
-params ["_unitClass", ["_pos", position player], ["_grp", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_autoDelete", true], ["_spawnCrew", true], ["_useDefaultCrew", true], ["_faction", ""]];  
-private ["_veh", "_side", "_canFloat", "_crew"];
+params ["_unitClass", ["_pos", position player], ["_grpOrSide", grpNull, [grpNull, sideUnknown]], ["_markers", []], ["_radius", 0], ["_special", "NONE"], ["_enableRandom", true], ["_autoDelete", true], ["_spawnCrew", true], ["_useDefaultCrew", true], ["_faction", ""]];  
+private ["_veh", "_side", "_grp", "_canFloat", "_crew"];
 
 // Adjust position when over water or if vehicle can float
 _canFloat = getNumber (configFile >> "CfgVehicles" >> _unitClass >> "canFloat");
@@ -39,20 +39,22 @@ if (!_enableRandom) then {
 
 // Create crew
 if (_spawnCrew) then {
+    _grp = grpNull;
     _side = sideUnknown;
-    if (typeName _grp == "SIDE") then {
-      if (_grp == sideUnknown) then {
+    if (typeName _grpOrSide == "SIDE") then {
+      if (_grpOrSide == sideUnknown) then {
         _side = side player;
       } else {
-        _side = _grp;
+        _side = _grpOrSide;
       };
       _grp = createGroup [_side, _autoDelete];
     } else {
-      if (isNull _grp) then {
+      if (isNull _grpOrSide) then {
         _side = side player;
         _grp = createGroup [_side, _autoDelete];
       } else {
-        _side = side _grp;
+        _side = side _grpOrSide;
+        _grp = _grpOrSide;
       };
     };
     
