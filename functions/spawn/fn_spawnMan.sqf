@@ -33,9 +33,6 @@ if (typeName _grpOrSide == "SIDE") then {
     _side = _grpOrSide;
   };
   _grp = createGroup [_side, _autoDelete];
-  // _grp = call compile format ["DAKKA_spawnGrp_%1", _side];
-  // _spawner = call compile format ["DAKKA_dummy_%1", _side];
-  // _grp = group _spawner;
 } else {
   if (isNull _grpOrSide) then {
     _side = west;
@@ -45,8 +42,6 @@ if (typeName _grpOrSide == "SIDE") then {
     _grp = _grpOrSide;
   };
 };
-
-// private _side = side _grp;
 
 // Check for global group limit reached
 if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnMan UNIT %1 COULDN'T BE SPAWNED. GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };

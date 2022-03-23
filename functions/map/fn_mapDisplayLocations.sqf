@@ -18,7 +18,7 @@
 */
 
 params ["_idcTerrain", "_idcSatellite", ["_idcCombo", -1]];
-private ["_display", "_ctrl", "_worldLocationsData", "_locationsData", "_categoryData", "_locations", "_markers", "_mrkr", "_txt", "_mrkrToMove", "_indexCat", "_pos", "_dir", "_pos1"];
+private ["_display", "_ctrl", "_worldLocationsData", "_locationsData", "_categoryData", "_locations", "_markers", "_mrkr", "_mrkrName", "_txt", "_mrkrToMove", "_indexCat", "_pos", "_dir", "_pos1"];
 
 _display = findDisplay IDC_MENU_MISSION_EDIT;
 
@@ -33,66 +33,57 @@ if (DAKKA_debug) then { diag_log format ["DAKKA: mapDisplayLocations _locations:
 _markers = [];
 
 // Reset markers
- call DAKKA_fnc_deleteTaskMarkers;
+call DAKKA_fnc_deleteTaskMarkers;
  
-if (count _locations == 0) exitWith { false };
+if (count _locations == 0) exitWith { if (DAKKA_debug) then { diag_log "DAKKA: mapDisplayLocations - EXIT FUNCTION - No locations found!" }; false };
 
 // Create markers
 // "|MARKERNAME|markerPos|markerType|markerShape|markerSize|markerDir|markerBrush|markerColor|markerAlpha|markerText"
+_mrkr = "";
+for [{_i = 0}, {_i < (count _locations)}, {_i = _i + 1}] do
 {
-  _mrkr = format ["DAKKA_mrkr_Task%1_location_%2", DAKKA_Task, _forEachIndex + 1];
-  _pos = _x select 0;
-  _dir = _x select 1;
-  if (isNil "_mrkr") then {
-    _txt = format ["Location %1", _forEachIndex + 1];
-    // [_x select 0, [1, 1], "ColorEAST", "b_hq", _txt, 1, [_mrkr]] call BIS_fnc_markerCreate;
-    // _mrkr setMarkerDir (_x select 1); 
-    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos, "Select", "ICON", [1, 1], _dir, "Solid", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
-  } else {
-    _mrkr setMarkerPos (_x select 0);
-    _mrkr setMarkerDir (_x select 1);
-    _mrkr setMarkerText format ["Location %1", _forEachIndex + 1];
-  };
-  _markers pushBack _mrkr;
+    private _location = _locations select _i;
+    _mrkrName = format ["DAKKA_mrkr_Task%1_location_%2", DAKKA_Task, _i + 1];
+    _pos = _location select 0;
+    _dir = _location select 1;
+    _txt = format ["Location %1", _i + 1];
+    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkrName, _pos, "Select", "ICON", [1, 1], _dir, "Solid", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
+    _markers pushBack _mrkr;
 
-  // Create aditional markers
-  if (DAKKA_Task == 2) then {
-    // Contested area
-    _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = _pos;
-    _txt = "Contested Area";
-    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "empty", "RECTANGLE", [500, 250], _dir, "FDiagonal", "ColorEAST", 0.8, _txt] call BIS_fnc_stringToMarker;
-    // Friendly spawn
-    _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = _pos getPos [-500, _dir];
-    _txt = "Friendly Spawn Area";
-    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "empty", "RECTANGLE", [500, 500], _dir, "Border", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
-    // Friendly spawn Text
-    _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly_txt", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = _pos getPos [-500, _dir];
-    _txt = "Friendly Spawn Area";
-    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "hd_dot", "ICON", [1, 1], _dir, "Solid", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
-    // Enemy spawn
-    _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = _pos getPos [500, _dir];
-    _txt = "Enemy Spawn Area";
-    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "empty", "RECTANGLE", [500, 500], _dir, "Border", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
-    // Enemy spawn Text
-    _mrkr = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy_txt", DAKKA_Task, _forEachIndex + 1];
-    _pos1 = _pos getPos [500, _dir];
-    _txt = "Enemy Spawn Area";
-    _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkr, _pos1, "hd_dot", "ICON", [1, 1], _dir, "Solid", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
-  };
-} forEach _locations;
+    // Create aditional markers
+    if (DAKKA_Task == 2) then {
+        // Contested area
+        _mrkrName = format ["DAKKA_mrkr_Task%1_location_%2_area", DAKKA_Task, _i + 1];
+        _pos1 = _pos;
+        _txt = "Contested Area";
+        _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkrName, _pos1, "empty", "RECTANGLE", [500, 250], _dir, "FDiagonal", "ColorEAST", 0.8, _txt] call BIS_fnc_stringToMarker;
+        // Friendly spawn
+        _mrkrName = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly", DAKKA_Task, _i + 1];
+        _pos1 = _pos getPos [-500, _dir];
+        _txt = "Friendly Spawn Area";
+        _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkrName, _pos1, "empty", "RECTANGLE", [500, 500], _dir, "Border", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
+        // Friendly spawn Text
+        _mrkrName = format ["DAKKA_mrkr_Task%1_location_%2_area_friendly_txt", DAKKA_Task, _i + 1];
+        _pos1 = _pos getPos [-500, _dir];
+        _txt = "Friendly Spawn Area";
+        _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkrName, _pos1, "hd_dot", "ICON", [1, 1], _dir, "Solid", "ColorWEST", 1, _txt] call BIS_fnc_stringToMarker;
+        // Enemy spawn
+        _mrkrName = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy", DAKKA_Task, _i + 1];
+        _pos1 = _pos getPos [500, _dir];
+        _txt = "Enemy Spawn Area";
+        _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkrName, _pos1, "empty", "RECTANGLE", [500, 500], _dir, "Border", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
+        // Enemy spawn Text
+        _mrkrName = format ["DAKKA_mrkr_Task%1_location_%2_area_enemy_txt", DAKKA_Task, _i + 1];
+        _pos1 = _pos getPos [500, _dir];
+        _txt = "Enemy Spawn Area";
+        _mrkr = format ["|%1|%2|%3|%4|%5|%6|%7|%8|%9|%10", _mrkrName, _pos1, "hd_dot", "ICON", [1, 1], _dir, "Solid", "ColorEAST", 1, _txt] call BIS_fnc_stringToMarker;
+    };
+};
 
 if (DAKKA_debug) then { diag_log format ["DAKKA: mapDisplayLocations _markers: %1", _markers] };
 if (count _locations > 0) then {
-  _mrkrToMove = if (_idcCombo >= 0) then {
-    _markers select (lbCurSel _idcCombo) max 0;
-  } else {
-    _markers select 0;
-  };
-  [_idcTerrain, _idcSatellite, _mrkrToMove] call DAKKA_fnc_moveToCtrlMapMarker;
+    _mrkrToMove = _markers select (lbCurSel _idcCombo) max 0;
+    [_idcTerrain, _idcSatellite, _mrkrToMove] call DAKKA_fnc_moveToCtrlMapMarker;
 };
 
 true

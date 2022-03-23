@@ -71,7 +71,9 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
             _unit = ([_unitClass, _pos, _grp, [], _maxDist, "NONE", _enableRandom, _checkManPos] call DAKKA_fnc_spawnMan);
         } else {
             _isAir = [_unitClass] call DAKKA_fnc_isAir;
-            _unit = ([_unitClass, _pos, _grp, [], _maxDist max ((sizeOf _unitClass) + 20), if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, if (_isDefaultVeh) then { _faction } else { "" }] call DAKKA_fnc_spawnVehicle);
+            private _vehSizeBuffer = (sizeOf _unitClass) + 20;
+            private _maxDistVeh = (_maxDist * 2) + _vehSizeBuffer;
+            _unit = ([_unitClass, _pos, _grp, [], _maxDistVeh, if (_isAir && _fly) then { "FLY" } else { "NONE" }, _enableRandom, true, true, if (_isDefaultVeh) then { false } else { true }, if (_isDefaultVeh) then { _faction } else { "" }] call DAKKA_fnc_spawnVehicle);
         };
 
         // sleep 0.001;
@@ -96,6 +98,9 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         if (_isMan) then {
             _groupPassengers pushBack _unit;
         } else {
+            if (!_isAir || (_isAir && !_fly)) then {
+                [_unit, _pos, _fly] call DAKKA_fnc_placeUnit;
+            };
             {
                 _x allowDamage false;
                 _x setDamage 0;
@@ -110,9 +115,6 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
             _groupVehicles pushBack _unit;
             _grp addVehicle _unit;
             if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - Vehicle group %1 is side %2", _grp, side _grp ] };
-            if (!_isAir || (_isAir && !_fly)) then {
-                [_unit, _pos, _fly] call DAKKA_fnc_placeUnit;
-            };
         };
         _unit setUnitRank _unitRank;
 
@@ -151,7 +153,7 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         for "_i" from 0 to (count _units)-1 do
         {
             private _unit = _units select _i;
-            // waitUntil {sleep 0.001; (_unit getVariable ["DAKKA_UnitReady", false])};
+            waitUntil {sleep 0.001; (_unit getVariable ["DAKKA_UnitReady", false])};
             private _veh = vehicle _unit;
             _unit enableSimulation true;
             _isAir = [_unit] call DAKKA_fnc_isAir;

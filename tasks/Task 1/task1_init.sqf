@@ -110,9 +110,15 @@ if (DAKKA_automated || (!DAKKA_automated && _noCompData)) then {
     //     if (DAKKA_debug) then { diag_log format ["%1: %2", _x select 0, _x select 1] };
     // } forEach _selectedCompositions;
 
+    // Find flat terrain nearby
+    // private _flatPos = [DAKKA_task1_locPos, 0, 200, 0, 0, 0.1, 0, [], [DAKKA_task1_locPos, DAKKA_task1_locPos]] call BIS_fnc_findSafePos;
+    // _flatPos set [2, 0];
+    // if (DAKKA_debug) then { diag_log format ["DAKKA: Task1 Init - DAKKA_task1_locPos: %1, _flatPos: %2", DAKKA_task1_locPos, _flatPos] };
+    // DAKKA_task1_locPos = +_flatPos;
+
     // Load compositions
     [1, DAKKA_task1_locPos] call DAKKA_fnc_compositionLoad;
-    waitUntil {DAKKA_compositionsLoaded == 1};
+    waitUntil {DAKKA_compositionsLoaded >= 1};
     DAKKA_task1_locPos = DAKKA_compLoadedLocs select 0;
 
     // Enable simulation for all composition objects
@@ -327,9 +333,9 @@ playMusic _startingMusic;
 	_patrolGroups = +(_enemyGroups select 0) select 1;
 	for [{private _i = 0}, {_i < count _patrolGroups}, {_i = _i + 1}] do {
 		_grp = [(_patrolGroups select _i) select 1, DAKKA_task1_locPos, east, 100] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        diag_log format ["DAKKA: Task 1 - Spawning enemy patrol #%1 group %2", _i + 1, _grp];
 		if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            diag_log format ["DAKKA: Task 1 - Spawning enemy patrol #%1 group %2", _i + 1, _grp];
 			deleteWaypoint [_grp, 0];
 			DAKKA_patrolGrps_task1 pushBack _grp;
             _grp setBehaviour "AWARE";
@@ -361,9 +367,9 @@ playMusic _startingMusic;
 	_defendGroups = +(_enemyGroups select 1) select 1;
 	for [{private _i = 0}, {_i < count _defendGroups}, {_i = _i + 1}] do {
 		_grp = [(_defendGroups select _i) select 1, DAKKA_task1_locPos, east, 10, true, "", false] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        diag_log format ["DAKKA: Task 1 - Spawning enemy defenders #%1 group %2", _i + 1, _grp];
 		if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            diag_log format ["DAKKA: Task 1 - Spawning enemy defenders #%1 group %2", _i + 1, _grp];
 			deleteWaypoint [_grp, 0];
 			DAKKA_defendGrps_task1 pushBack _grp;
             _grp setBehaviour "AWARE";

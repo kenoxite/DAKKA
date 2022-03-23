@@ -164,7 +164,7 @@ _nul = _this spawn {
 
             // Rotate reference and wait for rotation to finish
             _ref setDir _refDir;
-            sleep ((count _compObjects) * 0.0001);
+            sleep ((count _compObjects) * 0.001);
 
             // Detach objects and set correct altitude
             for "_i" from 1 to (count _compObjects)-1 do
@@ -200,7 +200,7 @@ _nul = _this spawn {
                 } else {
                     _obj setPosATL _itemPosATL;
                 };
-                // sleep 0.0001;
+                sleep 0.0001;
             };
 
             // Set pos 2nd pass
@@ -231,7 +231,7 @@ _nul = _this spawn {
                     };
                     if (_obj isKindOf "LandVehicle" && !(_obj isKindOf "StaticWeapon")) then {_obj setVectorUp (surfaceNormal (position _obj)) };
                 };
-                // sleep 0.0001;
+                sleep 0.0001;
             };
 
             // Enable simulation
@@ -257,9 +257,9 @@ _nul = _this spawn {
         } else {
             _return = false;
     	};
+        sleep 0.001;
 
         DAKKA_compositionsLoaded = DAKKA_compositionsLoaded + 1;
-        sleep 0.01;
     };
 
     // Save task settings

@@ -27,7 +27,7 @@ if (DAKKA_noNight) then {
     _hour = [_dawn + 1, _dusk - 1] call BIS_fnc_randomInt;
     _minutes = floor (random 59);
 } else {
-    private _chanceNight = if (DAKKA_Task == 1) then { 0.80 } else { 0.25 };
+    private _chanceNight = if (DAKKA_Task == 1) then { 0.5 } else { 0.25 };
     private _roll = random 1;
     if (DAKKA_debug) then { diag_log format ["DAKKA: randomTime - night roll: %1", _roll] };
     if (_roll <= _chanceNight) then {

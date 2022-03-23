@@ -51,6 +51,8 @@ if (isNil "_savedData") then {
 /*    {
         if (DAKKA_debug) then { diag_log format ["DAKKA: settingsSave _savedData %1: %2", _forEachIndex, _x] };
     } forEach _savedData;*/
+        
+
     if (_slotIndex < 0) then {
         // No existing saves for this terrain. Create a new one
         diag_log format ["DAKKA: settingsSave --- WARNING --- No saved task data found for this task. Creating a new save using default task data", ""];

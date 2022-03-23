@@ -136,7 +136,7 @@ _ctrl ctrlEnable true;
     _ctrl ctrlEnable false;
     
     _ctrl = (_display displayCtrl IDC_BT_AO_SEL_ADD);
-    _ctrl ctrlSetText "Add to locations";
+    _ctrl ctrlSetText "New location";
     _ctrl ctrlSetEventHandler ["ButtonClick", '[IDC_COMBO_AO_SELECTION_LOC] call DAKKA_fnc_locationAdd;'];
     _ctrl ctrlSetTooltip "Add current map coordinates as a new location";
     _ctrl ctrlEnable true;
@@ -314,6 +314,7 @@ if (DAKKA_mapSatellite) then {
 // Map crosshair and marker
 _mapCenter = [worldSize / 2, worldSize / 2, 0];
 _pos = markerPos DAKKA_selectedLocMrkr;
+if (DAKKA_debug) then { diag_log format ["DAKKA: page5 - _pos: %1, DAKKA_selectedLocMrkr: %2", _pos, DAKKA_selectedLocMrkr] };
 if (_pos isEqualTo [0,0,0]) then {
     _pos = _mapCenter;
 };
@@ -349,7 +350,7 @@ if (DAKKA_mapSatellite) then {
 	_ctrl ctrlShow false;
 };
 
-[IDC_MAP_AO_SEL_T, IDC_MAP_AO_SEL_S] call DAKKA_fnc_mapDisplayLocations;
+[IDC_MAP_AO_SEL_T, IDC_MAP_AO_SEL_S, IDC_COMBO_AO_SELECTION_LOC] call DAKKA_fnc_mapDisplayLocations;
 call DAKKA_fnc_mapDisplayCompositions;
 
 	// Buttons - Map

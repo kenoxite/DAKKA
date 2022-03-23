@@ -523,11 +523,11 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
 		_grp = [(_O_InfGrps select _i) select 1, _spawnPos, east, 30] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        _txt = format ["Spawning enemy infantry #%1 group %2", _i + 1, _grp];
-        if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
-        diag_log format ["DAKKA: Task 2 - %1", _txt];
 		if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            _txt = format ["Spawning enemy infantry #%1 group %2", _i + 1, _grp];
+            if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
+            diag_log format ["DAKKA: Task 2 - %1", _txt];
             DAKKA_O_InfGrps pushBack _grp;
             // [_grp, [_spawnPos, -(_spawnDist), DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "MOVE", "AWARE", "NORMAL", if (_inTown) then { "COLUMN" } else { "LINE" }, "RED", 50, "", true, false, [0,0,0], ["true", "(group this) setBehaviour ""COMBAT""; [getPos this, thisList select [0, (floor (random (count thisList))) max 1], 50, true, true, false, true] call DAKKA_fnc_occupyHouse;"]] call DAKKA_fnc_GroupWp;
 
@@ -573,11 +573,11 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_LandGrps select _i) select 1, _spawnPos, east, 50, true, _enemyFaction] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        _txt = format ["Spawning enemy land vehicles #%1 group %2", _i + 1, _grp];
-        if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
-        diag_log format ["DAKKA: Task 2 - %1", _txt];
         if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            _txt = format ["Spawning enemy land vehicles #%1 group %2", _i + 1, _grp];
+            if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
+            diag_log format ["DAKKA: Task 2 - %1", _txt];
             DAKKA_O_LandGrps pushBack _grp;
             _wpDist = if (count DAKKA_O_InfGrps == 0) then {
                             150
@@ -623,11 +623,11 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [[(DAKKA_task2_locPos select 0), (DAKKA_task2_locPos select 1), 2000], _relDist, _spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_O_AirGrps select _i) select 1, _spawnPos, east, 200, true, _enemyFaction] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        _txt = format ["Spawning enemy air vehicles #%1 group %2", _i + 1, _grp];
-        if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
-        diag_log format ["DAKKA: Task 2 - %1", _txt];
         if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            _txt = format ["Spawning enemy air vehicles #%1 group %2", _i + 1, _grp];
+            if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
+            diag_log format ["DAKKA: Task 2 - %1", _txt];
             DAKKA_O_AirGrps pushBack _grp;
             // [_grp, [_spawnPos, 150, DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DAKKA_fnc_GroupWp;
 
@@ -672,11 +672,11 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;  
         _grp = [(_B_InfGrps select _i) select 1, _spawnPos, west, 30] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        _txt = format ["Spawning friendly infantry #%1 group %2", _i + 1, _grp];
-        if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
-        diag_log format ["DAKKA: Task 2 - %1", _txt];
         if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            _txt = format ["Spawning friendly infantry #%1 group %2", _i + 1, _grp];
+            if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
+            diag_log format ["DAKKA: Task 2 - %1", _txt];
             DAKKA_B_InfGrps pushBack _grp;
 
             // Units of first group will be used for spawning units in compositions
@@ -728,11 +728,11 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [DAKKA_task2_locPos, _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_LandGrps select _i) select 1, _spawnPos, west, 50, true, _playerFaction] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        _txt = format ["Spawning friendly land vehicles #%1 group %2", _i + 1, _grp];
-        if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
-        diag_log format ["DAKKA: Task 2 - %1", _txt];
         if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            _txt = format ["Spawning friendly land vehicles #%1 group %2", _i + 1, _grp];
+            if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
+            diag_log format ["DAKKA: Task 2 - %1", _txt];
             DAKKA_B_LandGrps pushBack _grp;
             _wpDist = if (count DAKKA_B_InfGrps == 0) then {
                             50
@@ -777,11 +777,11 @@ playMusic _startingMusic;
         _spawnDist = _spawnDist + (50 * _row);
         _spawnPos = [[(DAKKA_task2_locPos select 0), (DAKKA_task2_locPos select 1), 2000], _relDist, -_spawnDist, _relDir] call _fnc_getSpawnPos;
         _grp = [(_B_AirGrps select _i) select 1, _spawnPos, west, 200, true, _playerFaction] call DAKKA_fnc_spawnGroup;
-        waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
-        _txt = format ["Spawning friendly air vehicles #%1 group %2", _i + 1, _grp];
-        if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
-        diag_log format ["DAKKA: Task 2 - %1", _txt];
         if (!isNull _grp) then {
+            waitUntil {sleep 0.01; _grp getVariable ["DAKKA_groupReady", false]};
+            _txt = format ["Spawning friendly air vehicles #%1 group %2", _i + 1, _grp];
+            if (DAKKA_debug) then { _ctrl ctrlSetText _txt }; 
+            diag_log format ["DAKKA: Task 2 - %1", _txt];
             DAKKA_B_AirGrps pushBack _grp;
             // [_grp, [_spawnPos, _spawnDist-50, DAKKA_task2_locDir] call BIS_fnc_relPos, 0, -1, "", "SAD", "COMBAT", "FULL", "WEDGE", "RED"] call DAKKA_fnc_GroupWp;
 

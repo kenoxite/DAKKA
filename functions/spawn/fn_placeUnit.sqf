@@ -52,12 +52,13 @@ if (_isMan) then {
     // Vehicles
     private _nul = [_unit, _location, _unitClass, _fly] spawn {
         params ["_unit", "_location", "_unitClass", "_fly"];
-        private _unitType = [_unitClass] call DAKKA_fnc_vehicleType;
+        // private _unitType = [_unitClass] call DAKKA_fnc_vehicleType;
         private _isAir = [_unitClass] call DAKKA_fnc_isAir;
         if (count _location == 0) then { _location = ASLToAGL (getPosWorld _unit) };
         private _location2D = [_location select 0, _location select 1];
         private _locationASL = AGLToASL _location;
-        private _safeRadius = 1;
+        // private _safeRadius = 1;
+        private _safeRadius = (sizeOf _unitClass) + 20;
 
         _unit enableSimulation false;
         _unit allowDamage false;
@@ -74,7 +75,8 @@ if (_isMan) then {
             (vehicle _unit) setVectorUp (surfaceNormal _safePos);
             (vehicle _unit) setVelocity [0, 0, 0];
         } else {
-            _unit setVehiclePosition [_location, [], 5, ["NONE", "FLY"] select _fly];
+            // _unit setVehiclePosition [_location, [], 5, ["NONE", "FLY"] select _fly];
+            _unit setVehiclePosition [_location, [], 5 + _safeRadius, ["NONE", "FLY"] select _fly];
             (vehicle _unit) setVectorUp (surfaceNormal _location);
             (vehicle _unit) setVelocity [0, 0, 0];
         };

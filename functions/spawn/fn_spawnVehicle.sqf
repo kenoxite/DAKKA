@@ -36,6 +36,9 @@ if (isNull _veh) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnVehicle 
 if (!_enableRandom) then {
   _veh setVariable ["BIS_enableRandomization", false];
 };
+// Make it invulnerable for now
+// _veh setDamage 0;
+// _veh allowDamage false;
 
 // Create crew
 if (_spawnCrew) then {
