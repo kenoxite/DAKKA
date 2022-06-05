@@ -156,6 +156,8 @@ _grp setVariable ["DAKKA_playerGroupReady", false];
                 _veh addEventHandler ["killed", format ["(_this select 0) removeAction %1;", _actionID]]; 
             };
         };
+        // Allow team switch for this unit
+        // addSwitchableUnit _x;
     } forEach _units;
 
 

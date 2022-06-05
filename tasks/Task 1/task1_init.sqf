@@ -196,6 +196,19 @@ _basePos = getPos DAKKA_officer;
     ["Air Transport", DAKKA_task1_locPos, 1000, ["DAKKA_mrkr_Task1_searchArea"]]
 ]] spawn DAKKA_fnc_spawnSupport;
 
+{
+    _x enableSimulation true;
+    _x setVelocity [0, 0, 0];
+    _x allowDamage true;
+    _x setDamage 0;
+    _x enableAI "TARGET";
+    _x enableAI "AUTOTARGET";
+    _x enableAI "AUTOCOMBAT";
+    _x enableAI "CHECKVISIBLE";
+    _x enableAI "MOVE";
+    _x setCaptive false;
+} forEach units DAKKA_PlayerNewGroup;
+
 DAKKA_playerGroupReady = true;
 
 // BRIEFING
