@@ -32,6 +32,7 @@ if ((count _selectionPath) < 1 && !_all) exitWith { [format ["ERROR: No composit
 _taskData = DAKKA_TaskData select (DAKKA_Task - 1);
 _worldCompositionsData = [_taskData, "Compositions"] call BIS_fnc_getFromPairs;
 _compositionsData = [_worldCompositionsData, worldName] call BIS_fnc_getFromPairs;
+if (isNil "_compositionsData") exitWith {DAKKA_compositionsRemoved = true};
 if (DAKKA_debug) then { diag_log format ["DAKKA: compositionRemove _compositionsData: %1", _compositionsData] };
 
 _index = (_selectionPath select 0);

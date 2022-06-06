@@ -53,6 +53,7 @@ private _hasPilot = false;
 private _hasJTAC = false;
 private _hasSpotter = false;
 private _hasAutoriflemen = false;
+private _hasParatrooper = false;
 
 private _SFvehicleClasses = [
         "MenRecon",
@@ -112,6 +113,7 @@ private _return = false;
         if ("driver" in _className) then { _hasDriver = true };
         if ("pilot" in _className && !("crew" in _className)) then { _hasPilot = true };
         if ("jtac" in _className) then { _hasJTAC = true };
+        if ("para trooper" in _className || "paratrooper" in _className || "para-trooper" in _className) then { _hasParatrooper = true };
 
         if (_roleCheck != "") then {
             if (call compile format ["%1"]) exitWith { _return = true };
@@ -122,5 +124,5 @@ private _return = false;
 if (_roleCheck != "") then {
     _return
 } else {
-    [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter, _hasAutoriflemen]
+    [_hasAT, _hasAA, _hasMedic, _hasMG, _hasGrenadier, _hasMarksman, _hasUnarmed, _hasEngi, _hasDemo, _hasLeader, _hasOfficer, _hasHacker, _hasDiver, _hasSF, _hasSniper, _hasCrew, _hasAssistant, _hasRadio, _hasDriver, _hasPilot, _hasJTAC, _hasSpotter, _hasAutoriflemen, _hasParatrooper]
 }

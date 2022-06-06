@@ -16,7 +16,7 @@
   Examples:
 
 */
-params [["_target", [], [[]]]];
+params [["_target", [], [[]]], ["_dist", 800]];
 private ["_camera", "_pos", "_dir", "_landPos"];
 cutText ["Loading preview...", "BLACK IN", 999];
 // 0 fadeSound 0;
@@ -44,7 +44,7 @@ if (count _target == 0) then {
     };
 } else {
     // _pos = [_target, 800, random 360] call BIS_fnc_relPos;
-    _pos = _target getPos [800, random 360];
+    _pos = _target getPos [_dist, random 360];
     // Make a copy so modifying the passed position doesn't modify the original (which in this case is the global variable for the task location)
     _target = +_target;
 };

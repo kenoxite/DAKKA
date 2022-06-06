@@ -17,9 +17,10 @@
 params ["_veh", ["_grp", grpNull], ["_faction", ""], ["_autoDelete", true]];  
 // diag_log format ["DAKKA: spawnCrew - _veh: %1, _grp: %2, _faction: %3", typeOf _veh, _grp, _faction ];
 
-
 private _vehClass = typeOf _veh;
-private _vehType = [_vehClass] call DAKKA_fnc_vehicleType;
+
+if (isNull _grp) exitWith {diag_log format ["DAKKA: spawnCrew - GROUP IS NULL! Could not spawn crew for %1", _vehClass]; _veh};
+// private _vehType = [_vehClass] call DAKKA_fnc_vehicleType;
 private _vehLC = toLowerANSI _vehClass;
 private _crew = [];
 
@@ -27,9 +28,9 @@ if (_faction == "" || "drone" in _vehLC) then {
     if (DAKKA_debug) then { diag_log format ["DAKKA: spawnCrew Spawning DEFAULT crew for %1: %2", _vehClass, _grp ] };
     createVehicleCrew _veh;
     _crew = crew _veh;
-    // {
-    //     [_x] joinSilent grpNull;
-    // } forEach _crew;
+    {
+        [_x] joinSilent grpNull;
+    } forEach _crew;
     _crew joinSilent _grp;
 } else {
     if (DAKKA_debug) then { diag_log format ["DAKKA: spawnCrew Spawning FACTION crew for %1: %2", _veh, _grp ] };

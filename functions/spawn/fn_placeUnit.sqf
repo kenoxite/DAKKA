@@ -63,22 +63,23 @@ if (_isMan) then {
         _unit enableSimulation false;
         _unit allowDamage false;
         _unit setDamage 0;
-        (vehicle _unit) setVelocity [0, 0, 0];
+        private _veh = vehicle _unit;
+        _veh setVelocity [0, 0, 0];
         {
             _x allowDamage false;
             _x setDamage 0;
-        } forEach (crew vehicle _unit);
+        } forEach (crew _veh);
         
         private _safePos = [_location2D, [ _safeRadius, -1, -1, 1, 0, true, objNull ]] call DAKKA_fnc_isFlatEmpty;
         if (count _safePos > 0) then {
             _unit setPosASL _safePos;
-            (vehicle _unit) setVectorUp (surfaceNormal _safePos);
-            (vehicle _unit) setVelocity [0, 0, 0];
+            _veh setVectorUp (surfaceNormal _safePos);
+            _veh setVelocity [0, 0, 0];
         } else {
             // _unit setVehiclePosition [_location, [], 5, ["NONE", "FLY"] select _fly];
-            _unit setVehiclePosition [_location, [], 5 + _safeRadius, ["NONE", "FLY"] select _fly];
-            (vehicle _unit) setVectorUp (surfaceNormal _location);
-            (vehicle _unit) setVelocity [0, 0, 0];
+            _veh setVehiclePosition [_location, [], 5 + _safeRadius, ["NONE", "FLY"] select _fly];
+            _veh setVectorUp (surfaceNormal _location);
+            _veh setVelocity [0, 0, 0];
         };
         // private _inBuilding = [false, true] select (count (lineIntersectsWith [ getPosASL _unit, (getPosASL _unit) vectorAdd [0, 0, 20], _unit]) > 0);
         private _inBuilding = [_unit] call DAKKA_fnc_inBuilding;
@@ -94,10 +95,10 @@ if (_isMan) then {
                                 _x setDamage 0;
                             } forEach (crew _this);
                         };
-        _unit setVariable ["DAKKA_UnitReady", true];
+        _veh setVariable ["DAKKA_UnitReady", true];
         {
             _x setVariable ["DAKKA_UnitReady", true];
-        } forEach (crew vehicle _unit);
+        } forEach (crew _veh);
 
         /*
         // Reposition if objects are too close

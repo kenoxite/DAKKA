@@ -3,7 +3,8 @@
 #include "control_defines.hpp";
 
 // Load weather settings for this terrain
-#include "settings_terrain.hpp";
+private _terrainSettings = [] execVM format ["terrainSettings\%1.sqf", worldName];
+if (isNil "_terrainSettings") then {[] execVM "terrainSettings\none.sqf"};
 
 // Disable mods
 // - TPW

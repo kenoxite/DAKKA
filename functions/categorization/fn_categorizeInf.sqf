@@ -63,7 +63,7 @@ private _pilots_SF = [];
     private _unit = _x select 0;
     private _unitLC = toLowerANSI (_x select 0);
     // if (DAKKA_debug) then { diag_log format ["DAKKA: categorizeInf - Checking unit %1", _unit] };
-    // [0:_hasAT, 1:_hasAA, 2:_hasMedic, 3:_hasMG, 4:_hasGrenadier, 5:_hasMarksman, 6:_hasUnarmed, 7:_hasEngi, 8:_hasDemo, 9:_hasLeader, 10:_hasOfficer, 11:_hasHacker, 12:_hasDiver, 13:_hasSF, 14:_hasSniper, 15:_hasCrew, 16:_hasAssistant, 17:_hasRadio, 18:_hasDriver, 19:_hasPilot, 20:_hasJTAC, 21:_hasSpotter, 22:_hasAutoriflemen]
+    // [0:_hasAT, 1:_hasAA, 2:_hasMedic, 3:_hasMG, 4:_hasGrenadier, 5:_hasMarksman, 6:_hasUnarmed, 7:_hasEngi, 8:_hasDemo, 9:_hasLeader, 10:_hasOfficer, 11:_hasHacker, 12:_hasDiver, 13:_hasSF, 14:_hasSniper, 15:_hasCrew, 16:_hasAssistant, 17:_hasRadio, 18:_hasDriver, 19:_hasPilot, 20:_hasJTAC, 21:_hasSpotter, 22:_hasAutoriflemen, 23:_hasParatrooper]
     private _roles = [[_unit]] call DAKKA_fnc_groupRoles;
     if (!_assigned && _roles select 0) then { if !(_roles select 13) then { _riflemenAT pushBackUnique _unit } else { _riflemenAT_SF pushBackUnique _unit }; _assigned = true; };
     if (!_assigned && _roles select 1) then { if !(_roles select 13) then { _riflemenAA pushBackUnique _unit } else { _riflemenAA_SF pushBackUnique _unit }; _assigned = true; };
@@ -84,7 +84,7 @@ private _pilots_SF = [];
     if (!_assigned && _roles select 7) then { if !(_roles select 13) then { _engineers pushBackUnique _unit } else { _engineers_SF pushBackUnique _unit }; _assigned = true; };
     if (!_assigned && _roles select 19) then { if !(_roles select 13) then { _pilots pushBackUnique _unit } else { _pilots_SF pushBackUnique _unit }; _assigned = true; };
     // Regular infantry
-    if (!_assigned && !(_roles select 6) && !(_roles select 11) && !(_roles select 12) && !(_roles select 16) && !(_roles select 17) && !("angelina" in _unitLC) && !("_aa" in _unitLC) && !("support" in _unitLC) && !("crew" in _unitLC) && !("_a_" in _unitLC) && !("parade" in _unitLC)) then { if !(_roles select 13) then { _riflemen pushBackUnique _unit } else { _riflemen_SF pushBackUnique _unit }; _assigned = true; };
+    if (!_assigned && !(_roles select 6) && !(_roles select 11) && !(_roles select 12) && !(_roles select 16) && !(_roles select 17) && !(_roles select 23) && !("angelina" in _unitLC) && !("_aa" in _unitLC) && !("support" in _unitLC) && !("crew" in _unitLC) && !("_a_" in _unitLC) && !("parade" in _unitLC)) then { if !(_roles select 13) then { _riflemen pushBackUnique _unit } else { _riflemen_SF pushBackUnique _unit }; _assigned = true; };
 } forEach _infGroups;
 
 if !(_isRegular) then {

@@ -20,7 +20,8 @@ params ["_unit", ["_unitLoadout", []], ["_unitSkill", 0]];
 
 private _applyFlareFix = [DAKKA_customDate] call DAKKA_fnc_isNight;
 private _veh = vehicle _unit;
-if (_unit == effectiveCommander _veh) then {
+private _isVehLeader = _unit == effectiveCommander _veh;
+if (_isVehLeader) then {
     {
         // Set skill
         [_x, _unitSkill] call DAKKA_fnc_setUnitSkill;
@@ -34,9 +35,11 @@ if (_unit == effectiveCommander _veh) then {
 };
 
 // Apply unscheduled loadout changes so units that change loadout at init EH have time to do their thing
-_null = [_unit, _unitLoadout] spawn {
+_null = [_unit, _unitLoadout, _veh, _isVehLeader] spawn {
     private _unit = _this select 0;
     private _unitLoadout = _this select 1;
+    private _veh = _this select 2;
+    private _isVehLeader = _this select 3;
 
     // Give AI real ammo for disposable launchers
     _AIDisposableLauncherFix = {
@@ -63,8 +66,7 @@ _null = [_unit, _unitLoadout] spawn {
 
     sleep 1;
 
-    private _veh = vehicle _unit;
-    if (_unit == effectiveCommander _veh) then {
+    if (_isVehLeader) then {
         {
             // Apply loadout
             if (count _unitLoadout > 0) then {
@@ -108,24 +110,18 @@ _null = [_unit, _unitLoadout] spawn {
             [_x] spawn _AIDisposableLauncherFix;
 
             // Deploy drones
-                private _backpack = unitBackpack _x;
-                if (!isNull _backpack) then {
-                    private _backpackClass = typeOf _backpack;
-                    private _parents = [ configFile >> "CfgVehicles" >> _backpackClass, true ] call BIS_fnc_returnParents;
-                    private _UVtype = [
-                                ["B_UAV_01_backpack_F", "B_UAV_01_F"],
-                                ["UAV_06_backpack_base_F", "B_UAV_06_F"],
-                                ["UAV_06_medical_backpack_base_F", "B_UAV_06_medical_F"],
-                                ["UGV_02_Demining_backpack_base_F", "B_UGV_02_Demining_F"],
-                                ["UGV_02_Science_backpack_base_F", "B_UGV_02_Science_F"]
-                            ];
-                    private _index = _UVtype findIf { (_x select 0) in _parents };
-                    if (_index >= 0) then {                
-                        removeBackpack _x;
-                        private _UVclass = (_UVtype select _index) select 1;
-                        private _nul = [_UVclass, _x] spawn {
-                            params ["_UVclass", "_unit"];
-                            private _UV = createVehicle [_UVclass, getPos _unit, [], 5, ["NONE", "FLY"] select (_UVclass isKindOf "Air")];
+            private _backpack = unitBackpack _x;
+            if (!isNull _backpack) then {
+                private _backpackClass = typeOf _backpack;
+                private _config = configFile >> "CfgVehicles" >> _backpackClass >> "assembleInfo";
+                private _UVclass = getText ( _config >> "assembleTo");
+                if (_UVclass != "") then {              
+                    removeBackpack _x;
+                    private _nul = [_UVclass, _x] spawn {
+                        params ["_UVclass", "_unit"];
+                        waitUntil {sleep 0.01; (isNull objectParent _unit) || !(alive _unit)};
+                        if (alive _unit) then {
+                            private _UV = createVehicle [_UVclass, getPos vehicle _unit, [], 5, ["NONE", "FLY"] select (_UVclass isKindOf "Air")];
                             createVehicleCrew _UV;
                             private _crew = crew _UV;
                             {
@@ -135,6 +131,7 @@ _null = [_unit, _unitLoadout] spawn {
                         };
                     };
                 };
+            };
         } forEach (crew _veh);
     };
 };

@@ -65,6 +65,7 @@ if (_spawnCrew) then {
     if (isNull _grp) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnVehicle GLOBAL GROUP LIMIT FOR SIDE %2 HAS BEEN REACHED!", _unitClass, _side]; objNull };
 
     _veh = [_veh, _grp, _faction] call DAKKA_fnc_spawnCrew;
+    // _veh setVariable ["DAKKA_UnitReady", true];
     // if (DAKKA_debug) then { diag_log format ["DAKKA: spawnVehicle %1 side: %2", _veh, side _grp ] };
     if (isNull _veh) exitWith { diag_log format ["DAKKA: --- ERROR --- spawnVehicle VEHICLE %1 COULDN'T BE SPAWNED!", _unitClass]; objNull };
 };

@@ -84,6 +84,8 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         if (side _unit != _side) then {
             diag_log format ["DAKKA: --- ERROR --- spawnGroup UNIT %1 ISN'T THE CORRECT SIDE. Expected side: %2. Current side: %3", _unitClass, _side, side _unit];
         };
+
+        // if (DAKKA_debug) then { [getPosWorld vehicle _unit, 50] spawn DAKKA_fnc_cameraIntro };
         
         _unit allowDamage false;
         _unit setDamage 0;
@@ -100,6 +102,8 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         } else {
             if (!_isAir || (_isAir && !_fly)) then {
                 [_unit, _pos, _fly] call DAKKA_fnc_placeUnit;
+            } else {
+                (vehicle _unit) setVariable ["DAKKA_UnitReady", true];
             };
             {
                 _x allowDamage false;
@@ -118,6 +122,7 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         };
         _unit setUnitRank _unitRank;
 
+        if (DAKKA_debug) then { diag_log format ["DAKKA: spawnGroup - Preparing unit: %1 (%2)", _unit, typeof _unit ] };
         [_unit, _unitLoadout, _unitSkill] call DAKKA_fnc_prepareUnit;
     } forEach _presentUnits;
 
@@ -153,8 +158,8 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         for "_i" from 0 to (count _units)-1 do
         {
             private _unit = _units select _i;
-            waitUntil {sleep 0.001; (_unit getVariable ["DAKKA_UnitReady", false])};
             private _veh = vehicle _unit;
+            waitUntil {sleep 0.001; (_veh getVariable ["DAKKA_UnitReady", false])};
             _unit enableSimulation true;
             _isAir = [_unit] call DAKKA_fnc_isAir;
             if (!_isAir) then {
