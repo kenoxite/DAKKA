@@ -28,6 +28,11 @@ tpw_skirmish_active = false;
 // tpw_soap_active = false;
 // tpw_streetlights_active = false;
 tpw_zombies_active = false;
+tpw_bleedout_active = false;
+tpw_fall_active = false;
+tpw_hud_active  = false;
+// tpw_puddle_active  = false;
+// tpw_rain_active  = false;
 
 
 // GLOBAL VARIABLES
