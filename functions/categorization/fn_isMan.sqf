@@ -19,7 +19,7 @@ if (typeName _class == "OBJECT") then {
 	_class = typeOf _class;
 };
 private _isMan = false;
-if (_class isKindOf "Man") then {
+if (_class isKindOf "CAManBase") then {
 	_isMan = true;
 };
 _isMan

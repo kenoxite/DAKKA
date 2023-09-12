@@ -42,7 +42,7 @@ diag_log "DAKKA: Snow: Starting";
    
             if (vehicle player != player) then {    
                 _max = _max * 2;   
-                smowTempIntensity = DAKKA_snowIntensity;    
+                DAKKA_snowTempIntensity = DAKKA_snowIntensity;    
                 DAKKA_snowIntensity = DAKKA_snowIntensity * 9;    
             } else {    
                 DAKKA_snowIntensity = DAKKA_snowTempIntensity;   

@@ -10,6 +10,13 @@ private _ctrl = (_display displayCtrl IDC_TXT_LOADINGSCREEN);
 cutText ["", "BLACK IN", 999];
 enableRadio false;
 
+// Lower terrain and view distance
+DAKKA_playerTerrainGrid = getTerrainGrid;
+DAKKA_playerViewDistance = getObjectViewDistance;
+setTerrainGrid 25;
+setViewDistance 500;
+setObjectViewDistance [300, 50];
+
 // Make group icons visible
 setGroupIconsVisible [true, false]; 
 

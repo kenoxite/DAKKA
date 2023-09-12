@@ -299,6 +299,11 @@ _task_2_checks = [] spawn {
                 ["end1", false, true, true, true] call BIS_fnc_endMission;
             };
 
+            // Reset terrain and view distance
+            setTerrainGrid DAKKA_playerTerrainGrid;
+            setViewDistance -1;
+            setObjectViewDistance DAKKA_playerViewDistance;
+
             diag_log "DAKKA: Task 2 --- END --- ";
         };
 
