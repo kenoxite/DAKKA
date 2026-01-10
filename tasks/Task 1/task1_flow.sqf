@@ -279,7 +279,7 @@ _task_1_checks = [] spawn {
 					};
 				} forEach (units DAKKA_PlayerNewGroup);
 				private _visCheck = [units DAKKA_PlayerNewGroup, (AGLToASL DAKKA_task1_locPos) vectorAdd [0, 0, 2.5], 100] call DAKKA_fnc_targetVisible;
-                if (DAKKA_debug) then { systemChat format ["DAKKA: Task1 flow - _visCheck: %1", _visCheck] };
+                // if (DAKKA_debug) then { systemChat format ["DAKKA: Task1 flow - _visCheck: %1", _visCheck] };
 				if (_visCheck select 0) then {
 					_outpostVisibleTimer = _outpostVisibleTimer + 1;
 				} else {
