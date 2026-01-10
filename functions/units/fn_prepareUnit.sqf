@@ -105,7 +105,10 @@ _null = [_unit, _unitLoadout, _veh, _isVehLeader] spawn {
                 } forEach _assignedItems;
             };*/
             // Check for NVGs and flashlights
-            [_x, DAKKA_forceFlashlights] spawn DAKKA_fnc_useNVGflashlight;
+            // Disable if already handled by kTweaks
+            private _ktwk = if (isNil {KTWK_AIlights_opt_enabled}) then {false} else {KTWK_AIlights_opt_enabled};
+            if (!_ktwk) exitWith { [_x, DAKKA_forceFlashlights] spawn DAKKA_fnc_useNVGflashlight };
+
             // RHS single-shot launchers for AI fix
             [_x] spawn _AIDisposableLauncherFix;
 
