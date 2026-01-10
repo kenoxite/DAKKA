@@ -15,7 +15,7 @@ class CfgSounds
     class radioStatic1
     {
         name = "radio static 1";
-        sound[] = { "\sound\radiostatic1.ogg", 1, 1 };
+        sound[] = { "\sound\radiostatic1.ogg", db-5, 1 };
         titles[] = { 0, "" };
     };
 
@@ -31,19 +31,19 @@ class CfgSounds
     class radioNoise1
     {
         name = "radio noise 1";
-        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise1.ogg", 1, 1 };
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise1.ogg", db-1, 1 };
         titles[] = { 0, "" };
     };
     class radioNoise2
     {
         name = "radio noise 2";
-        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise2.ogg", 1, 1 };
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise2.ogg", db-1, 1 };
         titles[] = { 0, "" };
     };
     class radioNoise3
     {
         name = "radio noise 3";
-        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise3.ogg", 1, 1 };
+        sound[] = { "@A3\Dubbing_Radio_F\Sfx\radionoise3.ogg", db-1, 1 };
         titles[] = { 0, "" };
     };
 
