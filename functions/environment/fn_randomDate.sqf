@@ -61,7 +61,9 @@ if (!isNil "DAKKA_cameraIntroPlaying") then {
 };
 
 // Brighter nights
-call DAKKA_fnc_brighterNights;
+// Disable if already handled by kTweaks
+private _ktwk = if (isNil {KTWK_BN_opt_enabled}) then {false} else {if (KTWK_BN_opt_enabled > 0) then {true} else {false}};
+if (!_ktwk) exitWith { call DAKKA_fnc_brighterNights };
 
 diag_log "DAKKA: --- RANDOM DATE GENERATED ---";
 

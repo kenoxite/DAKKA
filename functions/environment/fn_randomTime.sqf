@@ -47,7 +47,9 @@ setDate _newDate;
 DAKKA_customDate = _newDate;
 
 // Brighter nights
-call DAKKA_fnc_brighterNights;
+// Disable if already handled by kTweaks
+private _ktwk = if (isNil {KTWK_BN_opt_enabled}) then {false} else {if (KTWK_BN_opt_enabled > 0) then {true} else {false}};
+if (!_ktwk) exitWith { call DAKKA_fnc_brighterNights };
 
 DAKKA_comboNoValueUpdate = true;
  ((findDisplay IDC_MENU_MISSION_EDIT) displayCtrl IDC_COMBO_ENVSETTINGS_HOUR) lbSetCurSel (_hour);
