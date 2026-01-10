@@ -19,7 +19,8 @@
 params ["_unit"];
 
 // Disable if already handled by kTweaks
-if (KTWK_SFH_opt_enabled) exitWith {0};
+private _ktwk = if (isNil {KTWK_SFH_opt_enabled}) then {false} else {KTWK_SFH_opt_enabled};
+if (_ktwk) exitWith {0};
 
 private _healEH = _unit addEventHandler ["HandleHeal", {
     _this spawn {
