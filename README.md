@@ -7,6 +7,8 @@
 
 Simple _**Dynamic Mission Framework**_ with _**Instant Action**_ capabilities for Arma 3.
 
+You can check the already packed version by visiting this mod's [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3642727356) page.
+
 ### License
 ![APL-SA](https://i.imgur.com/VgZW2Qa.png)
 
