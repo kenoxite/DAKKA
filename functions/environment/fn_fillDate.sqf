@@ -28,7 +28,7 @@ private _currentMinutes = _currentDate select 4;
 if ("all" in _action || "year" in _action) then {
     _ctrl = (_display displayCtrl IDC_COMBO_ENVSETTINGS_YEAR);
     lbClear _ctrl;
-    for [{private _i = 1982}, {_i <= 2050}, {_i = _i + 1}] do 
+    for [{private _i = 1900}, {_i <= 2100}, {_i = _i + 1}] do 
     {
         private _ctrlIndex = _ctrl lbAdd str _i; 
         _ctrl lbSetValue [_ctrlIndex, _i];
