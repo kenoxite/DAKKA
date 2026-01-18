@@ -1,6 +1,6 @@
 ![DAKKA](https://i.imgur.com/sqkhQop.png)
 #### Downright Awesome Kinetic Kit for Arma
-[![Version](https://img.shields.io/badge/Version-0.3-green)](https://github.com/kenoxite/DAKKA/releases/latest)
+[![Version](https://img.shields.io/badge/Version-1.0-green)](https://github.com/kenoxite/DAKKA/releases/latest)
 [![License](https://img.shields.io/badge/License-APL--SA-lightgrey)](https://github.com/kenoxite/DAKKA/blob/master/LICENSE)
 
 ### Info
