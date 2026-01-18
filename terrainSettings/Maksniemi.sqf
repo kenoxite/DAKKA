@@ -4,13 +4,13 @@
 
 // Overcast settings - should be changed based on general climate of the terrain
 DAKKA_overcast = 0.6; // average overcast
-DAKKA_rain = [1.4, 3]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
+DAKKA_rain = [1, 3]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
 DAKKA_rainMonths = [6, 8]; // months where precipitation is at its highest -- you can either start from the beginning of the rainy months or the end, it'll be sorted later
 
 // Fog settings - should be changed based on general climate of the terrain and their average elevation
 DAKKA_fogValue = [0, 0.3]; // normal fog value that represents fog density at fogBase level. Range 0..1 - [min, max] -- min is used for dry season, max for wet
 DAKKA_fogDecay = 0.03; // decay of fog density with altitude. Range -1..1 --- the lower the more hazy and spread, the higher the more condensed at lower altitudes and thick --- values closer to 0 are preferable for more realistic results
-DAKKA_fogBase = 200;  // base altitude (ASL) of fog (in meters). Range -5000..5000 -- this value should be based on the lowest elevation of the terrain
+DAKKA_fogBase = 0.4;  // base altitude (ASL) of fog (in meters). Range -5000..5000 -- this value should be based on the lowest elevation of the terrain
 
 
 // - Locations -
@@ -21,11 +21,14 @@ DAKKA_fogBase = 200;  // base altitude (ASL) of fog (in meters). Range -5000..50
 DAKKA_locations_Task1 = [
         ["Outposts",
             [
-                [[7097.6,8799.69,0],0],
-                [[9972.77,5305.38,0],0],
-                [[1421.69,2885.96,0],0],
-                [[2153.29,4371.2,0],0],
-                [[7626.22,1385.66,0],0]
+                [[2699.14,8695.95,0],0],
+                [[3562.91,8394.32,0],0],
+                [[6766.4,8329.42,0],0],
+                [[6574.28,7692.91,0],0],
+                [[4595.99,5707.26,0],0],
+                [[7562.4,7762.67,0],0],
+                [[9128.99,6249.66,0],0],
+                [[1332.49,5814.96,0],0]
             ]
         ]
     ];
@@ -33,22 +36,11 @@ DAKKA_locations_Task1 = [
 DAKKA_locations_Task2 = [
         ["Contested Areas",
             [
-                [[5005.74,10093.5,0],35],
-                [[8114.79,8725.75,0],85],
-                [[7646.25,5284.09,0],315],
-                [[6047.3,4135.81,0],155],
-                [[3271.92,2129.08,0],75],
-                [[3110.11,6817.88,0],310],
-                [[1729.26,7355.74,0],65],
-                [[3710.19,11738.3,0],80],
-                [[9269.6,10827.8,0],310],
-                [[9823.84,8531.93,0],20],
-                [[8831.55,6626.44,0],60],
-                [[11147.9,4311.49,0],50],
-                [[4801.1,7565.06,0],0],
-                [[6040.19,8105.69,0],45],
-                [[3979.97,7967.78,0],60],
-                [[1476.78,9727.11,0],40]
+                [[3493.14,6998.62,0],0],
+                [[1922.96,7422.48,0],295],
+                [[9164.53,9166.02,0],120],
+                [[7495.61,6222.41,0],160],
+                [[4423.74,5346.71,0],170]
             ]
         ]
     ];

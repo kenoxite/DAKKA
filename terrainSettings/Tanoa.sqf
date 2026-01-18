@@ -3,8 +3,8 @@
 // - Weather -
 
 // Overcast settings - should be changed based on general climate of the terrain
-DAKKA_overcast = 0.3; // average overcast
-DAKKA_rain = [4.5, 12]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
+DAKKA_overcast = 0.5; // average overcast
+DAKKA_rain = [2, 14]; // average annual precipitation [min, max] -- should be roughly based on real stats, in inches
 DAKKA_rainMonths = [7, 10]; // months where precipitation is at its highest -- you can either start from the beginning of the rainy months or the end, it'll be sorted later
 
 // Fog settings - should be changed based on general climate of the terrain and their average elevation
