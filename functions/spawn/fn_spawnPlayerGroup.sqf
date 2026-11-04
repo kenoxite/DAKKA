@@ -107,6 +107,10 @@ _grp setVariable ["DAKKA_playerGroupReady", false];
         _grp selectLeader p1;
     };
 
+    // Disable PIR for player unit
+    p1 setVariable ["dam_ignore_hit0",true,true];
+    p1 setVariable ["dam_ignore_effect0",true,true];
+
     // Initialize the rest of the team
     _units = (units group p1); 
     { 
@@ -158,6 +162,9 @@ _grp setVariable ["DAKKA_playerGroupReady", false];
         };
         // Allow team switch for this unit
         // addSwitchableUnit _x;
+        // Disable PIR for unit
+        _x setVariable ["dam_ignore_hit0",true,true];
+        _x setVariable ["dam_ignore_effect0",true,true];
     } forEach _units;
 
 

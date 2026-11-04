@@ -97,6 +97,10 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
         _unit disableAI "AUTOCOMBAT";
         _unit disableAI "CHECKVISIBLE";
         _unit disableAI "MOVE";
+        // Disable PIR for unit
+        _unit setVariable ["dam_ignore_hit0",true,true];
+        _unit setVariable ["dam_ignore_effect0",true,true];
+
         if (_isMan) then {
             _groupPassengers pushBack _unit;
         } else {
@@ -115,6 +119,9 @@ diag_log format ["DAKKA: spawnGroup - grp: %1, side: %2", _grp, side _grp];
                 _x disableAI "AUTOCOMBAT";
                 _x disableAI "CHECKVISIBLE";
                 _x disableAI "MOVE";
+                // Disable PIR for unit
+                _x setVariable ["dam_ignore_hit0",true,true];
+                _x setVariable ["dam_ignore_effect0",true,true];
             } forEach (crew vehicle _unit);
             _groupVehicles pushBack _unit;
             _grp addVehicle _unit;
